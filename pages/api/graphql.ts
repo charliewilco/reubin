@@ -3,6 +3,9 @@ import { schema } from "../../lib/schema";
 
 const server = new ApolloServer({
   schema,
+  context(c) {
+    return c;
+  },
 });
 
 export const config = {
