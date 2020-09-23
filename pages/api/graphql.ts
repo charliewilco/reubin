@@ -3,6 +3,7 @@ import { schema } from "../../lib/schema";
 
 const server = new ApolloServer({
   schema,
+  introspection: true,
   context(c) {
     return c;
   },
