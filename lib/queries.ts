@@ -38,7 +38,7 @@ export const Query: IQueryResolvers<ResolverContext> = {
     return x;
   },
 
-  unread: async (parent, __, context) => {
+  unread: async () => {
     return [];
   },
 };
