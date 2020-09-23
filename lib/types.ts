@@ -39,6 +39,11 @@ export type IFeed = {
   items: Array<Maybe<IItem>>;
 };
 
+export type IAuthResponse = {
+  __typename?: 'AuthResponse';
+  isValid: Scalars['Boolean'];
+};
+
 export type IQuery = {
   __typename?: 'Query';
   subscription: ISubscription;
@@ -48,11 +53,17 @@ export type IQuery = {
 export type IMutation = {
   __typename?: 'Mutation';
   bookmark: Maybe<Scalars['String']>;
+  login: Maybe<IAuthResponse>;
 };
 
 
 export type IMutationBookmarkArgs = {
   id: Scalars['String'];
+};
+
+
+export type IMutationLoginArgs = {
+  hash: Scalars['String'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -142,6 +153,7 @@ export type IResolversTypes = ResolversObject<{
   Feed: ResolverTypeWrapper<IFeed>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  AuthResponse: ResolverTypeWrapper<IAuthResponse>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
 }>;
@@ -156,6 +168,7 @@ export type IResolversParentTypes = ResolversObject<{
   Feed: IFeed;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  AuthResponse: IAuthResponse;
   Query: {};
   Mutation: {};
 }>;
@@ -187,6 +200,11 @@ export type IFeedResolvers<ContextType = any, ParentType extends IResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
+export type IAuthResponseResolvers<ContextType = any, ParentType extends IResolversParentTypes['AuthResponse'] = IResolversParentTypes['AuthResponse']> = ResolversObject<{
+  isValid: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+}>;
+
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = ResolversObject<{
   subscription: Resolver<IResolversTypes['Subscription'], ParentType, ContextType>;
   unread: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType>;
@@ -194,6 +212,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = ResolversObject<{
   bookmark: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType, RequireFields<IMutationBookmarkArgs, 'id'>>;
+  login: Resolver<Maybe<IResolversTypes['AuthResponse']>, ParentType, ContextType, RequireFields<IMutationLoginArgs, 'hash'>>;
 }>;
 
 export type IResolvers<ContextType = any> = ResolversObject<{
@@ -201,6 +220,7 @@ export type IResolvers<ContextType = any> = ResolversObject<{
   Item: IItemResolvers<ContextType>;
   Tag: ITagResolvers<ContextType>;
   Feed: IFeedResolvers<ContextType>;
+  AuthResponse: IAuthResponseResolvers<ContextType>;
   Query: IQueryResolvers<ContextType>;
   Mutation: IMutationResolvers<ContextType>;
 }>;

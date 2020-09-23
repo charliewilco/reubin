@@ -25,6 +25,10 @@ export const typeDefs = gql`
     items: [Item]!
   }
 
+  type AuthResponse {
+    isValid: Boolean!
+  }
+
   type Query {
     subscription: Subscription!
     unread: [Item!]!
@@ -32,6 +36,7 @@ export const typeDefs = gql`
 
   type Mutation {
     bookmark(id: String!): String
+    login(hash: String!): AuthResponse
   }
 
   schema {
