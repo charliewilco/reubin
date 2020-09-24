@@ -6,12 +6,11 @@ const IndexPage = () => (
     <Head>
       <title>Reubin | Android Feedbin Client</title>
     </Head>
-    <h1>Reubin</h1>
-    <p>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-    </p>
+    <header id="header">
+      <img id="icon" src="/app-icon.png" alt="Round Yellow Circle" />
+      <h1>Reubin</h1>
+      <p>coming soon</p>
+    </header>
   </>
 );
 
