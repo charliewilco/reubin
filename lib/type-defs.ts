@@ -6,9 +6,16 @@ export const typeDefs = gql`
   }
 
   type Item {
-    url: String!
+    id: Int!
+    feed_id: Int!
     title: String!
-    unread: Boolean!
+    author: String
+    summary: String!
+    content: String!
+    url: String!
+    extracted_content_url: String!
+    published: String!
+    created_at: String
   }
 
   type Tag {

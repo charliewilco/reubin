@@ -1,4 +1,6 @@
 import { IFeed, ISubscription } from "./types";
+import qs from "query-string";
+import { ENTRIES_URL } from "./urls";
 
 export interface IServiceSubscriptions {
   id: number;
@@ -13,6 +15,19 @@ export interface IServiceTagging {
   id: number;
   feed_id: number;
   name: string;
+}
+
+export interface IEntryUnread {
+  id: number;
+  feed_id: number;
+  title: string;
+  author: any;
+  summary: string;
+  content: string;
+  url: string;
+  extracted_content_url: string;
+  published: string;
+  created_at: string;
 }
 
 function groupTags(taggings: IServiceTagging[]) {
@@ -78,4 +93,25 @@ export const normalizeSubscriptions = (
   return {
     tags,
   };
+};
+
+export const createUrlsofUnreads = (
+  ids: number[],
+  url = ENTRIES_URL
+): string[] => {
+  const urls: string[] = [];
+  let count = Math.ceil(ids.length / 100);
+
+  while (count > 0) {
+    const q = ids.splice(0, 100);
+
+    urls.push(
+      qs.stringifyUrl({ url, query: { ids: q } } as any, {
+        arrayFormat: "comma",
+      })
+    );
+    count--;
+  }
+
+  return urls;
 };

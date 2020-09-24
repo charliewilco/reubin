@@ -18,9 +18,16 @@ export type ISubscription = {
 
 export type IItem = {
   __typename?: 'Item';
-  url: Scalars['String'];
+  id: Scalars['Int'];
+  feed_id: Scalars['Int'];
   title: Scalars['String'];
-  unread: Scalars['Boolean'];
+  author: Maybe<Scalars['String']>;
+  summary: Scalars['String'];
+  content: Scalars['String'];
+  url: Scalars['String'];
+  extracted_content_url: Scalars['String'];
+  published: Scalars['String'];
+  created_at: Maybe<Scalars['String']>;
 };
 
 export type ITag = {
@@ -147,13 +154,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type IResolversTypes = ResolversObject<{
   Subscription: ResolverTypeWrapper<{}>;
   Item: ResolverTypeWrapper<IItem>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   String: ResolverTypeWrapper<Scalars['String']>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Tag: ResolverTypeWrapper<ITag>;
   Feed: ResolverTypeWrapper<IFeed>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
   AuthResponse: ResolverTypeWrapper<IAuthResponse>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
 }>;
@@ -162,13 +169,13 @@ export type IResolversTypes = ResolversObject<{
 export type IResolversParentTypes = ResolversObject<{
   Subscription: {};
   Item: IItem;
+  Int: Scalars['Int'];
   String: Scalars['String'];
-  Boolean: Scalars['Boolean'];
   Tag: ITag;
   Feed: IFeed;
   ID: Scalars['ID'];
-  Int: Scalars['Int'];
   AuthResponse: IAuthResponse;
+  Boolean: Scalars['Boolean'];
   Query: {};
   Mutation: {};
 }>;
@@ -178,9 +185,16 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
 }>;
 
 export type IItemResolvers<ContextType = any, ParentType extends IResolversParentTypes['Item'] = IResolversParentTypes['Item']> = ResolversObject<{
-  url: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  id: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  feed_id: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
   title: Resolver<IResolversTypes['String'], ParentType, ContextType>;
-  unread: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>;
+  author: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  summary: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  content: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  url: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  extracted_content_url: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  published: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  created_at: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
