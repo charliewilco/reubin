@@ -43,6 +43,7 @@ export const typeDefs = gql`
     subscriptions: Subscriptions!
     unread: UnreadList!
     entries(page: Int): [Item!]!
+    entry(id: Float!): Item!
   }
 
   type Mutation {

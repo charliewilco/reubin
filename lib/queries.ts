@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+import { ApolloError } from "apollo-server-micro";
 import qs from "query-string";
 import { ResolverContext, deriveHeader } from "./context";
 import { IQueryResolvers } from "./types";
@@ -15,6 +16,7 @@ import {
   SUBSCRIPTIONS_URL,
   TAGGINGS_URL,
   UNREAD_URL,
+  createEntryURL,
 } from "./urls";
 
 export const writeToMock = (name: string, content: any) => {
@@ -68,5 +70,21 @@ export const Query: IQueryResolvers<ResolverContext> = {
     const entries = entriesRes.json();
 
     return entries;
+  },
+
+  entry: async (_, { id }, context) => {
+    console.log(`ENTRY ${id} QUERY`);
+    const init = deriveHeader(context);
+
+    const url = createEntryURL(id);
+
+    try {
+      const entryRes = await fetch(url, init);
+      const entry = entryRes.json();
+
+      return entry;
+    } catch (error) {
+      throw new ApolloError(error);
+    }
   },
 };

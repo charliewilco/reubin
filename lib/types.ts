@@ -24,7 +24,7 @@ export type ISubscriptions = {
 
 export type IItem = {
   __typename?: 'Item';
-  id: Scalars['Int'];
+  id: Scalars['Float'];
   feed_id: Scalars['Int'];
   title: Scalars['String'];
   author: Maybe<Scalars['String']>;
@@ -60,11 +60,17 @@ export type IQuery = {
   subscriptions: ISubscriptions;
   unread: IUnreadList;
   entries: Array<IItem>;
+  entry: IItem;
 };
 
 
 export type IQueryEntriesArgs = {
   page: Maybe<Scalars['Int']>;
+};
+
+
+export type IQueryEntryArgs = {
+  id: Scalars['Float'];
 };
 
 export type IMutation = {
@@ -160,6 +166,7 @@ export type IResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscriptions: ResolverTypeWrapper<ISubscriptions>;
   Item: ResolverTypeWrapper<IItem>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Tag: ResolverTypeWrapper<ITag>;
   Feed: ResolverTypeWrapper<IFeed>;
@@ -176,6 +183,7 @@ export type IResolversParentTypes = ResolversObject<{
   String: Scalars['String'];
   Subscriptions: ISubscriptions;
   Item: IItem;
+  Float: Scalars['Float'];
   Int: Scalars['Int'];
   Tag: ITag;
   Feed: IFeed;
@@ -198,7 +206,7 @@ export type ISubscriptionsResolvers<ContextType = any, ParentType extends IResol
 }>;
 
 export type IItemResolvers<ContextType = any, ParentType extends IResolversParentTypes['Item'] = IResolversParentTypes['Item']> = ResolversObject<{
-  id: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
+  id: Resolver<IResolversTypes['Float'], ParentType, ContextType>;
   feed_id: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
   title: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   author: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
@@ -234,6 +242,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   subscriptions: Resolver<IResolversTypes['Subscriptions'], ParentType, ContextType>;
   unread: Resolver<IResolversTypes['UnreadList'], ParentType, ContextType>;
   entries: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryEntriesArgs, never>>;
+  entry: Resolver<IResolversTypes['Item'], ParentType, ContextType, RequireFields<IQueryEntryArgs, 'id'>>;
 }>;
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = ResolversObject<{
