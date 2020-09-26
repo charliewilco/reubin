@@ -1,8 +1,13 @@
 import { gql } from "apollo-server-micro";
 
 export const typeDefs = gql`
-  type Subscription {
-    tags: [Tag]!
+  type UnreadList {
+    itemIDs: [String!]!
+  }
+
+  type Subscriptions {
+    tags: [Tag!]!
+    untaggedFeeds: [Feed!]!
   }
 
   type Item {
@@ -28,8 +33,6 @@ export const typeDefs = gql`
     site: String!
     name: String!
     id: ID!
-    unreadCount: Int!
-    items: [Item]!
   }
 
   type AuthResponse {
@@ -37,12 +40,14 @@ export const typeDefs = gql`
   }
 
   type Query {
-    subscription: Subscription!
-    unread: [Item!]!
+    subscriptions: Subscriptions!
+    unread: UnreadList!
+    entries(page: Int): [Item!]!
   }
 
   type Mutation {
-    bookmark(id: String!): String
+    # bookmark(id: String!): Item
+    # markAsRead(id: String!): Item
     login(hash: String!): AuthResponse
   }
 

@@ -1,4 +1,4 @@
-import { IFeed, ISubscription } from "./types";
+import { IFeed, ISubscriptions } from "./types";
 import qs from "query-string";
 import { ENTRIES_URL } from "./urls";
 
@@ -53,16 +53,14 @@ export const deriveFeedFromSubscription = (s: IServiceSubscriptions): IFeed => {
     url: s.feed_url,
     site: s.site_url,
     id: s.id.toString(),
-    unreadCount: Math.floor(Math.random() * Math.floor(1000)),
     name: s.title,
-    items: [],
   };
 };
 
 export const normalizeSubscriptions = (
   subscriptions: IServiceSubscriptions[],
   taggings: IServiceTagging[]
-): ISubscription => {
+): ISubscriptions => {
   const cloneSubscriptions = subscriptions.slice();
 
   const tags = Array.from(groupTags(taggings)).map(([title, feeds]) => {
@@ -85,13 +83,9 @@ export const normalizeSubscriptions = (
     };
   });
 
-  tags.push({
-    title: "Untagged Feeds",
-    feeds: cloneSubscriptions.map((i) => deriveFeedFromSubscription(i)),
-  });
-
   return {
     tags,
+    untaggedFeeds: cloneSubscriptions.map((i) => deriveFeedFromSubscription(i)),
   };
 };
 

@@ -1,15 +1,21 @@
 const fs = require("fs");
 const path = require("path");
+import qs from "query-string";
 import { ResolverContext, deriveHeader } from "./context";
 import { IQueryResolvers } from "./types";
 import {
   normalizeSubscriptions,
   IServiceTagging,
   IServiceSubscriptions,
-  createUrlsofUnreads,
-  IEntryUnread,
+  // createUrlsofUnreads,
+  // IEntryUnread,
 } from "./normalize";
-import { SUBSCRIPTIONS_URL, TAGGINGS_URL, UNREAD_URL } from "./urls";
+import {
+  ENTRIES_URL,
+  SUBSCRIPTIONS_URL,
+  TAGGINGS_URL,
+  UNREAD_URL,
+} from "./urls";
 
 export const writeToMock = (name: string, content: any) => {
   const f = path.join(process.cwd(), "mock", name.concat(".json"));
@@ -18,7 +24,8 @@ export const writeToMock = (name: string, content: any) => {
 };
 
 export const Query: IQueryResolvers<ResolverContext> = {
-  subscription: async (_, __, context) => {
+  subscriptions: async (_, __, context) => {
+    console.log("SUBSCRIPTIONS QUERY");
     const init = deriveHeader(context);
     const subscriptionsRes = await fetch(SUBSCRIPTIONS_URL, init);
 
@@ -32,18 +39,34 @@ export const Query: IQueryResolvers<ResolverContext> = {
   },
 
   unread: async (_, __, context) => {
-    const init = deriveHeader(context);
+    console.log("UNREAD QUERY");
 
+    const init = deriveHeader(context);
     const unreadItemRes = await fetch(UNREAD_URL, init);
 
     const unreadItems: number[] = await unreadItemRes.json();
 
-    const urls = createUrlsofUnreads(unreadItems);
+    // const urls = createUrlsofUnreads(unreadItems);
 
-    const unread: IEntryUnread[][] = await Promise.all(
-      urls.map((url) => fetch(url, init).then((res) => res.json()))
-    );
+    // const unread: IEntryUnread[][] = await Promise.all(
+    //   urls.map((url) => fetch(url, init).then((res) => res.json()))
+    // );
 
-    return unread.flat();
+    return {
+      itemIDs: unreadItems.toString().split(","),
+    };
+  },
+
+  entries: async (_, { page }, context) => {
+    console.log("ENTRIES QUERY");
+    const init = deriveHeader(context);
+    const url = page
+      ? qs.stringifyUrl({ url: ENTRIES_URL, query: { page: page.toString() } })
+      : ENTRIES_URL;
+
+    const entriesRes = await fetch(url, init);
+    const entries = entriesRes.json();
+
+    return entries;
   },
 };
