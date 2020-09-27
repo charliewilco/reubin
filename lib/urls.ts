@@ -6,3 +6,8 @@ export const UNREAD_URL = FEEDBIN_API.concat("/unread_entries.json");
 export const ENTRIES_URL = FEEDBIN_API.concat("/entries.json");
 export const createEntryURL = (id: number) =>
   FEEDBIN_API.concat(`/entries/${id}.json`);
+
+export const createFeedUrl = (id: number) =>
+  FEEDBIN_API.concat(`/feeds/${id}.json`);
+export const createFeedWithEntriesUrl = (id: number) =>
+  FEEDBIN_API.concat(`/feeds/${id}/entries.json`);

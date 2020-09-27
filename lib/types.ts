@@ -48,11 +48,18 @@ export type IFeed = {
   site: Scalars['String'];
   name: Scalars['String'];
   id: Scalars['ID'];
+  feed_id: Scalars['Float'];
 };
 
 export type IAuthResponse = {
   __typename?: 'AuthResponse';
   isValid: Scalars['Boolean'];
+};
+
+export type ISubscription = {
+  __typename?: 'Subscription';
+  feed: IFeed;
+  items: Array<IItem>;
 };
 
 export type IQuery = {
@@ -61,6 +68,7 @@ export type IQuery = {
   unread: IUnreadList;
   entries: Array<IItem>;
   entry: IItem;
+  subscription: ISubscription;
 };
 
 
@@ -70,6 +78,11 @@ export type IQueryEntriesArgs = {
 
 
 export type IQueryEntryArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type IQuerySubscriptionArgs = {
   id: Scalars['Float'];
 };
 
@@ -173,6 +186,7 @@ export type IResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']>;
   AuthResponse: ResolverTypeWrapper<IAuthResponse>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Subscription: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
 }>;
@@ -190,6 +204,7 @@ export type IResolversParentTypes = ResolversObject<{
   ID: Scalars['ID'];
   AuthResponse: IAuthResponse;
   Boolean: Scalars['Boolean'];
+  Subscription: {};
   Query: {};
   Mutation: {};
 }>;
@@ -230,6 +245,7 @@ export type IFeedResolvers<ContextType = any, ParentType extends IResolversParen
   site: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   name: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   id: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
+  feed_id: Resolver<IResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
@@ -238,11 +254,17 @@ export type IAuthResponseResolvers<ContextType = any, ParentType extends IResolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
+export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = ResolversObject<{
+  feed: SubscriptionResolver<IResolversTypes['Feed'], "feed", ParentType, ContextType>;
+  items: SubscriptionResolver<Array<IResolversTypes['Item']>, "items", ParentType, ContextType>;
+}>;
+
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = ResolversObject<{
   subscriptions: Resolver<IResolversTypes['Subscriptions'], ParentType, ContextType>;
   unread: Resolver<IResolversTypes['UnreadList'], ParentType, ContextType>;
   entries: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryEntriesArgs, never>>;
   entry: Resolver<IResolversTypes['Item'], ParentType, ContextType, RequireFields<IQueryEntryArgs, 'id'>>;
+  subscription: Resolver<IResolversTypes['Subscription'], ParentType, ContextType, RequireFields<IQuerySubscriptionArgs, 'id'>>;
 }>;
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = ResolversObject<{
@@ -256,6 +278,7 @@ export type IResolvers<ContextType = any> = ResolversObject<{
   Tag: ITagResolvers<ContextType>;
   Feed: IFeedResolvers<ContextType>;
   AuthResponse: IAuthResponseResolvers<ContextType>;
+  Subscription: ISubscriptionResolvers<ContextType>;
   Query: IQueryResolvers<ContextType>;
   Mutation: IMutationResolvers<ContextType>;
 }>;

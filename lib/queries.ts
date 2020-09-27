@@ -6,6 +6,7 @@ import { ResolverContext, deriveHeader } from "./context";
 import { IQueryResolvers } from "./types";
 import {
   normalizeSubscriptions,
+  deriveFeedFromSubscription,
   IServiceTagging,
   IServiceSubscriptions,
   // createUrlsofUnreads,
@@ -17,6 +18,8 @@ import {
   TAGGINGS_URL,
   UNREAD_URL,
   createEntryURL,
+  createFeedUrl,
+  createFeedWithEntriesUrl,
 } from "./urls";
 
 export const writeToMock = (name: string, content: any) => {
@@ -27,7 +30,6 @@ export const writeToMock = (name: string, content: any) => {
 
 export const Query: IQueryResolvers<ResolverContext> = {
   subscriptions: async (_, __, context) => {
-    console.log("SUBSCRIPTIONS QUERY");
     const init = deriveHeader(context);
     const subscriptionsRes = await fetch(SUBSCRIPTIONS_URL, init);
 
@@ -41,8 +43,6 @@ export const Query: IQueryResolvers<ResolverContext> = {
   },
 
   unread: async (_, __, context) => {
-    console.log("UNREAD QUERY");
-
     const init = deriveHeader(context);
     const unreadItemRes = await fetch(UNREAD_URL, init);
 
@@ -60,7 +60,6 @@ export const Query: IQueryResolvers<ResolverContext> = {
   },
 
   entries: async (_, { page }, context) => {
-    console.log("ENTRIES QUERY");
     const init = deriveHeader(context);
     const url = page
       ? qs.stringifyUrl({ url: ENTRIES_URL, query: { page: page.toString() } })
@@ -73,9 +72,7 @@ export const Query: IQueryResolvers<ResolverContext> = {
   },
 
   entry: async (_, { id }, context) => {
-    console.log(`ENTRY ${id} QUERY`);
     const init = deriveHeader(context);
-
     const url = createEntryURL(id);
 
     try {
@@ -86,5 +83,21 @@ export const Query: IQueryResolvers<ResolverContext> = {
     } catch (error) {
       throw new ApolloError(error);
     }
+  },
+
+  subscription: async (_, { id }, context) => {
+    const init = deriveHeader(context);
+    console.log(createFeedUrl(id), createFeedWithEntriesUrl(id));
+    const feedDetailsRes = await fetch(createFeedUrl(id), init);
+    const feed = await feedDetailsRes.json();
+
+    const entriesRes = await fetch(createFeedWithEntriesUrl(id), init);
+
+    const items = await entriesRes.json();
+
+    return {
+      feed: deriveFeedFromSubscription(feed),
+      items,
+    };
   },
 };

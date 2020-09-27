@@ -33,10 +33,16 @@ export const typeDefs = gql`
     site: String!
     name: String!
     id: ID!
+    feed_id: Float!
   }
 
   type AuthResponse {
     isValid: Boolean!
+  }
+
+  type Subscription {
+    feed: Feed!
+    items: [Item!]!
   }
 
   type Query {
@@ -44,11 +50,13 @@ export const typeDefs = gql`
     unread: UnreadList!
     entries(page: Int): [Item!]!
     entry(id: Float!): Item!
+    subscription(id: Float!): Subscription!
   }
 
   type Mutation {
     # bookmark(id: String!): Item
     # markAsRead(id: String!): Item
+    # markAsUnread(id: String!): Item
     login(hash: String!): AuthResponse
   }
 

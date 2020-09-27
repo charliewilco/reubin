@@ -30,7 +30,7 @@ export interface IEntryUnread {
   created_at: string;
 }
 
-function groupTags(taggings: IServiceTagging[]) {
+export const groupTags = (taggings: IServiceTagging[]) => {
   const m = new Map<string, [IServiceTagging]>();
 
   for (let index = 0; index < taggings.length; index++) {
@@ -46,7 +46,7 @@ function groupTags(taggings: IServiceTagging[]) {
   }
 
   return m;
-}
+};
 
 export const deriveFeedFromSubscription = (s: IServiceSubscriptions): IFeed => {
   return {
@@ -54,6 +54,7 @@ export const deriveFeedFromSubscription = (s: IServiceSubscriptions): IFeed => {
     site: s.site_url,
     id: s.id.toString(),
     name: s.title,
+    feed_id: s.feed_id,
   };
 };
 
