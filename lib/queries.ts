@@ -20,6 +20,7 @@ import {
   createEntryURL,
   createFeedUrl,
   createFeedWithEntriesUrl,
+  STARRED_URL,
 } from "./urls";
 
 export const writeToMock = (name: string, content: any) => {
@@ -87,7 +88,6 @@ export const Query: IQueryResolvers<ResolverContext> = {
 
   subscription: async (_, { id }, context) => {
     const init = deriveHeader(context);
-    console.log(createFeedUrl(id), createFeedWithEntriesUrl(id));
     const feedDetailsRes = await fetch(createFeedUrl(id), init);
     const feed = await feedDetailsRes.json();
 
@@ -100,4 +100,15 @@ export const Query: IQueryResolvers<ResolverContext> = {
       items,
     };
   },
+
+  favorites: async (_, __, context) => {
+    const init = deriveHeader(context);
+    const starredRes = await fetch(STARRED_URL, init);
+    const favoriteIds: number[] = await starredRes.json();
+    return favoriteIds;
+  },
+
+  // bookmarks: async (_, { ids }, context) => {
+
+  // }
 };

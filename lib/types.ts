@@ -69,6 +69,9 @@ export type IQuery = {
   entries: Array<IItem>;
   entry: IItem;
   subscription: ISubscription;
+  favorites: Array<Scalars['Float']>;
+  bookmarks: Array<IItem>;
+  feed: IFeed;
 };
 
 
@@ -83,6 +86,16 @@ export type IQueryEntryArgs = {
 
 
 export type IQuerySubscriptionArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type IQueryBookmarksArgs = {
+  ids: Maybe<Array<Scalars['Float']>>;
+};
+
+
+export type IQueryFeedArgs = {
   id: Scalars['Float'];
 };
 
@@ -265,6 +278,9 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   entries: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryEntriesArgs, never>>;
   entry: Resolver<IResolversTypes['Item'], ParentType, ContextType, RequireFields<IQueryEntryArgs, 'id'>>;
   subscription: Resolver<IResolversTypes['Subscription'], ParentType, ContextType, RequireFields<IQuerySubscriptionArgs, 'id'>>;
+  favorites: Resolver<Array<IResolversTypes['Float']>, ParentType, ContextType>;
+  bookmarks: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryBookmarksArgs, never>>;
+  feed: Resolver<IResolversTypes['Feed'], ParentType, ContextType, RequireFields<IQueryFeedArgs, 'id'>>;
 }>;
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = ResolversObject<{

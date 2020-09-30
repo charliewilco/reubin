@@ -51,10 +51,13 @@ export const typeDefs = gql`
     entries(page: Int): [Item!]!
     entry(id: Float!): Item!
     subscription(id: Float!): Subscription!
+    favorites: [Float!]!
+    bookmarks(ids: [Float!]): [Item!]!
+    feed(id: Float!): Feed!
   }
 
   type Mutation {
-    # bookmark(id: String!): Item
+    # bookmark(id: Float!): Item
     # markAsRead(id: String!): Item
     # markAsUnread(id: String!): Item
     login(hash: String!): AuthResponse
