@@ -63,7 +63,8 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    # bookmark(id: Float!): Item
+    bookmark(id: Float!): Item
+    removeBookmark(id: Float!): Item
     markAsRead(id: String!): Item
     markAsUnread(id: String!): Item
     login(hash: String!): AuthResponse

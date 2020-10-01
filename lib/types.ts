@@ -103,9 +103,21 @@ export type IQueryFeedArgs = {
 
 export type IMutation = {
   __typename?: 'Mutation';
+  bookmark: Maybe<IItem>;
+  removeBookmark: Maybe<IItem>;
   markAsRead: Maybe<IItem>;
   markAsUnread: Maybe<IItem>;
   login: Maybe<IAuthResponse>;
+};
+
+
+export type IMutationBookmarkArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type IMutationRemoveBookmarkArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -298,6 +310,8 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
 }>;
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = ResolversObject<{
+  bookmark: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationBookmarkArgs, 'id'>>;
+  removeBookmark: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationRemoveBookmarkArgs, 'id'>>;
   markAsRead: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationMarkAsReadArgs, 'id'>>;
   markAsUnread: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationMarkAsUnreadArgs, 'id'>>;
   login: Resolver<Maybe<IResolversTypes['AuthResponse']>, ParentType, ContextType, RequireFields<IMutationLoginArgs, 'hash'>>;
