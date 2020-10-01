@@ -28,7 +28,7 @@ export type IItem = {
   feed_id: Scalars['Int'];
   title: Scalars['String'];
   author: Maybe<Scalars['String']>;
-  summary: Scalars['String'];
+  summary: Maybe<Scalars['String']>;
   content: Scalars['String'];
   url: Scalars['String'];
   extracted_content_url: Scalars['String'];
@@ -238,7 +238,7 @@ export type IItemResolvers<ContextType = any, ParentType extends IResolversParen
   feed_id: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
   title: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   author: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
-  summary: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  summary: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
   content: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   url: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   extracted_content_url: Resolver<IResolversTypes['String'], ParentType, ContextType>;
