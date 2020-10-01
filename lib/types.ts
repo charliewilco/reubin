@@ -28,7 +28,7 @@ export type IItem = {
   feed_id: Scalars['Int'];
   title: Scalars['String'];
   author: Maybe<Scalars['String']>;
-  summary: Scalars['String'];
+  summary: Maybe<Scalars['String']>;
   content: Scalars['String'];
   url: Scalars['String'];
   extracted_content_url: Scalars['String'];
@@ -68,7 +68,12 @@ export type IQuery = {
   unread: IUnreadList;
   entries: Array<IItem>;
   entry: IItem;
+  /** Deprecated */
   subscription: ISubscription;
+  favorites: Array<Scalars['Float']>;
+  bookmarks: Array<IItem>;
+  /** Must be id not feed_id */
+  feed: IFeed;
 };
 
 
@@ -86,9 +91,43 @@ export type IQuerySubscriptionArgs = {
   id: Scalars['Float'];
 };
 
+
+export type IQueryBookmarksArgs = {
+  ids: Maybe<Array<Scalars['Float']>>;
+};
+
+
+export type IQueryFeedArgs = {
+  id: Scalars['Float'];
+};
+
 export type IMutation = {
   __typename?: 'Mutation';
+  bookmark: Maybe<IItem>;
+  removeBookmark: Maybe<IItem>;
+  markAsRead: Maybe<IItem>;
+  markAsUnread: Maybe<IItem>;
   login: Maybe<IAuthResponse>;
+};
+
+
+export type IMutationBookmarkArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type IMutationRemoveBookmarkArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type IMutationMarkAsReadArgs = {
+  id: Scalars['String'];
+};
+
+
+export type IMutationMarkAsUnreadArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -225,7 +264,7 @@ export type IItemResolvers<ContextType = any, ParentType extends IResolversParen
   feed_id: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
   title: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   author: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
-  summary: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  summary: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
   content: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   url: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   extracted_content_url: Resolver<IResolversTypes['String'], ParentType, ContextType>;
@@ -265,9 +304,16 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   entries: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryEntriesArgs, never>>;
   entry: Resolver<IResolversTypes['Item'], ParentType, ContextType, RequireFields<IQueryEntryArgs, 'id'>>;
   subscription: Resolver<IResolversTypes['Subscription'], ParentType, ContextType, RequireFields<IQuerySubscriptionArgs, 'id'>>;
+  favorites: Resolver<Array<IResolversTypes['Float']>, ParentType, ContextType>;
+  bookmarks: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryBookmarksArgs, never>>;
+  feed: Resolver<IResolversTypes['Feed'], ParentType, ContextType, RequireFields<IQueryFeedArgs, 'id'>>;
 }>;
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = ResolversObject<{
+  bookmark: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationBookmarkArgs, 'id'>>;
+  removeBookmark: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationRemoveBookmarkArgs, 'id'>>;
+  markAsRead: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationMarkAsReadArgs, 'id'>>;
+  markAsUnread: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationMarkAsUnreadArgs, 'id'>>;
   login: Resolver<Maybe<IResolversTypes['AuthResponse']>, ParentType, ContextType, RequireFields<IMutationLoginArgs, 'hash'>>;
 }>;
 

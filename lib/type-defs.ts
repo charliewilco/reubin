@@ -15,7 +15,7 @@ export const typeDefs = gql`
     feed_id: Int!
     title: String!
     author: String
-    summary: String!
+    summary: String
     content: String!
     url: String!
     extracted_content_url: String!
@@ -50,13 +50,23 @@ export const typeDefs = gql`
     unread: UnreadList!
     entries(page: Int): [Item!]!
     entry(id: Float!): Item!
+    """
+    Deprecated
+    """
     subscription(id: Float!): Subscription!
+    favorites: [Float!]!
+    bookmarks(ids: [Float!]): [Item!]!
+    """
+    Must be id not feed_id
+    """
+    feed(id: Float!): Feed!
   }
 
   type Mutation {
-    # bookmark(id: String!): Item
-    # markAsRead(id: String!): Item
-    # markAsUnread(id: String!): Item
+    bookmark(id: Float!): Item
+    removeBookmark(id: Float!): Item
+    markAsRead(id: String!): Item
+    markAsUnread(id: String!): Item
     login(hash: String!): AuthResponse
   }
 
