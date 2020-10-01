@@ -1,46 +1,13 @@
-@import "~typeface-jetbrains-mono";
+@import "~typeface-ibm-plex-sans";
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@tailwind base;
 
-html {
-  background: #212121;
-  color: white;
-  font: 400 100%/1.6 "JetBrains Mono", monospace;
-}
+/* Write your own custom base styles here */
 
-html,
-body,
-#__next {
-  height: 100%;
-}
+/* Start purging... */
+@tailwind components;
+/* Stop purging. */
 
-#__next {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#icon {
-  display: block;
-  margin: 0 auto 4rem;
-  max-width: 6rem;
-  width: 100%;
-  height: auto;
-}
-
-#header {
-  text-align: center;
-}
-
-h1 {
-  margin-bottom: 1rem;
-}
-
-p {
-  font-style: italic;
-}
+/* Start purging... */
+@tailwind utilities;
+/* Stop purging. */
