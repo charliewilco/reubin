@@ -15,7 +15,7 @@ export const typeDefs = gql`
     feed_id: Int!
     title: String!
     author: String
-    summary: String!
+    summary: String
     content: String!
     url: String!
     extracted_content_url: String!
