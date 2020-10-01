@@ -68,9 +68,11 @@ export type IQuery = {
   unread: IUnreadList;
   entries: Array<IItem>;
   entry: IItem;
+  /** Deprecated */
   subscription: ISubscription;
   favorites: Array<Scalars['Float']>;
   bookmarks: Array<IItem>;
+  /** Must be id not feed_id */
   feed: IFeed;
 };
 
@@ -101,7 +103,19 @@ export type IQueryFeedArgs = {
 
 export type IMutation = {
   __typename?: 'Mutation';
+  markAsRead: Maybe<IItem>;
+  markAsUnread: Maybe<IItem>;
   login: Maybe<IAuthResponse>;
+};
+
+
+export type IMutationMarkAsReadArgs = {
+  id: Scalars['String'];
+};
+
+
+export type IMutationMarkAsUnreadArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -284,6 +298,8 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
 }>;
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = ResolversObject<{
+  markAsRead: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationMarkAsReadArgs, 'id'>>;
+  markAsUnread: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationMarkAsUnreadArgs, 'id'>>;
   login: Resolver<Maybe<IResolversTypes['AuthResponse']>, ParentType, ContextType, RequireFields<IMutationLoginArgs, 'hash'>>;
 }>;
 

@@ -9,8 +9,6 @@ import {
   deriveFeedFromSubscription,
   IServiceTagging,
   IServiceSubscriptions,
-  // createUrlsofUnreads,
-  // IEntryUnread,
 } from "./normalize";
 import {
   ENTRIES_URL,
@@ -21,6 +19,7 @@ import {
   createFeedUrl,
   createFeedWithEntriesUrl,
   STARRED_URL,
+  FEEDBIN_API,
 } from "./urls";
 
 export const writeToMock = (name: string, content: any) => {
@@ -85,7 +84,6 @@ export const Query: IQueryResolvers<ResolverContext> = {
       throw new ApolloError(error);
     }
   },
-
   subscription: async (_, { id }, context) => {
     const init = deriveHeader(context);
     const feedDetailsRes = await fetch(createFeedUrl(id), init);
@@ -108,7 +106,39 @@ export const Query: IQueryResolvers<ResolverContext> = {
     return favoriteIds;
   },
 
-  // bookmarks: async (_, { ids }, context) => {
+  bookmarks: async (_, { ids }, context) => {
+    const init = deriveHeader(context);
+    let url = qs.stringifyUrl({ url: ENTRIES_URL, query: { ids: ids } } as any);
 
-  // }
+    if (!ids || ids === null) {
+      const starredRes = await fetch(STARRED_URL, init);
+      const favoriteIds: number[] = await starredRes.json();
+
+      url = qs.stringifyUrl(
+        { url: ENTRIES_URL, query: { ids: favoriteIds } } as any,
+        {
+          arrayFormat: "comma",
+        }
+      );
+
+      const entriesRes = await fetch(url, init);
+      const entries = await entriesRes.json();
+      return entries;
+    }
+
+    const entriesRes = await fetch(url, init);
+    const entries = await entriesRes.json();
+    return entries;
+  },
+
+  feed: async (_, { id }, context) => {
+    const init = deriveHeader(context);
+
+    const subscription = await fetch(
+      FEEDBIN_API.concat(`/subscriptions/${id}.json`),
+      init
+    ).then((res) => res.json());
+
+    return deriveFeedFromSubscription(subscription);
+  },
 };
