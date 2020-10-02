@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 
 const IndexPage = () => (
   <>
@@ -56,12 +57,11 @@ const IndexPage = () => (
               </a>
             </div>
             <div className="px-5 py-2">
-              <a
-                href="#"
-                className="text-base leading-6 text-gray-500 hover:text-gray-900"
-              >
-                Changelog
-              </a>
+              <Link href="/changelog">
+                <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
+                  Changelog
+                </a>
+              </Link>
             </div>
             <div className="px-5 py-2">
               <a

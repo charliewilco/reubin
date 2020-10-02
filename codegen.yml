@@ -1,12 +1,25 @@
-schema: ./lib/type-defs.ts
 generates:
   ./lib/types.ts:
+    schema: ./lib/type-defs.ts
     config:
       useIndexSignature: true
     plugins:
       - typescript
       - typescript-operations
       - typescript-resolvers
+  ./util/github-sdk.ts:
+    schema:
+      - https://api.github.com/graphql:
+          headers:
+            Authorization: Bearer ${GITHUB_ACCESS_TOKEN}
+
+    documents: "./util/*.graphql"
+    config:
+      useIndexSignature: true
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
 config:
   typesPrefix: I
   avoidOptionals: true

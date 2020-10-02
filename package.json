@@ -8,11 +8,12 @@
     "type-check": "tsc",
     "prebuild": "yarn generate",
     "predev": "yarn generate",
-    "generate": "graphql-codegen",
+    "generate": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config",
     "test": "jest"
   },
   "dependencies": {
     "@apollo/client": "^3.2.0",
+    "@tailwindcss/ui": "^0.6.2",
     "@types/node": "^14.11.2",
     "@types/ramda": "^0.27.19",
     "@types/react": "^16.9.16",
@@ -20,6 +21,7 @@
     "apollo-datasource-rest": "^0.9.4",
     "apollo-server-micro": "^2.18.0",
     "graphql": "^15.3.0",
+    "graphql-request": "^3.1.0",
     "next": "latest",
     "postcss-flexbugs-fixes": "^4.2.1",
     "postcss-preset-env": "^6.7.0",
@@ -35,6 +37,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^1.17.8",
     "@graphql-codegen/typescript": "^1.17.9",
+    "@graphql-codegen/typescript-graphql-request": "^2.0.1",
     "@graphql-codegen/typescript-operations": "^1.17.8",
     "@graphql-codegen/typescript-react-apollo": "^2.0.6",
     "@graphql-codegen/typescript-resolvers": "^1.17.9",
