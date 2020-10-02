@@ -1,0 +1,16 @@
+query Changelogs {
+  repository(name: "FeedbinPrototype", owner: "charliewilco") {
+    id
+    releases(last: 100) {
+      nodes {
+        name
+        descriptionHTML
+        tag {
+          name
+        }
+        tagName
+        publishedAt
+      }
+    }
+  }
+}
