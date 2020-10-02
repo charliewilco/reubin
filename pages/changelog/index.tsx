@@ -6,7 +6,7 @@ import { sdk } from "../../util/sdk";
 
 export const getStaticProps: GetStaticProps<{
   results: IChangelogsQuery;
-}> = async (context) => {
+}> = async () => {
   const results = await sdk.Changelogs();
 
   return {
