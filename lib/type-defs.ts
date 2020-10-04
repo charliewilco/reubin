@@ -47,14 +47,14 @@ export const typeDefs = gql`
 
   type Query {
     subscriptions: Subscriptions!
-    unread: UnreadList!
+    favorites: [Float!]!
+    unread: [Float!]!
     entries(page: Int): [Item!]!
     entry(id: Float!): Item!
     """
     Deprecated
     """
     subscription(id: Float!): Subscription!
-    favorites: [Float!]!
     bookmarks(ids: [Float!]): [Item!]!
     """
     Must be id not feed_id

@@ -54,9 +54,7 @@ export const Query: IQueryResolvers<ResolverContext> = {
     //   urls.map((url) => fetch(url, init).then((res) => res.json()))
     // );
 
-    return {
-      itemIDs: unreadItems.toString().split(","),
-    };
+    return unreadItems;
   },
 
   entries: async (_, { page }, context) => {

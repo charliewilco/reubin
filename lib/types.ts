@@ -65,12 +65,12 @@ export type ISubscription = {
 export type IQuery = {
   __typename?: 'Query';
   subscriptions: ISubscriptions;
-  unread: IUnreadList;
+  favorites: Array<Scalars['Float']>;
+  unread: Array<Scalars['Float']>;
   entries: Array<IItem>;
   entry: IItem;
   /** Deprecated */
   subscription: ISubscription;
-  favorites: Array<Scalars['Float']>;
   bookmarks: Array<IItem>;
   /** Must be id not feed_id */
   feed: IFeed;
@@ -300,11 +300,11 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = ResolversObject<{
   subscriptions: Resolver<IResolversTypes['Subscriptions'], ParentType, ContextType>;
-  unread: Resolver<IResolversTypes['UnreadList'], ParentType, ContextType>;
+  favorites: Resolver<Array<IResolversTypes['Float']>, ParentType, ContextType>;
+  unread: Resolver<Array<IResolversTypes['Float']>, ParentType, ContextType>;
   entries: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryEntriesArgs, never>>;
   entry: Resolver<IResolversTypes['Item'], ParentType, ContextType, RequireFields<IQueryEntryArgs, 'id'>>;
   subscription: Resolver<IResolversTypes['Subscription'], ParentType, ContextType, RequireFields<IQuerySubscriptionArgs, 'id'>>;
-  favorites: Resolver<Array<IResolversTypes['Float']>, ParentType, ContextType>;
   bookmarks: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryBookmarksArgs, never>>;
   feed: Resolver<IResolversTypes['Feed'], ParentType, ContextType, RequireFields<IQueryFeedArgs, 'id'>>;
 }>;
