@@ -12,4 +12,4 @@ export const createEntryURL = (id: number) =>
 export const createFeedUrl = (id: number) =>
   FEEDBIN_API.concat(`/feeds/${id}.json`);
 export const createFeedWithEntriesUrl = (id: number) =>
-  FEEDBIN_API.concat(`/feeds/${id}/entries.json`);
+  FEEDBIN_API.concat(`/feeds/${id}/entries.json?include_original=true`);
