@@ -2,8 +2,9 @@ const fs = require("fs");
 const path = require("path");
 import { ApolloError } from "apollo-server-micro";
 import qs from "query-string";
+import sanitizeHtml from "sanitize-html";
 import { ResolverContext, deriveHeader } from "./context";
-import { IQueryResolvers } from "./types";
+import { IItem, IQueryResolvers } from "./types";
 import {
   normalizeSubscriptions,
   deriveFeedFromSubscription,
@@ -27,6 +28,8 @@ export const writeToMock = (name: string, content: any) => {
 
   fs.writeFileSync(f, JSON.stringify(content, null, 2), "utf8");
 };
+
+const getTime = (d: string) => new Date(d).getTime();
 
 export const Query: IQueryResolvers<ResolverContext> = {
   subscriptions: async (_, __, context) => {
@@ -75,9 +78,20 @@ export const Query: IQueryResolvers<ResolverContext> = {
 
     try {
       const entryRes = await fetch(url, init);
-      const entry = entryRes.json();
+      const entry = await entryRes.json();
 
-      return entry;
+      console.log(
+        entry.content,
+        "\n",
+        sanitizeHtml(entry.content, {
+          allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+          allowedAttributes: {
+            img: ["src", "alt"],
+          },
+        })
+      );
+
+      return { ...entry, content: sanitizeHtml(entry.content) };
     } catch (error) {
       throw new ApolloError(error);
     }
@@ -89,11 +103,11 @@ export const Query: IQueryResolvers<ResolverContext> = {
 
     const entriesRes = await fetch(createFeedWithEntriesUrl(id), init);
 
-    const items = await entriesRes.json();
+    const items: IItem[] = await entriesRes.json();
 
     return {
       feed: deriveFeedFromSubscription(feed),
-      items,
+      items: items.sort((a, b) => getTime(b.published) - getTime(a.published)),
     };
   },
 

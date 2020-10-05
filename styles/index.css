@@ -11,3 +11,7 @@
 /* Start purging... */
 @tailwind utilities;
 /* Stop purging. */
+
+.prose a {
+  @apply text-yellow-600;
+}
