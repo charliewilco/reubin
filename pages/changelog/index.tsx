@@ -1,4 +1,5 @@
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
+import Head from "next/head";
 import { Footer } from "../../components/footer";
 
 import { IChangelogsQuery } from "../../util/github-sdk";
@@ -50,6 +51,9 @@ const Changelog: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
               id="header"
               className="mx-auto max-w-screen-xl px-4 py-16 text-center mb-16"
             >
+              <Head>
+                <title>Privacy Policy | Reubin</title>
+              </Head>
               <img
                 id="icon"
                 className="mx-auto w-24 h-24 mb-8"
