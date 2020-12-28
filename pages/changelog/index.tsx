@@ -1,5 +1,6 @@
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import { Footer } from "../../components/footer";
 
 import { IChangelogsQuery } from "../../util/github-sdk";
@@ -54,8 +55,10 @@ const Changelog: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
               <Head>
                 <title>Privacy Policy | Reubin</title>
               </Head>
-              <img
+              <Image
                 id="icon"
+                width={96}
+                height={96}
                 className="mx-auto w-24 h-24 mb-8"
                 src="/app-icon.png"
                 alt="Round Yellow Circle"
@@ -91,9 +94,13 @@ const Changelog: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
             </div>
           </div>
           <div className="mt-6 grid gap-16 border-t-2 border-gray-100 pt-10 lg:grid-cols-2 lg:gap-x-5 lg:gap-y-12">
-            {props.results.repository?.releases.nodes?.map((n) => {
+            {props.results.repository?.releases.nodes?.map((n, i) => {
               return (
-                <ChangelogPost title={n?.name!} content={n?.descriptionHTML!} />
+                <ChangelogPost
+                  key={i}
+                  title={n?.name!}
+                  content={n?.descriptionHTML!}
+                />
               );
             })}
           </div>

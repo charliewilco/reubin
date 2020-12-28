@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import { Footer } from "../components/footer";
 
 const IndexPage = () => (
@@ -12,8 +13,10 @@ const IndexPage = () => (
           id="header"
           className="mt-10 mx-auto max-w-screen-xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 xl:mt-28 text-center"
         >
-          <img
+          <Image
             id="icon"
+            width={96}
+            height={96}
             className="mx-auto w-24 h-24 mb-8"
             src="/app-icon.png"
             alt="Round Yellow Circle"

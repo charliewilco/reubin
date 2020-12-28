@@ -68,18 +68,6 @@ export type IAcceptTopicSuggestionPayload = {
   topic: Maybe<ITopic>;
 };
 
-/** The possible capabilities for action executions setting. */
-export enum IActionExecutionCapabilitySetting {
-  /** All action executions are disabled. */
-  Disabled = 'DISABLED',
-  /** All action executions are enabled. */
-  AllActions = 'ALL_ACTIONS',
-  /** Only actions defined within the repo are allowed. */
-  LocalActionsOnly = 'LOCAL_ACTIONS_ONLY',
-  /** Organization administrators action execution capabilities. */
-  NoPolicy = 'NO_POLICY'
-}
-
 /** Represents an object which can take actions on GitHub. Typically a User or Bot. */
 export type IActor = {
   /** A URL pointing to the actor's public avatar. */
@@ -645,6 +633,10 @@ export type IBotAvatarUrlArgs = {
 /** A branch protection rule. */
 export type IBranchProtectionRule = INode & {
   __typename?: 'BranchProtectionRule';
+  /** Can this branch be deleted. */
+  allowsDeletions: Scalars['Boolean'];
+  /** Are force pushes allowed on this branch. */
+  allowsForcePushes: Scalars['Boolean'];
   /** A list of conflicts matching branches protection rule and other branch protection rules */
   branchProtectionRuleConflicts: IBranchProtectionRuleConflictConnection;
   /** The actor who created this branch protection rule. */
@@ -674,6 +666,8 @@ export type IBranchProtectionRule = INode & {
   requiresCodeOwnerReviews: Scalars['Boolean'];
   /** Are commits required to be signed. */
   requiresCommitSignatures: Scalars['Boolean'];
+  /** Are merge commits prohibited from being pushed to this branch. */
+  requiresLinearHistory: Scalars['Boolean'];
   /** Are status checks required to update matching branches. */
   requiresStatusChecks: Scalars['Boolean'];
   /** Are branches required to be up to date before merging. */
@@ -937,6 +931,8 @@ export enum ICheckConclusionState {
   Neutral = 'NEUTRAL',
   /** The check suite or run was skipped. */
   Skipped = 'SKIPPED',
+  /** The check suite or run has failed at startup. */
+  StartupFailure = 'STARTUP_FAILURE',
   /** The check suite or run was marked stale by GitHub. Only GitHub can use this conclusion. */
   Stale = 'STALE'
 }
@@ -1074,6 +1070,8 @@ export enum ICheckStatusState {
   InProgress = 'IN_PROGRESS',
   /** The check suite or run has been completed. */
   Completed = 'COMPLETED',
+  /** The check suite or run is in waiting state. */
+  Waiting = 'WAITING',
   /** The check suite or run has been requested. */
   Requested = 'REQUESTED'
 }
@@ -2191,6 +2189,12 @@ export type ICreateBranchProtectionRuleInput = {
   requiredApprovingReviewCount: Maybe<Scalars['Int']>;
   /** Are commits required to be signed. */
   requiresCommitSignatures: Maybe<Scalars['Boolean']>;
+  /** Are merge commits prohibited from being pushed to this branch. */
+  requiresLinearHistory: Maybe<Scalars['Boolean']>;
+  /** Are force pushes allowed on this branch. */
+  allowsForcePushes: Maybe<Scalars['Boolean']>;
+  /** Can this branch be deleted. */
+  allowsDeletions: Maybe<Scalars['Boolean']>;
   /** Can admins overwrite branch protection. */
   isAdminEnforced: Maybe<Scalars['Boolean']>;
   /** Are status checks required to update matching branches. */
@@ -3214,7 +3218,9 @@ export enum IDeploymentState {
   /** The deployment has queued */
   Queued = 'QUEUED',
   /** The deployment is in progress. */
-  InProgress = 'IN_PROGRESS'
+  InProgress = 'IN_PROGRESS',
+  /** The deployment is waiting. */
+  Waiting = 'WAITING'
 }
 
 /** Describes the status of a given deployment attempt. */
@@ -3756,8 +3762,6 @@ export type IEnterpriseOutsideCollaboratorEdgeRepositoriesArgs = {
 /** Enterprise information only visible to enterprise owners. */
 export type IEnterpriseOwnerInfo = {
   __typename?: 'EnterpriseOwnerInfo';
-  /** A list of enterprise organizations configured with the provided action execution capabilities setting value. */
-  actionExecutionCapabilitySettingOrganizations: IOrganizationConnection;
   /** A list of all of the administrators for this enterprise. */
   admins: IEnterpriseAdministratorConnection;
   /** A list of users in the enterprise who currently have two-factor authentication disabled. */
@@ -3851,16 +3855,6 @@ export type IEnterpriseOwnerInfo = {
   twoFactorRequiredSetting: IEnterpriseEnabledSettingValue;
   /** A list of enterprise organizations configured with the two-factor authentication setting value. */
   twoFactorRequiredSettingOrganizations: IOrganizationConnection;
-};
-
-
-/** Enterprise information only visible to enterprise owners. */
-export type IEnterpriseOwnerInfoActionExecutionCapabilitySettingOrganizationsArgs = {
-  after: Maybe<Scalars['String']>;
-  before: Maybe<Scalars['String']>;
-  first: Maybe<Scalars['Int']>;
-  last: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<IOrganizationOrder>;
 };
 
 
@@ -5393,6 +5387,7 @@ export type IIssueAssigneesArgs = {
 
 /** An Issue is a place to discuss ideas, enhancements, tasks, and bugs for a project. */
 export type IIssueCommentsArgs = {
+  orderBy: Maybe<IIssueCommentOrder>;
   after: Maybe<Scalars['String']>;
   before: Maybe<Scalars['String']>;
   first: Maybe<Scalars['Int']>;
@@ -5584,6 +5579,20 @@ export type IIssueCommentEdge = {
   /** The item at the end of the edge. */
   node: Maybe<IIssueComment>;
 };
+
+/** Ways in which lists of issue comments can be ordered upon return. */
+export type IIssueCommentOrder = {
+  /** The field in which to order issue comments by. */
+  field: IIssueCommentOrderField;
+  /** The direction in which to order issue comments by the specified field. */
+  direction: IOrderDirection;
+};
+
+/** Properties by which issue comment connections can be ordered. */
+export enum IIssueCommentOrderField {
+  /** Order issue comments by update time */
+  UpdatedAt = 'UPDATED_AT'
+}
 
 /** The connection type for Issue. */
 export type IIssueConnection = {
@@ -6066,9 +6075,9 @@ export type ILinkRepositoryToProjectPayload = {
 
 /** Autogenerated input type of LockLockable */
 export type ILockLockableInput = {
-  /** ID of the issue or pull request to be locked. */
+  /** ID of the item to be locked. */
   lockableId: Scalars['ID'];
-  /** A reason for why the issue or pull request will be locked. */
+  /** A reason for why the item will be locked. */
   lockReason: Maybe<ILockReason>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId: Maybe<Scalars['String']>;
@@ -6246,6 +6255,8 @@ export type IMarketplaceListing = INode & {
   hasPublishedFreeTrialPlans: Scalars['Boolean'];
   /** Does this listing have a terms of service link? */
   hasTermsOfService: Scalars['Boolean'];
+  /** Whether the creator of the app is a verified org */
+  hasVerifiedOwner: Scalars['Boolean'];
   /** A technical description of how this app works with GitHub. */
   howItWorks: Maybe<Scalars['String']>;
   /** The listing's technical description rendered to HTML. */
@@ -6994,6 +7005,12 @@ export type IMutation = {
   resolveReviewThread: Maybe<IResolveReviewThreadPayload>;
   /** Creates or updates the identity provider for an enterprise. */
   setEnterpriseIdentityProvider: Maybe<ISetEnterpriseIdentityProviderPayload>;
+  /** Set an organization level interaction limit for an organization's public repositories. */
+  setOrganizationInteractionLimit: Maybe<ISetOrganizationInteractionLimitPayload>;
+  /** Sets an interaction limit setting for a repository. */
+  setRepositoryInteractionLimit: Maybe<ISetRepositoryInteractionLimitPayload>;
+  /** Set a user level interaction limit for an user's public repositories. */
+  setUserInteractionLimit: Maybe<ISetUserInteractionLimitPayload>;
   /** Submits a pending pull request review. */
   submitPullRequestReview: Maybe<ISubmitPullRequestReviewPayload>;
   /** Transfer an issue to a different repository */
@@ -7020,8 +7037,6 @@ export type IMutation = {
   updateCheckRun: Maybe<IUpdateCheckRunPayload>;
   /** Modifies the settings of an existing check suite */
   updateCheckSuitePreferences: Maybe<IUpdateCheckSuitePreferencesPayload>;
-  /** Sets the action execution capability setting for an enterprise. */
-  updateEnterpriseActionExecutionCapabilitySetting: Maybe<IUpdateEnterpriseActionExecutionCapabilitySettingPayload>;
   /** Updates the role of an enterprise administrator. */
   updateEnterpriseAdministratorRole: Maybe<IUpdateEnterpriseAdministratorRolePayload>;
   /** Sets whether private repository forks are enabled for an enterprise. */
@@ -7534,6 +7549,24 @@ export type IMutationSetEnterpriseIdentityProviderArgs = {
 
 
 /** The root query for implementing GraphQL mutations. */
+export type IMutationSetOrganizationInteractionLimitArgs = {
+  input: ISetOrganizationInteractionLimitInput;
+};
+
+
+/** The root query for implementing GraphQL mutations. */
+export type IMutationSetRepositoryInteractionLimitArgs = {
+  input: ISetRepositoryInteractionLimitInput;
+};
+
+
+/** The root query for implementing GraphQL mutations. */
+export type IMutationSetUserInteractionLimitArgs = {
+  input: ISetUserInteractionLimitInput;
+};
+
+
+/** The root query for implementing GraphQL mutations. */
 export type IMutationSubmitPullRequestReviewArgs = {
   input: ISubmitPullRequestReviewInput;
 };
@@ -7608,12 +7641,6 @@ export type IMutationUpdateCheckRunArgs = {
 /** The root query for implementing GraphQL mutations. */
 export type IMutationUpdateCheckSuitePreferencesArgs = {
   input: IUpdateCheckSuitePreferencesInput;
-};
-
-
-/** The root query for implementing GraphQL mutations. */
-export type IMutationUpdateEnterpriseActionExecutionCapabilitySettingArgs = {
-  input: IUpdateEnterpriseActionExecutionCapabilitySettingInput;
 };
 
 
@@ -9237,11 +9264,17 @@ export type IOrganization = INode & IActor & IPackageOwner & IProjectOwner & IRe
   descriptionHTML: Maybe<Scalars['String']>;
   /** The organization's public email. */
   email: Maybe<Scalars['String']>;
+  /** True if this user/organization has a GitHub Sponsors listing. */
+  hasSponsorsListing: Scalars['Boolean'];
   id: Scalars['ID'];
+  /** The interaction ability settings for this organization. */
+  interactionAbility: Maybe<IRepositoryInteractionAbility>;
   /** The setting value for whether the organization has an IP allow list enabled. */
   ipAllowListEnabledSetting: IIpAllowListEnabledSettingValue;
   /** The IP addresses that are allowed to access resources owned by the organization. */
   ipAllowListEntries: IIpAllowListEntryConnection;
+  /** True if the viewer is sponsored by this user/organization. */
+  isSponsoringViewer: Scalars['Boolean'];
   /** Whether the organization has verified its profile email and website, always false on Enterprise. */
   isVerified: Scalars['Boolean'];
   /** Showcases a selection of repositories and gists that the profile owner has either curated or that have been selected automatically based on popularity. */
@@ -9290,7 +9323,7 @@ export type IOrganization = INode & IActor & IPackageOwner & IProjectOwner & IRe
   resourcePath: Scalars['URI'];
   /** The Organization's SAML identity providers */
   samlIdentityProvider: Maybe<IOrganizationIdentityProvider>;
-  /** The GitHub Sponsors listing for this user. */
+  /** The GitHub Sponsors listing for this user or organization. */
   sponsorsListing: Maybe<ISponsorsListing>;
   /** This object's sponsorships as the maintainer. */
   sponsorshipsAsMaintainer: ISponsorshipConnection;
@@ -9320,8 +9353,12 @@ export type IOrganization = INode & IActor & IPackageOwner & IProjectOwner & IRe
   viewerCanCreateRepositories: Scalars['Boolean'];
   /** Viewer can create teams on this organization. */
   viewerCanCreateTeams: Scalars['Boolean'];
+  /** Whether or not the viewer is able to sponsor this user/organization. */
+  viewerCanSponsor: Scalars['Boolean'];
   /** Viewer is an active member of this organization. */
   viewerIsAMember: Scalars['Boolean'];
+  /** True if the viewer is sponsoring this user/organization. */
+  viewerIsSponsoring: Scalars['Boolean'];
   /** The organization's public profile URL. */
   websiteUrl: Maybe<Scalars['URI']>;
 };
@@ -10826,6 +10863,7 @@ export type IPullRequestAssigneesArgs = {
 
 /** A repository pull request. */
 export type IPullRequestCommentsArgs = {
+  orderBy: Maybe<IIssueCommentOrder>;
   after: Maybe<Scalars['String']>;
   before: Maybe<Scalars['String']>;
   first: Maybe<Scalars['Int']>;
@@ -13783,6 +13821,8 @@ export type IRepository = INode & IProjectOwner & IPackageOwner & ISubscribable 
   /** The repository's URL. */
   homepageUrl: Maybe<Scalars['URI']>;
   id: Scalars['ID'];
+  /** The interaction ability settings for this repository. */
+  interactionAbility: Maybe<IRepositoryInteractionAbility>;
   /** Indicates if the repository is unmaintained. */
   isArchived: Scalars['Boolean'];
   /** Returns true if blank issue creation is allowed */
@@ -14268,13 +14308,7 @@ export type IRepositoryCollaboratorEdge = {
   /** A cursor for use in pagination. */
   cursor: Scalars['String'];
   node: IUser;
-  /**
-   * The permission the user has on the repository.
-   * 
-   * **Upcoming Change on 2020-10-01 UTC**
-   * **Description:** Type for `permission` will change from `RepositoryPermission!` to `String`.
-   * **Reason:** This field may return additional values
-   */
+  /** The permission the user has on the repository. */
   permission: IRepositoryPermission;
   /** A list of sources for the user's access to the repository. */
   permissionSources: Maybe<Array<IPermissionSource>>;
@@ -14395,6 +14429,53 @@ export type IRepositoryInfoShortDescriptionHtmlArgs = {
   limit?: Maybe<Scalars['Int']>;
 };
 
+/** Repository interaction limit that applies to this object. */
+export type IRepositoryInteractionAbility = {
+  __typename?: 'RepositoryInteractionAbility';
+  /** The time the currently active limit expires. */
+  expiresAt: Maybe<Scalars['DateTime']>;
+  /** The current limit that is enabled on this object. */
+  limit: IRepositoryInteractionLimit;
+  /** The origin of the currently active interaction limit. */
+  origin: IRepositoryInteractionLimitOrigin;
+};
+
+/** A repository interaction limit. */
+export enum IRepositoryInteractionLimit {
+  /** Users that have recently created their account will be unable to interact with the repository. */
+  ExistingUsers = 'EXISTING_USERS',
+  /** Users that have not previously committed to a repository’s default branch will be unable to interact with the repository. */
+  ContributorsOnly = 'CONTRIBUTORS_ONLY',
+  /** Users that are not collaborators will not be able to interact with the repository. */
+  CollaboratorsOnly = 'COLLABORATORS_ONLY',
+  /** No interaction limits are enabled. */
+  NoLimit = 'NO_LIMIT'
+}
+
+/** The length for a repository interaction limit to be enabled for. */
+export enum IRepositoryInteractionLimitExpiry {
+  /** The interaction limit will expire after 1 day. */
+  OneDay = 'ONE_DAY',
+  /** The interaction limit will expire after 3 days. */
+  ThreeDays = 'THREE_DAYS',
+  /** The interaction limit will expire after 1 week. */
+  OneWeek = 'ONE_WEEK',
+  /** The interaction limit will expire after 1 month. */
+  OneMonth = 'ONE_MONTH',
+  /** The interaction limit will expire after 6 months. */
+  SixMonths = 'SIX_MONTHS'
+}
+
+/** Indicates where an interaction limit is configured. */
+export enum IRepositoryInteractionLimitOrigin {
+  /** A limit that is configured at the repository level. */
+  Repository = 'REPOSITORY',
+  /** A limit that is configured at the organization level. */
+  Organization = 'ORGANIZATION',
+  /** A limit that is configured at the user-wide level. */
+  User = 'USER'
+}
+
 /** An invitation for a user to be added to a repository. */
 export type IRepositoryInvitation = INode & {
   __typename?: 'RepositoryInvitation';
@@ -14407,13 +14488,7 @@ export type IRepositoryInvitation = INode & {
   inviter: IUser;
   /** The permalink for this repository invitation. */
   permalink: Scalars['URI'];
-  /**
-   * The permission granted on this repository by this invitation.
-   * 
-   * **Upcoming Change on 2020-10-01 UTC**
-   * **Description:** Type for `permission` will change from `RepositoryPermission!` to `String`.
-   * **Reason:** This field may return additional values
-   */
+  /** The permission granted on this repository by this invitation. */
   permission: IRepositoryPermission;
   /** The Repository the user is invited to. */
   repository: Maybe<IRepositoryInfo>;
@@ -14781,7 +14856,9 @@ export enum IRequestableCheckStatusState {
   /** The check suite or run is in progress. */
   InProgress = 'IN_PROGRESS',
   /** The check suite or run has been completed. */
-  Completed = 'COMPLETED'
+  Completed = 'COMPLETED',
+  /** The check suite or run is in waiting state. */
+  Waiting = 'WAITING'
 }
 
 /** Types that can be requested reviewers. */
@@ -15351,6 +15428,69 @@ export type ISetEnterpriseIdentityProviderPayload = {
   identityProvider: Maybe<IEnterpriseIdentityProvider>;
 };
 
+/** Autogenerated input type of SetOrganizationInteractionLimit */
+export type ISetOrganizationInteractionLimitInput = {
+  /** The ID of the organization to set a limit for. */
+  organizationId: Scalars['ID'];
+  /** The limit to set. */
+  limit: IRepositoryInteractionLimit;
+  /** When this limit should expire. */
+  expiry: Maybe<IRepositoryInteractionLimitExpiry>;
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId: Maybe<Scalars['String']>;
+};
+
+/** Autogenerated return type of SetOrganizationInteractionLimit */
+export type ISetOrganizationInteractionLimitPayload = {
+  __typename?: 'SetOrganizationInteractionLimitPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** The organization that the interaction limit was set for. */
+  organization: Maybe<IOrganization>;
+};
+
+/** Autogenerated input type of SetRepositoryInteractionLimit */
+export type ISetRepositoryInteractionLimitInput = {
+  /** The ID of the repository to set a limit for. */
+  repositoryId: Scalars['ID'];
+  /** The limit to set. */
+  limit: IRepositoryInteractionLimit;
+  /** When this limit should expire. */
+  expiry: Maybe<IRepositoryInteractionLimitExpiry>;
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId: Maybe<Scalars['String']>;
+};
+
+/** Autogenerated return type of SetRepositoryInteractionLimit */
+export type ISetRepositoryInteractionLimitPayload = {
+  __typename?: 'SetRepositoryInteractionLimitPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** The repository that the interaction limit was set for. */
+  repository: Maybe<IRepository>;
+};
+
+/** Autogenerated input type of SetUserInteractionLimit */
+export type ISetUserInteractionLimitInput = {
+  /** The ID of the user to set a limit for. */
+  userId: Scalars['ID'];
+  /** The limit to set. */
+  limit: IRepositoryInteractionLimit;
+  /** When this limit should expire. */
+  expiry: Maybe<IRepositoryInteractionLimitExpiry>;
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId: Maybe<Scalars['String']>;
+};
+
+/** Autogenerated return type of SetUserInteractionLimit */
+export type ISetUserInteractionLimitPayload = {
+  __typename?: 'SetUserInteractionLimitPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** The user that the interaction limit was set for. */
+  user: Maybe<IUser>;
+};
+
 /** Represents an S/MIME signature on a Commit or Tag. */
 export type ISmimeSignature = IGitSignature & {
   __typename?: 'SmimeSignature';
@@ -15375,12 +15515,20 @@ export type ISponsor = IOrganization | IUser;
 
 /** Entities that can be sponsored through GitHub Sponsors */
 export type ISponsorable = {
-  /** The GitHub Sponsors listing for this user. */
+  /** True if this user/organization has a GitHub Sponsors listing. */
+  hasSponsorsListing: Scalars['Boolean'];
+  /** True if the viewer is sponsored by this user/organization. */
+  isSponsoringViewer: Scalars['Boolean'];
+  /** The GitHub Sponsors listing for this user or organization. */
   sponsorsListing: Maybe<ISponsorsListing>;
   /** This object's sponsorships as the maintainer. */
   sponsorshipsAsMaintainer: ISponsorshipConnection;
   /** This object's sponsorships as the sponsor. */
   sponsorshipsAsSponsor: ISponsorshipConnection;
+  /** Whether or not the viewer is able to sponsor this user/organization. */
+  viewerCanSponsor: Scalars['Boolean'];
+  /** True if the viewer is sponsoring this user/organization. */
+  viewerIsSponsoring: Scalars['Boolean'];
 };
 
 
@@ -15532,7 +15680,7 @@ export type ISponsorship = INode & {
    * @deprecated `Sponsorship.sponsor` will be removed. Use `Sponsorship.sponsorEntity` instead. Removal on 2020-10-01 UTC.
    */
   sponsor: Maybe<IUser>;
-  /** The user or organization that is sponsoring. Returns null if the sponsorship is private. */
+  /** The user or organization that is sponsoring, if you have permission to view them. */
   sponsorEntity: Maybe<ISponsor>;
   /** The entity that is being sponsored */
   sponsorable: ISponsorable;
@@ -16752,13 +16900,7 @@ export type ITeamRepositoryEdge = {
   /** A cursor for use in pagination. */
   cursor: Scalars['String'];
   node: IRepository;
-  /**
-   * The permission level the team has on the repository
-   * 
-   * **Upcoming Change on 2020-10-01 UTC**
-   * **Description:** Type for `permission` will change from `RepositoryPermission!` to `String`.
-   * **Reason:** This field may return additional values
-   */
+  /** The permission level the team has on the repository */
   permission: IRepositoryPermission;
 };
 
@@ -17065,7 +17207,7 @@ export type IUnlinkRepositoryFromProjectPayload = {
 
 /** Autogenerated input type of UnlockLockable */
 export type IUnlockLockableInput = {
-  /** ID of the issue or pull request to be unlocked. */
+  /** ID of the item to be unlocked. */
   lockableId: Scalars['ID'];
   /** A unique identifier for the client performing the mutation. */
   clientMutationId: Maybe<Scalars['String']>;
@@ -17230,6 +17372,12 @@ export type IUpdateBranchProtectionRuleInput = {
   requiredApprovingReviewCount: Maybe<Scalars['Int']>;
   /** Are commits required to be signed. */
   requiresCommitSignatures: Maybe<Scalars['Boolean']>;
+  /** Are merge commits prohibited from being pushed to this branch. */
+  requiresLinearHistory: Maybe<Scalars['Boolean']>;
+  /** Are force pushes allowed on this branch. */
+  allowsForcePushes: Maybe<Scalars['Boolean']>;
+  /** Can this branch be deleted. */
+  allowsDeletions: Maybe<Scalars['Boolean']>;
   /** Can admins overwrite branch protection. */
   isAdminEnforced: Maybe<Scalars['Boolean']>;
   /** Are status checks required to update matching branches. */
@@ -17317,27 +17465,6 @@ export type IUpdateCheckSuitePreferencesPayload = {
   clientMutationId: Maybe<Scalars['String']>;
   /** The updated repository. */
   repository: Maybe<IRepository>;
-};
-
-/** Autogenerated input type of UpdateEnterpriseActionExecutionCapabilitySetting */
-export type IUpdateEnterpriseActionExecutionCapabilitySettingInput = {
-  /** The ID of the enterprise on which to set the members can create repositories setting. */
-  enterpriseId: Scalars['ID'];
-  /** The value for the action execution capability setting on the enterprise. */
-  capability: IActionExecutionCapabilitySetting;
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId: Maybe<Scalars['String']>;
-};
-
-/** Autogenerated return type of UpdateEnterpriseActionExecutionCapabilitySetting */
-export type IUpdateEnterpriseActionExecutionCapabilitySettingPayload = {
-  __typename?: 'UpdateEnterpriseActionExecutionCapabilitySettingPayload';
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId: Maybe<Scalars['String']>;
-  /** The enterprise with the updated action execution capability setting. */
-  enterprise: Maybe<IEnterprise>;
-  /** A message confirming the result of updating the action execution capability setting. */
-  message: Maybe<Scalars['String']>;
 };
 
 /** Autogenerated input type of UpdateEnterpriseAdministratorRole */
@@ -18098,9 +18225,13 @@ export type IUser = INode & IActor & IPackageOwner & IProjectOwner & IRepository
   gistComments: IGistCommentConnection;
   /** A list of the Gists the user has created. */
   gists: IGistConnection;
+  /** True if this user/organization has a GitHub Sponsors listing. */
+  hasSponsorsListing: Scalars['Boolean'];
   /** The hovercard information for this user in a given context */
   hovercard: IHovercard;
   id: Scalars['ID'];
+  /** The interaction ability settings for this user. */
+  interactionAbility: Maybe<IRepositoryInteractionAbility>;
   /** Whether or not this user is a participant in the GitHub Security Bug Bounty. */
   isBountyHunter: Scalars['Boolean'];
   /** Whether or not this user is a participant in the GitHub Campus Experts Program. */
@@ -18113,6 +18244,8 @@ export type IUser = INode & IActor & IPackageOwner & IProjectOwner & IRepository
   isHireable: Scalars['Boolean'];
   /** Whether or not this user is a site administrator. */
   isSiteAdmin: Scalars['Boolean'];
+  /** True if the viewer is sponsored by this user/organization. */
+  isSponsoringViewer: Scalars['Boolean'];
   /** Whether or not this user is the viewing user. */
   isViewer: Scalars['Boolean'];
   /** A list of issue comments made by this user. */
@@ -18163,7 +18296,7 @@ export type IUser = INode & IActor & IPackageOwner & IProjectOwner & IRepository
   resourcePath: Scalars['URI'];
   /** Replies this user has saved */
   savedReplies: Maybe<ISavedReplyConnection>;
-  /** The GitHub Sponsors listing for this user. */
+  /** The GitHub Sponsors listing for this user or organization. */
   sponsorsListing: Maybe<ISponsorsListing>;
   /** This object's sponsorships as the maintainer. */
   sponsorshipsAsMaintainer: ISponsorshipConnection;
@@ -18187,8 +18320,12 @@ export type IUser = INode & IActor & IPackageOwner & IProjectOwner & IRepository
   viewerCanCreateProjects: Scalars['Boolean'];
   /** Whether or not the viewer is able to follow the user. */
   viewerCanFollow: Scalars['Boolean'];
+  /** Whether or not the viewer is able to sponsor this user/organization. */
+  viewerCanSponsor: Scalars['Boolean'];
   /** Whether or not this user is followed by the viewer. */
   viewerIsFollowing: Scalars['Boolean'];
+  /** True if the viewer is sponsoring this user/organization. */
+  viewerIsSponsoring: Scalars['Boolean'];
   /** A list of repositories the given user is watching. */
   watching: IRepositoryConnection;
   /** A URL pointing to the user's public website/blog. */
@@ -18277,6 +18414,7 @@ export type IUserHovercardArgs = {
 
 /** A user is an individual's account on GitHub that owns repositories and can make new content. */
 export type IUserIssueCommentsArgs = {
+  orderBy: Maybe<IIssueCommentOrder>;
   after: Maybe<Scalars['String']>;
   before: Maybe<Scalars['String']>;
   first: Maybe<Scalars['Int']>;

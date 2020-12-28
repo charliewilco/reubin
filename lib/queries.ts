@@ -91,7 +91,21 @@ export const Query: IQueryResolvers<ResolverContext> = {
         })
       );
 
-      return { ...entry, content: sanitizeHtml(entry.content) };
+      return {
+        ...entry,
+        content: sanitizeHtml(entry.content, {
+          allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+            "img",
+            "iframe",
+            "pre",
+          ]),
+          allowedAttributes: {
+            a: ["href", "name", "target"],
+            img: ["src", "alt"],
+            iframe: ["src"],
+          },
+        }),
+      };
     } catch (error) {
       throw new ApolloError(error);
     }

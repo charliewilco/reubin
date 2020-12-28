@@ -13,8 +13,6 @@ describe("Normalize", () => {
   it("builds array of strings", () => {
     const urls = createUrlsofUnreads(unread);
 
-    console.log(urls.join("\n"));
-
     expect(urls.length).toBeGreaterThan(1);
   });
 });

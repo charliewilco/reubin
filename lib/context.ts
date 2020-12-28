@@ -6,7 +6,7 @@ export const deriveHeader = (
   context: ResolverContext,
   method: string = "GET",
   body?: string,
-  additionalHeaders?: Omit<Headers, "Authorization">
+  additionalHeaders: Record<string, string> = {}
 ): RequestInit => {
   const Authorization = context.req.headers["authorization"]!;
 

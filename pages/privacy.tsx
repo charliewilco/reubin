@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Head from "next/head";
 import { Footer } from "../components/footer";
 
@@ -169,8 +170,10 @@ const Privacy = () => {
               id="header"
               className="mx-auto max-w-screen-xl px-4 py-16 text-center mb-16"
             >
-              <img
+              <Image
                 id="icon"
+                width={96}
+                height={96}
                 className="mx-auto w-24 h-24 mb-8"
                 src="/app-icon.png"
                 alt="Round Yellow Circle"
