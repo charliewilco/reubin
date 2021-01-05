@@ -70,7 +70,7 @@ const Changelog: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
             <h2 className="text-3xl leading-9 tracking-tight font-extrabold text-gray-100 sm:text-4xl sm:leading-10">
               Changelog
             </h2>
-            <div className="mt-3 sm:mt-4 lg:grid lg:grid-cols-2 lg:gap-5 lg:items-center">
+            {/* <div className="mt-3 sm:mt-4 lg:grid lg:grid-cols-2 lg:gap-5 lg:items-center">
               <p className="text-xl leading-7 text-gray-400">
                 Get weekly articles in your inbox on how to grow your business.
               </p>
@@ -91,7 +91,7 @@ const Changelog: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
                   </button>
                 </span>
               </form>
-            </div>
+            </div> */}
           </div>
           <div className="mt-6 grid gap-16 border-t-2 border-gray-100 pt-10 lg:grid-cols-2 lg:gap-x-5 lg:gap-y-12">
             {props.results.repository?.releases.nodes?.map((n, i) => {
