@@ -29,6 +29,20 @@ export const writeToMock = (name: string, content: any) => {
   fs.writeFileSync(f, JSON.stringify(content, null, 2), "utf8");
 };
 
+const getContent = (content: string) =>
+  sanitizeHtml(content, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+      "img",
+      "iframe",
+      "pre",
+    ]),
+    allowedAttributes: {
+      a: ["href", "name", "target"],
+      img: ["src", "alt"],
+      iframe: ["src"],
+    },
+  });
+
 const getTime = (d: string) => new Date(d).getTime();
 
 export const Query: IQueryResolvers<ResolverContext> = {
@@ -79,32 +93,10 @@ export const Query: IQueryResolvers<ResolverContext> = {
     try {
       const entryRes = await fetch(url, init);
       const entry = await entryRes.json();
-
-      console.log(
-        entry.content,
-        "\n",
-        sanitizeHtml(entry.content, {
-          allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
-          allowedAttributes: {
-            img: ["src", "alt"],
-          },
-        })
-      );
-
+      const content = getContent(entry.content);
       return {
         ...entry,
-        content: sanitizeHtml(entry.content, {
-          allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-            "img",
-            "iframe",
-            "pre",
-          ]),
-          allowedAttributes: {
-            a: ["href", "name", "target"],
-            img: ["src", "alt"],
-            iframe: ["src"],
-          },
-        }),
+        content,
       };
     } catch (error) {
       throw new ApolloError(error);

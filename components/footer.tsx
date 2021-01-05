@@ -75,7 +75,7 @@ export const Footer = () => {
         </div>
         <div className="mt-8">
           <p className="text-center text-base leading-6 text-gray-400">
-            © 2020 Charles Peters. All rights reserved.
+            © 2020 Charlie Peters. All rights reserved.
           </p>
         </div>
       </div>
