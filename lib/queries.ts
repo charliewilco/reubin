@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 import { ApolloError } from "apollo-server-micro";
 import qs from "query-string";
-import sanitizeHtml from "sanitize-html";
+import { getTime, getContent } from "./html";
 import { ResolverContext, deriveHeader } from "./context";
 import { IItem, IQueryResolvers } from "./types";
 import {
@@ -28,22 +28,6 @@ export const writeToMock = (name: string, content: any) => {
 
   fs.writeFileSync(f, JSON.stringify(content, null, 2), "utf8");
 };
-
-const getContent = (content: string) =>
-  sanitizeHtml(content, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-      "img",
-      "iframe",
-      "pre",
-    ]),
-    allowedAttributes: {
-      a: ["href", "name", "target"],
-      img: ["src", "alt"],
-      iframe: ["src"],
-    },
-  });
-
-const getTime = (d: string) => new Date(d).getTime();
 
 export const Query: IQueryResolvers<ResolverContext> = {
   subscriptions: async (_, __, context) => {
@@ -81,7 +65,8 @@ export const Query: IQueryResolvers<ResolverContext> = {
       : ENTRIES_URL;
 
     const entriesRes = await fetch(url, init);
-    const entries = entriesRes.json();
+    const entries: IItem[] = await entriesRes.json();
+    // console.log(entries.map((e) => e.title));
 
     return entries;
   },

@@ -1,3 +1,5 @@
+import { it, describe, expect } from "@jest/globals";
+
 import { normalizeSubscriptions, createUrlsofUnreads } from "../normalize";
 import { subscriptions } from "../../mock/subscriptions.json";
 import { taggings } from "../../mock/taggings.json";
