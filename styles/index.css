@@ -1,4 +1,5 @@
 @import "~typeface-ibm-plex-sans";
+@import "~typeface-jetbrains-mono";
 
 @tailwind base;
 
@@ -12,6 +13,15 @@
 @tailwind utilities;
 /* Stop purging. */
 
+.prose h2,
+.prose h3 {
+  @apply dark:text-gray-300 text-gray-600;
+}
+
+.prose {
+  @apply dark:text-gray-200 text-gray-500;
+}
+
 .prose a {
-  @apply text-yellow-600;
+  @apply text-yellow-600 dark:text-yellow-400;
 }
