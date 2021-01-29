@@ -4,14 +4,21 @@ import { IconHeader } from "./icon-header";
 import { Footer } from "./footer";
 import Head from "next/head";
 
-export const MarketingLayout: React.FC<{ title?: string }> = ({
+interface ILayoutProps {
+  title?: string;
+  addressbar: string;
+}
+
+export const MarketingLayout: React.FC<ILayoutProps> = ({
   title,
+  addressbar,
   children,
 }) => {
   return (
     <>
       <Banner />
       <Head>
+        <title>{addressbar}</title>
         <link rel="shortcut icon" href="favicon.png" />
       </Head>
       <IconHeader title={title} />

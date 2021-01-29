@@ -1,12 +1,8 @@
-import Head from "next/head";
 import { Features } from "../components/features";
 import { MarketingLayout } from "../components/layout";
 
 const IndexPage = () => (
-  <MarketingLayout>
-    <Head>
-      <title>Reubin | Android Feedbin Client</title>
-    </Head>
+  <MarketingLayout addressbar="Reubin | Android Feedbin Client">
     <div className="relative pt-6 pb-12 sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
       <div className="mx-auto max-w-screen-xl px-4 mb-32">
         <div className="text-center">
