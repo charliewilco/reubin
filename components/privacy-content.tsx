@@ -31,9 +31,8 @@ export const PrivacyContent = () => {
 
       <p>
         The terms used in this Privacy Policy have the same meanings as in our
-        Terms and Conditions, which is accessible at
-        https://pre-alpha.reubin.app/, unless otherwise defined in this Privacy
-        Policy.
+        Terms and Conditions, which is accessible at https://reubin.app/, unless
+        otherwise defined in this Privacy Policy.
       </p>
 
       <h2>Information Collection and Use</h2>

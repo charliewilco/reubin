@@ -43,8 +43,12 @@ export const Features = () => {
         <FeatureBlock
           title="Organize"
           icon={<AiFillTags className={iconClassName} />}
-        />
-        <FeatureBlock title="Built with OSS" icon={<OSS />} />
+        >
+          Add and organize your favorite RSS feeds.
+        </FeatureBlock>
+        <FeatureBlock title="Built with OSS" icon={<OSS />}>
+          Built with React, TypeScript and Apollo Client.
+        </FeatureBlock>
       </dl>
     </div>
   );
