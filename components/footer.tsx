@@ -29,7 +29,7 @@ const SiteNav = () => (
 const SocialLinks = () => (
   <div className="mt-8 flex justify-center">
     <a
-      href="https://charlespeters.net"
+      href="https://charliewil.co/"
       className=" text-gray-400 hover:text-gray-500"
     >
       <AiOutlineGlobal className="h-6 w-6" />
