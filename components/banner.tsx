@@ -3,7 +3,7 @@ import { AiFillNotification } from "react-icons/ai";
 export const Banner = () => {
   return (
     <div className="bg-yellow-400  px-2 ">
-      <div className="max-w-4xl mx-auto py-3">
+      <div className="max-w-4xl mx-auto py-3 px-2">
         <div className="flex items-center justify-between flex-wrap">
           <div className="flex items-center">
             <span className="flex p-2 rounded-lg bg-yellow-500">
