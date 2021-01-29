@@ -7,7 +7,7 @@ import {
 } from "react-icons/ai";
 
 const SiteNav = () => (
-  <nav className="-mx-5 -my-2 flex flex-wrap justify-center">
+  <nav className="flex flex-wrap justify-center">
     <div className="px-5 py-2">
       <Link href="/">
         <a className={linkClassName}>About</a>

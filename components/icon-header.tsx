@@ -7,10 +7,7 @@ interface IIconHeaderProps {
 
 export const IconHeader: React.FC<IIconHeaderProps> = ({ title }) => {
   return (
-    <header
-      id="header"
-      className="mx-auto max-w-screen-xl px-4 py-32 text-center"
-    >
+    <header id="header" className="mx-auto max-w-xl px-4 py-32 text-center">
       <object className="block mb-8">
         <Link href="/">
           <a className="mx-auto w-32 h-32 block">
