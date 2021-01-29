@@ -1,8 +1,8 @@
+import Head from "next/head";
 import { Banner } from "./banner";
 import { DownloadBlock } from "./download";
 import { IconHeader } from "./icon-header";
 import { Footer } from "./footer";
-import Head from "next/head";
 
 interface ILayoutProps {
   title?: string;
@@ -26,7 +26,6 @@ export const MarketingLayout: React.FC<ILayoutProps> = ({
       <main className="px-2 max-w-4xl mx-auto">{children}</main>
 
       <DownloadBlock />
-
       <Footer />
     </>
   );

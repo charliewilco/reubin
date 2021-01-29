@@ -32,7 +32,7 @@ const OSS = () => (
 
 export const Features = () => {
   return (
-    <div className="mx-auto max-w-4xl mb-32">
+    <div className="mx-auto max-w-4xl mb-16">
       <dl className="space-y-10 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-8">
         <FeatureBlock
           title="Favorite"
