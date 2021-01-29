@@ -2,7 +2,7 @@ import { AiFillApple, AiFillAndroid } from "react-icons/ai";
 
 export const DownloadBlock = () => {
   return (
-    <div className="mx-auto max-w-4xl px-2 mb-32">
+    <div className="mx-auto max-w-4xl px-2 mb-16">
       <div className="bg-gradient-to-tr from-yellow-800 via-yellow-600 to-yellow-400 overflow-hidden shadow-xl py-8 px-4">
         <div className="mx-auto max-w-2xl py-8 text-gray-300 text-center">
           <h2 className="text-xl font-black text-gray-800 tracking-tight sm:text-3xl">

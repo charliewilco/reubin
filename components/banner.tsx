@@ -16,7 +16,7 @@ export const Banner = () => {
           <div className="mt-2 w-full sm:order-2 sm:mt-0 sm:w-auto">
             <a
               href="#"
-              className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-bold text-gray-100 bg-gray-900 hover:bg-yellow-50"
+              className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-100 bg-gray-900 hover:bg-gray-700"
             >
               Learn more
             </a>

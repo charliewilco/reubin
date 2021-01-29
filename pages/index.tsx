@@ -1,14 +1,10 @@
-import Head from "next/head";
 import { Features } from "../components/features";
 import { MarketingLayout } from "../components/layout";
 
 const IndexPage = () => (
-  <MarketingLayout>
-    <Head>
-      <title>Reubin | Android Feedbin Client</title>
-    </Head>
-    <div className="relative pt-6 pb-12 sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
-      <div className="mx-auto max-w-screen-xl px-4 mb-32">
+  <MarketingLayout addressbar="Reubin | Android Feedbin Client">
+    <div className="relative pt-6 pb-12 mb-16">
+      <div className="mx-auto max-w-screen-xl px-4">
         <div className="text-center">
           <h2 className="text-xl tracking-tight leading-10 font-extrabold text-gray-800 dark:text-gray-100 sm:leading-none md:text-2xl">
             RSS for Android.
@@ -20,8 +16,8 @@ const IndexPage = () => (
           </p>
         </div>
       </div>
-      <Features />
     </div>
+    <Features />
   </MarketingLayout>
 );
 

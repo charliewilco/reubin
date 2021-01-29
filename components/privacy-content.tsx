@@ -1,6 +1,6 @@
 export const PrivacyContent = () => {
   return (
-    <div>
+    <div className="prose prose-lg mx-auto">
       <p>
         Reubin operates the https://reubin.app/ website, which provides the
         SERVICE.
