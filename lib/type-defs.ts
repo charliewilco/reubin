@@ -10,6 +10,12 @@ export const typeDefs = gql`
     untaggedFeeds: [Feed!]!
   }
 
+  enum Services {
+    RSS
+    INSTAPAPER
+    FEEDBIN
+  }
+
   type Item {
     id: Float!
     feed_id: Int!
@@ -60,6 +66,7 @@ export const typeDefs = gql`
     Must be id not feed_id
     """
     feed(id: Float!): Feed!
+    product(service: Services!, url: String!): [Item!]!
   }
 
   type Mutation {

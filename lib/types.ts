@@ -22,6 +22,12 @@ export type ISubscriptions = {
   untaggedFeeds: Array<IFeed>;
 };
 
+export enum IServices {
+  Rss = 'RSS',
+  Instapaper = 'INSTAPAPER',
+  Feedbin = 'FEEDBIN'
+}
+
 export type IItem = {
   __typename?: 'Item';
   id: Scalars['Float'];
@@ -74,6 +80,7 @@ export type IQuery = {
   bookmarks: Array<IItem>;
   /** Must be id not feed_id */
   feed: IFeed;
+  product: Array<IItem>;
 };
 
 
@@ -99,6 +106,12 @@ export type IQueryBookmarksArgs = {
 
 export type IQueryFeedArgs = {
   id: Scalars['Float'];
+};
+
+
+export type IQueryProductArgs = {
+  service: IServices;
+  url: Scalars['String'];
 };
 
 export type IMutation = {
@@ -217,6 +230,7 @@ export type IResolversTypes = ResolversObject<{
   UnreadList: ResolverTypeWrapper<IUnreadList>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscriptions: ResolverTypeWrapper<ISubscriptions>;
+  Services: IServices;
   Item: ResolverTypeWrapper<IItem>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -307,6 +321,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   subscription: Resolver<IResolversTypes['Subscription'], ParentType, ContextType, RequireFields<IQuerySubscriptionArgs, 'id'>>;
   bookmarks: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryBookmarksArgs, never>>;
   feed: Resolver<IResolversTypes['Feed'], ParentType, ContextType, RequireFields<IQueryFeedArgs, 'id'>>;
+  product: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryProductArgs, 'service' | 'url'>>;
 }>;
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = ResolversObject<{

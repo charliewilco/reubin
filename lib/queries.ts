@@ -22,6 +22,9 @@ import {
   STARRED_URL,
   FEEDBIN_API,
 } from "./urls";
+import { API } from "./api/api";
+
+const api = new API();
 
 export const writeToMock = (name: string, content: any) => {
   const f = path.join(process.cwd(), "mock", name.concat(".json"));
@@ -143,5 +146,13 @@ export const Query: IQueryResolvers<ResolverContext> = {
     ).then((res) => res.json());
 
     return deriveFeedFromSubscription(subscription);
+  },
+
+  product: async (_, { service, url }) => {
+    console.log(service);
+    const results = await api.services.rss.getItems(
+      url
+    );
+    return results;
   },
 };
