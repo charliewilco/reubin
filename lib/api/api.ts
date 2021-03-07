@@ -8,13 +8,8 @@ interface IServices {
   feedbin: FeedbinAPI;
 }
 
-export class API {
-  public services: IServices;
-  constructor() {
-    this.services = {
-      rss: new RSS(),
-      feedbin: new FeedbinAPI(),
-      instapaper: new InstapaperAPI(),
-    };
-  }
+export class API implements IServices {
+  public rss = new RSS();
+  public feedbin = new FeedbinAPI();
+  public instapaper = new InstapaperAPI();
 }

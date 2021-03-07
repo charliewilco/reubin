@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 import { ApolloError } from "apollo-server-micro";
 import qs from "query-string";
-import { getTime, getContent } from "./html";
+import { getTime } from "./html";
 import { ResolverContext, deriveHeader } from "./context";
 import { IItem, IQueryResolvers } from "./types";
 import {
@@ -16,7 +16,6 @@ import {
   SUBSCRIPTIONS_URL,
   TAGGINGS_URL,
   UNREAD_URL,
-  createEntryURL,
   createFeedUrl,
   createFeedWithEntriesUrl,
   STARRED_URL,
@@ -62,30 +61,20 @@ export const Query: IQueryResolvers<ResolverContext> = {
   },
 
   entries: async (_, { page }, context) => {
-    const init = deriveHeader(context);
-    const url = page
-      ? qs.stringifyUrl({ url: ENTRIES_URL, query: { page: page.toString() } })
-      : ENTRIES_URL;
-
-    const entriesRes = await fetch(url, init);
-    const entries: IItem[] = await entriesRes.json();
-    // console.log(entries.map((e) => e.title));
-
-    return entries;
+    return api.feedbin.getEntries(
+      { authorization: context.req.headers["authorization"]! },
+      page
+    );
   },
 
   entry: async (_, { id }, context) => {
-    const init = deriveHeader(context);
-    const url = createEntryURL(id);
-
     try {
-      const entryRes = await fetch(url, init);
-      const entry = await entryRes.json();
-      const content = getContent(entry.content);
-      return {
-        ...entry,
-        content,
-      };
+      return api.feedbin.getEntry(
+        {
+          authorization: context.req.headers["authorization"]!,
+        },
+        id
+      );
     } catch (error) {
       throw new ApolloError(error);
     }
@@ -148,11 +137,9 @@ export const Query: IQueryResolvers<ResolverContext> = {
     return deriveFeedFromSubscription(subscription);
   },
 
-  product: async (_, { service, url }) => {
+  async product(_, { service, url }) {
     console.log(service);
-    const results = await api.services.rss.getItems(
-      url
-    );
+    const results = await api.rss.getFeedItems(url);
     return results;
   },
 };

@@ -17,7 +17,7 @@ export const typeDefs = gql`
   }
 
   type Item {
-    id: Float!
+    id: String!
     feed_id: Int!
     title: String!
     author: String

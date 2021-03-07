@@ -1,21 +1,23 @@
 import Parser from "rss-parser";
-import { IItem } from "../types";
+import { IFeed, IItem } from "../types";
+import { IFeedService } from "./types";
 
-export class RSS extends Parser {
+export class RSS extends Parser implements IFeedService {
   constructor() {
     super();
   }
-  async getItems(url: string): Promise<IItem[]> {
-    const feed = await this.parseURL(url);
+  async getFeedItems(url: string): Promise<IItem[]> {
+    const { items, ...feed } = await this.parseURL(url);
     console.log(feed);
-    return feed.items.map((_f) => {
+    return items.map(({ content, contentSnippet, ..._f }) => {
+      console.log(_f);
       return {
-        id: 1,
+        id: _f.guid!,
         created_at: _f.isoDate!,
         title: _f.title ?? "...",
-        content: _f.content!,
+        content: content!,
         feed_id: 2,
-        author: _f.creator ?? "No Creator",
+        author: _f.author ?? _f.creator ?? "No Creator",
         summary: _f.contentSnippet ?? null,
         url: _f.link!,
         published: _f.pubDate!,
@@ -26,5 +28,13 @@ export class RSS extends Parser {
 
   async getItemsFromLastUpdate(lastUpdate: Date, urls: string[]) {}
 
-  async getFeedInfo(url: string): Promise<any> {}
+  async getFeedDetails(url: string): Promise<IFeed> {
+    return {
+      url,
+      site: "...",
+      name: "...",
+      id: "...",
+      feed_id: 1,
+    };
+  }
 }

@@ -1,9 +1,9 @@
-import { IResolvers } from "apollo-server-micro";
 import { Query } from "./queries";
 import { Mutation } from "./mutations";
 import { ResolverContext } from "./context";
+import { IItemIdResolvers, IResolvers } from "./types";
 
-export const resolvers: IResolvers<unknown, ResolverContext> = {
+export const resolvers: IResolvers<ResolverContext> = {
   Query,
   Mutation,
 };
