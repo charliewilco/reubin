@@ -2,17 +2,18 @@ import { getContent } from "../html";
 import { IItem } from "../types";
 import { FEEDBIN_API } from "../urls";
 import { CachedAPI } from "./cached-service";
+import { IFeedService } from "./types";
 
 interface IHandlerOptions {
   authorization: string;
 }
 
-export class FeedbinAPI extends CachedAPI {
+export class FeedbinAPI extends CachedAPI implements IFeedService {
   constructor() {
     super(FEEDBIN_API);
   }
 
-  async getEntries(options: IHandlerOptions, page?: number | null) {
+  async getFeedItems(options: IHandlerOptions, page?: number | null) {
     this.instance.mergeOptions({
       headers: {
         Authorization: options.authorization,
@@ -26,7 +27,7 @@ export class FeedbinAPI extends CachedAPI {
     return entries;
   }
 
-  async getEntry(options: IHandlerOptions, id: number) {
+  async getFeedItem(options: IHandlerOptions, id: number) {
     this.instance.mergeOptions({
       headers: { Authorization: options.authorization },
     });

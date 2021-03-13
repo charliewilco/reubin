@@ -1,0 +1,7 @@
+query LocalRSS($url: String!) {
+  product(service: RSS, url: $url) {
+    url
+    title
+    published
+  }
+}

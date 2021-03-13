@@ -2,15 +2,22 @@ import Parser from "rss-parser";
 import { IFeed, IItem } from "../types";
 import { IFeedService } from "./types";
 
+export const DUMMY_SUBSCRIPTIONS = [
+  "https://daverupert.com/atom.xml",
+  "https://charliewil.co/rss.xml",
+  "https://typescript.wtf/rss.xml",
+];
+
 export class RSS extends Parser implements IFeedService {
   constructor() {
     super();
   }
+  public unread = new Set<string>();
+  public favorites = new Set<string>();
   async getFeedItems(url: string): Promise<IItem[]> {
     const { items, ...feed } = await this.parseURL(url);
     console.log(feed);
     return items.map(({ content, contentSnippet, ..._f }) => {
-      console.log(_f);
       return {
         id: _f.guid!,
         created_at: _f.isoDate!,
@@ -26,9 +33,12 @@ export class RSS extends Parser implements IFeedService {
     });
   }
 
-  async getItemsFromLastUpdate(lastUpdate: Date, urls: string[]) {}
+  async getAllFeeds(): Promise<IFeed[]> {
+    return [];
+  }
 
   async getFeedDetails(url: string): Promise<IFeed> {
+    const {} = await this.parseURL(url);
     return {
       url,
       site: "...",

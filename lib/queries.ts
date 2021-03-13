@@ -61,7 +61,7 @@ export const Query: IQueryResolvers<ResolverContext> = {
   },
 
   entries: async (_, { page }, context) => {
-    return api.feedbin.getEntries(
+    return api.feedbin.getFeedItems(
       { authorization: context.req.headers["authorization"]! },
       page
     );
@@ -69,7 +69,7 @@ export const Query: IQueryResolvers<ResolverContext> = {
 
   entry: async (_, { id }, context) => {
     try {
-      return api.feedbin.getEntry(
+      return api.feedbin.getFeedItem(
         {
           authorization: context.req.headers["authorization"]!,
         },
@@ -138,7 +138,6 @@ export const Query: IQueryResolvers<ResolverContext> = {
   },
 
   async product(_, { service, url }) {
-    console.log(service);
     const results = await api.rss.getFeedItems(url);
     return results;
   },

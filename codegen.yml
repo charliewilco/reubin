@@ -1,4 +1,13 @@
 generates:
+  ./util/reubin-sdk.ts:
+    schema: ./lib/type-defs.ts
+    documents: "./util/reubin.graphql"
+    config:
+      useIndexSignature: true
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
   ./lib/types.ts:
     schema: ./lib/type-defs.ts
     config:
@@ -13,7 +22,7 @@ generates:
           headers:
             Authorization: Bearer ${GITHUB_ACCESS_TOKEN}
 
-    documents: "./util/*.graphql"
+    documents: "./util/github.graphql"
     config:
       useIndexSignature: true
     plugins:

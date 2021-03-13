@@ -1,7 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -29,11 +28,9 @@ export enum IServices {
   Feedbin = 'FEEDBIN'
 }
 
-export type IItemId = Scalars['String'] | Scalars['Float'];
-
 export type IItem = {
   __typename?: 'Item';
-  id: IItemId;
+  id: Scalars['String'];
   feed_id: Scalars['Int'];
   title: Scalars['String'];
   author: Maybe<Scalars['String']>;
@@ -234,13 +231,12 @@ export type IResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscriptions: ResolverTypeWrapper<ISubscriptions>;
   Services: IServices;
-  ItemID: IResolversTypes['String'] | IResolversTypes['Float'];
-  Float: ResolverTypeWrapper<Scalars['Float']>;
-  Item: ResolverTypeWrapper<Omit<IItem, 'id'> & { id: IResolversTypes['ItemID'] }>;
+  Item: ResolverTypeWrapper<IItem>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Tag: ResolverTypeWrapper<ITag>;
   Feed: ResolverTypeWrapper<IFeed>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   AuthResponse: ResolverTypeWrapper<IAuthResponse>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Subscription: ResolverTypeWrapper<{}>;
@@ -253,13 +249,12 @@ export type IResolversParentTypes = ResolversObject<{
   UnreadList: IUnreadList;
   String: Scalars['String'];
   Subscriptions: ISubscriptions;
-  ItemID: IResolversParentTypes['String'] | IResolversParentTypes['Float'];
-  Float: Scalars['Float'];
-  Item: Omit<IItem, 'id'> & { id: IResolversParentTypes['ItemID'] };
+  Item: IItem;
   Int: Scalars['Int'];
   Tag: ITag;
   Feed: IFeed;
   ID: Scalars['ID'];
+  Float: Scalars['Float'];
   AuthResponse: IAuthResponse;
   Boolean: Scalars['Boolean'];
   Subscription: {};
@@ -278,12 +273,8 @@ export type ISubscriptionsResolvers<ContextType = any, ParentType extends IResol
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
-export type IItemIdResolvers<ContextType = any, ParentType extends IResolversParentTypes['ItemID'] = IResolversParentTypes['ItemID']> = ResolversObject<{
-  __resolveType: TypeResolveFn<'String' | 'Float', ParentType, ContextType>;
-}>;
-
 export type IItemResolvers<ContextType = any, ParentType extends IResolversParentTypes['Item'] = IResolversParentTypes['Item']> = ResolversObject<{
-  id: Resolver<IResolversTypes['ItemID'], ParentType, ContextType>;
+  id: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   feed_id: Resolver<IResolversTypes['Int'], ParentType, ContextType>;
   title: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   author: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
@@ -344,7 +335,6 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
 export type IResolvers<ContextType = any> = ResolversObject<{
   UnreadList: IUnreadListResolvers<ContextType>;
   Subscriptions: ISubscriptionsResolvers<ContextType>;
-  ItemID: IItemIdResolvers<ContextType>;
   Item: IItemResolvers<ContextType>;
   Tag: ITagResolvers<ContextType>;
   Feed: IFeedResolvers<ContextType>;
