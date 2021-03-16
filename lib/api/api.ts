@@ -1,9 +1,12 @@
+// import { parse, fetchResource } from "@postlight/mercury-parser";
 import { FeedbinAPI } from "./feedbin";
 import { InstapaperAPI } from "./instapaper";
 import { RSS } from "./rss";
 import { IFeedService } from "./types";
 
-type Product = "RSS" | "Instapaper" | "Feedbin";
+export type MissingProduct = "Inoreader" | "Feedly";
+
+export type Product = "RSS" | "Instapaper" | "Feedbin";
 
 interface IServices {
   rss: RSS;

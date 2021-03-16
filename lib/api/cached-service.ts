@@ -26,15 +26,19 @@ export abstract class CachedAPI {
     params?: NodeJS.Dict<string | readonly string[]>
   ) {
     const searchParams = new URLSearchParams(params);
-    const response = await this.instance.get<T>(path, {
-      prefixUrl: this.baseURL,
-      searchParams,
-      responseType: "json",
-    });
-    return response.body;
+    try {
+      const response = await this.instance.get<T>(path, {
+        prefixUrl: this.baseURL,
+        searchParams,
+        responseType: "json",
+      });
+      return response.body;
+    } catch (error) {
+      this._didEncounterError(error);
+    }
   }
 
-  private _didEncounterError(error: any) {
+  private _didEncounterError(error: any): never {
     const status = error.statusCode ? error.statusCode : null;
     const message = error.bodyText ? error.bodyText : null;
 
