@@ -137,7 +137,7 @@ export const Query: IQueryResolvers<ResolverContext> = {
     return deriveFeedFromSubscription(subscription);
   },
 
-  async product(_, { service, url }) {
+  async product(_, { url }) {
     const results = await api.rss.getFeedItems(url);
     return results;
   },
