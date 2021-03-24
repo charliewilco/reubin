@@ -1,27 +1,24 @@
-import { AiFillNotification } from "react-icons/ai";
+import { AiFillNotification, AiOutlineRight } from "react-icons/ai";
 
 export const Banner = () => {
   return (
-    <div className="bg-yellow-400 px-2" role="banner">
-      <div className="max-w-4xl mx-auto py-3 px-2">
-        <div className="sm:flex sm:items-center sm:justify-between sm:flex-wrap">
-          <div className="flex items-center">
-            <span className="flex p-2 rounded-lg bg-yellow-500">
-              <AiFillNotification className="text-gray-900 h-6 w-6" />
+    <div className="px-2 bg-black " role="banner">
+      <div className="max-w-2xl mx-auto py-3">
+        <a
+          href="#"
+          className="flex items-center justify-between text-white rounded-full p-1 pr-2 sm:text-base lg:text-sm xl:text-base hover:text-gray-200"
+        >
+          <div className="flex items-center ">
+            <span className="px-3 py-1 text-white flex items-center bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full">
+              <AiFillNotification className="mr-2" />
+              Announcement
             </span>
-            <p className="ml-3 text-gray-900">
+            <span className="ml-4">
               Big news! We're excited to announce a brand new product.
-            </p>
+            </span>
           </div>
-          <div className="mt-2 w-full sm:mt-0 sm:w-auto">
-            <a
-              href="#"
-              className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-100 bg-gray-900 hover:bg-gray-700"
-            >
-              Learn more
-            </a>
-          </div>
-        </div>
+          <AiOutlineRight className="ml-2 w-5 h-5 text-gray-500" />
+        </a>
       </div>
     </div>
   );
