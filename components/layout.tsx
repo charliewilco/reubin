@@ -19,7 +19,7 @@ export const MarketingLayout: React.FC<ILayoutProps> = ({
       <Banner />
       <Head>
         <title>{addressbar}</title>
-        <link rel="shortcut icon" href="favicon.png" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <IconHeader title={title} />
 
