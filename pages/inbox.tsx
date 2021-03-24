@@ -1,6 +1,6 @@
 import { GraphQLClient } from "graphql-request";
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from "next";
-import useSWR, { SWRResponse } from "swr";
+import useSWR, { responseInterface as SWRResponse } from "swr";
 import base64 from "base-64";
 
 import {

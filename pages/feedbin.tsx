@@ -5,3 +5,13 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {},
   };
 };
+
+const FeedbinPage = () => {
+  return (
+    <div>
+      <h1>Feedbin</h1>
+    </div>
+  );
+};
+
+export default FeedbinPage;
