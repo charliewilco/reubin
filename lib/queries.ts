@@ -1,5 +1,3 @@
-const fs = require("fs");
-const path = require("path");
 import { ApolloError } from "apollo-server-micro";
 import qs from "query-string";
 import { getTime } from "./html";
@@ -24,12 +22,6 @@ import {
 import { API } from "./api/api";
 
 const api = new API();
-
-export const writeToMock = (name: string, content: any) => {
-  const f = path.join(process.cwd(), "mock", name.concat(".json"));
-
-  fs.writeFileSync(f, JSON.stringify(content, null, 2), "utf8");
-};
 
 export const Query: IQueryResolvers<ResolverContext> = {
   subscriptions: async (_, __, context) => {
