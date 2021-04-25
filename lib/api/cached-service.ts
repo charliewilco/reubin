@@ -1,10 +1,6 @@
 import got, { Got } from "got";
 import { URLSearchParams } from "url";
-import {
-  ApolloError,
-  ForbiddenError,
-  AuthenticationError,
-} from "apollo-server-micro";
+import { SDKError, ForbiddenError, AuthenticationError } from "./errors";
 import { SimpleLRU, ICacheStore } from "./lru";
 
 export abstract class CachedAPI {
@@ -42,7 +38,7 @@ export abstract class CachedAPI {
     const status = error.statusCode ? error.statusCode : null;
     const message = error.bodyText ? error.bodyText : null;
 
-    let apolloError: ApolloError;
+    let apolloError: SDKError;
 
     switch (status) {
       case 401:
@@ -52,10 +48,10 @@ export abstract class CachedAPI {
         apolloError = new ForbiddenError(message);
         break;
       case 502:
-        apolloError = new ApolloError("Bad Gateway", status);
+        apolloError = new SDKError("Bad Gateway", status);
         break;
       default:
-        apolloError = new ApolloError(message, status);
+        apolloError = new SDKError(message, status);
     }
 
     throw apolloError;

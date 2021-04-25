@@ -1,8 +1,7 @@
-// import { parse, fetchResource } from "@postlight/mercury-parser";
 import { FeedbinAPI } from "./feedbin";
 import { InstapaperAPI } from "./instapaper";
 import { RSS } from "./rss";
-import { IFeedService } from "./types";
+import { IFeedService, HTMLParseHanlder } from "./types";
 
 export type MissingProduct = "Inoreader" | "Feedly";
 
@@ -16,9 +15,14 @@ interface IServices {
 }
 
 export class API implements IServices {
-  public rss = new RSS();
-  public feedbin = new FeedbinAPI();
-  public instapaper = new InstapaperAPI();
+  public readonly rss: RSS;
+  public readonly instapaper: InstapaperAPI;
+  public readonly feedbin: FeedbinAPI;
+  constructor(parser: HTMLParseHanlder) {
+    this.rss = new RSS();
+    this.feedbin = new FeedbinAPI(parser);
+    this.instapaper = new InstapaperAPI();
+  }
 
   public getService(product: Product) {
     switch (product) {

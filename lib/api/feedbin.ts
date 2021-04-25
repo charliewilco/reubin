@@ -1,12 +1,17 @@
-import { getContent } from "../html";
-import { IItem } from "../types";
 import { FEEDBIN_API } from "../urls";
 import { CachedAPI } from "./cached-service";
-import { IFeedService, IHandlerOptions } from "./types";
+import {
+  HTMLParseHanlder,
+  IFeedService,
+  IHandlerOptions,
+  IItem,
+} from "./types";
 
 export class FeedbinAPI extends CachedAPI implements IFeedService {
-  constructor() {
+  private _parseHTML: HTMLParseHanlder;
+  constructor(parser: HTMLParseHanlder) {
     super(FEEDBIN_API);
+    this._parseHTML = parser;
   }
   favorites = new Set<string>();
   unread = new Set<string>();
@@ -56,7 +61,7 @@ export class FeedbinAPI extends CachedAPI implements IFeedService {
 
     return {
       ...entry,
-      content: getContent(entry.content),
+      content: this._parseHTML(entry.content),
     };
   }
 }

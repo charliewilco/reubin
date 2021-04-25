@@ -1,6 +1,5 @@
 import Parser from "rss-parser";
-import { IFeed, IItem } from "../types";
-import { IFeedService, IHandlerOptions } from "./types";
+import { IFeed, IItem, IFeedService, IHandlerOptions } from "./types";
 
 export const DUMMY_SUBSCRIPTIONS = [
   "https://daverupert.com/atom.xml",
