@@ -6,7 +6,6 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc",
-    "prebuild": "yarn generate",
     "predev": "yarn generate",
     "generate": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config",
     "test": "jest"

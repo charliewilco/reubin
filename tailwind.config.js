@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        gray: colors.coolGray,
+        gray: colors.trueGray,
       },
       fontFamily: {
         sans: ["IBM Plex Sans", ...defaultTheme.fontFamily.sans],
