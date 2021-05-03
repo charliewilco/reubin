@@ -1,21 +1,4 @@
 generates:
-  ./util/reubin-sdk.ts:
-    schema: ./lib/type-defs.ts
-    documents: "./util/reubin.graphql"
-    config:
-      useIndexSignature: true
-    plugins:
-      - typescript
-      - typescript-operations
-      - typescript-graphql-request
-  ./lib/types.ts:
-    schema: ./lib/type-defs.ts
-    config:
-      useIndexSignature: true
-    plugins:
-      - typescript
-      - typescript-operations
-      - typescript-resolvers
   ./util/github-sdk.ts:
     schema:
       - https://api.github.com/graphql:

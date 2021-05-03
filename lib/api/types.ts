@@ -36,7 +36,7 @@ export interface IHandlerOptions {
   authorization: string;
 }
 
-export type HTMLParseHanlder = (sourceHTML: string) => string;
+export type HTMLParseHandler = (sourceHTML: string) => string;
 
 /**
  * API Caller

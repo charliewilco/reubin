@@ -1,7 +1,7 @@
 import { FeedbinAPI } from "./feedbin";
 import { InstapaperAPI } from "./instapaper";
 import { RSS } from "./rss";
-import { IFeedService, HTMLParseHanlder } from "./types";
+import { IFeedService, HTMLParseHandler } from "./types";
 
 export type MissingProduct = "Inoreader" | "Feedly";
 
@@ -14,11 +14,13 @@ interface IServices {
   getService(product: Product): IFeedService;
 }
 
+const DEFAULT_HTML_PARSER: HTMLParseHandler = (_) => _;
+
 export class API implements IServices {
   public readonly rss: RSS;
   public readonly instapaper: InstapaperAPI;
   public readonly feedbin: FeedbinAPI;
-  constructor(parser: HTMLParseHanlder) {
+  constructor(parser: HTMLParseHandler = DEFAULT_HTML_PARSER) {
     this.rss = new RSS();
     this.feedbin = new FeedbinAPI(parser);
     this.instapaper = new InstapaperAPI();

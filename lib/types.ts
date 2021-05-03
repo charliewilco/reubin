@@ -1,6 +1,8 @@
 import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -11,22 +13,19 @@ export type Scalars = {
   Float: number;
 };
 
-export type IUnreadList = {
-  __typename?: 'UnreadList';
-  itemIDs: Array<Scalars['String']>;
+export type IAuthResponse = {
+  __typename?: 'AuthResponse';
+  isValid: Scalars['Boolean'];
 };
 
-export type ISubscriptions = {
-  __typename?: 'Subscriptions';
-  tags: Array<ITag>;
-  untaggedFeeds: Array<IFeed>;
+export type IFeed = {
+  __typename?: 'Feed';
+  url: Scalars['String'];
+  site: Scalars['String'];
+  name: Scalars['String'];
+  id: Scalars['ID'];
+  feed_id: Scalars['Float'];
 };
-
-export enum IServices {
-  Rss = 'RSS',
-  Instapaper = 'INSTAPAPER',
-  Feedbin = 'FEEDBIN'
-}
 
 export type IItem = {
   __typename?: 'Item';
@@ -40,78 +39,6 @@ export type IItem = {
   extracted_content_url: Scalars['String'];
   published: Scalars['String'];
   created_at: Maybe<Scalars['String']>;
-};
-
-export type ITag = {
-  __typename?: 'Tag';
-  title: Scalars['String'];
-  feeds: Array<Maybe<IFeed>>;
-};
-
-export type IFeed = {
-  __typename?: 'Feed';
-  url: Scalars['String'];
-  site: Scalars['String'];
-  name: Scalars['String'];
-  id: Scalars['ID'];
-  feed_id: Scalars['Float'];
-};
-
-export type IAuthResponse = {
-  __typename?: 'AuthResponse';
-  isValid: Scalars['Boolean'];
-};
-
-export type ISubscription = {
-  __typename?: 'Subscription';
-  feed: IFeed;
-  items: Array<IItem>;
-};
-
-export type IQuery = {
-  __typename?: 'Query';
-  subscriptions: ISubscriptions;
-  favorites: Array<Scalars['Float']>;
-  unread: Array<Scalars['Float']>;
-  entries: Array<IItem>;
-  entry: IItem;
-  /** Deprecated */
-  subscription: ISubscription;
-  bookmarks: Array<IItem>;
-  /** Must be id not feed_id */
-  feed: IFeed;
-  product: Array<IItem>;
-};
-
-
-export type IQueryEntriesArgs = {
-  page: Maybe<Scalars['Int']>;
-};
-
-
-export type IQueryEntryArgs = {
-  id: Scalars['Float'];
-};
-
-
-export type IQuerySubscriptionArgs = {
-  id: Scalars['Float'];
-};
-
-
-export type IQueryBookmarksArgs = {
-  ids: Maybe<Array<Scalars['Float']>>;
-};
-
-
-export type IQueryFeedArgs = {
-  id: Scalars['Float'];
-};
-
-
-export type IQueryProductArgs = {
-  service: IServices;
-  url: Scalars['String'];
 };
 
 export type IMutation = {
@@ -146,6 +73,104 @@ export type IMutationMarkAsUnreadArgs = {
 
 export type IMutationLoginArgs = {
   hash: Scalars['String'];
+};
+
+export type IParsedEntries = {
+  __typename?: 'ParsedEntries';
+  link: Scalars['String'];
+  guid: Scalars['String'];
+  title: Scalars['String'];
+  pubDate: Scalars['String'];
+  creator: Scalars['String'];
+  content: Scalars['String'];
+  isoDate: Scalars['String'];
+  categories: Array<Maybe<Scalars['String']>>;
+  summary: Maybe<Scalars['String']>;
+  contentSnippet: Maybe<Scalars['String']>;
+  enclosureUrl: Maybe<Scalars['String']>;
+  enclosureLength: Maybe<Scalars['Int']>;
+  enclosureType: Maybe<Scalars['String']>;
+};
+
+export type IQuery = {
+  __typename?: 'Query';
+  subscriptions: ISubscriptions;
+  favorites: Array<Scalars['Float']>;
+  unread: Array<Scalars['Float']>;
+  entries: Array<IItem>;
+  entry: IItem;
+  /** Deprecated */
+  subscription: ISubscription;
+  bookmarks: Array<IItem>;
+  /** Must be id not feed_id */
+  feed: IFeed;
+  product: Array<IItem>;
+  parsedEntries: Array<Maybe<IParsedEntries>>;
+};
+
+
+export type IQueryEntriesArgs = {
+  page: Maybe<Scalars['Int']>;
+};
+
+
+export type IQueryEntryArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type IQuerySubscriptionArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type IQueryBookmarksArgs = {
+  ids: Maybe<Array<Scalars['Float']>>;
+};
+
+
+export type IQueryFeedArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type IQueryProductArgs = {
+  service: IServices;
+  url: Scalars['String'];
+};
+
+
+export type IQueryParsedEntriesArgs = {
+  url: Scalars['String'];
+};
+
+export enum IServices {
+  Rss = 'RSS',
+  Instapaper = 'INSTAPAPER',
+  Feedbin = 'FEEDBIN'
+}
+
+export type ISubscription = {
+  __typename?: 'Subscription';
+  feed: IFeed;
+  items: Array<IItem>;
+};
+
+export type ISubscriptions = {
+  __typename?: 'Subscriptions';
+  tags: Array<ITag>;
+  untaggedFeeds: Array<IFeed>;
+};
+
+export type ITag = {
+  __typename?: 'Tag';
+  title: Scalars['String'];
+  feeds: Array<Maybe<IFeed>>;
+};
+
+export type IUnreadList = {
+  __typename?: 'UnreadList';
+  itemIDs: Array<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -213,7 +238,7 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}> = (obj: T, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
@@ -227,50 +252,55 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type IResolversTypes = ResolversObject<{
-  UnreadList: ResolverTypeWrapper<IUnreadList>;
-  String: ResolverTypeWrapper<Scalars['String']>;
-  Subscriptions: ResolverTypeWrapper<ISubscriptions>;
-  Services: IServices;
-  Item: ResolverTypeWrapper<IItem>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  Tag: ResolverTypeWrapper<ITag>;
-  Feed: ResolverTypeWrapper<IFeed>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
-  Float: ResolverTypeWrapper<Scalars['Float']>;
   AuthResponse: ResolverTypeWrapper<IAuthResponse>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  Subscription: ResolverTypeWrapper<{}>;
-  Query: ResolverTypeWrapper<{}>;
+  Feed: ResolverTypeWrapper<IFeed>;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
+  Item: ResolverTypeWrapper<IItem>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
+  ParsedEntries: ResolverTypeWrapper<IParsedEntries>;
+  Query: ResolverTypeWrapper<{}>;
+  Services: IServices;
+  Subscription: ResolverTypeWrapper<{}>;
+  Subscriptions: ResolverTypeWrapper<ISubscriptions>;
+  Tag: ResolverTypeWrapper<ITag>;
+  UnreadList: ResolverTypeWrapper<IUnreadList>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type IResolversParentTypes = ResolversObject<{
-  UnreadList: IUnreadList;
-  String: Scalars['String'];
-  Subscriptions: ISubscriptions;
-  Item: IItem;
-  Int: Scalars['Int'];
-  Tag: ITag;
-  Feed: IFeed;
-  ID: Scalars['ID'];
-  Float: Scalars['Float'];
   AuthResponse: IAuthResponse;
   Boolean: Scalars['Boolean'];
-  Subscription: {};
-  Query: {};
+  Feed: IFeed;
+  String: Scalars['String'];
+  ID: Scalars['ID'];
+  Float: Scalars['Float'];
+  Item: IItem;
+  Int: Scalars['Int'];
   Mutation: {};
+  ParsedEntries: IParsedEntries;
+  Query: {};
+  Subscription: {};
+  Subscriptions: ISubscriptions;
+  Tag: ITag;
+  UnreadList: IUnreadList;
 }>;
 
-export type IUnreadListResolvers<ContextType = any, ParentType extends IResolversParentTypes['UnreadList'] = IResolversParentTypes['UnreadList']> = ResolversObject<{
-  itemIDs: Resolver<Array<IResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+export type IAuthResponseResolvers<ContextType = any, ParentType extends IResolversParentTypes['AuthResponse'] = IResolversParentTypes['AuthResponse']> = ResolversObject<{
+  isValid: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ISubscriptionsResolvers<ContextType = any, ParentType extends IResolversParentTypes['Subscriptions'] = IResolversParentTypes['Subscriptions']> = ResolversObject<{
-  tags: Resolver<Array<IResolversTypes['Tag']>, ParentType, ContextType>;
-  untaggedFeeds: Resolver<Array<IResolversTypes['Feed']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+export type IFeedResolvers<ContextType = any, ParentType extends IResolversParentTypes['Feed'] = IResolversParentTypes['Feed']> = ResolversObject<{
+  url: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  site: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  name: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  id: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
+  feed_id: Resolver<IResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IItemResolvers<ContextType = any, ParentType extends IResolversParentTypes['Item'] = IResolversParentTypes['Item']> = ResolversObject<{
@@ -284,32 +314,32 @@ export type IItemResolvers<ContextType = any, ParentType extends IResolversParen
   extracted_content_url: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   published: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   created_at: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ITagResolvers<ContextType = any, ParentType extends IResolversParentTypes['Tag'] = IResolversParentTypes['Tag']> = ResolversObject<{
+export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = ResolversObject<{
+  bookmark: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationBookmarkArgs, 'id'>>;
+  removeBookmark: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationRemoveBookmarkArgs, 'id'>>;
+  markAsRead: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationMarkAsReadArgs, 'id'>>;
+  markAsUnread: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationMarkAsUnreadArgs, 'id'>>;
+  login: Resolver<Maybe<IResolversTypes['AuthResponse']>, ParentType, ContextType, RequireFields<IMutationLoginArgs, 'hash'>>;
+}>;
+
+export type IParsedEntriesResolvers<ContextType = any, ParentType extends IResolversParentTypes['ParsedEntries'] = IResolversParentTypes['ParsedEntries']> = ResolversObject<{
+  link: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  guid: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   title: Resolver<IResolversTypes['String'], ParentType, ContextType>;
-  feeds: Resolver<Array<Maybe<IResolversTypes['Feed']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-}>;
-
-export type IFeedResolvers<ContextType = any, ParentType extends IResolversParentTypes['Feed'] = IResolversParentTypes['Feed']> = ResolversObject<{
-  url: Resolver<IResolversTypes['String'], ParentType, ContextType>;
-  site: Resolver<IResolversTypes['String'], ParentType, ContextType>;
-  name: Resolver<IResolversTypes['String'], ParentType, ContextType>;
-  id: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
-  feed_id: Resolver<IResolversTypes['Float'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-}>;
-
-export type IAuthResponseResolvers<ContextType = any, ParentType extends IResolversParentTypes['AuthResponse'] = IResolversParentTypes['AuthResponse']> = ResolversObject<{
-  isValid: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-}>;
-
-export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = ResolversObject<{
-  feed: SubscriptionResolver<IResolversTypes['Feed'], "feed", ParentType, ContextType>;
-  items: SubscriptionResolver<Array<IResolversTypes['Item']>, "items", ParentType, ContextType>;
+  pubDate: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  creator: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  content: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  isoDate: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  categories: Resolver<Array<Maybe<IResolversTypes['String']>>, ParentType, ContextType>;
+  summary: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  contentSnippet: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  enclosureUrl: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  enclosureLength: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>;
+  enclosureType: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = ResolversObject<{
@@ -322,26 +352,42 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   bookmarks: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryBookmarksArgs, never>>;
   feed: Resolver<IResolversTypes['Feed'], ParentType, ContextType, RequireFields<IQueryFeedArgs, 'id'>>;
   product: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryProductArgs, 'service' | 'url'>>;
+  parsedEntries: Resolver<Array<Maybe<IResolversTypes['ParsedEntries']>>, ParentType, ContextType, RequireFields<IQueryParsedEntriesArgs, 'url'>>;
 }>;
 
-export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = ResolversObject<{
-  bookmark: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationBookmarkArgs, 'id'>>;
-  removeBookmark: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationRemoveBookmarkArgs, 'id'>>;
-  markAsRead: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationMarkAsReadArgs, 'id'>>;
-  markAsUnread: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationMarkAsUnreadArgs, 'id'>>;
-  login: Resolver<Maybe<IResolversTypes['AuthResponse']>, ParentType, ContextType, RequireFields<IMutationLoginArgs, 'hash'>>;
+export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = ResolversObject<{
+  feed: SubscriptionResolver<IResolversTypes['Feed'], "feed", ParentType, ContextType>;
+  items: SubscriptionResolver<Array<IResolversTypes['Item']>, "items", ParentType, ContextType>;
+}>;
+
+export type ISubscriptionsResolvers<ContextType = any, ParentType extends IResolversParentTypes['Subscriptions'] = IResolversParentTypes['Subscriptions']> = ResolversObject<{
+  tags: Resolver<Array<IResolversTypes['Tag']>, ParentType, ContextType>;
+  untaggedFeeds: Resolver<Array<IResolversTypes['Feed']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ITagResolvers<ContextType = any, ParentType extends IResolversParentTypes['Tag'] = IResolversParentTypes['Tag']> = ResolversObject<{
+  title: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  feeds: Resolver<Array<Maybe<IResolversTypes['Feed']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IUnreadListResolvers<ContextType = any, ParentType extends IResolversParentTypes['UnreadList'] = IResolversParentTypes['UnreadList']> = ResolversObject<{
+  itemIDs: Resolver<Array<IResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IResolvers<ContextType = any> = ResolversObject<{
-  UnreadList: IUnreadListResolvers<ContextType>;
-  Subscriptions: ISubscriptionsResolvers<ContextType>;
-  Item: IItemResolvers<ContextType>;
-  Tag: ITagResolvers<ContextType>;
-  Feed: IFeedResolvers<ContextType>;
   AuthResponse: IAuthResponseResolvers<ContextType>;
-  Subscription: ISubscriptionResolvers<ContextType>;
-  Query: IQueryResolvers<ContextType>;
+  Feed: IFeedResolvers<ContextType>;
+  Item: IItemResolvers<ContextType>;
   Mutation: IMutationResolvers<ContextType>;
+  ParsedEntries: IParsedEntriesResolvers<ContextType>;
+  Query: IQueryResolvers<ContextType>;
+  Subscription: ISubscriptionResolvers<ContextType>;
+  Subscriptions: ISubscriptionsResolvers<ContextType>;
+  Tag: ITagResolvers<ContextType>;
+  UnreadList: IUnreadListResolvers<ContextType>;
 }>;
 
 

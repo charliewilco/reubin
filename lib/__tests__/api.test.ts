@@ -1,5 +1,5 @@
 import { describe, it, expect } from "@jest/globals";
-import { API } from "../api/api";
+import { API } from "../api";
 
 const DUMMY_SUBSCRIPTIONS = [
   "https://daverupert.com/atom.xml",
@@ -11,12 +11,20 @@ const api = new API();
 
 describe("API", () => {
   it("calls subscriptions", async () => {
-    const items = await api.rss.getFeedItems(DUMMY_SUBSCRIPTIONS[0]);
+    const items = await api.rss.getMagicFeedItems(DUMMY_SUBSCRIPTIONS[2]);
+    const trueItems = await api.rss.parseURL(DUMMY_SUBSCRIPTIONS[2]);
+    items.forEach(({ link, guid, title }) =>
+      console.log("Transformed", { link, title, guid })
+    );
+
+    trueItems.items.forEach((_) =>
+      console.log("Parsed", { link: _.link, guid: _.guid })
+    );
+
     expect(items).toBe(
       expect.arrayContaining([
         {
-          title: "📩 : TypeScript for Everyone 🚀",
-          created_at: "2021-01-11T00:00:00.000Z",
+          title: "The Basic Concepts",
           author: "Charlie Peters",
         },
       ])

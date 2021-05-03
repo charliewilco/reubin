@@ -1,15 +1,15 @@
 import { FEEDBIN_API } from "../urls";
 import { CachedAPI } from "./cached-service";
 import {
-  HTMLParseHanlder,
+  HTMLParseHandler,
   IFeedService,
   IHandlerOptions,
   IItem,
 } from "./types";
 
 export class FeedbinAPI extends CachedAPI implements IFeedService {
-  private _parseHTML: HTMLParseHanlder;
-  constructor(parser: HTMLParseHanlder) {
+  private _parseHTML: HTMLParseHandler;
+  constructor(parser: HTMLParseHandler) {
     super(FEEDBIN_API);
     this._parseHTML = parser;
   }
