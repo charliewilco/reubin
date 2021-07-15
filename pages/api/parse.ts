@@ -1,17 +1,10 @@
 import { NextApiHandler } from "next";
-import { API } from "../../lib/api";
-
-const api = new API();
-
-const toString = (_: string | string[]): string => {
-  return Array.isArray(_) ? _.join("") : _;
-};
+import { reubin } from "../../lib/api";
 
 const handler: NextApiHandler = async (req, res) => {
-  console.log(req.query);
-  const { url } = req.query;
-
-  const feed = await api.rss.getMagicDetails(toString(url));
+  const feed = await reubin.rss.getMagicDetails(
+    reubin.urlQueryToString(req.query.url)
+  );
 
   res.status(200).json(feed);
 };

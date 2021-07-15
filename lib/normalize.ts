@@ -1,6 +1,33 @@
-import { IFeed, ISubscriptions } from "./types";
 import qs from "query-string";
 import { ENTRIES_URL } from "./urls";
+
+/**
+ * @deprecated
+ */
+interface IOutputSubscription {
+  __typename?: "Subscriptions";
+  tags: IOutputTag[];
+  untaggedFeeds: IOutputFeed[];
+}
+
+/**
+ * @deprecated
+ */
+interface IOutputTag {
+  title: string;
+  feeds: IOutputFeed[];
+}
+
+/**
+ * @deprecated
+ */
+interface IOutputFeed {
+  url: string;
+  site: string;
+  id: string;
+  name: string;
+  feed_id: number;
+}
 
 export interface IServiceSubscriptions {
   id: number;
@@ -48,7 +75,9 @@ export const groupTags = (taggings: IServiceTagging[]) => {
   return m;
 };
 
-export const deriveFeedFromSubscription = (s: IServiceSubscriptions): IFeed => {
+export const deriveFeedFromSubscription = (
+  s: IServiceSubscriptions
+): IOutputFeed => {
   return {
     url: s.feed_url,
     site: s.site_url,
@@ -61,11 +90,11 @@ export const deriveFeedFromSubscription = (s: IServiceSubscriptions): IFeed => {
 export const normalizeSubscriptions = (
   subscriptions: IServiceSubscriptions[],
   taggings: IServiceTagging[]
-): ISubscriptions => {
+): IOutputSubscription => {
   const cloneSubscriptions = subscriptions.slice();
 
   const tags = Array.from(groupTags(taggings)).map(([title, feeds]) => {
-    const results: IFeed[] = [];
+    const results: IOutputFeed[] = [];
 
     for (let i = 0; i < feeds.length; i++) {
       const { feed_id } = feeds[i];

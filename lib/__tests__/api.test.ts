@@ -1,5 +1,5 @@
 import { describe, it, expect } from "@jest/globals";
-import { API } from "../api";
+import { reubin } from "../api";
 
 const DUMMY_SUBSCRIPTIONS = [
   "https://daverupert.com/atom.xml",
@@ -7,27 +7,18 @@ const DUMMY_SUBSCRIPTIONS = [
   "https://typescript.wtf/rss.xml",
 ];
 
-const api = new API();
-
 describe("API", () => {
   it("calls subscriptions", async () => {
-    const items = await api.rss.getMagicFeedItems(DUMMY_SUBSCRIPTIONS[2]);
-    const trueItems = await api.rss.parseURL(DUMMY_SUBSCRIPTIONS[2]);
-    items.forEach(({ link, guid, title }) =>
-      console.log("Transformed", { link, title, guid })
+    const items = await reubin.rss.getMagicFeedItems(DUMMY_SUBSCRIPTIONS[2]);
+    const { items: unparsedItems } = await reubin.parser.parseURL(
+      DUMMY_SUBSCRIPTIONS[2]
     );
 
-    trueItems.items.forEach((_) =>
-      console.log("Parsed", { link: _.link, guid: _.guid })
-    );
+    expect(items[0].title).toBe(unparsedItems[0].title);
+  });
 
-    expect(items).toBe(
-      expect.arrayContaining([
-        {
-          title: "The Basic Concepts",
-          author: "Charlie Peters",
-        },
-      ])
-    );
+  it("can get rss links from header", async () => {
+    const { feed } = await reubin.metadata.resolve("https://typescript.wtf");
+    expect(feed).toBe("https://typescript.wtf/rss.xml");
   });
 });

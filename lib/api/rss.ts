@@ -23,15 +23,16 @@ interface IParserItem {
   enclosureType: string | null;
 }
 
-export class RSS extends Parser implements IFeedService {
-  constructor() {
-    super();
+export class RSS implements IFeedService {
+  private _parser: Parser;
+  constructor(parser: Parser) {
+    this._parser = parser;
   }
   public unread = new Set<string>();
   public favorites = new Set<string>();
   async getFeedItems(url: IHandlerOptions | string): Promise<IItem[]> {
     if (typeof url === "string") {
-      const { items, ...feed } = await this.parseURL(url);
+      const { items, ...feed } = await this._parser.parseURL(url);
       console.log(feed);
       return items.length === 0
         ? []
@@ -89,13 +90,13 @@ export class RSS extends Parser implements IFeedService {
   }
 
   public async getMagicFeedItems(url: string) {
-    const { items } = await this.parseURL(url);
+    const { items } = await this._parser.parseURL(url);
 
     return items.map(this._createMergeFactory(url));
   }
 
   public async getMagicDetails(url: string) {
-    const { items, ...feed } = await this.parseURL(url);
+    const { items, ...feed } = await this._parser.parseURL(url);
 
     return {
       items: items.map(this._createMergeFactory(url)),
@@ -108,7 +109,7 @@ export class RSS extends Parser implements IFeedService {
   }
 
   async getFeedDetails(url: string): Promise<IFeed> {
-    const {} = await this.parseURL(url);
+    const {} = await this._parser.parseURL(url);
     return {
       url,
       site: "...",
