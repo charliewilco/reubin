@@ -8,7 +8,7 @@ const handler: NextApiHandler<FeedAPIResponse> = async (req, res) => {
     );
     res.status(200).json(data);
     res.end();
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     res.status(404).json({ message: error.message });
     res.end();
