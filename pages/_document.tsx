@@ -10,7 +10,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body className="bg-gray-50 dark:bg-gray-900">
+        <body>
           <Main />
           <NextScript />
         </body>

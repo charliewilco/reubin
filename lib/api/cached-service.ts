@@ -19,7 +19,7 @@ export abstract class CachedAPI {
 
   protected async get<T>(
     path: string,
-    params?: NodeJS.Dict<string | readonly string[]>
+    params?: Record<string, string | string[]>
   ) {
     const searchParams = new URLSearchParams(params);
     try {

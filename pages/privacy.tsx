@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { MarketingLayout } from "../components/layout";
 
 const Privacy = () => {
@@ -6,16 +7,12 @@ const Privacy = () => {
       title="Privacy Policy"
       addressbar="Privacy Policy | Reubin"
     >
-      <div className="py-8">
-        <div className="text-lg max-w-prose mx-auto mb-6">
-          <p className="text-base text-center leading-6 dark:text-yellow-700 text-yellow-600 font-semibold tracking-wide uppercase">
-            Legal
-          </p>
-          <h1 className="mt-2 mb-8 text-3xl text-center leading-8 font-extrabold tracking-tight dark:text-gray-300 text-gray-600 sm:text-4xl sm:leading-10">
-            Privacy Policy of Reubin
-          </h1>
+      <div>
+        <div>
+          <p>Legal</p>
+          <h1>Privacy Policy of Reubin</h1>
         </div>
-        <div className="prose prose-lg mx-auto">
+        <div>
           <p>
             Reubin operates the https://reubin.app/ website, which provides the
             SERVICE.
