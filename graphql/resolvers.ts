@@ -30,7 +30,7 @@ const mutation: MutationResolvers = {
 
         return feed;
       }
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(err);
     }
   },

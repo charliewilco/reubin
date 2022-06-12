@@ -61,9 +61,7 @@ export class FeedMetadata {
     return data;
   }
 
-  private async _mergeParserError(
-    contents: string
-  ): Promise<Parser.Output<any> | null> {
+  private async _mergeParserError(contents: string): Promise<Parser.Output<any> | null> {
     return new Promise((resolve) => {
       this._parser
         .parseString(contents)
@@ -82,7 +80,7 @@ export class FeedMetadata {
       const { body } = await got(url);
 
       return body;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(
         `Server responded with ${error.response.statusCode} ${error.response.statusMessage}`
       );
