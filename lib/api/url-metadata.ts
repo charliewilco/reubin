@@ -23,7 +23,10 @@ export class FeedMetadata {
    * valid xml document --> look for the link or check if it doesn't end in xml then scrape and send that.
    *
    */
-  public async resolve(_url: string): Promise<Metadata> {
+  public async resolve(_url?: string): Promise<Metadata> {
+    if (!_url) {
+      throw new Error("Must provider url");
+    }
     const contents = await this._getSiteContents(_url);
     const output = await this._mergeParserError(contents);
 

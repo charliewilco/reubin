@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
-export default class MyDocument extends Document {
+export default class CustomDocument extends Document {
+  static displayName = "DocumentLove";
   render() {
     return (
       <Html>
@@ -10,7 +11,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body>
+        <body className="dark:bg-zinc-900 dark:text-white">
           <Main />
           <NextScript />
         </body>

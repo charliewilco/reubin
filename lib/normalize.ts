@@ -1,11 +1,9 @@
 import qs from "query-string";
-import { ENTRIES_URL } from "./urls";
 
 /**
  * @deprecated
  */
 interface IOutputSubscription {
-  __typename?: "Subscriptions";
   tags: IOutputTag[];
   untaggedFeeds: IOutputFeed[];
 }
@@ -29,6 +27,9 @@ interface IOutputFeed {
   feed_id: number;
 }
 
+/**
+ * @deprecated
+ */
 export interface IServiceSubscriptions {
   id: number;
   created_at: string;
@@ -38,12 +39,18 @@ export interface IServiceSubscriptions {
   site_url: string;
 }
 
+/**
+ * @deprecated
+ */
 export interface IServiceTagging {
   id: number;
   feed_id: number;
   name: string;
 }
 
+/*
+ *@deprecated
+ **/
 export interface IEntryUnread {
   id: number;
   feed_id: number;
@@ -75,9 +82,7 @@ export const groupTags = (taggings: IServiceTagging[]) => {
   return m;
 };
 
-export const deriveFeedFromSubscription = (
-  s: IServiceSubscriptions
-): IOutputFeed => {
+export const deriveFeedFromSubscription = (s: IServiceSubscriptions): IOutputFeed => {
   return {
     url: s.feed_url,
     site: s.site_url,
@@ -119,10 +124,7 @@ export const normalizeSubscriptions = (
   };
 };
 
-export const createUrlsofUnreads = (
-  ids: number[],
-  url = ENTRIES_URL
-): string[] => {
+export const createUrlsofUnreads = (ids: number[], url: string): string[] => {
   const urls: string[] = [];
   let count = Math.ceil(ids.length / 100);
 

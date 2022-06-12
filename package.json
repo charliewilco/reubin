@@ -1,24 +1,33 @@
 {
-  "name": "with-typescript",
+  "name": "reubin",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "generate": "graphql-codegen",
     "types": "tsc --noEmit --pretty",
     "test": "jest"
   },
   "dependencies": {
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/typescript": "^2.4.11",
+    "@graphql-codegen/typescript-resolvers": "^2.6.4",
+    "@graphql-tools/schema": "^8.3.13",
+    "@graphql-yoga/node": "^2.8.0",
     "@metascraper/helpers": "^5.22.1",
     "@postlight/mercury-parser": "^2.2.1",
-    "@sindresorhus/is": "^4.0.0",
-    "cheerio": "^1.0.0-rc.5",
+    "@prisma/client": "^3.15.1",
+    "@sindresorhus/is": "^5.0.1",
+    "autoprefixer": "^10.4.7",
+    "cheerio": "^1.0.0-rc.11",
+    "cuid": "^2.1.8",
     "date-fns": "^2.21.3",
     "fathom-client": "^3.0.0",
-    "got": "^11.8.2",
-    "graphql": "^15.5.0",
-    "graphql-request": "^3.4.0",
-    "graphql-tag": "^2.12.4",
+    "got": "^12.1.0",
+    "graphql": "^16.5.0",
+    "graphql-request": "^4.3.0",
+    "graphql-tag": "^2.12.6",
     "html-entities": "^2.3.2",
     "metascraper": "^5.22.1",
     "metascraper-clearbit": "^5.3.0",
@@ -27,7 +36,8 @@
     "metascraper-logo-favicon": "^5.22.1",
     "metascraper-title": "^5.22.1",
     "metascraper-url": "^5.22.1",
-    "next": "^12.1.5",
+    "next": "^12.1.6",
+    "postcss": "^8.4.14",
     "query-string": "^7.0.0",
     "quick-lru": "^6.0.0",
     "react": "^18.0.0",
@@ -36,11 +46,12 @@
     "rss-parser": "^3.12.0",
     "sanitize-html": "^2.3.3",
     "swr": "^1.3.0",
+    "tailwindcss": "^3.0.24",
     "typescript": "^4.3.5",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^28.1.1",
     "@types/metascraper": "^5.14.0",
     "@types/metascraper-clearbit": "^5.14.0",
     "@types/metascraper-description": "^5.14.0",
@@ -53,27 +64,28 @@
     "@types/react-dom": "^18.0.1",
     "@types/sanitize-html": "^2.3.1",
     "@types/xml2js": "^0.4.8",
-    "babel-jest": "^27.0.6",
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.5",
-    "jest": "^27.0.6",
-    "ts-jest": "^27.0.3"
+    "jest": "^28.1.1",
+    "prettier": "^2.6.2",
+    "prettier-plugin-prisma": "^3.14.0",
+    "prettier-plugin-tailwindcss": "^0.1.11",
+    "prisma": "^3.14.0",
+    "ts-jest": "^28.0.4"
   },
   "license": "MIT",
-  "jest": {
-    "preset": "ts-jest/presets/js-with-babel",
-    "testEnvironment": "node",
-    "globals": {
-      "ts-jest": {
-        "babelConfig": {
-          "presets": [
-            "next/babel"
-          ]
-        }
-      }
-    }
-  },
   "eslintConfig": {
     "extends": "next/core-web-vitals"
+  },
+  "prettier": {
+    "printWidth": 95,
+    "useTabs": false,
+    "tabWidth": 2,
+    "bracketSpacing": true,
+    "bracketSameLine": true,
+    "plugins": [
+      "prettier-plugin-prisma",
+      "prettier-plugin-tailwindcss"
+    ]
   }
 }
