@@ -1,4 +1,3 @@
 packages:
-  - "ui"
-  - "graphql"
+  - "apps/*"
   - "packages/*"

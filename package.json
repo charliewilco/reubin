@@ -4,8 +4,8 @@
   "author": "Charlie ⚡ <charliewilc0@protonmail.com>",
   "private": true,
   "workspaces": [
-    "ui",
-    "api"
+    "packages/*",
+    "apps/*"
   ],
   "devDependencies": {
     "turbo": "^1.1.4",
