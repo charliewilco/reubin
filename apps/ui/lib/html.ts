@@ -1,16 +1,11 @@
 import sanitize from "sanitize-html";
 import { encode } from "html-entities";
 
-import cheerio from "cheerio";
+import cheerio, { load } from "cheerio";
 
 export const getContent = (content: string) => {
   const sanitized = sanitize(content, {
-    allowedTags: sanitize.defaults.allowedTags.concat([
-      "img",
-      "iframe",
-      "pre",
-      "code",
-    ]),
+    allowedTags: sanitize.defaults.allowedTags.concat(["img", "iframe", "pre", "code"]),
     allowedAttributes: {
       a: ["href", "name", "target"],
       img: ["src", "alt"],
@@ -18,9 +13,7 @@ export const getContent = (content: string) => {
     },
   });
 
-  const $ = cheerio.load(sanitized);
-
-  // const tags = $("pre > code").toArray();
+  const $ = load(sanitized);
 
   $("pre").each((_i, t) => {
     const current = $(t);

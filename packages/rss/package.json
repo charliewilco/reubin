@@ -4,5 +4,16 @@
     "@types/xml2js": "^0.4.8",
     "entities": "^3.0.1",
     "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "jest": "^28.1.1",
+    "ts-jest": "^28.0.5",
+    "typescript": "^4.3.5"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "verbose": true
   }
 }
