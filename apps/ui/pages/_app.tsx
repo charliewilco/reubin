@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { AppProps } from "next/app";
 import Router from "next/router";
 import * as Fathom from "fathom-client";
-import "../ui/components/styles.css";
+import "../components/styles.css";
 
 Router.events.on("routeChangeComplete", () => {
   Fathom.trackPageview();

@@ -1,15 +1,17 @@
 import fastify from "fastify";
-import mercurius from "mercurius";
+import mercurius, { MercuriusOptions } from "mercurius";
 import { schema } from "./schema";
 import { context } from "./context";
 
 const app = fastify();
 
-app.register(mercurius, {
+const options: MercuriusOptions = {
   schema,
   graphiql: true,
   context: () => context,
-});
+};
+
+app.register(mercurius, options);
 
 app.listen(4000, (err) => {
   if (err) {
