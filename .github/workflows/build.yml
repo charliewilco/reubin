@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build and Generate Types
 on: [push, pull_request] # Run on Push and Pull Requests
 
 jobs:
