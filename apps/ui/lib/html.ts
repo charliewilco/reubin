@@ -1,6 +1,5 @@
 import sanitize from "sanitize-html";
 import { encode } from "html-entities";
-
 import cheerio, { load } from "cheerio";
 
 export const getContent = (content: string) => {

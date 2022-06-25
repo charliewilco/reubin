@@ -17,23 +17,23 @@ export const MarketingLayout = ({ title, addressbar, children }: ILayoutProps) =
         <title>{addressbar}</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
-      <header id="header" className="mx-auto mt-8 max-w-6xl py-2 pt-4 text-center">
+      <header id="header" className="mx-auto mt-8 max-w-7xl p-2">
         <Link href="/" passHref>
-          <a>
+          <a className="block">
             <Image
               id="icon"
-              width={128}
-              height={128}
+              width={32}
+              height={32}
+              className="block"
               src="/app-icon-play-store.png"
               alt="App icon for Reubin application"
             />
           </a>
         </Link>
-
-        <h1>{title ?? "Reubin"}</h1>
+        {title && <h1>{title}</h1>}
       </header>
 
-      <main className="mx-auto max-w-6xl py-2">{children}</main>
+      <main>{children}</main>
       <SiteFooter />
     </div>
   );

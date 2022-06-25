@@ -3,10 +3,10 @@ import Link from "next/link";
 import { AiOutlineGlobal, AiOutlineTwitter, AiFillGithub } from "react-icons/ai";
 
 export const SiteFooter = () => (
-  <footer className="mx-auto max-w-6xl py-2">
+  <footer className="mx-auto max-w-7xl py-2 px-2">
     <div>
-      <nav className="flex flex-wrap justify-center">
-        <div className="px-5 py-2">
+      <nav className="flex flex-wrap">
+        <div className="py-2 pr-5">
           <Link href="/">
             <a>About</a>
           </Link>
@@ -27,7 +27,7 @@ export const SiteFooter = () => (
           </Link>
         </div>
       </nav>
-      <div className="mt-8 flex justify-center">
+      <div className="mt-8 flex">
         <a href="https://charliewil.co/" className="text-gray-400 hover:text-gray-500">
           <AiOutlineGlobal className="h-6 w-6" />
         </a>

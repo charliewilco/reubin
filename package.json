@@ -8,12 +8,21 @@
     "apps/*"
   ],
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/typescript": "^2.4.11",
+    "@graphql-codegen/typescript-resolvers": "^2.6.6",
+    "@graphql-codegen/typescript-graphql-request": "4.4.10",
+    "@graphql-codegen/typescript-operations": "2.4.2",
     "turbo": "^1.1.4",
     "jest": "^28.1.1",
     "husky": "^8.0.0",
     "prettier": "^2.6.2",
     "prettier-plugin-prisma": "^3.14.0",
-    "prettier-plugin-tailwindcss": "^0.1.11"
+    "prettier-plugin-tailwindcss": "^0.1.11",
+    "typescript": "^4.7.4",
+    "graphql": "^16.5.0",
+    "graphql-request": "^4.3.0",
+    "graphql-tag": "^2.12.6"
   },
   "scripts": {
     "build": "turbo run build",
@@ -21,7 +30,8 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "generate": "graphql-codegen"
   },
   "prettier": {
     "printWidth": 95,
@@ -33,5 +43,33 @@
       "prettier-plugin-prisma",
       "prettier-plugin-tailwindcss"
     ]
+  },
+  "graphql": {
+    "schema": "apps/graphql/src/typedefs.ts",
+    "extensions": {
+      "codegen": {
+        "generates": {
+          "./apps/graphql/src/types.ts": {
+            "plugins": [
+              "typescript",
+              "typescript-resolvers"
+            ]
+          },
+          "./apps/ui/lib/types.ts": {
+            "documents": "apps/ui/lib/*.graphql",
+            "plugins": [
+              "typescript",
+              "typescript-operations",
+              "typescript-graphql-request"
+            ]
+          }
+        },
+        "hooks": {
+          "afterAllFileWrite": [
+            "prettier --write"
+          ]
+        }
+      }
+    }
   }
 }
