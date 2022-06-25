@@ -1,3 +1,7 @@
 import { load } from "cheerio";
 
-export class MetaKit {}
+export class MetaKit {
+  constructor(html: string) {
+    load(html);
+  }
+}
