@@ -1,13 +1,12 @@
 {
-  "name": "@reubin/rss",
+  "name": "@reubin/utils",
   "scripts": {
     "build": "tsc",
     "test": "jest"
   },
   "dependencies": {
-    "@types/xml2js": "^0.4.11",
-    "entities": "^4.3.0",
-    "xml2js": "^0.4.23"
+    "cheerio": "^1.0.0-rc.11",
+    "iconv-lite": "^0.6.3"
   },
   "devDependencies": {
     "@types/jest": "^28.1.3",

@@ -7,8 +7,8 @@ const LoginPage = () => {
         <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-12 px-4 lg:flex-none">
           <div className="">
             <div>
-              <header className="text-center">
-                <h2 className="mt-6 text-3xl font-extrabold text-gray-100">
+              <header className="">
+                <h2 className="mt-6 text-3xl font-bold text-gray-100">
                   Sign in to your account
                 </h2>
               </header>
