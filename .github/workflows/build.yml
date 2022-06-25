@@ -24,5 +24,7 @@ jobs:
         run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
       - name: pnpm Install
         run: pnpm install
+      - name: Generate Types
+        run: pnpm generate
       - name: Build
         run: pnpm build
