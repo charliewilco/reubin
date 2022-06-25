@@ -1,79 +1,75 @@
 {
-  "name": "with-typescript",
-  "version": "1.0.0",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "types": "tsc --noEmit --pretty",
-    "test": "jest"
-  },
-  "dependencies": {
-    "@metascraper/helpers": "^5.22.1",
-    "@postlight/mercury-parser": "^2.2.1",
-    "@sindresorhus/is": "^4.0.0",
-    "cheerio": "^1.0.0-rc.5",
-    "date-fns": "^2.21.3",
-    "fathom-client": "^3.0.0",
-    "got": "^11.8.2",
-    "graphql": "^15.5.0",
-    "graphql-request": "^3.4.0",
-    "graphql-tag": "^2.12.4",
-    "html-entities": "^2.3.2",
-    "metascraper": "^5.22.1",
-    "metascraper-clearbit": "^5.3.0",
-    "metascraper-description": "^5.22.1",
-    "metascraper-image": "^5.22.1",
-    "metascraper-logo-favicon": "^5.22.1",
-    "metascraper-title": "^5.22.1",
-    "metascraper-url": "^5.22.1",
-    "next": "^12.1.5",
-    "query-string": "^7.0.0",
-    "quick-lru": "^6.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-icons": "^4.1.0",
-    "rss-parser": "^3.12.0",
-    "sanitize-html": "^2.3.3",
-    "swr": "^1.3.0",
-    "typescript": "^4.3.5",
-    "xml2js": "^0.4.23"
-  },
+  "name": "reubin",
+  "repository": "charliewilco/reubin.app",
+  "author": "Charlie ⚡ <charliewilc0@protonmail.com>",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "devDependencies": {
-    "@types/jest": "^26.0.23",
-    "@types/metascraper": "^5.14.0",
-    "@types/metascraper-clearbit": "^5.14.0",
-    "@types/metascraper-description": "^5.14.0",
-    "@types/metascraper-image": "^5.14.0",
-    "@types/metascraper-logo-favicon": "^5.14.0",
-    "@types/metascraper-url": "^5.14.0",
-    "@types/node": "^17.0.25",
-    "@types/postlight__mercury-parser": "^2.2.4",
-    "@types/react": "^18.0.5",
-    "@types/react-dom": "^18.0.1",
-    "@types/sanitize-html": "^2.3.1",
-    "@types/xml2js": "^0.4.8",
-    "babel-jest": "^27.0.6",
-    "eslint": "8.13.0",
-    "eslint-config-next": "12.1.5",
-    "jest": "^27.0.6",
-    "ts-jest": "^27.0.3"
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/typescript": "^2.4.11",
+    "@graphql-codegen/typescript-resolvers": "^2.6.6",
+    "@graphql-codegen/typescript-graphql-request": "4.4.10",
+    "@graphql-codegen/typescript-operations": "2.4.2",
+    "turbo": "^1.3.1",
+    "jest": "^28.1.1",
+    "husky": "^8.0.1",
+    "prettier": "^2.7.1",
+    "prettier-plugin-prisma": "^3.14.0",
+    "prettier-plugin-tailwindcss": "^0.1.11",
+    "typescript": "^4.7.4",
+    "graphql": "^16.5.0",
+    "graphql-request": "^4.3.0",
+    "graphql-tag": "^2.12.6"
   },
-  "license": "MIT",
-  "jest": {
-    "preset": "ts-jest/presets/js-with-babel",
-    "testEnvironment": "node",
-    "globals": {
-      "ts-jest": {
-        "babelConfig": {
-          "presets": [
-            "next/babel"
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "prepare": "husky install",
+    "generate": "graphql-codegen"
+  },
+  "prettier": {
+    "printWidth": 95,
+    "useTabs": false,
+    "tabWidth": 2,
+    "bracketSpacing": true,
+    "bracketSameLine": true,
+    "plugins": [
+      "prettier-plugin-prisma",
+      "prettier-plugin-tailwindcss"
+    ]
+  },
+  "graphql": {
+    "schema": "apps/graphql/src/typedefs.ts",
+    "extensions": {
+      "codegen": {
+        "generates": {
+          "./apps/graphql/src/types.ts": {
+            "plugins": [
+              "typescript",
+              "typescript-resolvers"
+            ]
+          },
+          "./apps/ui/lib/types.ts": {
+            "documents": "apps/ui/lib/*.graphql",
+            "plugins": [
+              "typescript",
+              "typescript-operations",
+              "typescript-graphql-request"
+            ]
+          }
+        },
+        "hooks": {
+          "afterAllFileWrite": [
+            "prettier --write"
           ]
         }
       }
     }
-  },
-  "eslintConfig": {
-    "extends": "next/core-web-vitals"
   }
 }
