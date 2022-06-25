@@ -1,5 +1,5 @@
 {
-  "name": "graphql",
+  "name": "@reubin/graphql-api",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,7 @@
     "dev": "ts-node-dev --no-notify --respawn --transpile-only src/server"
   },
   "devDependencies": {
-    "@types/node": "^17.0.25",
+    "@types/node": "^18.0.0",
     "prisma": "3.15.2",
     "ts-node": "10.8.1",
     "ts-node-dev": "2.0.0",

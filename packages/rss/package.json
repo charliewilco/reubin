@@ -1,5 +1,5 @@
 {
-  "name": "@charliewilco/rsskit",
+  "name": "@reubin/rss",
   "scripts": {
     "build": "tsc",
     "test": "jest"
