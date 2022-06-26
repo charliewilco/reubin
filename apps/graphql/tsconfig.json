@@ -23,6 +23,6 @@
     "isolatedModules": true,
     "outDir": "./dist"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "node_modules/@types/jest"],
   "exclude": ["src/**/*.test.ts"]
 }

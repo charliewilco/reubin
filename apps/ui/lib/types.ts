@@ -46,11 +46,26 @@ export type Feed = {
 
 export type Mutation = {
   __typename?: "Mutation";
-  addFeed?: Maybe<Feed>;
+  addFeed: Feed;
+  refreshFeed: Array<Maybe<Feed>>;
+  removeFeed: Feed;
+  updateFeed: Feed;
 };
 
 export type MutationAddFeedArgs = {
   url: Scalars["String"];
+};
+
+export type MutationRefreshFeedArgs = {
+  ids: Array<Scalars["ID"]>;
+};
+
+export type MutationRemoveFeedArgs = {
+  id: Scalars["ID"];
+};
+
+export type MutationUpdateFeedArgs = {
+  id: Scalars["ID"];
 };
 
 export type Query = {

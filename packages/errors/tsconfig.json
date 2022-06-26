@@ -4,6 +4,7 @@
     "target": "es6",
     "module": "commonjs",
     "allowJs": true,
+    "declaration": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,

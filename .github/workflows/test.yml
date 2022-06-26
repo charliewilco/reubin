@@ -4,6 +4,9 @@ on: [push, pull_request] # Run on Push and Pull Requests
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
 
     strategy:
       matrix:
@@ -26,3 +29,5 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm test
+        env:
+          DATABASE_URL: "postgresql://localhost:5432"

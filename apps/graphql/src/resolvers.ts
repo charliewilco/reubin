@@ -1,21 +1,30 @@
-import cuid from "cuid";
-import type { Feed, MutationResolvers, QueryResolvers } from "./types";
+import { RSSKit } from "@reubin/rss";
+import type { MutationResolvers, QueryResolvers } from "./types";
+import { getFeedFromDirectURL } from "./feeds";
+import { Context } from "./context";
 
-const query: QueryResolvers = {};
+const query: QueryResolvers<Context> = {
+  async feeds(_parent, _args, { prisma }) {
+    const feeds = await prisma.feed.findMany();
 
-const mutation: MutationResolvers = {
-  async addFeed(_parent, { url }) {
+    return feeds;
+  },
+};
+
+const rss = new RSSKit();
+
+const mutation: MutationResolvers<Context> = {
+  async addFeed(_parent, { url }, { prisma }) {
     try {
-      const _metadata = {
-        title: "Something",
-        url: "https://something.example/",
-      };
-
-      const feed: Feed = {
-        id: cuid(),
-        title: _metadata.title ?? "Untitled Feed",
-        link: _metadata.url ?? url,
-      };
+      const { data } = await getFeedFromDirectURL(url);
+      const parsed = await rss.parse(data);
+      const feed = await prisma.feed.create({
+        data: {
+          title: parsed.title ?? "Untitled Feed",
+          link: parsed.link ?? url,
+          feedURL: parsed.feedUrl ?? url,
+        },
+      });
 
       return feed;
     } catch (err: any) {

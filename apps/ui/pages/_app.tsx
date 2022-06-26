@@ -12,7 +12,7 @@ export default function RootApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     // Initialize Fathom when the app loads
     Fathom.load("MIGXNOZX", {
-      includedDomains: ["rebuin.app", "pre-alpha.reubin.app"],
+      includedDomains: ["rebuin.app"],
     });
   }, []);
 

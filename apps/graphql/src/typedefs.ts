@@ -36,7 +36,10 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    addFeed(url: String!): Feed
+    addFeed(url: String!): Feed!
+    updateFeed(id: ID!): Feed!
+    removeFeed(id: ID!): Feed!
+    refreshFeed(ids: [ID!]!): [Feed]!
   }
 
   schema {

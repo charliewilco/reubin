@@ -47,11 +47,26 @@ export type Feed = {
 
 export type Mutation = {
   __typename?: "Mutation";
-  addFeed?: Maybe<Feed>;
+  addFeed: Feed;
+  refreshFeed: Array<Maybe<Feed>>;
+  removeFeed: Feed;
+  updateFeed: Feed;
 };
 
 export type MutationAddFeedArgs = {
   url: Scalars["String"];
+};
+
+export type MutationRefreshFeedArgs = {
+  ids: Array<Scalars["ID"]>;
+};
+
+export type MutationRemoveFeedArgs = {
+  id: Scalars["ID"];
+};
+
+export type MutationUpdateFeedArgs = {
+  id: Scalars["ID"];
 };
 
 export type Query = {
@@ -228,10 +243,28 @@ export type MutationResolvers<
   ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
 > = {
   addFeed?: Resolver<
-    Maybe<ResolversTypes["Feed"]>,
+    ResolversTypes["Feed"],
     ParentType,
     ContextType,
     RequireFields<MutationAddFeedArgs, "url">
+  >;
+  refreshFeed?: Resolver<
+    Array<Maybe<ResolversTypes["Feed"]>>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationRefreshFeedArgs, "ids">
+  >;
+  removeFeed?: Resolver<
+    ResolversTypes["Feed"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationRemoveFeedArgs, "id">
+  >;
+  updateFeed?: Resolver<
+    ResolversTypes["Feed"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateFeedArgs, "id">
   >;
 };
 
