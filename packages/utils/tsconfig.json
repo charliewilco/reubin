@@ -24,6 +24,6 @@
     "outDir": "./dist",
     "experimentalDecorators": true
   },
-  "include": ["types/*", "src/**/*", "node_modules/@types/jest"],
+  "include": ["types/*", "src/**/*", "node_modules/@types/node", "node_modules/@types/jest"],
   "exclude": ["dist", "docs"]
 }

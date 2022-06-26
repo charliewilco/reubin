@@ -23,7 +23,7 @@ jobs:
       - name: Install PNPM
         uses: pnpm/action-setup@v2.2.2
         with:
-          version: 7.1.9
+          version: 7.3.0
       - name: pnpm Install
         run: pnpm install
       - name: Generate Types

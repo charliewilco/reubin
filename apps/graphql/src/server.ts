@@ -1,24 +1,6 @@
-import Fastify from "fastify";
-import mercurius, { type MercuriusOptions } from "mercurius";
-import { schema } from "./schema";
-import { context } from "./context";
+import { createApp } from "./app";
 
-const app = Fastify({ logger: false });
-
-const options: MercuriusOptions = {
-  schema,
-  graphiql: true,
-  context: () => context,
-};
-
-app.register(mercurius, options);
-
-// TODO: Create feed object
-// TODO: Create tag object
-// TODO: User sign up, registration
-// TODO: Stripe integration
-
-export { app };
+const app = createApp();
 
 const start = async () => {
   try {
