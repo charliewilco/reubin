@@ -1,8 +1,8 @@
 import { createApp } from "./app";
 
-const app = createApp();
-
 const start = async () => {
+  const app = createApp();
+
   try {
     app.listen({ port: 5300 }).then(() => {
       console.log(`\

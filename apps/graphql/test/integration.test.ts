@@ -1,13 +1,13 @@
 import { createMercuriusTestClient } from "mercurius-integration-testing";
 import { createApp } from "../src/app";
+import { context } from "../src/context";
 
 let client: ReturnType<typeof createMercuriusTestClient>;
-let app: ReturnType<typeof createApp>;
 
 describe("Integration", () => {
-  beforeAll(() => {
-    app = createApp();
-    client = createMercuriusTestClient(app);
+  beforeAll(async () => {
+    client = createMercuriusTestClient(createApp());
+    await context.prisma.$connect();
   });
   it("can add feed", async () => {
     const response = await client.mutate(`
@@ -24,6 +24,6 @@ describe("Integration", () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    await context.prisma.$disconnect();
   });
 });
