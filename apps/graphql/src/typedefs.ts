@@ -3,6 +3,12 @@ import gql from "graphql-tag";
 export const typeDefs = gql`
   scalar Date
 
+  enum EntryFilter {
+    UNREAD
+    ALL
+    FAVORITED
+  }
+
   type Feed {
     id: ID!
     title: String!
@@ -32,7 +38,7 @@ export const typeDefs = gql`
     feeds: [Feed]!
     entry(id: String): Entry
     feed(id: ID!): Feed
-    entries(feed_id: ID!): [Entry]!
+    entries(feed_id: ID!, filter: EntryFilter): [Entry]!
   }
 
   type Mutation {

@@ -41,7 +41,9 @@ jobs:
         run: pnpm install
       - name: Build Packages
         run: pnpm build
+      # - name: Setup DB
+      #   run: psql postgres -f setup.sql
       - name: Test
         run: pnpm test
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/reubindb
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres

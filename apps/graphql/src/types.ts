@@ -38,6 +38,12 @@ export type Entry = {
   url?: Maybe<Scalars["String"]>;
 };
 
+export enum EntryFilter {
+  All = "ALL",
+  Favorited = "FAVORITED",
+  Unread = "UNREAD",
+}
+
 export type Feed = {
   __typename?: "Feed";
   id: Scalars["ID"];
@@ -79,6 +85,7 @@ export type Query = {
 
 export type QueryEntriesArgs = {
   feed_id: Scalars["ID"];
+  filter?: InputMaybe<EntryFilter>;
 };
 
 export type QueryEntryArgs = {
@@ -177,6 +184,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Date: ResolverTypeWrapper<Scalars["Date"]>;
   Entry: ResolverTypeWrapper<Entry>;
+  EntryFilter: EntryFilter;
   Feed: ResolverTypeWrapper<Feed>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
