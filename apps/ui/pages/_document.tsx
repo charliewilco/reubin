@@ -4,7 +4,7 @@ export default class CustomDocument extends Document {
   static displayName = "DocumentLove";
   render() {
     return (
-      <Html>
+      <Html className="h-full dark:bg-zinc-900 dark:text-white">
         <Head>
           <link
             href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"
@@ -19,7 +19,7 @@ export default class CustomDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body className="dark:bg-zinc-900 dark:text-white">
+        <body className="h-full overflow-hidden">
           <Main />
           <NextScript />
         </body>

@@ -13,6 +13,7 @@
     "autoprefixer": "^10.4.7",
     "date-fns": "^2.21.3",
     "fathom-client": "^3.5.0",
+    "formik": "^2.2.9",
     "graphql": "^16.5.0",
     "graphql-request": "^4.3.0",
     "graphql-tag": "^2.12.6",

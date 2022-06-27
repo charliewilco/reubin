@@ -1,6 +1,24 @@
+fragment FeedDetails on Feed {
+  id
+  title
+}
+
 query GetFeeds {
   feeds {
-    id
+    ...FeedDetails
+  }
+}
+
+query EntriesByFeed($id: ID!) {
+  entries(feed_id: $id) {
     title
+    content
+    id
+  }
+}
+
+mutation CreateFeed($url: String!) {
+  addFeed(url: $url) {
+    ...FeedDetails
   }
 }

@@ -37,6 +37,12 @@ export type Entry = {
   url?: Maybe<Scalars["String"]>;
 };
 
+export enum EntryFilter {
+  All = "ALL",
+  Favorited = "FAVORITED",
+  Unread = "UNREAD",
+}
+
 export type Feed = {
   __typename?: "Feed";
   id: Scalars["ID"];
@@ -78,6 +84,7 @@ export type Query = {
 
 export type QueryEntriesArgs = {
   feed_id: Scalars["ID"];
+  filter?: InputMaybe<EntryFilter>;
 };
 
 export type QueryEntryArgs = {
@@ -88,6 +95,8 @@ export type QueryFeedArgs = {
   id: Scalars["ID"];
 };
 
+export type FeedDetailsFragment = { __typename?: "Feed"; id: string; title: string };
+
 export type GetFeedsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetFeedsQuery = {
@@ -95,13 +104,59 @@ export type GetFeedsQuery = {
   feeds: Array<{ __typename?: "Feed"; id: string; title: string } | null>;
 };
 
+export type EntriesByFeedQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type EntriesByFeedQuery = {
+  __typename?: "Query";
+  entries: Array<{
+    __typename?: "Entry";
+    title?: string | null;
+    content?: string | null;
+    id: string;
+  } | null>;
+};
+
+export type CreateFeedMutationVariables = Exact<{
+  url: Scalars["String"];
+}>;
+
+export type CreateFeedMutation = {
+  __typename?: "Mutation";
+  addFeed: { __typename?: "Feed"; id: string; title: string };
+};
+
+export const FeedDetailsFragmentDoc = gql`
+  fragment FeedDetails on Feed {
+    id
+    title
+  }
+`;
 export const GetFeedsDocument = gql`
   query GetFeeds {
     feeds {
-      id
-      title
+      ...FeedDetails
     }
   }
+  ${FeedDetailsFragmentDoc}
+`;
+export const EntriesByFeedDocument = gql`
+  query EntriesByFeed($id: ID!) {
+    entries(feed_id: $id) {
+      title
+      content
+      id
+    }
+  }
+`;
+export const CreateFeedDocument = gql`
+  mutation CreateFeed($url: String!) {
+    addFeed(url: $url) {
+      ...FeedDetails
+    }
+  }
+  ${FeedDetailsFragmentDoc}
 `;
 
 export type SdkFunctionWrapper = <T>(
@@ -130,6 +185,34 @@ export function getSdk(
           }),
         "GetFeeds",
         "query"
+      );
+    },
+    EntriesByFeed(
+      variables: EntriesByFeedQueryVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<EntriesByFeedQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<EntriesByFeedQuery>(EntriesByFeedDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "EntriesByFeed",
+        "query"
+      );
+    },
+    CreateFeed(
+      variables: CreateFeedMutationVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<CreateFeedMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreateFeedMutation>(CreateFeedDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "CreateFeed",
+        "mutation"
       );
     },
   };
