@@ -47,6 +47,7 @@ export enum EntryFilter {
 export type Feed = {
   __typename?: "Feed";
   id: Scalars["ID"];
+  lastFetched: Scalars["Date"];
   link: Scalars["String"];
   title: Scalars["String"];
 };
@@ -54,9 +55,8 @@ export type Feed = {
 export type Mutation = {
   __typename?: "Mutation";
   addFeed: Feed;
-  refreshFeed: Array<Maybe<Feed>>;
+  refreshFeed: Array<Maybe<Entry>>;
   removeFeed: Feed;
-  updateFeed: Feed;
 };
 
 export type MutationAddFeedArgs = {
@@ -64,14 +64,10 @@ export type MutationAddFeedArgs = {
 };
 
 export type MutationRefreshFeedArgs = {
-  ids: Array<Scalars["ID"]>;
-};
-
-export type MutationRemoveFeedArgs = {
   id: Scalars["ID"];
 };
 
-export type MutationUpdateFeedArgs = {
+export type MutationRemoveFeedArgs = {
   id: Scalars["ID"];
 };
 
@@ -89,7 +85,7 @@ export type QueryEntriesArgs = {
 };
 
 export type QueryEntryArgs = {
-  id?: InputMaybe<Scalars["String"]>;
+  id: Scalars["ID"];
 };
 
 export type QueryFeedArgs = {
@@ -241,6 +237,7 @@ export type FeedResolvers<
   ParentType extends ResolversParentTypes["Feed"] = ResolversParentTypes["Feed"]
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  lastFetched?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
   link?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -257,22 +254,16 @@ export type MutationResolvers<
     RequireFields<MutationAddFeedArgs, "url">
   >;
   refreshFeed?: Resolver<
-    Array<Maybe<ResolversTypes["Feed"]>>,
+    Array<Maybe<ResolversTypes["Entry"]>>,
     ParentType,
     ContextType,
-    RequireFields<MutationRefreshFeedArgs, "ids">
+    RequireFields<MutationRefreshFeedArgs, "id">
   >;
   removeFeed?: Resolver<
     ResolversTypes["Feed"],
     ParentType,
     ContextType,
     RequireFields<MutationRemoveFeedArgs, "id">
-  >;
-  updateFeed?: Resolver<
-    ResolversTypes["Feed"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateFeedArgs, "id">
   >;
 };
 
@@ -290,7 +281,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes["Entry"]>,
     ParentType,
     ContextType,
-    Partial<QueryEntryArgs>
+    RequireFields<QueryEntryArgs, "id">
   >;
   feed?: Resolver<
     Maybe<ResolversTypes["Feed"]>,

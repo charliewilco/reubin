@@ -8,23 +8,25 @@ datasource db {
 }
 
 model Entry {
-  id       String  @id @default(cuid())
+  id       String   @id @default(cuid())
   title    String
   content  String
-  favorite Boolean @default(false)
-  unread   Boolean @default(true)
+  pubDate  DateTime @default(now())
+  favorite Boolean  @default(false)
+  unread   Boolean  @default(true)
   feedId   String?
-  Feed     Feed?   @relation(fields: [feedId], references: [id])
+  Feed     Feed?    @relation(fields: [feedId], references: [id])
 }
 
 model Feed {
-  id      String  @id @default(cuid())
-  title   String
-  userId  String?
-  link    String
-  feedURL String
-  User    User?   @relation(fields: [userId], references: [id])
-  entries Entry[]
+  id          String   @id @default(cuid())
+  title       String
+  userId      String?
+  link        String
+  feedURL     String
+  lastFetched DateTime @default(now())
+  User        User?    @relation(fields: [userId], references: [id])
+  entries     Entry[]
 }
 
 model User {

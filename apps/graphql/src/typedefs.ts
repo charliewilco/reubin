@@ -13,6 +13,7 @@ export const typeDefs = gql`
     id: ID!
     title: String!
     link: String!
+    lastFetched: Date!
   }
 
   type Activity {
@@ -36,16 +37,15 @@ export const typeDefs = gql`
 
   type Query {
     feeds: [Feed]!
-    entry(id: String): Entry
+    entry(id: ID!): Entry
     feed(id: ID!): Feed
     entries(feed_id: ID!, filter: EntryFilter): [Entry]!
   }
 
   type Mutation {
     addFeed(url: String!): Feed!
-    updateFeed(id: ID!): Feed!
     removeFeed(id: ID!): Feed!
-    refreshFeed(ids: [ID!]!): [Feed]!
+    refreshFeed(id: ID!): [Entry]!
   }
 
   schema {

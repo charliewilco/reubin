@@ -5,11 +5,12 @@ import type { Entry as EntryType } from "./types";
 export const mapRSStoEntry = (
   rssItem: RSSItem,
   feedId: string
-): Pick<Entry, "content" | "title" | "feedId"> => {
+): Pick<Entry, "content" | "title" | "feedId" | "pubDate"> => {
   return {
     title: rssItem.title ?? "Untitled Entry",
     content: rssItem.content ?? "",
     feedId,
+    pubDate: new Date(rssItem.pubDate ?? Date.now()),
   };
 };
 
@@ -19,5 +20,6 @@ export const mapORMEntryToAPIEntry = (entry: Entry): EntryType => {
     id: entry.id,
     content: entry.content,
     feed_id: entry.feedId!,
+    published: entry.pubDate,
   };
 };

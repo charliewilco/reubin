@@ -46,6 +46,7 @@ export enum EntryFilter {
 export type Feed = {
   __typename?: "Feed";
   id: Scalars["ID"];
+  lastFetched: Scalars["Date"];
   link: Scalars["String"];
   title: Scalars["String"];
 };
@@ -53,9 +54,8 @@ export type Feed = {
 export type Mutation = {
   __typename?: "Mutation";
   addFeed: Feed;
-  refreshFeed: Array<Maybe<Feed>>;
+  refreshFeed: Array<Maybe<Entry>>;
   removeFeed: Feed;
-  updateFeed: Feed;
 };
 
 export type MutationAddFeedArgs = {
@@ -63,14 +63,10 @@ export type MutationAddFeedArgs = {
 };
 
 export type MutationRefreshFeedArgs = {
-  ids: Array<Scalars["ID"]>;
-};
-
-export type MutationRemoveFeedArgs = {
   id: Scalars["ID"];
 };
 
-export type MutationUpdateFeedArgs = {
+export type MutationRemoveFeedArgs = {
   id: Scalars["ID"];
 };
 
@@ -88,7 +84,7 @@ export type QueryEntriesArgs = {
 };
 
 export type QueryEntryArgs = {
-  id?: InputMaybe<Scalars["String"]>;
+  id: Scalars["ID"];
 };
 
 export type QueryFeedArgs = {

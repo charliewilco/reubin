@@ -25,7 +25,7 @@
     "graphql-tag": "^2.12.6"
   },
   "scripts": {
-    "build": "turbo run build",
+    "build": "graphql-codegen && turbo run build",
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",
     "lint": "turbo run lint",
