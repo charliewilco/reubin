@@ -7,21 +7,21 @@ jobs:
     services:
       postgres:
         image: postgres
+        ports:
+          # Maps TCP port 5432 on service container to the host
+          - 5432:5432
         env:
-          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          # Maps TCP port 5432 on service container to the host
-          - 5432:5432
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres?schema=public
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -41,8 +41,20 @@ jobs:
       - name: pnpm Install
         run: pnpm install
       - name: Build Packages
-        run: pnpm build
+        run: pnpm --filter "./packages/**" build
+      # - name: Setup DB
+      #   run: pnpm --filter @reubin/graphql-api db:push 
+      #   env:
+      #     # The hostname used to communicate with the PostgreSQL service container
+      #     POSTGRES_HOST: postgres
+      #     # The default PostgreSQL port
+      #     POSTGRES_PORT: 5432
+      #     DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres?schema=public
       - name: Test
         run: pnpm test
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: postgres
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
+          DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres?schema=public
