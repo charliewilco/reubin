@@ -6,6 +6,9 @@ module.exports = {
   optimizeFonts: true,
   cleanDistDir: true,
   swcMinify: true,
+  experimental: {
+    newNextLinkBehavior: true,
+  },
   async rewrites() {
     return [
       {

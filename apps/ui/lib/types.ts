@@ -30,10 +30,12 @@ export type Entry = {
   /** HTML String */
   content?: Maybe<Scalars["String"]>;
   created_at?: Maybe<Scalars["Date"]>;
+  favorite: Scalars["Boolean"];
   feed_id: Scalars["ID"];
   id: Scalars["ID"];
   published?: Maybe<Scalars["Date"]>;
-  title?: Maybe<Scalars["String"]>;
+  title: Scalars["String"];
+  unread: Scalars["Boolean"];
   url?: Maybe<Scalars["String"]>;
 };
 
@@ -54,12 +56,22 @@ export type Feed = {
 export type Mutation = {
   __typename?: "Mutation";
   addFeed: Feed;
-  refreshFeed: Array<Maybe<Entry>>;
+  markAsFavorite: Entry;
+  markAsRead: Entry;
+  refreshFeed: Array<Entry>;
   removeFeed: Feed;
 };
 
 export type MutationAddFeedArgs = {
   url: Scalars["String"];
+};
+
+export type MutationMarkAsFavoriteArgs = {
+  id: Scalars["ID"];
+};
+
+export type MutationMarkAsReadArgs = {
+  id: Scalars["ID"];
 };
 
 export type MutationRefreshFeedArgs = {
@@ -72,9 +84,9 @@ export type MutationRemoveFeedArgs = {
 
 export type Query = {
   __typename?: "Query";
-  entries: Array<Maybe<Entry>>;
-  entry?: Maybe<Entry>;
-  feed?: Maybe<Feed>;
+  entries: Array<Entry>;
+  entry: Entry;
+  feed: Feed;
   feeds: Array<Maybe<Feed>>;
 };
 
@@ -100,6 +112,15 @@ export type GetFeedsQuery = {
   feeds: Array<{ __typename?: "Feed"; id: string; title: string } | null>;
 };
 
+export type EntryDetailsFragment = {
+  __typename?: "Entry";
+  title: string;
+  content?: string | null;
+  id: string;
+  unread: boolean;
+  published?: any | null;
+};
+
 export type EntriesByFeedQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
@@ -108,10 +129,44 @@ export type EntriesByFeedQuery = {
   __typename?: "Query";
   entries: Array<{
     __typename?: "Entry";
-    title?: string | null;
+    title: string;
     content?: string | null;
     id: string;
-  } | null>;
+    unread: boolean;
+    published?: any | null;
+  }>;
+};
+
+export type UnreadEntriesQueryVariables = Exact<{
+  feedID: Scalars["ID"];
+}>;
+
+export type UnreadEntriesQuery = {
+  __typename?: "Query";
+  entries: Array<{
+    __typename?: "Entry";
+    title: string;
+    content?: string | null;
+    id: string;
+    unread: boolean;
+    published?: any | null;
+  }>;
+};
+
+export type FavoriteEntriesQueryVariables = Exact<{
+  feedID: Scalars["ID"];
+}>;
+
+export type FavoriteEntriesQuery = {
+  __typename?: "Query";
+  entries: Array<{
+    __typename?: "Entry";
+    title: string;
+    content?: string | null;
+    id: string;
+    unread: boolean;
+    published?: any | null;
+  }>;
 };
 
 export type CreateFeedMutationVariables = Exact<{
@@ -123,10 +178,44 @@ export type CreateFeedMutation = {
   addFeed: { __typename?: "Feed"; id: string; title: string };
 };
 
+export type MarkAsReadMutationVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type MarkAsReadMutation = {
+  __typename?: "Mutation";
+  markAsRead: { __typename?: "Entry"; title: string; content?: string | null; id: string };
+};
+
+export type IndividualEntryQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type IndividualEntryQuery = {
+  __typename?: "Query";
+  entry: {
+    __typename?: "Entry";
+    id: string;
+    published?: any | null;
+    content?: string | null;
+    title: string;
+    unread: boolean;
+  };
+};
+
 export const FeedDetailsFragmentDoc = gql`
   fragment FeedDetails on Feed {
     id
     title
+  }
+`;
+export const EntryDetailsFragmentDoc = gql`
+  fragment EntryDetails on Entry {
+    title
+    content
+    id
+    unread
+    published
   }
 `;
 export const GetFeedsDocument = gql`
@@ -140,11 +229,26 @@ export const GetFeedsDocument = gql`
 export const EntriesByFeedDocument = gql`
   query EntriesByFeed($id: ID!) {
     entries(feed_id: $id) {
-      title
-      content
-      id
+      ...EntryDetails
     }
   }
+  ${EntryDetailsFragmentDoc}
+`;
+export const UnreadEntriesDocument = gql`
+  query UnreadEntries($feedID: ID!) {
+    entries(feed_id: $feedID, filter: UNREAD) {
+      ...EntryDetails
+    }
+  }
+  ${EntryDetailsFragmentDoc}
+`;
+export const FavoriteEntriesDocument = gql`
+  query FavoriteEntries($feedID: ID!) {
+    entries(feed_id: $feedID, filter: FAVORITED) {
+      ...EntryDetails
+    }
+  }
+  ${EntryDetailsFragmentDoc}
 `;
 export const CreateFeedDocument = gql`
   mutation CreateFeed($url: String!) {
@@ -153,6 +257,26 @@ export const CreateFeedDocument = gql`
     }
   }
   ${FeedDetailsFragmentDoc}
+`;
+export const MarkAsReadDocument = gql`
+  mutation MarkAsRead($id: ID!) {
+    markAsRead(id: $id) {
+      title
+      content
+      id
+    }
+  }
+`;
+export const IndividualEntryDocument = gql`
+  query IndividualEntry($id: ID!) {
+    entry(id: $id) {
+      id
+      published
+      content
+      title
+      unread
+    }
+  }
 `;
 
 export type SdkFunctionWrapper = <T>(
@@ -197,6 +321,34 @@ export function getSdk(
         "query"
       );
     },
+    UnreadEntries(
+      variables: UnreadEntriesQueryVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<UnreadEntriesQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<UnreadEntriesQuery>(UnreadEntriesDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "UnreadEntries",
+        "query"
+      );
+    },
+    FavoriteEntries(
+      variables: FavoriteEntriesQueryVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<FavoriteEntriesQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FavoriteEntriesQuery>(FavoriteEntriesDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "FavoriteEntries",
+        "query"
+      );
+    },
     CreateFeed(
       variables: CreateFeedMutationVariables,
       requestHeaders?: Dom.RequestInit["headers"]
@@ -209,6 +361,34 @@ export function getSdk(
           }),
         "CreateFeed",
         "mutation"
+      );
+    },
+    MarkAsRead(
+      variables: MarkAsReadMutationVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<MarkAsReadMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<MarkAsReadMutation>(MarkAsReadDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "MarkAsRead",
+        "mutation"
+      );
+    },
+    IndividualEntry(
+      variables: IndividualEntryQueryVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<IndividualEntryQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<IndividualEntryQuery>(IndividualEntryDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "IndividualEntry",
+        "query"
       );
     },
   };

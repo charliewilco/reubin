@@ -10,17 +10,15 @@ const IndexPage = () => (
       <link rel="icon" type="image/png" href="/favicon.png" />
     </Head>
     <header id="header" className="mx-auto mt-8 max-w-7xl p-2">
-      <Link href="/" passHref>
-        <a className="block">
-          <Image
-            id="icon"
-            width={32}
-            height={32}
-            className="block"
-            src="/app-icon-play-store.png"
-            alt="App icon for Reubin application"
-          />
-        </a>
+      <Link href="/" passHref className="block">
+        <Image
+          id="icon"
+          width={32}
+          height={32}
+          className="block"
+          src="/app-icon-play-store.png"
+          alt="App icon for Reubin application"
+        />
       </Link>
     </header>
     <main className="mx-auto max-w-7xl px-2 py-16">

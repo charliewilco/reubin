@@ -1,15 +1,12 @@
-import useSWR from "swr";
-import { sdk } from "../lib/fetcher";
-import { LoadingIndicator } from "./activity-indicator";
+import { useFeedList } from "../hooks/useFeedList";
+import { LoadingIndicator } from "./ui/activity-indicator";
 
 interface FeedListProps {
   onSelect(id: string): void;
 }
 
 export const FeedList = (props: FeedListProps) => {
-  const { data, error } = useSWR("feeds", () => sdk.GetFeeds());
-
-  const isLoading = !error && !data;
+  const { data, error, isLoading } = useFeedList();
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -28,7 +25,7 @@ export const FeedList = (props: FeedListProps) => {
       );
     }
     return (
-      <div>
+      <div className="absolute top-0 left-0 right-0 bottom-0 w-full ">
         <ul>
           {data.feeds.map((f) => {
             return (

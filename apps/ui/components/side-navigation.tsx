@@ -16,11 +16,12 @@ interface LinkItemProps {
 
 export const LinkItem = (props: LinkItemProps) => {
   return (
-    <Link key={props.name} href={props.href}>
-      <a className="flex items-center rounded-lg p-2 text-zinc-200 hover:bg-sky-700">
-        {props.children}
-        <span className="sr-only">{props.name}</span>
-      </a>
+    <Link
+      key={props.name}
+      href={props.href}
+      className="flex items-center rounded-lg p-2 text-zinc-200 hover:bg-sky-700">
+      {props.children}
+      <span className="sr-only">{props.name}</span>
     </Link>
   );
 };

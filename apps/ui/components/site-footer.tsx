@@ -7,24 +7,16 @@ export const SiteFooter = () => (
     <div>
       <nav className="flex flex-wrap">
         <div className="py-2 pr-5">
-          <Link href="/">
-            <a>About</a>
-          </Link>
+          <Link href="/">About</Link>
         </div>
         <div className="px-5 py-2">
-          <Link href="/changelog">
-            <a>Changelog</a>
-          </Link>
+          <Link href="/changelog">Changelog</Link>
         </div>
         <div className="px-5 py-2">
-          <Link href="/login">
-            <a>Login</a>
-          </Link>
+          <Link href="/login">Login</Link>
         </div>
         <div className="px-5 py-2">
-          <Link href="/privacy">
-            <a>Privacy Policy</a>
-          </Link>
+          <Link href="/privacy">Privacy Policy</Link>
         </div>
       </nav>
       <div className="mt-8 flex">
