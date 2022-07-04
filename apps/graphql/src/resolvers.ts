@@ -8,6 +8,12 @@ import type { Context } from "./context";
 import { mapORMEntryToAPIEntry, mapRSStoEntry } from "./structs";
 import { getFeedFromDirectURL } from "./feeds";
 
+/**
+ * TODO:
+ * - recently read
+ * - tags
+ * - me
+ **/
 const query: QueryResolvers<Context> = {
   async feeds(_parent, _args, { prisma }) {
     const feeds = await prisma.feed.findMany();
@@ -20,6 +26,10 @@ const query: QueryResolvers<Context> = {
         id,
       },
     });
+
+    if (feed === null) {
+      throw new Error("Feed not found");
+    }
 
     return feed;
   },
@@ -55,6 +65,14 @@ const query: QueryResolvers<Context> = {
   },
 };
 
+/**
+ * TODO:
+ * - create, read, update, delete tags
+ * - mark as read
+ * - mark as favorite
+ * - login
+ * - register user
+ **/
 const mutation: MutationResolvers<Context> = {
   async addFeed(_parent, { url }, { prisma, rss }) {
     try {
@@ -129,6 +147,22 @@ const mutation: MutationResolvers<Context> = {
     });
 
     return _.map((value) => mapORMEntryToAPIEntry(value));
+  },
+
+  async markAsRead(_parent, { id }, { prisma }) {
+    const entry = await prisma.entry.update({
+      where: {
+        id,
+      },
+      data: {
+        unread: false,
+      },
+    });
+    if (entry === null) {
+      throw new Error("Entry not updated");
+    }
+
+    return mapORMEntryToAPIEntry(entry);
   },
 };
 

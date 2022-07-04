@@ -8,14 +8,37 @@ datasource db {
 }
 
 model Entry {
-  id       String   @id @default(cuid())
+  id       String    @id @default(cuid())
   title    String
   content  String
-  pubDate  DateTime @default(now())
-  favorite Boolean  @default(false)
-  unread   Boolean  @default(true)
+  pubDate  DateTime  @default(now())
+  favorite Boolean   @default(false)
+  unread   Boolean   @default(true)
   feedId   String?
-  Feed     Feed?    @relation(fields: [feedId], references: [id])
+  feed     Feed?     @relation(fields: [feedId], references: [id])
+  readAt   DateTime? @map("read_at")
+}
+
+model Tag {
+  id     String        @id @default(cuid())
+  title  String
+  userId String?
+  // Reference: https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations
+  feeds  TagsOnFeeds[]
+  user   User?         @relation(fields: [userId], references: [id])
+
+  Feed Feed[]
+}
+
+model TagsOnFeeds {
+  post       Feed     @relation(fields: [feedId], references: [id])
+  feedId     String // relation scalar field (used in the `@relation` attribute above)
+  tag        Tag      @relation(fields: [tagId], references: [id])
+  tagId      String // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([feedId, tagId])
 }
 
 model Feed {
@@ -25,17 +48,25 @@ model Feed {
   link        String
   feedURL     String
   lastFetched DateTime @default(now())
-  User        User?    @relation(fields: [userId], references: [id])
+  user        User?    @relation(fields: [userId], references: [id])
   entries     Entry[]
+
+
+  TagsOnFeeds TagsOnFeeds[]
+  Tag         Tag?          @relation(fields: [tagId], references: [id])
+  tagId       String?
 }
 
 model User {
   id        String   @id @default(cuid())
-  name      String?
-  email     String?  @unique
+  name      String   @unique
+  email     String   @unique
+  /// hashed obvs lol
+  password  String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   feeds     Feed[]
 
+  tags Tag[]
   @@map("users")
 }

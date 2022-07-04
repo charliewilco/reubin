@@ -31,10 +31,12 @@ export type Entry = {
   /** HTML String */
   content?: Maybe<Scalars["String"]>;
   created_at?: Maybe<Scalars["Date"]>;
+  favorite: Scalars["Boolean"];
   feed_id: Scalars["ID"];
   id: Scalars["ID"];
   published?: Maybe<Scalars["Date"]>;
-  title?: Maybe<Scalars["String"]>;
+  title: Scalars["String"];
+  unread: Scalars["Boolean"];
   url?: Maybe<Scalars["String"]>;
 };
 
@@ -55,12 +57,22 @@ export type Feed = {
 export type Mutation = {
   __typename?: "Mutation";
   addFeed: Feed;
-  refreshFeed: Array<Maybe<Entry>>;
+  markAsFavorite: Entry;
+  markAsRead: Entry;
+  refreshFeed: Array<Entry>;
   removeFeed: Feed;
 };
 
 export type MutationAddFeedArgs = {
   url: Scalars["String"];
+};
+
+export type MutationMarkAsFavoriteArgs = {
+  id: Scalars["ID"];
+};
+
+export type MutationMarkAsReadArgs = {
+  id: Scalars["ID"];
 };
 
 export type MutationRefreshFeedArgs = {
@@ -73,9 +85,9 @@ export type MutationRemoveFeedArgs = {
 
 export type Query = {
   __typename?: "Query";
-  entries: Array<Maybe<Entry>>;
-  entry?: Maybe<Entry>;
-  feed?: Maybe<Feed>;
+  entries: Array<Entry>;
+  entry: Entry;
+  feed: Feed;
   feeds: Array<Maybe<Feed>>;
 };
 
@@ -224,10 +236,12 @@ export type EntryResolvers<
   author?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   content?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   created_at?: Resolver<Maybe<ResolversTypes["Date"]>, ParentType, ContextType>;
+  favorite?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   feed_id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   published?: Resolver<Maybe<ResolversTypes["Date"]>, ParentType, ContextType>;
-  title?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  unread?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   url?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -253,8 +267,20 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationAddFeedArgs, "url">
   >;
+  markAsFavorite?: Resolver<
+    ResolversTypes["Entry"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationMarkAsFavoriteArgs, "id">
+  >;
+  markAsRead?: Resolver<
+    ResolversTypes["Entry"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationMarkAsReadArgs, "id">
+  >;
   refreshFeed?: Resolver<
-    Array<Maybe<ResolversTypes["Entry"]>>,
+    Array<ResolversTypes["Entry"]>,
     ParentType,
     ContextType,
     RequireFields<MutationRefreshFeedArgs, "id">
@@ -272,19 +298,19 @@ export type QueryResolvers<
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
 > = {
   entries?: Resolver<
-    Array<Maybe<ResolversTypes["Entry"]>>,
+    Array<ResolversTypes["Entry"]>,
     ParentType,
     ContextType,
     RequireFields<QueryEntriesArgs, "feed_id">
   >;
   entry?: Resolver<
-    Maybe<ResolversTypes["Entry"]>,
+    ResolversTypes["Entry"],
     ParentType,
     ContextType,
     RequireFields<QueryEntryArgs, "id">
   >;
   feed?: Resolver<
-    Maybe<ResolversTypes["Feed"]>,
+    ResolversTypes["Feed"],
     ParentType,
     ContextType,
     RequireFields<QueryFeedArgs, "id">

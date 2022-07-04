@@ -13,7 +13,7 @@
     "@types/node": "^18.0.0",
     "jest": "^28.1.1",
     "mercurius-integration-testing": "^5.0.0",
-    "prisma": "3.15.2",
+    "prisma": "^4.0.0",
     "ts-jest": "^28.0.5",
     "ts-node": "10.8.1",
     "ts-node-dev": "2.0.0",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@graphql-tools/schema": "^8.4.0",
-    "@prisma/client": "3.15.2",
+    "@prisma/client": "^4.0.0",
     "@reubin/rss": "workspace:../../packages/rss",
     "axios": "^0.27.2",
     "cuid": "^2.1.8",

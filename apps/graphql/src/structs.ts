@@ -21,5 +21,7 @@ export const mapORMEntryToAPIEntry = (entry: Entry): EntryType => {
     content: entry.content,
     feed_id: entry.feedId!,
     published: entry.pubDate,
+    unread: entry.unread,
+    favorite: entry.favorite,
   };
 };

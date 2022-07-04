@@ -24,7 +24,7 @@ export const typeDefs = gql`
   type Entry {
     id: ID!
     feed_id: ID!
-    title: String
+    title: String!
     url: String
     """
     HTML String
@@ -33,19 +33,23 @@ export const typeDefs = gql`
     author: String
     published: Date
     created_at: Date
+    unread: Boolean!
+    favorite: Boolean!
   }
 
   type Query {
     feeds: [Feed]!
-    entry(id: ID!): Entry
-    feed(id: ID!): Feed
-    entries(feed_id: ID!, filter: EntryFilter): [Entry]!
+    entry(id: ID!): Entry!
+    feed(id: ID!): Feed!
+    entries(feed_id: ID!, filter: EntryFilter): [Entry!]!
   }
 
   type Mutation {
     addFeed(url: String!): Feed!
     removeFeed(id: ID!): Feed!
-    refreshFeed(id: ID!): [Entry]!
+    refreshFeed(id: ID!): [Entry!]!
+    markAsFavorite(id: ID!): Entry!
+    markAsRead(id: ID!): Entry!
   }
 
   schema {
