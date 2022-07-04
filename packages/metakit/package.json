@@ -1,27 +1,27 @@
 {
-  "name": "@reubin/meta",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "test": "jest"
-  },
-  "dependencies": {
-    "html-entities": "^2.3.2",
-    "sanitize-html": "^2.7.0",
-    "cheerio": "^1.0.0-rc.11",
-    "iconv-lite": "^0.6.3"
-  },
-  "devDependencies": {
-    "@types/sanitize-html": "^2.3.1",
-    "@types/jest": "^28.1.3",
-    "jest": "^28.1.1",
-    "ts-jest": "^28.0.5",
-    "typescript": "^4.7.4"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "verbose": true
-  }
+	"name": "@reubin/meta",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "tsc",
+		"test": "jest"
+	},
+	"dependencies": {
+		"html-entities": "^2.3.2",
+		"sanitize-html": "^2.7.0",
+		"cheerio": "^1.0.0-rc.11",
+		"iconv-lite": "^0.6.3"
+	},
+	"devDependencies": {
+		"@types/sanitize-html": "^2.3.1",
+		"@types/jest": "^28.1.3",
+		"jest": "^28.1.1",
+		"ts-jest": "^28.0.5",
+		"typescript": "^4.7.4"
+	},
+	"jest": {
+		"preset": "ts-jest",
+		"testEnvironment": "node",
+		"verbose": true
+	}
 }

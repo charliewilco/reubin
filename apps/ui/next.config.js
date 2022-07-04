@@ -2,19 +2,19 @@
 
 /** @type {import('next').NextConfig} */
 module.exports = {
-  reactStrictMode: true,
-  optimizeFonts: true,
-  cleanDistDir: true,
-  swcMinify: true,
-  experimental: {
-    newNextLinkBehavior: true,
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/graphql",
-        destination: "http://localhost:5300/graphql",
-      },
-    ];
-  },
+	reactStrictMode: true,
+	optimizeFonts: true,
+	cleanDistDir: true,
+	swcMinify: true,
+	experimental: {
+		newNextLinkBehavior: true,
+	},
+	async rewrites() {
+		return [
+			{
+				source: "/graphql",
+				destination: "http://localhost:5300/graphql",
+			},
+		];
+	},
 };

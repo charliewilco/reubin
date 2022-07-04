@@ -9,15 +9,15 @@ import { context } from "./context";
 // TODO: Stripe integration
 
 export const createApp = () => {
-  const app = Fastify({ logger: false });
+	const app = Fastify({ logger: false });
 
-  const options: MercuriusOptions = {
-    schema,
-    graphiql: true,
-    context: () => context,
-  };
+	const options: MercuriusOptions = {
+		schema,
+		graphiql: true,
+		context: () => context,
+	};
 
-  app.register(mercurius, options);
+	app.register(mercurius, options);
 
-  return app;
+	return app;
 };

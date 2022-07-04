@@ -10,6 +10,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -41,8 +42,6 @@ jobs:
         run: pnpm install
       - name: Build Packages
         run: pnpm build
-      # - name: Setup DB
-      #   run: psql postgres -f setup.sql
       - name: Test
         run: pnpm test
         env:

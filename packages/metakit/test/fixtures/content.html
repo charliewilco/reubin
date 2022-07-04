@@ -1,15 +1,21 @@
-<p>I prefer <code>useReducer</code> to <code>useState</code> when I'm using React, it gives us a declarative (and as
-  you'll see, strongly typed) way of defining our next state after an update. With <code>useReducer()</code> we have a
-  tuple of state and how to update that state, the dispatch:
+<p>
+	I prefer <code>useReducer</code> to <code>useState</code> when I'm using React, it gives us a
+	declarative (and as you'll see, strongly typed) way of defining our next state after an
+	update. With <code>useReducer()</code> we have a tuple of state and how to update that state,
+	the dispatch:
 </p>
 <pre><code><span>const</span> <span>[</span>state<span>,</span> dispatch<span>]</span> <span>=</span> <span>React</span><span>.</span><span>useReducer</span><span>(</span>reducer<span>,</span> initialState<span>)</span><span>;</span>
 </code></pre>
-<p>We have two concepts here: the <strong>state</strong>, a snapshot of what should be rendering inside your component
-  and the <strong>dispatch</strong>, a way of describing how to update that state.
+<p>
+	We have two concepts here: the <strong>state</strong>, a snapshot of what should be rendering
+	inside your component and the <strong>dispatch</strong>, a way of describing how to update
+	that state.
 </p>
-<p>If you create a reducer function, you're going to need to create a pure function, meaning there's a single input and
-  derived output, that returns your next state. When you add type annotations for your state object that's pretty clear
-  most of the time, it's what you want the out to be each time:
+<p>
+	If you create a reducer function, you're going to need to create a pure function, meaning
+	there's a single input and derived output, that returns your next state. When you add type
+	annotations for your state object that's pretty clear most of the time, it's what you want
+	the out to be each time:
 </p>
 <pre><code><span>interface</span> <span>IState</span> <span>{</span>
   someKey<span>:</span> <span>string</span><span>;</span>
@@ -20,22 +26,25 @@
   <span>return</span> <span>{</span> someKey<span>:</span> <span>"..."</span> <span>}</span><span>;</span>
 <span>}</span>
 </code></pre>
-<p>Now there's some type safety, our compiler will warn when you're not returning that value that's an object that
-  matches that interface. But adding type annotations to the second parameter <code>action</code> can get a little wild.
-  Action is what we pass to the dispatch to update the state.
+<p>
+	Now there's some type safety, our compiler will warn when you're not returning that value
+	that's an object that matches that interface. But adding type annotations to the second
+	parameter <code>action</code> can get a little wild. Action is what we pass to the dispatch
+	to update the state.
 </p>
 <pre><code><span>dispatch</span><span>(</span><span>"foo"</span><span>)</span><span>;</span>
 
 <span>// Then when the reducer is called</span>
 <span>reducer</span><span>(</span>currentState<span>,</span> <span>"foo"</span><span>)</span><span>;</span>
 </code></pre>
-<p>You can pass anything, the pattern I've most often used is a switch statement and passing a
-  <code>{ type: 'ActionName' }</code>. When we create our reducer function we can call it a <code>React.Reducer</code>:
+<p>
+	You can pass anything, the pattern I've most often used is a switch statement and passing a
+	<code>{ type: 'ActionName' }</code>. When we create our reducer function we can call it a
+	<code>React.Reducer</code>:
 </p>
 <pre><code><span>const</span> reducer<span>:</span> <span>React</span><span>.</span><span><span>Reducer</span></span><span>&lt;</span><span>State</span><span>,</span> <span>Action</span><span>&gt;</span> <span>=</span> <span>(</span><span>)</span> <span>=&gt;</span> <span>{</span><span>}</span><span>;</span>
 </code></pre>
-<p>We can pass generics to the reducer to describe the state and action.
-</p>
+<p>We can pass generics to the reducer to describe the state and action.</p>
 <pre><code><span>interface</span> <span>IState</span> <span>{</span>
   someKey<span>:</span> <span>string</span><span>;</span>
 <span>}</span>
@@ -48,14 +57,16 @@
 <span>type</span> <span>MyReducer</span> <span>=</span> <span>React</span><span>.</span><span><span>Reducer</span></span><span>&lt;</span><span>IState</span><span>,</span> <span>IAction</span><span>&gt;</span><span>;</span>
 </code></pre>
 <h3>Pitfalls of Typing Dispatch Functions</h3>
-<p>This tells us that when we call <code>dispatch()</code> we're expecting to call it like this:
+<p>
+	This tells us that when we call <code>dispatch()</code> we're expecting to call it like this:
 </p>
 <pre><code><span>// Both satisfy IAction for the compiler</span>
 <span>dispatch</span><span>(</span><span>{</span> <span>type</span><span>:</span> <span>"ActionOne"</span><span>,</span> payload<span>:</span> <span>[</span><span>]</span> <span>}</span><span>)</span><span>;</span> <span>// ✅</span>
 <span>dispatch</span><span>(</span><span>{</span> <span>type</span><span>:</span> <span>"ActionTwo"</span> <span>}</span><span>)</span><span>;</span> <span>// ✅</span>
 </code></pre>
-<p>Now this presents an issue, our payload might be undefined, or we might pass it into an action that doesn't need it,
-  say our reducer looks like this:
+<p>
+	Now this presents an issue, our payload might be undefined, or we might pass it into an
+	action that doesn't need it, say our reducer looks like this:
 </p>
 <pre><code><span>interface</span> <span>IState</span> <span>{</span>
   items<span>:</span> <span>any</span><span>[</span><span>]</span><span>;</span>
@@ -81,11 +92,11 @@
   <span>}</span>
 <span>}</span><span>;</span>
 </code></pre>
-<p>We can't spread our payload if it's undefined.
-</p>
+<p>We can't spread our payload if it's undefined.</p>
 <h3>Federated Union Types</h3>
-<p>One thing I've found helps is using a federated union type. We need to change our <code>IAction</code> interface to a
-  type.
+<p>
+	One thing I've found helps is using a federated union type. We need to change our
+	<code>IAction</code> interface to a type.
 </p>
 <pre><code><span>type</span> <span>ActionType</span> <span>=</span>
   <span>|</span> <span>{</span>
@@ -98,21 +109,26 @@
 
 <span>const</span> reducer<span>:</span> <span>React</span><span>.</span><span><span>Reducer</span></span><span>&lt;</span><span>IState</span><span>,</span> <span>ActionType</span><span>&gt;</span> <span>=</span> <span>(</span><span>)</span> <span>=&gt;</span> <span>{</span><span>}</span><span>;</span>
 </code></pre>
-<p>In that switch statement we don't get an error, we know when we call <code>dispatch()</code> with the type
-  <code>"ADD_ITEMS"</code> we're expecting the payload to exist and be the type we specified.
+<p>
+	In that switch statement we don't get an error, we know when we call
+	<code>dispatch()</code> with the type <code>"ADD_ITEMS"</code> we're expecting the payload to
+	exist and be the type we specified.
 </p>
-<p>Now when we call dispatch:
-</p>
+<p>Now when we call dispatch:</p>
 <pre><code><span>// Both will fail during compilation</span>
 <span>dispatch</span><span>(</span><span>{</span> <span>type</span><span>:</span> <span>"FETCHING"</span><span>,</span> payload<span>:</span> <span>[</span><span>]</span> <span>}</span><span>)</span><span>;</span> <span>// ❌</span>
 <span>dispatch</span><span>(</span><span>{</span> <span>type</span><span>:</span> <span>"ADD_ITEMS"</span> <span>}</span><span>)</span><span>;</span> <span>// ❌</span>
 </code></pre>
-<p>There you have it we've added more type safety to our reducer and we can even do a little better.
+<p>
+	There you have it we've added more type safety to our reducer and we can even do a little
+	better.
 </p>
 <h3>Enums for Action Types</h3>
-<p>It's a strong preference of mine when you're writing reducers in your application to use enums to define the action
-  types. An enum in TypeScript is named constant, it's enumerable meaning it can be known at compile time. For our
-  purposes it would allow us to specify a specific action type name with a specific dispatch:
+<p>
+	It's a strong preference of mine when you're writing reducers in your application to use
+	enums to define the action types. An enum in TypeScript is named constant, it's enumerable
+	meaning it can be known at compile time. For our purposes it would allow us to specify a
+	specific action type name with a specific dispatch:
 </p>
 <pre><code><span>enum</span> <span>NamedActions</span> <span>{</span>
   <span>FETCHING</span> <span>=</span> <span>"FETCHING"</span><span>,</span>
@@ -130,5 +146,8 @@
 
 <span>dispatch</span><span>(</span><span>{</span> <span>type</span><span>:</span> <span>NamedActions</span><span>.</span><span>FETCHING</span> <span>}</span><span>)</span><span>;</span>
 </code></pre>
-<p>What this buys us is organization. It ensures the only thing calling <code>dispatch()</code> is coming from within
-  our application and that it belongs to something we typed. With just simple strings, we lose that certainty.</p>
+<p>
+	What this buys us is organization. It ensures the only thing calling
+	<code>dispatch()</code> is coming from within our application and that it belongs to
+	something we typed. With just simple strings, we lose that certainty.
+</p>
