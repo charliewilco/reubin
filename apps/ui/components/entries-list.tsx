@@ -3,6 +3,7 @@ import type { EntryDetailsFragment } from "../lib/types";
 import { classNames } from "./ui/class-names";
 
 interface EntryListProps {
+	selected: null | string;
 	feedID: string;
 	onSelect(id: string): void;
 }
@@ -29,10 +30,11 @@ export const EntryListItem = (props: EntryListItemProps) => {
 	};
 
 	return (
-		<li
-			className={classNames("border-b border-zinc-700 p-2", !props.isUnread && "opacity-25")}>
-			<h3 className="mb-2 text-lg font-bold">{props.title}</h3>
-			<button onClick={handleSelect}>Select</button>
+		<li className={classNames("border-b border-zinc-700 p-2")}>
+			<div className={classNames("p-2", !props.isUnread && "opacity-25")}>
+				<h3 className="mb-2 text-lg font-bold">{props.title}</h3>
+				<button onClick={handleSelect}>Select</button>
+			</div>
 		</li>
 	);
 };

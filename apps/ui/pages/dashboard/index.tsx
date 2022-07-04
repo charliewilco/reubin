@@ -34,7 +34,7 @@ export default function UnreadEntries() {
 					<main className="grid flex-1 grid-cols-12">
 						<aside className="col-span-2 overflow-y-scroll border-r border-zinc-700">
 							<div className="relative h-full  bg-zinc-900">
-								<FeedList onSelect={selectFeed} />
+								<FeedList onSelect={selectFeed} selected={feed} />
 								<div className="absolute bottom-0 left-0 right-0 flex w-full justify-center bg-red-500/50 p-2">
 									<AddFeed />
 								</div>
@@ -42,7 +42,9 @@ export default function UnreadEntries() {
 						</aside>
 						<aside className="col-span-3 overflow-y-scroll border-r border-zinc-700">
 							<div className="relative bg-zinc-900">
-								{feed !== null && <EntryList feedID={feed} onSelect={selectEntry} />}
+								{feed !== null && (
+									<EntryList feedID={feed} selected={entry} onSelect={selectEntry} />
+								)}
 							</div>
 						</aside>
 						<section
