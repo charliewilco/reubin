@@ -7,6 +7,7 @@
 		"build": "npx prisma generate && npx tsc",
 		"dev": "ts-node-dev --no-notify --respawn --transpile-only src/server --watch src/*.ts",
 		"db:push": "npx prisma db push",
+		"db:generate": "npx prisma generate",
 		"test": "jest"
 	},
 	"devDependencies": {

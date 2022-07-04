@@ -41,7 +41,7 @@ jobs:
       - name: pnpm Install
         run: pnpm install
       - name: Build Packages
-        run: pnpm --filter "./packages/**" build
+        run: pnpm --filter "./packages/**" build && pnpm --filter @reubin/graphql-api db:generate 
       # - name: Setup DB
       #   run: pnpm --filter @reubin/graphql-api db:push 
       #   env:
