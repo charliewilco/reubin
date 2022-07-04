@@ -1,8 +1,8 @@
-import { PrismaClient } from '@prisma/client'
+// import { PrismaClient } from '@prisma/client'
 import { Client } from "pg"
 
 describe('example test with Prisma Client', () => {
-  let prisma = new PrismaClient()
+  // let prisma = new PrismaClient()
 
   let pgclient = new Client({
     host: process.env.POSTGRES_HOST,
