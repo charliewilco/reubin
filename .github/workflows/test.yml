@@ -48,7 +48,7 @@ jobs:
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci_db_test
       - name: Test
-        run: pnpm test
+        run: pnpm test:ci
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost
