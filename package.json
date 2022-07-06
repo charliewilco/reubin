@@ -7,12 +7,13 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
+		"test": "jest",
 		"types": "tsc --noEmit --pretty",
 		"generate": "graphql-codegen",
 		"prepare": "husky install && npx prisma generate",
 		"format": "pretty-quick --staged",
-		"db:generate": "npx prisma generate",
-		"db:push": "npx prisma db push"
+		"db:generate": "prisma generate",
+		"db:push": "prisma db push"
 	},
 	"dependencies": {
 		"@graphql-tools/schema": "^8.4.0",
@@ -67,6 +68,7 @@
 		"eslint-config-next": "^12.1.6",
 		"husky": "^8.0.1",
 		"jest": "^28.1.1",
+		"jest-environment-jsdom": "^28.1.2",
 		"prettier": "^2.7.1",
 		"prettier-plugin-prisma": "^3.14.0",
 		"prettier-plugin-tailwindcss": "^0.1.11",
