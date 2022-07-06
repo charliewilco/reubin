@@ -2,38 +2,81 @@
 	"name": "reubin",
 	"repository": "charliewilco/reubin.app",
 	"author": "Charlie ⚡ <charliewilc0@protonmail.com>",
-	"private": true,
-	"workspaces": [
-		"packages/*",
-		"apps/*"
-	],
+	"version": "1.0.0",
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"types": "tsc --noEmit --pretty",
+		"generate": "graphql-codegen",
+		"prepare": "husky install && npx prisma generate",
+		"format": "pretty-quick --staged",
+		"db:generate": "npx prisma generate",
+		"db:push": "npx prisma db push"
+	},
+	"dependencies": {
+		"@graphql-tools/schema": "^8.4.0",
+		"@graphql-yoga/common": "^2.10.0",
+		"@graphql-yoga/node": "^2.11.2",
+		"@prisma/client": "^4.0.0",
+		"@radix-ui/colors": "^0.1.8",
+		"@radix-ui/react-dialog": "^0.1.7",
+		"@radix-ui/react-icons": "^1.1.1",
+		"@stitches/react": "^1.2.8",
+		"@tailwindcss/forms": "^0.5.2",
+		"@tailwindcss/typography": "^0.5.2",
+		"autoprefixer": "^10.4.7",
+		"axios": "^0.27.2",
+		"cheerio": "^1.0.0-rc.11",
+		"cuid": "^2.1.8",
+		"date-fns": "^2.21.3",
+		"entities": "^4.3.0",
+		"fathom-client": "^3.5.0",
+		"formik": "^2.2.9",
+		"graphql": "^16.5.0",
+		"graphql-request": "^4.3.0",
+		"graphql-scalars": "^1.17.0",
+		"graphql-tag": "^2.12.6",
+		"html-entities": "^2.3.2",
+		"iconv-lite": "^0.6.3",
+		"next": "^12.2.0",
+		"postcss": "^8.4.14",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-icons": "^4.1.0",
+		"sanitize-html": "^2.7.0",
+		"swr": "^1.3.0",
+		"tailwindcss": "^3.1.4",
+		"typescript": "^4.7.4",
+		"valtio": "^1.6.1",
+		"xml2js": "^0.4.23"
+	},
 	"devDependencies": {
 		"@graphql-codegen/cli": "^2.6.2",
 		"@graphql-codegen/typescript": "^2.4.11",
-		"@graphql-codegen/typescript-resolvers": "^2.6.6",
 		"@graphql-codegen/typescript-graphql-request": "4.4.10",
 		"@graphql-codegen/typescript-operations": "2.4.2",
-		"turbo": "^1.3.1",
-		"jest": "^28.1.1",
+		"@graphql-codegen/typescript-resolvers": "^2.6.6",
+		"@types/jest": "^28.1.1",
+		"@types/node": "^18.0.0",
+		"@types/react": "^18.0.14",
+		"@types/react-dom": "^18.0.5",
+		"@types/sanitize-html": "^2.3.1",
+		"@types/xml2js": "^0.4.11",
+		"eslint": "^8.17.0",
+		"eslint-config-next": "^12.1.6",
 		"husky": "^8.0.1",
+		"jest": "^28.1.1",
 		"prettier": "^2.7.1",
 		"prettier-plugin-prisma": "^3.14.0",
 		"prettier-plugin-tailwindcss": "^0.1.11",
 		"pretty-quick": "^3.1.3",
-		"typescript": "^4.7.4",
-		"graphql": "^16.5.0",
-		"graphql-request": "^4.3.0",
-		"graphql-tag": "^2.12.6"
+		"prisma": "^4.0.0",
+		"ts-jest": "^28.0.4"
 	},
-	"scripts": {
-		"build": "graphql-codegen && turbo run build",
-		"dev": "turbo run dev --parallel",
-		"test": "turbo run test",
-		"lint": "turbo run lint",
-		"type-check": "turbo run type-check",
-		"prepare": "husky install",
-		"generate": "graphql-codegen",
-		"format": "pretty-quick --staged"
+	"license": "MIT",
+	"eslintConfig": {
+		"extends": "next/core-web-vitals"
 	},
 	"prettier": {
 		"printWidth": 95,
@@ -47,18 +90,18 @@
 		]
 	},
 	"graphql": {
-		"schema": "apps/graphql/src/typedefs.ts",
+		"schema": "server/typedefs.ts",
 		"extensions": {
 			"codegen": {
 				"generates": {
-					"./apps/graphql/src/types.ts": {
+					"./server/types.ts": {
 						"plugins": [
 							"typescript",
 							"typescript-resolvers"
 						]
 					},
-					"./apps/ui/lib/types.ts": {
-						"documents": "apps/ui/lib/*.graphql",
+					"./lib/types.ts": {
+						"documents": "lib/*.graphql",
 						"plugins": [
 							"typescript",
 							"typescript-operations",
