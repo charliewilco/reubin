@@ -26,19 +26,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Cache .pnpm-store
-        uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - name: Install PNPM
-        uses: pnpm/action-setup@v2.2.2
-        with:
-          version: 7.3.0
-      - name: pnpm Install
-        run: pnpm install
+      - name: npm Install
+        run: npm ci
       - name: Setup DB
-        run: pnpm db:push
+        run: npm run db:push
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost
@@ -48,7 +39,7 @@ jobs:
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci_db_test
       - name: Test
-        run: pnpm test:ci
+        run: npm run test:ci
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost
