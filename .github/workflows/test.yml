@@ -2,12 +2,23 @@ name: Testing Suite
 on: [push, pull_request] # Run on Push and Pull Requests
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_db_test
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ci_db_test
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -15,14 +26,25 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Cache .pnpm-store
-        uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - name: Install pnpm
-        run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
-      - name: pnpm Install
-        run: pnpm install
-      - name: Build
-        run: pnpm test
+      - name: npm Install
+        run: npm ci
+      - name: Setup DB
+        run: npm run db:push
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_db_test
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci_db_test
+      - name: Test
+        run: npm run test:ci
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_db_test
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci_db_test

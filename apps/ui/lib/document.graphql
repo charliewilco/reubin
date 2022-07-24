@@ -1,6 +1,0 @@
-query GetFeeds {
-  feeds {
-    id
-    title
-  }
-}

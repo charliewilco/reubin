@@ -1,0 +1,60 @@
+fragment FeedDetails on Feed {
+	id
+	title
+}
+
+query GetFeeds {
+	feeds {
+		...FeedDetails
+	}
+}
+
+fragment EntryDetails on Entry {
+	title
+	content
+	id
+	unread
+	published
+}
+
+query EntriesByFeed($id: ID!) {
+	entries(feed_id: $id) {
+		...EntryDetails
+	}
+}
+
+query UnreadEntries($feedID: ID!) {
+	entries(feed_id: $feedID, filter: UNREAD) {
+		...EntryDetails
+	}
+}
+
+query FavoriteEntries($feedID: ID!) {
+	entries(feed_id: $feedID, filter: FAVORITED) {
+		...EntryDetails
+	}
+}
+
+mutation CreateFeed($url: String!) {
+	addFeed(url: $url) {
+		...FeedDetails
+	}
+}
+
+mutation MarkAsRead($id: ID!) {
+	markAsRead(id: $id) {
+		title
+		content
+		id
+	}
+}
+
+query IndividualEntry($id: ID!) {
+	entry(id: $id) {
+		id
+		published
+		content
+		title
+		unread
+	}
+}

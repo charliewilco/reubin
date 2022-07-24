@@ -1,0 +1,72 @@
+{
+	"recommended": [
+		{
+			"title": "News",
+			"data": [
+				{
+					"link": "https://www.vox.com/rss/index.xml",
+					"displayName": "Vox"
+				},
+				{
+					"link": "https://www.out.com/rss.xml",
+					"displayName": "Out.com"
+				},
+				{
+					"link": "https://www.buzzfeed.com/world.xml",
+					"displayName": "BuzzFeed World News"
+				},
+				{
+					"link": "https://nautil.us/rss/all",
+					"displayName": "Nautilus"
+				},
+				{
+					"link": "https://thedailywhat.cheezburger.com/rss",
+					"displayName": "Daily What"
+				}
+			]
+		},
+		{
+			"title": "Tech",
+			"data": [
+				{
+					"link": "https://xkcd.com/atom.xml",
+					"displayName": "xkcd"
+				},
+				{
+					"link": "https://www.theverge.com/web/rss/index.xml",
+					"displayName": "The Verge"
+				},
+				{
+					"link": "https://future.a16z.com/feed/",
+					"displayName": "Future"
+				},
+				{
+					"link": "https://cointelegraph.com/rss",
+					"displayName": "Coin Telegraph"
+				}
+			]
+		},
+		{
+			"title": "Lifestyle",
+			"data": [
+				{
+					"link": "https://www.apartmenttherapy.com/main.rss",
+					"displayName": "Apartment Therapy"
+				}
+			]
+		},
+		{
+			"title": "Relevant",
+			"data": [
+				{
+					"link": "https://charliewil.co/rss.xml",
+					"displayName": "Charlie's Blog"
+				},
+				{
+					"link": "https://typescript.wtf/rss.xml",
+					"displayName": "TypeScript & React for Everyone"
+				}
+			]
+		}
+	]
+}

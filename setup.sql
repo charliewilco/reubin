@@ -1,0 +1,5 @@
+CREATE DATABASE reubindb;
+CREATE ROLE postgres WITH LOGIN PASSWORD 'postgres';
+ALTER ROLE postgres WITH SUPERUSER;
+ALTER DATABASE reubindb OWNER TO postgres;
+\q
