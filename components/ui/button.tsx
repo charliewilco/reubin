@@ -1,21 +1,18 @@
-import { styled } from "@stitches/react";
-import { blackA, mauve, green, blue } from "@radix-ui/colors";
-import { classNames } from "./class-names";
 import { forwardRef } from "react";
+import { classNames } from "./class-names";
 
-const Button = forwardRef<
-	HTMLButtonElement,
-	React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
->((props, ref) => {
+type BaseButtonProps = React.DetailedHTMLProps<
+	React.ButtonHTMLAttributes<HTMLButtonElement>,
+	HTMLButtonElement
+>;
+
+const Button = forwardRef<HTMLButtonElement, BaseButtonProps>((props, ref) => {
 	return <button {...props} ref={ref} />;
 });
 
 Button.displayName = "UIButton";
 
-const IconButton = forwardRef<
-	HTMLButtonElement,
-	React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
->((props, ref) => {
+const IconButton = forwardRef<HTMLButtonElement, BaseButtonProps>((props, ref) => {
 	return (
 		<button
 			{...props}
@@ -31,45 +28,19 @@ const IconButton = forwardRef<
 
 IconButton.displayName = "UIIconButton";
 
-export const SuperButton = styled("button", {
-	all: "unset",
-	display: "inline-flex",
-	alignItems: "center",
-	justifyContent: "center",
-	borderRadius: 4,
-	padding: "0 15px",
-	fontSize: 15,
-	lineHeight: 1,
-	fontWeight: 500,
-	height: 35,
+const SuperButton = ({ className, ..._props }: BaseButtonProps) => {
+	return (
+		<Button
+			{..._props}
+			className={classNames(
+				"inline-flex items-center justify-center rounded-sm px-4",
+				"h-8",
+				"bg-blue-300 text-blue-700 hover:shadow-sm",
+				className
+			)}
+			ref={() => {}}
+		/>
+	);
+};
 
-	variants: {
-		variant: {
-			violet: {
-				backgroundColor: "white",
-				color: blue.blue11,
-				boxShadow: `0 2px 10px ${blackA.blackA7}`,
-				"&:hover": { backgroundColor: mauve.mauve3 },
-				"&:focus": { boxShadow: `0 0 0 2px black` },
-			},
-			green: {
-				backgroundColor: green.green4,
-				color: green.green11,
-				"&:hover": { backgroundColor: green.green5 },
-				"&:focus": { boxShadow: `0 0 0 2px ${green.green7}` },
-			},
-			default: {
-				backgroundColor: blue.blue4,
-				color: blue.blue11,
-				"&:hover": { backgroundColor: blue.blue5 },
-				"&:focus": { boxShadow: `0 0 0 2px ${blue.blue7}` },
-			},
-		},
-	},
-
-	defaultVariants: {
-		variant: "default",
-	},
-});
-
-export { Button, IconButton };
+export { SuperButton, Button, IconButton };

@@ -1,14 +1,40 @@
 import Head from "next/head";
-import { useEntry } from "../hooks/useEntry";
+import { useEffect } from "react";
+import useSWR from "swr";
 import { LoadingIndicator } from "./ui/activity-indicator";
+import { getEntry, markAsRead } from "../lib/fetcher";
 
 interface EntryFullProps {
 	id: string;
 }
 
 export const EntryFull = (props: EntryFullProps) => {
-	const { data, error, isLoading } = useEntry(props.id);
+	const { error, data, mutate } = useSWR(props.id, getEntry);
 
+	const isLoading = !error && !data;
+
+	useEffect(() => {
+		async function mutator() {
+			console.log("Running mutation");
+			await markAsRead(props.id);
+
+			mutate(
+				async (data) => {
+					if (data) {
+						return {
+							...data,
+							unread: false,
+						};
+					}
+				},
+				{ rollbackOnError: true }
+			);
+		}
+		console.log(data?.entry);
+		if (data?.entry.unread) {
+			mutator();
+		}
+	}, [data?.entry, mutate, props.id]);
 	if (isLoading) {
 		return <LoadingIndicator />;
 	}

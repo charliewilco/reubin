@@ -1,4 +1,9 @@
-const NEWS = [
+type RecommendedField = {
+	link: string;
+	displayName: string;
+};
+
+const NEWS: RecommendedField[] = [
 	{
 		link: "https://www.vox.com/rss/index.xml",
 		displayName: "Vox",
@@ -21,7 +26,7 @@ const NEWS = [
 	},
 ];
 
-const TECH = [
+const TECH: RecommendedField[] = [
 	{
 		link: "https://xkcd.com/atom.xml",
 		displayName: "xkcd",
@@ -40,14 +45,14 @@ const TECH = [
 	},
 ];
 
-const LIFESTYLE = [
+const LIFESTYLE: RecommendedField[] = [
 	{
 		link: "https://www.apartmenttherapy.com/main.rss",
 		displayName: "Apartment Therapy",
 	},
 ];
 
-const RELEVANT = [
+const RELEVANT: RecommendedField[] = [
 	{
 		link: "https://charliewil.co/rss.xml",
 		displayName: "Charlie's Blog",
@@ -58,9 +63,11 @@ const RELEVANT = [
 	},
 ];
 
-export const RecommendationMap = new Map([
+export const RecommendedKeyArray = [
 	["News", NEWS],
 	["Tech", TECH],
 	["Lifestyle", LIFESTYLE],
 	["Relevant", RELEVANT],
-]);
+] as const;
+
+export const RecommendationMap = new Map(RecommendedKeyArray);

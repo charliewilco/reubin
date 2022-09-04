@@ -1,9 +1,9 @@
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Cross2Icon } from "@radix-ui/react-icons";
 import { useFormik } from "formik";
+import { useState } from "react";
 import { addFeed } from "../lib/fetcher";
-import { SuperButton, Button, IconButton } from "./ui/button";
+import { SuperButton, Button } from "./ui/button";
 import { Label, Fieldset, Input } from "./ui/input";
+import { Dialog } from "./ui/dialog";
 
 interface AddFeedFormProps {
 	onSubmit(url: string): void | Promise<void>;
@@ -35,28 +35,16 @@ export const AddFeedForm = (props: AddFeedFormProps) => {
 };
 
 export const AddFeed = () => {
+	const [isOpen, setOpen] = useState(false);
 	return (
-		<DialogPrimitive.Root>
-			<DialogPrimitive.Trigger asChild>
-				<Button>Add Feed</Button>
-			</DialogPrimitive.Trigger>
-			<DialogPrimitive.Portal>
-				<DialogPrimitive.Overlay className="fixed inset-0 bg-zinc-900 opacity-50" />
-				<DialogPrimitive.Content className="fixed top-1/2 left-1/2 max-h-[85vh] w-[90vw] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-sm bg-zinc-900 p-4 shadow-lg">
-					<DialogPrimitive.Title className="text-xl font-semibold">
-						Add Feed
-					</DialogPrimitive.Title>
-					<DialogPrimitive.Description className="mt-2 mb-8 text-sm opacity-50">
-						Make changes to your profile here. Click save when you&apos;re done.
-					</DialogPrimitive.Description>
-					<AddFeedForm onSubmit={addFeed} />
-					<DialogPrimitive.Close asChild>
-						<IconButton aria-label="Close">
-							<Cross2Icon />
-						</IconButton>
-					</DialogPrimitive.Close>
-				</DialogPrimitive.Content>
-			</DialogPrimitive.Portal>
-		</DialogPrimitive.Root>
+		<>
+			<Button onClick={() => setOpen(true)}>Add Feed</Button>
+			<Dialog isOpen={isOpen} onClose={() => setOpen(false)} title="Add Feed">
+				<div className="mt-2 mb-8 text-sm opacity-50">
+					Make changes to your profile here. Click save when you&apos;re done.
+				</div>
+				<AddFeedForm onSubmit={addFeed} />
+			</Dialog>
+		</>
 	);
 };

@@ -1,4 +1,5 @@
-import { useFeedList } from "../hooks/useFeedList";
+import useSWR from "swr";
+import { getFeeds } from "../lib/fetcher";
 import { LoadingIndicator } from "./ui/activity-indicator";
 import { classNames } from "./ui/class-names";
 
@@ -19,9 +20,11 @@ export const FeedItem = (props: FeedItemProps) => {
 	const isSelected = props.id === props.selected;
 
 	return (
-		<li key={props.id} className={classNames("p-2", isSelected && "bg-sky-600/50 text-white")}>
+		<li
+			key={props.id}
+			className={classNames("cursor-pointer p-2", isSelected && "bg-sky-600/50 text-white")}
+			onClick={handleSelect}>
 			<div>{props.title}</div>
-			<button onClick={handleSelect}>Select</button>
 		</li>
 	);
 };
@@ -32,7 +35,9 @@ interface FeedListProps {
 }
 
 export const FeedList = (props: FeedListProps) => {
-	const { data, error, isLoading } = useFeedList();
+	const { data, error } = useSWR("feeds", getFeeds);
+
+	const isLoading = !error && !data;
 
 	if (isLoading) {
 		return <LoadingIndicator />;
@@ -53,12 +58,12 @@ export const FeedList = (props: FeedListProps) => {
 		return (
 			<div className="absolute top-0 left-0 right-0 bottom-0 w-full">
 				<ul>
-					{data.feeds.map((f) =>
-						f === null ? null : (
+					{data.feeds.map((feed) =>
+						feed === null ? null : (
 							<FeedItem
-								key={f?.id}
-								id={f?.id}
-								title={f?.title}
+								key={feed?.id}
+								id={feed?.id}
+								title={feed?.title}
 								onSelect={props.onSelect}
 								selected={props.selected}
 							/>

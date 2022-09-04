@@ -47,7 +47,7 @@ const query: QueryResolvers<Context> = {
 		return mapORMEntryToAPIEntry(entry);
 	},
 	async entries(_parent, { feed_id, filter }, { prisma }) {
-		let args = { feedId: feed_id, favorite: false, unread: false };
+		let args: any = { feedId: feed_id };
 
 		if (filter === EntryFilter.Favorited) {
 			args.favorite = true;

@@ -1,6 +1,7 @@
-import { useEntries } from "../hooks/useEntries";
+import useSWR from "swr";
 import type { EntryDetailsFragment } from "../lib/types";
 import { classNames } from "./ui/class-names";
+import { getEntriesFromFeed } from "../lib/fetcher";
 
 interface EntryListProps {
 	selected: null | string;
@@ -9,6 +10,7 @@ interface EntryListProps {
 }
 
 interface EntryListItemProps {
+	isSelected: boolean;
 	onSelect(id: string): void;
 	title: string;
 	id: string;
@@ -30,17 +32,24 @@ export const EntryListItem = (props: EntryListItemProps) => {
 	};
 
 	return (
-		<li className={classNames("border-b border-zinc-700 p-2")}>
-			<div className={classNames("p-2", !props.isUnread && "opacity-25")}>
-				<h3 className="mb-2 text-lg font-bold">{props.title}</h3>
-				<button onClick={handleSelect}>Select</button>
+		<li
+			className={classNames(
+				"cursor-pointer border-b border-zinc-700 p-2",
+				props.isSelected && "bg-blue-500 text-white",
+				!props.isUnread && "opacity-50"
+			)}
+			onClick={handleSelect}>
+			<div className={classNames("p-2")}>
+				<h3 className="text-lg font-bold">{props.title}</h3>
 			</div>
 		</li>
 	);
 };
 
 export const EntryList = (props: EntryListProps) => {
-	const { data } = useEntries(props.feedID);
+	const { data } = useSWR(props.feedID, getEntriesFromFeed);
+
+	// const isLoading = !error && !data;
 
 	return (
 		<div className="absolute top-0 left-0 w-full">
@@ -50,6 +59,7 @@ export const EntryList = (props: EntryListProps) => {
 
 					return (
 						<EntryListItem
+							isSelected={entry.id === props.selected}
 							key={entry.id}
 							title={entry.title}
 							id={entry.id}

@@ -1,35 +1,43 @@
-import { useRef } from "react";
-import { proxy, useSnapshot } from "valtio";
+import { useCallback, useReducer } from "react";
 
 interface DashboardState {
 	feed: string | null;
 	entry: string | null;
 }
 
-class DashboardUI {
-	state = proxy<DashboardState>({
-		feed: null,
-		entry: null,
-	});
-
-	selectFeed = (id: string) => {
-		this.state.feed = id;
-	};
-	selectEntry = (id: string) => {
-		this.state.entry = id;
-	};
-
-	clearFeed = () => {
-		this.state.feed = null;
-	};
-	clearEntry = () => {
-		this.state.entry = null;
-	};
-}
+const dashboardReducer = (
+	state: DashboardState,
+	action:
+		| {
+				type: "SELECT_FEED";
+				feedId: string | null;
+		  }
+		| { type: "SELECT_ENTRY"; entryId: string | null }
+): DashboardState => {
+	switch (action.type) {
+		case "SELECT_ENTRY":
+			return { ...state, entry: action.entryId };
+		case "SELECT_FEED":
+			return { feed: action.feedId, entry: null };
+	}
+};
 
 export const useDashboard = () => {
-	const ref = useRef(new DashboardUI()).current;
-	const state = useSnapshot(ref.state);
+	const [state, dispatch] = useReducer(dashboardReducer, { feed: null, entry: null });
 
-	return [state, { selectFeed: ref.selectFeed, selectEntry: ref.selectEntry }] as const;
+	const selectEntry = useCallback(
+		(id: string) => {
+			dispatch({ type: "SELECT_ENTRY", entryId: id });
+		},
+		[dispatch]
+	);
+
+	const selectFeed = useCallback(
+		(id: string) => {
+			dispatch({ type: "SELECT_FEED", feedId: id });
+		},
+		[dispatch]
+	);
+
+	return [state, { selectEntry, selectFeed }] as const;
 };
