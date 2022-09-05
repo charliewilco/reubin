@@ -1,7 +1,7 @@
 // @ts-check
 
 /** @type {import('next').NextConfig} */
-module.exports = {
+const config = {
 	reactStrictMode: true,
 	optimizeFonts: true,
 	cleanDistDir: true,
@@ -10,3 +10,5 @@ module.exports = {
 		newNextLinkBehavior: true,
 	},
 };
+
+module.exports = config;

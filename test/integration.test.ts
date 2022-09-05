@@ -7,12 +7,12 @@ import { schema } from "../server/schema";
 import { context } from "../server/context";
 import gql from "graphql-tag";
 
-const yoga = createServer({
-	schema: schema,
-	context: () => context,
-});
-
 describe("Integration", () => {
+	const yoga = createServer({
+		schema: schema,
+		context: () => context,
+	});
+
 	it("can create feeds", async () => {
 		const createFeed = await yoga.inject({
 			document: gql`
