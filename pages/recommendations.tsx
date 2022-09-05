@@ -1,5 +1,6 @@
 import type { InferGetStaticPropsType, NextPage } from "next";
 import { RecommendedKeyArray } from "../server/recommended";
+import { RecommendationCard } from "../components/ui/recommendation-card";
 
 export const getStaticProps = async () => {
 	return {
@@ -13,24 +14,22 @@ const RecommendationsPage: NextPage<InferGetStaticPropsType<typeof getStaticProp
 	recommended,
 }) => {
 	return (
-		<div>
+		<div className="mx-auto max-w-7xl space-y-16 pt-16">
 			{recommended.map(([key, recommendedFeeds], idx) => {
 				return (
-					<div key={idx}>
-						<h2>{key}</h2>
+					<section key={idx}>
+						<h2 className="text-lg opacity-50">{key}</h2>
 
-						<ul>
-							{recommendedFeeds.map((r) => {
-								return (
-									<li key={r.displayName}>
-										<h3>{r.displayName}</h3>
-
-										<pre>{r.link}</pre>
-									</li>
-								);
-							})}
+						<ul
+							role="list"
+							className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+							{recommendedFeeds.map((r) => (
+								<li key={r.displayName} className="col-span-1">
+									<RecommendationCard displayName={r.displayName} link={r.link} />
+								</li>
+							))}
 						</ul>
-					</div>
+					</section>
 				);
 			})}
 		</div>

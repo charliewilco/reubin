@@ -34,8 +34,8 @@ export const EntryListItem = (props: EntryListItemProps) => {
 	return (
 		<li
 			className={classNames(
-				"cursor-pointer border-b border-zinc-700 p-2",
-				props.isSelected && "bg-blue-500 text-white",
+				"cursor-pointer border-b border-zinc-200 p-2 dark:border-zinc-700",
+				props.isSelected && "bg-sky-600/50 text-white",
 				!props.isUnread && "opacity-50"
 			)}
 			onClick={handleSelect}>

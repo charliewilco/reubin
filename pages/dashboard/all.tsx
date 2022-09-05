@@ -31,7 +31,7 @@ export default function AllEntries() {
 						</div>
 					</div>
 					<main className="grid flex-1 grid-cols-12">
-						<aside className="col-span-2 overflow-y-scroll border-r border-zinc-700">
+						<aside className="col-span-2 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">
 							<div className="relative h-full  bg-zinc-900">
 								<FeedList selected={feed} onSelect={selectFeed} />
 								<div className="absolute bottom-0 left-0 right-0 flex w-full items-center bg-red-500/50 p-2">
@@ -39,7 +39,7 @@ export default function AllEntries() {
 								</div>
 							</div>
 						</aside>
-						<aside className="col-span-3 overflow-y-scroll border-r border-zinc-700">
+						<aside className="col-span-3 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">
 							<div className="relative bg-zinc-900">
 								{feed !== null && (
 									<EntryList feedID={feed} selected={entry} onSelect={selectEntry} />
