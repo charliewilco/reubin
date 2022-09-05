@@ -54,7 +54,7 @@ const LIFESTYLE: RecommendedField[] = [
 
 const RELEVANT: RecommendedField[] = [
 	{
-		link: "https://charliewil.co/rss.xml",
+		link: "https://charliewil.co/rss",
 		displayName: "Charlie's Blog",
 	},
 	{
@@ -63,11 +63,16 @@ const RELEVANT: RecommendedField[] = [
 	},
 ];
 
-export const RecommendedKeyArray = [
+export const RecommendedKeyArray: [string, RecommendedField[]][] = [
 	["News", NEWS],
 	["Tech", TECH],
 	["Lifestyle", LIFESTYLE],
 	["Relevant", RELEVANT],
-] as const;
+];
 
-export const RecommendationMap = new Map(RecommendedKeyArray);
+export const RecommendationMap = new Map<string, RecommendedField[]>([
+	["News", NEWS],
+	["Tech", TECH],
+	["Lifestyle", LIFESTYLE],
+	["Relevant", RELEVANT],
+]);

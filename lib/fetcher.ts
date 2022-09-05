@@ -42,10 +42,11 @@ export const markAsRead = async (entryID: string) => {
 };
 export const addFeed = async (url: string) => {
 	try {
-		await sdk.CreateFeed({
+		const data = await sdk.CreateFeed({
 			url,
 		});
 		console.log(url);
+		return data;
 	} catch (error: any) {
 		throw new Error(error);
 	}

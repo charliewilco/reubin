@@ -1,6 +1,12 @@
-import type { Entry } from "@prisma/client";
+import type { Entry, Feed } from "@prisma/client";
 import type { RSSItem } from "./rss";
-import type { Entry as EntryType } from "./types";
+import type { Entry as EntryType, Feed as FeedType } from "./types";
+
+export const mapFeedtoAPIFeed = (feed: Feed): FeedType => {
+	return {
+		...feed,
+	};
+};
 
 export const mapRSStoEntry = (
 	rssItem: RSSItem,

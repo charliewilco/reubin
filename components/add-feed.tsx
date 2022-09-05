@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { addFeed } from "../lib/fetcher";
 import { SuperButton, Button } from "./ui/button";
 import { Label, Fieldset, Input } from "./ui/input";
@@ -36,6 +36,9 @@ export const AddFeedForm = (props: AddFeedFormProps) => {
 
 export const AddFeed = () => {
 	const [isOpen, setOpen] = useState(false);
+	const handleSubmit = useCallback((url: string) => {
+		addFeed(url);
+	}, []);
 	return (
 		<>
 			<Button onClick={() => setOpen(true)}>Add Feed</Button>
@@ -43,7 +46,7 @@ export const AddFeed = () => {
 				<div className="mt-2 mb-8 text-sm opacity-50">
 					Make changes to your profile here. Click save when you&apos;re done.
 				</div>
-				<AddFeedForm onSubmit={addFeed} />
+				<AddFeedForm onSubmit={handleSubmit} />
 			</Dialog>
 		</>
 	);

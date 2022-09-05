@@ -18,6 +18,7 @@ const query: QueryResolvers<Context> = {
 	async feeds(_parent, _args, { prisma }) {
 		const feeds = await prisma.feed.findMany();
 
+		console.log(feeds);
 		return feeds;
 	},
 	async feed(_parent, { id }, { prisma }) {

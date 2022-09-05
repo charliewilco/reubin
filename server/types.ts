@@ -48,6 +48,7 @@ export enum EntryFilter {
 
 export type Feed = {
 	__typename?: "Feed";
+	feedURL: Scalars["String"];
 	id: Scalars["ID"];
 	lastFetched: Scalars["Date"];
 	link: Scalars["String"];
@@ -250,6 +251,7 @@ export type FeedResolvers<
 	ContextType = any,
 	ParentType extends ResolversParentTypes["Feed"] = ResolversParentTypes["Feed"]
 > = {
+	feedURL?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
 	lastFetched?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
 	link?: Resolver<ResolversTypes["String"], ParentType, ContextType>;

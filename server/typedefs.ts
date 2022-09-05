@@ -14,6 +14,7 @@ export const typeDefs = gql`
 		title: String!
 		link: String!
 		lastFetched: Date!
+		feedURL: String!
 	}
 
 	type Activity {

@@ -47,6 +47,7 @@ export enum EntryFilter {
 
 export type Feed = {
 	__typename?: "Feed";
+	feedURL: Scalars["String"];
 	id: Scalars["ID"];
 	lastFetched: Scalars["Date"];
 	link: Scalars["String"];
@@ -103,13 +104,25 @@ export type QueryFeedArgs = {
 	id: Scalars["ID"];
 };
 
-export type FeedDetailsFragment = { __typename?: "Feed"; id: string; title: string };
+export type FeedDetailsFragment = {
+	__typename?: "Feed";
+	id: string;
+	title: string;
+	link: string;
+	feedURL: string;
+};
 
 export type GetFeedsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetFeedsQuery = {
 	__typename?: "Query";
-	feeds: Array<{ __typename?: "Feed"; id: string; title: string } | null>;
+	feeds: Array<{
+		__typename?: "Feed";
+		id: string;
+		title: string;
+		link: string;
+		feedURL: string;
+	} | null>;
 };
 
 export type EntryDetailsFragment = {
@@ -175,7 +188,7 @@ export type CreateFeedMutationVariables = Exact<{
 
 export type CreateFeedMutation = {
 	__typename?: "Mutation";
-	addFeed: { __typename?: "Feed"; id: string; title: string };
+	addFeed: { __typename?: "Feed"; id: string; title: string; link: string; feedURL: string };
 };
 
 export type MarkAsReadMutationVariables = Exact<{
@@ -207,6 +220,8 @@ export const FeedDetailsFragmentDoc = gql`
 	fragment FeedDetails on Feed {
 		id
 		title
+		link
+		feedURL
 	}
 `;
 export const EntryDetailsFragmentDoc = gql`
