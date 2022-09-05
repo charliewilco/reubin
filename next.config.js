@@ -8,6 +8,7 @@ const config = {
 	swcMinify: true,
 	experimental: {
 		newNextLinkBehavior: true,
+		gzipSize: true,
 	},
 };
 
