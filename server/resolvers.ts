@@ -5,7 +5,7 @@ import {
 	EntryFilter,
 } from "./types";
 import type { Context } from "./context";
-import { mapORMEntryToAPIEntry, mapRSStoEntry } from "./structs";
+import { mapFeedtoAPIFeed, mapORMEntryToAPIEntry, mapRSStoEntry } from "./structs";
 import { getFeedFromDirectURL } from "./feeds";
 
 /**
@@ -18,7 +18,6 @@ const query: QueryResolvers<Context> = {
 	async feeds(_parent, _args, { prisma }) {
 		const feeds = await prisma.feed.findMany();
 
-		console.log(feeds);
 		return feeds;
 	},
 	async feed(_parent, { id }, { prisma }) {
@@ -69,7 +68,6 @@ const query: QueryResolvers<Context> = {
 /**
  * TODO:
  * - create, read, update, delete tags
- * - mark as favorite
  * - login
  * - register user
  **/
@@ -148,7 +146,6 @@ const mutation: MutationResolvers<Context> = {
 
 		return _.map((value) => mapORMEntryToAPIEntry(value));
 	},
-
 	async markAsRead(_parent, { id }, { prisma }) {
 		const entry = await prisma.entry.update({
 			where: {
@@ -163,6 +160,38 @@ const mutation: MutationResolvers<Context> = {
 		}
 
 		return mapORMEntryToAPIEntry(entry);
+	},
+
+	async markAsFavorite(_parent, { id, favorite }, { prisma }) {
+		const entry = await prisma.entry.update({
+			where: {
+				id,
+			},
+			data: {
+				favorite,
+			},
+		});
+		if (entry === null) {
+			throw new Error("Entry not updated");
+		}
+
+		return mapORMEntryToAPIEntry(entry);
+	},
+	async updateFeed(_parent, { id, title }, { prisma }) {
+		const feed = await prisma.feed.update({
+			where: {
+				id,
+			},
+			data: {
+				title,
+			},
+		});
+
+		if (feed === null) {
+			throw new Error("Feed not updated");
+		}
+
+		return mapFeedtoAPIFeed(feed);
 	},
 };
 

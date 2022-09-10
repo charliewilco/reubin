@@ -30,11 +30,11 @@ export const EntryFull = (props: EntryFullProps) => {
 				{ rollbackOnError: true }
 			);
 		}
-		console.log(data?.entry);
 		if (data?.entry.unread) {
 			mutator();
 		}
 	}, [data?.entry, mutate, props.id]);
+
 	if (isLoading) {
 		return <LoadingIndicator />;
 	}

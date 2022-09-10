@@ -49,8 +49,9 @@ export const typeDefs = gql`
 		addFeed(url: String!): Feed!
 		removeFeed(id: ID!): Feed!
 		refreshFeed(id: ID!): [Entry!]!
-		markAsFavorite(id: ID!): Entry!
+		markAsFavorite(id: ID!, favorite: Boolean!): Entry!
 		markAsRead(id: ID!): Entry!
+		updateFeed(id: ID!, title: String!): Feed!
 	}
 
 	schema {

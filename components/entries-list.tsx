@@ -1,11 +1,14 @@
+import { memo, useCallback } from "react";
 import useSWR from "swr";
 import type { EntryDetailsFragment } from "../lib/types";
 import { classNames } from "./ui/class-names";
-import { getEntriesFromFeed } from "../lib/fetcher";
+import { getEntriesFromFeed, refreshFeed } from "../lib/fetcher";
+import { FeedToolbar } from "./feed-toolbar";
 
 interface EntryListProps {
-	selected: null | string;
-	feedID: string;
+	selectedEntry: null | string;
+	id: string;
+	title: string;
 	onSelect(id: string): void;
 }
 
@@ -26,7 +29,7 @@ function sortByNearest(
 	return Math.abs(Date.parse(a) - now) - Math.abs(Date.parse(b) - now);
 }
 
-export const EntryListItem = (props: EntryListItemProps) => {
+export const EntryListItem = memo((props: EntryListItemProps) => {
 	const handleSelect = () => {
 		props.onSelect(props.id);
 	};
@@ -34,32 +37,51 @@ export const EntryListItem = (props: EntryListItemProps) => {
 	return (
 		<li
 			className={classNames(
-				"cursor-pointer border-b border-zinc-200 p-2 dark:border-zinc-700",
-				props.isSelected && "bg-sky-600/50 text-white",
-				!props.isUnread && "opacity-50"
+				"cursor-pointer border-b border-zinc-200 dark:border-zinc-700",
+				!props.isUnread && "opacity-50",
+				props.isSelected && "bg-sky-500/50 text-white opacity-100"
 			)}
 			onClick={handleSelect}>
-			<div className={classNames("p-2")}>
-				<h3 className="text-lg font-bold">{props.title}</h3>
+			<div className="p-4">
+				<h3 className="text-base">{props.title}</h3>
 			</div>
 		</li>
 	);
-};
+});
+
+EntryListItem.displayName = "EntryListItem";
 
 export const EntryList = (props: EntryListProps) => {
-	const { data } = useSWR(props.feedID, getEntriesFromFeed);
+	const { data, mutate } = useSWR(props.id, getEntriesFromFeed);
 
 	// const isLoading = !error && !data;
 
+	const handleRefresh = useCallback(async () => {
+		const result = await refreshFeed(props.id);
+
+		mutate(
+			(prev) => {
+				if (prev && result.refreshFeed) {
+					// TODO: write mutation to call refresh on feed.
+					const entries: EntryDetailsFragment[] = [...result.refreshFeed, ...prev.entries];
+					return { ...prev, entries };
+				}
+			},
+			{ rollbackOnError: true }
+		);
+	}, [mutate, props.id]);
+
 	return (
 		<div className="absolute top-0 left-0 w-full">
+			<FeedToolbar onRefresh={handleRefresh} />
+
 			<ul>
 				{data?.entries.sort(sortByNearest).map((entry) => {
 					const isUnread = !!entry?.unread;
 
 					return (
 						<EntryListItem
-							isSelected={entry.id === props.selected}
+							isSelected={entry.id === props.selectedEntry}
 							key={entry.id}
 							title={entry.title}
 							id={entry.id}

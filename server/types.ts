@@ -62,6 +62,7 @@ export type Mutation = {
 	markAsRead: Entry;
 	refreshFeed: Array<Entry>;
 	removeFeed: Feed;
+	updateFeed: Feed;
 };
 
 export type MutationAddFeedArgs = {
@@ -69,6 +70,7 @@ export type MutationAddFeedArgs = {
 };
 
 export type MutationMarkAsFavoriteArgs = {
+	favorite: Scalars["Boolean"];
 	id: Scalars["ID"];
 };
 
@@ -82,6 +84,11 @@ export type MutationRefreshFeedArgs = {
 
 export type MutationRemoveFeedArgs = {
 	id: Scalars["ID"];
+};
+
+export type MutationUpdateFeedArgs = {
+	id: Scalars["ID"];
+	title: Scalars["String"];
 };
 
 export type Query = {
@@ -273,7 +280,7 @@ export type MutationResolvers<
 		ResolversTypes["Entry"],
 		ParentType,
 		ContextType,
-		RequireFields<MutationMarkAsFavoriteArgs, "id">
+		RequireFields<MutationMarkAsFavoriteArgs, "favorite" | "id">
 	>;
 	markAsRead?: Resolver<
 		ResolversTypes["Entry"],
@@ -292,6 +299,12 @@ export type MutationResolvers<
 		ParentType,
 		ContextType,
 		RequireFields<MutationRemoveFeedArgs, "id">
+	>;
+	updateFeed?: Resolver<
+		ResolversTypes["Feed"],
+		ParentType,
+		ContextType,
+		RequireFields<MutationUpdateFeedArgs, "id" | "title">
 	>;
 };
 

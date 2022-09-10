@@ -4,6 +4,7 @@ import { addFeed } from "../lib/fetcher";
 import { SuperButton, Button } from "./ui/button";
 import { Label, Fieldset, Input } from "./ui/input";
 import { Dialog } from "./ui/dialog";
+import { FiPlus } from "react-icons/fi";
 
 interface AddFeedFormProps {
 	onSubmit(url: string): void | Promise<void>;
@@ -41,7 +42,9 @@ export const AddFeed = () => {
 	}, []);
 	return (
 		<>
-			<Button onClick={() => setOpen(true)}>Add Feed</Button>
+			<Button onClick={() => setOpen(true)} aria-label="Add Feed" className="block">
+				<FiPlus size={24} />
+			</Button>
 			<Dialog isOpen={isOpen} onClose={() => setOpen(false)} title="Add Feed">
 				<div className="mt-2 mb-8 text-sm opacity-50">
 					Make changes to your profile here. Click save when you&apos;re done.

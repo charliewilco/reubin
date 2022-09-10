@@ -51,6 +51,24 @@ mutation MarkAsRead($id: ID!) {
 	}
 }
 
+mutation RefreshFeed($id: ID!) {
+	refreshFeed(id: $id) {
+		...EntryDetails
+	}
+}
+
+mutation RemoveFeed($id: ID!) {
+	removeFeed(id: $id) {
+		...FeedDetails
+	}
+}
+
+mutation UpdateFeedTitle($title: String!, $id: ID!) {
+	updateFeed(title: $title, id: $id) {
+		...FeedDetails
+	}
+}
+
 query IndividualEntry($id: ID!) {
 	entry(id: $id) {
 		id

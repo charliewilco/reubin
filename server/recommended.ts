@@ -1,4 +1,4 @@
-type RecommendedField = {
+export type RecommendedField = {
 	link: string;
 	displayName: string;
 };
@@ -49,6 +49,10 @@ const LIFESTYLE: RecommendedField[] = [
 	{
 		link: "https://www.apartmenttherapy.com/main.rss",
 		displayName: "Apartment Therapy",
+	},
+	{
+		link: "https://feedpress.me/FIJ",
+		displayName: "Food in Jars",
 	},
 ];
 

@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { useDashboardContext } from "../hooks/useDashboard";
 import { getFeeds } from "../lib/fetcher";
 import { LoadingIndicator } from "./ui/activity-indicator";
 import { classNames } from "./ui/class-names";
@@ -6,35 +7,34 @@ import { classNames } from "./ui/class-names";
 interface FeedItemProps {
 	id: string;
 	title: string;
-	selected: null | string;
-	onSelect(id: string): void;
+	selected: null | { id: string; title: string };
+	onSelect(id: string, title: string): void;
 }
 
 export const FeedItem = (props: FeedItemProps) => {
 	const handleSelect = () => {
 		if (props.id) {
-			props.onSelect(props.id);
+			props.onSelect(props.id, props.title);
 		}
 	};
 
-	const isSelected = props.id === props.selected;
+	const isSelected = props.id === props.selected?.id;
 
 	return (
 		<li
 			key={props.id}
-			className={classNames("cursor-pointer p-2", isSelected && "bg-sky-600/50 text-white")}
-			onClick={handleSelect}>
-			<div>{props.title}</div>
+			className={classNames("cursor-pointer p-2", isSelected && "bg-sky-500/50 text-white")}>
+			<div className="flex justify-between">
+				<div onClick={handleSelect} className="flex-1">
+					<h2 className="text-base">{props.title}</h2>
+				</div>
+			</div>
 		</li>
 	);
 };
 
-interface FeedListProps {
-	selected: null | string;
-	onSelect(id: string): void;
-}
-
-export const FeedList = (props: FeedListProps) => {
+export const FeedList = () => {
+	const [{ feed: selectedFeed }, { selectFeed }] = useDashboardContext();
 	const { data, error } = useSWR("feeds", getFeeds);
 
 	const isLoading = !error && !data;
@@ -64,8 +64,8 @@ export const FeedList = (props: FeedListProps) => {
 								key={feed?.id}
 								id={feed?.id}
 								title={feed?.title}
-								onSelect={props.onSelect}
-								selected={props.selected}
+								onSelect={selectFeed}
+								selected={selectedFeed}
 							/>
 						)
 					)}

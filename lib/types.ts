@@ -61,6 +61,7 @@ export type Mutation = {
 	markAsRead: Entry;
 	refreshFeed: Array<Entry>;
 	removeFeed: Feed;
+	updateFeed: Feed;
 };
 
 export type MutationAddFeedArgs = {
@@ -68,6 +69,7 @@ export type MutationAddFeedArgs = {
 };
 
 export type MutationMarkAsFavoriteArgs = {
+	favorite: Scalars["Boolean"];
 	id: Scalars["ID"];
 };
 
@@ -81,6 +83,11 @@ export type MutationRefreshFeedArgs = {
 
 export type MutationRemoveFeedArgs = {
 	id: Scalars["ID"];
+};
+
+export type MutationUpdateFeedArgs = {
+	id: Scalars["ID"];
+	title: Scalars["String"];
 };
 
 export type Query = {
@@ -200,6 +207,53 @@ export type MarkAsReadMutation = {
 	markAsRead: { __typename?: "Entry"; title: string; content?: string | null; id: string };
 };
 
+export type RefreshFeedMutationVariables = Exact<{
+	id: Scalars["ID"];
+}>;
+
+export type RefreshFeedMutation = {
+	__typename?: "Mutation";
+	refreshFeed: Array<{
+		__typename?: "Entry";
+		title: string;
+		content?: string | null;
+		id: string;
+		unread: boolean;
+		published?: any | null;
+	}>;
+};
+
+export type RemoveFeedMutationVariables = Exact<{
+	id: Scalars["ID"];
+}>;
+
+export type RemoveFeedMutation = {
+	__typename?: "Mutation";
+	removeFeed: {
+		__typename?: "Feed";
+		id: string;
+		title: string;
+		link: string;
+		feedURL: string;
+	};
+};
+
+export type UpdateFeedTitleMutationVariables = Exact<{
+	title: Scalars["String"];
+	id: Scalars["ID"];
+}>;
+
+export type UpdateFeedTitleMutation = {
+	__typename?: "Mutation";
+	updateFeed: {
+		__typename?: "Feed";
+		id: string;
+		title: string;
+		link: string;
+		feedURL: string;
+	};
+};
+
 export type IndividualEntryQueryVariables = Exact<{
 	id: Scalars["ID"];
 }>;
@@ -281,6 +335,30 @@ export const MarkAsReadDocument = gql`
 			id
 		}
 	}
+`;
+export const RefreshFeedDocument = gql`
+	mutation RefreshFeed($id: ID!) {
+		refreshFeed(id: $id) {
+			...EntryDetails
+		}
+	}
+	${EntryDetailsFragmentDoc}
+`;
+export const RemoveFeedDocument = gql`
+	mutation RemoveFeed($id: ID!) {
+		removeFeed(id: $id) {
+			...FeedDetails
+		}
+	}
+	${FeedDetailsFragmentDoc}
+`;
+export const UpdateFeedTitleDocument = gql`
+	mutation UpdateFeedTitle($title: String!, $id: ID!) {
+		updateFeed(title: $title, id: $id) {
+			...FeedDetails
+		}
+	}
+	${FeedDetailsFragmentDoc}
 `;
 export const IndividualEntryDocument = gql`
 	query IndividualEntry($id: ID!) {
@@ -389,6 +467,48 @@ export function getSdk(
 						...wrappedRequestHeaders,
 					}),
 				"MarkAsRead",
+				"mutation"
+			);
+		},
+		RefreshFeed(
+			variables: RefreshFeedMutationVariables,
+			requestHeaders?: Dom.RequestInit["headers"]
+		): Promise<RefreshFeedMutation> {
+			return withWrapper(
+				(wrappedRequestHeaders) =>
+					client.request<RefreshFeedMutation>(RefreshFeedDocument, variables, {
+						...requestHeaders,
+						...wrappedRequestHeaders,
+					}),
+				"RefreshFeed",
+				"mutation"
+			);
+		},
+		RemoveFeed(
+			variables: RemoveFeedMutationVariables,
+			requestHeaders?: Dom.RequestInit["headers"]
+		): Promise<RemoveFeedMutation> {
+			return withWrapper(
+				(wrappedRequestHeaders) =>
+					client.request<RemoveFeedMutation>(RemoveFeedDocument, variables, {
+						...requestHeaders,
+						...wrappedRequestHeaders,
+					}),
+				"RemoveFeed",
+				"mutation"
+			);
+		},
+		UpdateFeedTitle(
+			variables: UpdateFeedTitleMutationVariables,
+			requestHeaders?: Dom.RequestInit["headers"]
+		): Promise<UpdateFeedTitleMutation> {
+			return withWrapper(
+				(wrappedRequestHeaders) =>
+					client.request<UpdateFeedTitleMutation>(UpdateFeedTitleDocument, variables, {
+						...requestHeaders,
+						...wrappedRequestHeaders,
+					}),
+				"UpdateFeedTitle",
 				"mutation"
 			);
 		},

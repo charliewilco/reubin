@@ -5,14 +5,16 @@ import { EntryList } from "../../components/entries-list";
 import { EntryFull } from "../../components/entry-full";
 import { FeedList } from "../../components/feed-list";
 import { SideNavigation } from "../../components/side-navigation";
-import { useDashboard } from "../../hooks/useDashboard";
+import { DashboardProvider, useDashboardContext } from "../../hooks/useDashboard";
 
-export default function AllEntries() {
-	const [{ feed, entry }, { selectEntry, selectFeed }] = useDashboard();
+function AllEntries() {
+	const [{ feed, entry }, { selectEntry }] = useDashboardContext();
+
 	return (
 		<div>
 			<Head>
 				<title>Inbox | Reubin</title>
+				<link rel="icon" type="image/png" href="/favicon.png" />
 			</Head>
 			<div className="flex h-screen flex-col">
 				<AppHeader title="All Entries" />
@@ -33,7 +35,7 @@ export default function AllEntries() {
 					<main className="grid flex-1 grid-cols-12">
 						<aside className="col-span-2 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">
 							<div className="relative h-full  bg-zinc-900">
-								<FeedList selected={feed} onSelect={selectFeed} />
+								<FeedList />
 								<div className="absolute bottom-0 left-0 right-0 flex w-full items-center bg-red-500/50 p-2">
 									<AddFeed />
 								</div>
@@ -42,7 +44,7 @@ export default function AllEntries() {
 						<aside className="col-span-3 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">
 							<div className="relative bg-zinc-900">
 								{feed !== null && (
-									<EntryList feedID={feed} selected={entry} onSelect={selectEntry} />
+									<EntryList {...feed} selectedEntry={entry} onSelect={selectEntry} />
 								)}
 							</div>
 						</aside>
@@ -61,5 +63,13 @@ export default function AllEntries() {
 				</div>
 			</div>
 		</div>
+	);
+}
+
+export default function DashboardAllPage() {
+	return (
+		<DashboardProvider>
+			<AllEntries />
+		</DashboardProvider>
 	);
 }

@@ -1,7 +1,13 @@
-import { useCallback, useReducer } from "react";
+import React, {
+	createContext,
+	createElement,
+	useCallback,
+	useContext,
+	useReducer,
+} from "react";
 
 interface DashboardState {
-	feed: string | null;
+	feed: { id: string; title: string } | null;
 	entry: string | null;
 }
 
@@ -10,7 +16,7 @@ const dashboardReducer = (
 	action:
 		| {
 				type: "SELECT_FEED";
-				feedId: string | null;
+				feed: null | { id: string; title: string };
 		  }
 		| { type: "SELECT_ENTRY"; entryId: string | null }
 ): DashboardState => {
@@ -18,7 +24,7 @@ const dashboardReducer = (
 		case "SELECT_ENTRY":
 			return { ...state, entry: action.entryId };
 		case "SELECT_FEED":
-			return { feed: action.feedId, entry: null };
+			return { feed: action.feed, entry: null };
 	}
 };
 
@@ -33,11 +39,36 @@ export const useDashboard = () => {
 	);
 
 	const selectFeed = useCallback(
-		(id: string) => {
-			dispatch({ type: "SELECT_FEED", feedId: id });
+		(id: string, title: string) => {
+			dispatch({ type: "SELECT_FEED", feed: { id, title } });
 		},
 		[dispatch]
 	);
 
-	return [state, { selectEntry, selectFeed }] as const;
+	const unselectFeed = useCallback(() => {
+		dispatch({ type: "SELECT_FEED", feed: null });
+	}, [dispatch]);
+
+	return [state, { selectEntry, selectFeed, unselectFeed }] as const;
+};
+
+const DashContext = createContext<ReturnType<typeof useDashboard>>([
+	{
+		feed: null,
+		entry: null,
+	},
+	{
+		selectEntry() {},
+		selectFeed() {},
+		unselectFeed() {},
+	},
+]);
+
+export const DashboardProvider = ({ children }: { children?: React.ReactNode }) => {
+	const value = useDashboard();
+	return createElement(DashContext.Provider, { value }, children);
+};
+
+export const useDashboardContext = () => {
+	return useContext(DashContext);
 };

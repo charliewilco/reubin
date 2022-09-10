@@ -40,13 +40,42 @@ export const markAsRead = async (entryID: string) => {
 		throw new Error(error);
 	}
 };
+
 export const addFeed = async (url: string) => {
 	try {
 		const data = await sdk.CreateFeed({
 			url,
 		});
-		console.log(url);
 		return data;
+	} catch (error: any) {
+		throw new Error(error);
+	}
+};
+
+export const refreshFeed = async (feedID: string) => {
+	try {
+		return sdk.RefreshFeed({ id: feedID });
+	} catch (error: any) {
+		throw new Error(error);
+	}
+};
+
+export const removeFeed = async (feedID: string) => {
+	try {
+		return sdk.RemoveFeed({
+			id: feedID,
+		});
+	} catch (error: any) {
+		throw new Error(error);
+	}
+};
+
+export const updateFeedTitle = async (title: string, id: string) => {
+	try {
+		return sdk.UpdateFeedTitle({
+			title,
+			id,
+		});
 	} catch (error: any) {
 		throw new Error(error);
 	}

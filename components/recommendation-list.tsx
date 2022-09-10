@@ -2,9 +2,10 @@ import { useCallback } from "react";
 import useSWR from "swr";
 import { addFeed, getFeeds } from "../lib/fetcher";
 import { RecommendationCard } from "./ui/recommendation-card";
+import type { RecommendedField } from "../server/recommended";
 
 interface RecommendationListProps {
-	recommended: [string, Array<{ displayName: string; link: string }>][];
+	recommended: [string, RecommendedField[]][];
 }
 
 export const RecommendationList = ({ recommended }: RecommendationListProps) => {
