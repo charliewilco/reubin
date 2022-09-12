@@ -1,4 +1,6 @@
 import Link from "next/link";
+import isEqual from "react-fast-compare";
+import { memo } from "react";
 import {
 	MdHomeFilled,
 	MdOutlineFeed,
@@ -28,7 +30,7 @@ export const LinkItem = (props: LinkItemProps) => {
 
 // unread / bookmarked / all / recommendations / appearance / settings
 
-export const SideNavigation = () => {
+const _SideNavigation = () => {
 	return (
 		<nav aria-label="Sidebar" className="flex flex-col items-center space-y-4 px-2">
 			<LinkItem href="/dashboard" name="Home">
@@ -52,3 +54,9 @@ export const SideNavigation = () => {
 		</nav>
 	);
 };
+
+const SideNavigation = memo(_SideNavigation, isEqual);
+
+SideNavigation.displayName = "SideNavigation";
+
+export { SideNavigation };

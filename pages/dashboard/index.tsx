@@ -6,6 +6,8 @@ import { SideNavigation } from "../../components/side-navigation";
 import { AppHeader } from "../../components/app-header";
 import { EntryFull } from "../../components/entry-full";
 import { DashboardProvider, useDashboardContext } from "../../hooks/useDashboard";
+import isEqual from "react-fast-compare";
+import { memo } from "react";
 
 function UnreadEntries() {
 	const [{ feed, entry }, { selectEntry }] = useDashboardContext();
@@ -18,21 +20,21 @@ function UnreadEntries() {
 			</Head>
 			<div className="flex h-screen flex-col">
 				<AppHeader title="Unread Entries">
-					<AddFeed />
-				</AppHeader>
-				<div className="flex flex-1">
-					<div className="flex h-full flex-col justify-between border-r border-zinc-200 dark:border-zinc-700">
-						<div>
-							<SideNavigation />
-						</div>
+					<div className="flex justify-end gap-4">
+						<AddFeed />
 
-						<div className="pb-4">
+						<div>
 							<object className="mx-auto block h-8 w-8 rounded-full bg-gradient-to-r from-sky-500 to-blue-500" />
 							<div className="sr-only">
 								<p>Some Name</p>
 								<p>Account settings</p>
 							</div>
 						</div>
+					</div>
+				</AppHeader>
+				<div className="flex flex-1">
+					<div className="relative flex h-full flex-col justify-between border-r border-zinc-200 dark:border-zinc-700">
+						<SideNavigation />
 					</div>
 					<main className="grid flex-1 grid-cols-12">
 						<aside className="col-span-2 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">
@@ -65,10 +67,12 @@ function UnreadEntries() {
 	);
 }
 
+const MemoUnread = memo(UnreadEntries, isEqual);
+
 export default function DashboardPage() {
 	return (
 		<DashboardProvider>
-			<UnreadEntries />
+			<MemoUnread />
 		</DashboardProvider>
 	);
 }

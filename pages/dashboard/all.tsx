@@ -17,14 +17,11 @@ function AllEntries() {
 				<link rel="icon" type="image/png" href="/favicon.png" />
 			</Head>
 			<div className="flex h-screen flex-col">
-				<AppHeader title="All Entries" />
-				<div className="flex flex-1">
-					<div className="flex h-full flex-col justify-between border-r border-zinc-700">
-						<div>
-							<SideNavigation />
-						</div>
+				<AppHeader title="All Entries">
+					<div className="flex justify-end gap-4">
+						<AddFeed />
 
-						<div className="pb-4">
+						<div>
 							<object className="mx-auto block h-8 w-8 rounded-full bg-gradient-to-r from-sky-500 to-blue-500" />
 							<div className="sr-only">
 								<p>Some Name</p>
@@ -32,13 +29,17 @@ function AllEntries() {
 							</div>
 						</div>
 					</div>
+				</AppHeader>
+				<div className="flex flex-1">
+					<div className="flex h-full flex-col justify-between border-r border-zinc-700">
+						<div>
+							<SideNavigation />
+						</div>
+					</div>
 					<main className="grid flex-1 grid-cols-12">
 						<aside className="col-span-2 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">
-							<div className="relative h-full  bg-zinc-900">
+							<div className="relative h-full bg-zinc-900">
 								<FeedList />
-								<div className="absolute bottom-0 left-0 right-0 flex w-full items-center bg-red-500/50 p-2">
-									<AddFeed />
-								</div>
 							</div>
 						</aside>
 						<aside className="col-span-3 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">

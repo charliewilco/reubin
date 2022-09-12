@@ -1,33 +1,57 @@
-import { styled } from "@stitches/react";
-import { blue } from "@radix-ui/colors";
+import { forwardRef } from "react";
+import { classNames } from "./class-names";
 
-export const Input = styled("input", {
-	all: "unset",
-	width: "100%",
-	flex: "1",
-	display: "inline-flex",
-	alignItems: "center",
-	justifyContent: "center",
-	borderRadius: 4,
-	padding: "0 10px",
-	fontSize: 15,
-	lineHeight: 1,
-	boxShadow: `0 0 0 1px ${blue.blue7}`,
-	height: 35,
+type InputProps = React.DetailedHTMLProps<
+	React.InputHTMLAttributes<HTMLInputElement>,
+	HTMLInputElement
+>;
 
-	"&:focus": { boxShadow: `0 0 0 2px ${blue.blue8}` },
+const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {
+	return (
+		<input
+			{...props}
+			className={classNames("block w-full rounded px-0 py-2 text-sm shadow", className)}
+			ref={ref}
+		/>
+	);
 });
 
-export const Fieldset = styled("fieldset", {
-	all: "unset",
-	display: "flex",
-	gap: 20,
-	alignItems: "center",
-	marginBottom: 15,
+Input.displayName = "Input";
+
+type FieldsetProps = React.DetailedHTMLProps<
+	React.FieldsetHTMLAttributes<HTMLFieldSetElement>,
+	HTMLFieldSetElement
+>;
+
+const Fieldset = forwardRef<HTMLFieldSetElement, FieldsetProps>(
+	({ className, ...props }, ref) => {
+		return (
+			<fieldset
+				{...props}
+				className={classNames("mb-8 flex items-center gap-4", className)}
+				ref={ref}
+			/>
+		);
+	}
+);
+
+Fieldset.displayName = "Fieldset";
+
+type LabelProps = React.DetailedHTMLProps<
+	React.LabelHTMLAttributes<HTMLLabelElement>,
+	HTMLLabelElement
+>;
+
+const Label = forwardRef<HTMLLabelElement, LabelProps>(({ className, ...props }, ref) => {
+	return (
+		<label
+			{...props}
+			className={classNames("max-w-xs text-right text-sm", className)}
+			ref={ref}
+		/>
+	);
 });
 
-export const Label = styled("label", {
-	fontSize: 15,
-	width: 90,
-	textAlign: "right",
-});
+Label.displayName = "Label";
+
+export { Label, Input, Fieldset };
