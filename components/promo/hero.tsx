@@ -25,10 +25,10 @@ export const Hero = () => (
 					/>
 				</svg>
 			</Link>
-			<h2 className="bg-gradient-to-tr from-sky-200 to-sky-600 bg-clip-text font-display text-8xl font-bold tracking-tighter text-transparent">
+			<h2 className="bg-gradient-to-tr from-sky-200 to-sky-600 bg-clip-text font-display text-8xl text-transparent">
 				Reubin
 			</h2>
-			<p className="text-2xl opacity-50">RSS for the next generation. Coming Soon.</p>
+			<p className="text-2xl opacity-50">RSS for the next generation.</p>
 		</div>
 	</section>
 );

@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { useCallback, useState } from "react";
 import { addFeed } from "../lib/fetcher";
 import { SuperButton, Button } from "./ui/button";
-import { Label, Fieldset, Input } from "./ui/input";
+import { Label, Input } from "./ui/input";
 import { Dialog } from "./ui/dialog";
 import { FiPlus } from "react-icons/fi";
 
@@ -23,10 +23,8 @@ export const AddFeedForm = (props: AddFeedFormProps) => {
 	return (
 		<div>
 			<form onSubmit={formik.handleSubmit}>
-				<Fieldset>
-					<Label htmlFor="name">URL</Label>
-					<Input {...formik.getFieldProps("url")} />
-				</Fieldset>
+				<Label htmlFor="name">URL</Label>
+				<Input {...formik.getFieldProps("url")} />
 				<div style={{ display: "flex", marginTop: 25, justifyContent: "flex-end" }}>
 					<SuperButton type="submit">Submit</SuperButton>
 				</div>

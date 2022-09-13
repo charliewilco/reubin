@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { AiOutlineGlobal, AiOutlineTwitter, AiFillGithub } from "react-icons/ai";
+import { FiGlobe } from "react-icons/fi";
+import { SiGithub, SiTwitter } from "react-icons/si";
 
 export const SiteFooter = () => (
 	<footer className="mx-auto max-w-7xl py-2 px-2">
@@ -21,19 +22,19 @@ export const SiteFooter = () => (
 			</nav>
 			<div className="mt-8 flex">
 				<a href="https://charliewil.co/" className="text-gray-400 hover:text-gray-500">
-					<AiOutlineGlobal className="h-6 w-6" />
+					<FiGlobe className="h-6 w-6" />
 				</a>
 				<a
 					href="https://twitter.com/_charliewilco"
 					className="ml-6 text-gray-400 hover:text-gray-500">
 					<span className="sr-only">Twitter</span>
-					<AiOutlineTwitter className="h-6 w-6" />
+					<SiTwitter className="h-6 w-6" />
 				</a>
 				<a
 					href="https://github.com/charliewilco"
 					className="ml-6 text-gray-400 hover:text-gray-500">
 					<span className="sr-only">GitHub</span>
-					<AiFillGithub className="h-6 w-6" />
+					<SiGithub className="h-6 w-6" />
 				</a>
 			</div>
 			<div className="mt-8">

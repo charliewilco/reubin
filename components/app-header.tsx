@@ -16,6 +16,12 @@ export const AppHeader = (props: AppHeaderProps) => {
 
 				<div>{props.children}</div>
 			</div>
+
+			<style jsx>{`
+				header {
+					backdrop-filter: saturate(180%) blur(5px);
+				}
+			`}</style>
 		</header>
 	);
 };

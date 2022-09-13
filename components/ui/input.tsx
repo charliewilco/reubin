@@ -10,7 +10,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props },
 	return (
 		<input
 			{...props}
-			className={classNames("block w-full rounded px-0 py-2 text-sm shadow", className)}
+			className={classNames(
+				"block w-full rounded px-2 py-2 text-sm shadow dark:bg-zinc-700",
+				className
+			)}
 			ref={ref}
 		/>
 	);
@@ -43,13 +46,7 @@ type LabelProps = React.DetailedHTMLProps<
 >;
 
 const Label = forwardRef<HTMLLabelElement, LabelProps>(({ className, ...props }, ref) => {
-	return (
-		<label
-			{...props}
-			className={classNames("max-w-xs text-right text-sm", className)}
-			ref={ref}
-		/>
-	);
+	return <label {...props} className={classNames("text-sm", className)} ref={ref} />;
 });
 
 Label.displayName = "Label";

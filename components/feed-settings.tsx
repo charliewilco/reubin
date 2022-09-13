@@ -4,7 +4,8 @@ import { useCallback, useState } from "react";
 import { FiSettings, FiTrash2 } from "react-icons/fi";
 import { removeFeed, updateFeedTitle } from "../lib/fetcher";
 import { useFormik } from "formik";
-import { Input } from "./ui/input";
+import { mutate } from "swr";
+import { Input, Label } from "./ui/input";
 import { useDashboardContext } from "../hooks/useDashboard";
 
 export const UpdateFeedForm = (props: { onClose(): void }) => {
@@ -15,6 +16,7 @@ export const UpdateFeedForm = (props: { onClose(): void }) => {
 				removeFeed(feed.id).then(() => {
 					props.onClose();
 					unselectFeed();
+					mutate("feeds");
 				});
 			} catch (error) {}
 		}
@@ -27,15 +29,20 @@ export const UpdateFeedForm = (props: { onClose(): void }) => {
 
 		onSubmit(values) {
 			if (feed) {
-				updateFeedTitle(values.title, feed.id);
+				updateFeedTitle(values.title, feed.id)
+					.then((data) => {
+						console.log(data);
+					})
+					.catch((err) => console.log(err));
 			}
 		},
 	});
 	return (
 		<form onSubmit={formik.handleSubmit}>
-			<div>
+			<Label>
 				<Input {...formik.getFieldProps("title")} />
-			</div>
+				<span>Feed Name</span>
+			</Label>
 			<div className="flex justify-between">
 				<div className="block text-red-500">
 					<Button

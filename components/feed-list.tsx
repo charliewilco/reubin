@@ -27,6 +27,7 @@ export const FeedItem = (props: FeedItemProps) => {
 			<div className="flex justify-between">
 				<div onClick={handleSelect} className="flex-1">
 					<h2 className="text-base">{props.title}</h2>
+					<pre className="text-xs opacity-25">{props.id}</pre>
 				</div>
 			</div>
 		</li>
