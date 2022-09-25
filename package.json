@@ -4,9 +4,7 @@
   "author": "Charlie ⚡ <charliewilc0@protonmail.com>",
   "private": true,
   "workspaces": [
-    "graphql",
-    "ui",
-    "browser-extension"
+    "apps/*"
   ],
   "devDependencies": {
     "@graphql-codegen/cli": "^2.12.0",
