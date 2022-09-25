@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Entry {
+  id       String    @id @default(cuid())
+  title    String
+  content  String
+  pubDate  DateTime  @default(now())
+  favorite Boolean   @default(false)
+  unread   Boolean   @default(true)
+  feedId   String?
+  readAt   DateTime? @map("read_at")
+  feed     Feed?     @relation(fields: [feedId], references: [id])
+}
+
+model Tag {
+  id     String        @id @default(cuid())
+  title  String
+  userId String?
+  user   User?         @relation(fields: [userId], references: [id])
+  Feed   Feed[]
+  feeds  TagsOnFeeds[]
+}
+
+model TagsOnFeeds {
+  feedId     String
+  tagId      String
+  assignedAt DateTime @default(now())
+  assignedBy String
+  post       Feed     @relation(fields: [feedId], references: [id])
+  tag        Tag      @relation(fields: [tagId], references: [id])
+
+  @@id([feedId, tagId])
+}
+
+model Feed {
+  id          String        @id @default(cuid())
+  title       String
+  userId      String?
+  link        String
+  feedURL     String
+  lastFetched DateTime      @default(now())
+  tagId       String?
+  Tag         Tag?          @relation(fields: [tagId], references: [id])
+  user        User?         @relation(fields: [userId], references: [id])
+  entries     Entry[]
+  TagsOnFeeds TagsOnFeeds[]
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  email     String   @unique
+  /// hashed obvs lol
+  password  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  feeds     Feed[]
+  tags      Tag[]
+
+  @@map("users")
+}
