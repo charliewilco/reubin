@@ -1,0 +1,15 @@
+{
+  "name": "@reubin/extension",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "parcel watch src/manifest.json --host localhost --config @parcel/config-webextension",
+    "build": "parcel build src/manifest.json --config @parcel/config-webextension",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@parcel/config-webextension": "^2.6.2",
+    "parcel": "^2.6.2",
+    "typescript": "^4.7.4"
+  }
+}
