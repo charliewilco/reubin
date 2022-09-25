@@ -23,9 +23,10 @@ export const AddFeedForm = (props: AddFeedFormProps) => {
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
-        <Label htmlFor="name">URL</Label>
         <Input {...formik.getFieldProps("url")} />
-        <div style={{ display: "flex", marginTop: 25, justifyContent: "flex-end" }}>
+        <Label htmlFor="name">URL</Label>
+
+        <div className="mt-8 flex justify-end">
           <SuperButton type="submit">Submit</SuperButton>
         </div>
       </form>

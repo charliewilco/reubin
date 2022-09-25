@@ -6,12 +6,14 @@ type InputProps = React.DetailedHTMLProps<
   HTMLInputElement
 >;
 
+// className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+
 const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {
   return (
     <input
       {...props}
       className={classNames(
-        "block w-full rounded px-2 py-2 text-sm shadow dark:bg-zinc-700",
+        "block w-full rounded-md border-zinc-200 px-2 py-2 text-sm shadow focus:border-sky-500 focus:ring-sky-500 dark:bg-zinc-700",
         className
       )}
       ref={ref}

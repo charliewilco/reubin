@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button, SuperButton } from "./ui/button";
 import { Dialog } from "./ui/dialog";
 import { useCallback, useState } from "react";
 import { FiSettings, FiTrash2 } from "react-icons/fi";
@@ -32,6 +32,9 @@ export const UpdateFeedForm = (props: { onClose(): void }) => {
         updateFeedTitle(values.title, feed.id)
           .then((data) => {
             console.log(data);
+            props.onClose();
+            unselectFeed();
+            mutate("feeds");
           })
           .catch((err) => console.log(err));
       }
@@ -41,9 +44,9 @@ export const UpdateFeedForm = (props: { onClose(): void }) => {
     <form onSubmit={formik.handleSubmit}>
       <Label>
         <Input {...formik.getFieldProps("title")} />
-        <span>Feed Name</span>
+        <span>Feed Names</span>
       </Label>
-      <div className="flex justify-between">
+      <div className="mt-8 flex justify-between">
         <div className="block text-red-500">
           <Button
             type="button"
@@ -55,13 +58,9 @@ export const UpdateFeedForm = (props: { onClose(): void }) => {
           </Button>
         </div>
 
-        <Button
-          type="submit"
-          aria-label="Remove Feed"
-          className="inline-flex items-center"
-          onClick={handleRemove}>
-          <span className="ml-2">Save</span>
-        </Button>
+        <SuperButton type="submit" aria-label="Remove Feed">
+          <span>Save</span>
+        </SuperButton>
       </div>
     </form>
   );

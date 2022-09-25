@@ -188,8 +188,6 @@ const mutation: MutationResolvers<Context> = {
         },
       });
 
-      console.log(feed);
-
       if (feed === null) {
         throw new Error("Feed not updated");
       }
