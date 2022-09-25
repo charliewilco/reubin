@@ -10,6 +10,14 @@ const config = {
     newNextLinkBehavior: true,
     gzipSize: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/v1/:path*",
+        destination: "http://localhost:5300/:path*",
+      },
+    ];
+  },
 };
 
 module.exports = config;

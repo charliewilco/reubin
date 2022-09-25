@@ -1,7 +1,7 @@
 import { GraphQLClient } from "graphql-request";
 import { getSdk } from "./types";
 
-const client = new GraphQLClient("/api/graphql");
+const client = new GraphQLClient("/v1/graphql");
 
 export const sdk = getSdk(client);
 

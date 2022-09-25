@@ -1,4 +1,4 @@
-import { SDKError } from "../server/errors";
+import { SDKError } from "../src/errors";
 
 describe("Errors", () => {
   it("error contains message", () => {

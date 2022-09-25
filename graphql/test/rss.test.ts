@@ -1,4 +1,4 @@
-import { RSSKit } from "../server/rss";
+import { RSSKit } from "../src/rss";
 
 import { readFile } from "fs/promises";
 import path from "path";
