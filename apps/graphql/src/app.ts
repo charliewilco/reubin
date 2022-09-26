@@ -7,14 +7,10 @@ import { RecommendedKeyArray } from "./recommendations";
 export const createApp = () => {
   const app = Fastify({ logger: false });
 
-  app.route({
-    method: "GET",
-    url: "/recommendations",
-    handler(_req, res) {
-      res.send({
-        data: RecommendedKeyArray,
-      });
-    },
+  app.get("/recommendations", (_req, res) => {
+    res.send({
+      data: RecommendedKeyArray,
+    });
   });
 
   const options: MercuriusOptions = {
