@@ -1,56 +1,57 @@
-import { useCallback } from "react";
-import useSWR from "swr";
-import { addFeed, getFeeds } from "../lib/fetcher";
+import type { GetFeedsQuery } from "../lib/types";
 import { RecommendationCard } from "./ui/recommendation-card";
 
 export type RecommendedField = { link: string; displayName: string };
 
-interface RecommendationListProps {
-  recommended: [string, RecommendedField[]][];
+interface RecommendationListItemProps {
+  feeds: RecommendedField[];
+  title: string;
+  data?: GetFeedsQuery;
+  error?: any;
+  onClick: (link: string) => void;
 }
 
-export const RecommendationList = ({ recommended }: RecommendationListProps) => {
-  const { data, error, mutate } = useSWR("recommended feeds", getFeeds);
+export const NEWS = [
+  {
+    link: "https://www.vox.com/rss/index.xml",
+    displayName: "Vox",
+  },
+  {
+    link: "https://www.out.com/rss.xml",
+    displayName: "Out.com",
+  },
+  {
+    link: "https://www.buzzfeed.com/world.xml",
+    displayName: "BuzzFeed World News",
+  },
+  {
+    link: "https://nautil.us/rss/all",
+    displayName: "Nautilus",
+  },
+  {
+    link: "https://thedailywhat.cheezburger.com/rss",
+    displayName: "Daily What",
+  },
+];
 
-  const handleClick = useCallback(
-    async (link: string) => {
-      const data = await addFeed(link);
-
-      await mutate((prevData) => {
-        prevData?.feeds.push(data.addFeed);
-
-        return prevData;
-      });
-    },
-    [mutate]
-  );
-
+export const RecommendationList = (props: RecommendationListItemProps) => {
   return (
-    <div className="space-y-8 pb-8">
-      {error && <div>{error.toString()}</div>}
-      {recommended.map(([key, recommendedFeeds], idx) => {
-        return (
-          <section key={idx}>
-            <h2 className="text-lg opacity-50">{key}</h2>
+    <section>
+      <h2 className="text-lg opacity-50">{props.title}</h2>
 
-            <ul
-              role="list"
-              className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {recommendedFeeds.map((r) => (
-                <li key={r.displayName} className="col-span-1">
-                  <RecommendationCard
-                    displayName={r.displayName}
-                    link={r.link}
-                    feeds={data}
-                    error={error}
-                    onSubscribe={handleClick}
-                  />
-                </li>
-              ))}
-            </ul>
-          </section>
-        );
-      })}
-    </div>
+      <ul role="list" className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {props.feeds.map((r) => (
+          <li key={r.displayName} className="col-span-1">
+            <RecommendationCard
+              displayName={r.displayName}
+              link={r.link}
+              feeds={props.data}
+              error={props.error}
+              onSubscribe={props.onClick}
+            />
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 };

@@ -4,7 +4,7 @@ import { FiSettings, FiTrash2 } from "react-icons/fi";
 
 import { Button, SuperButton } from "./ui/button";
 import { Dialog } from "./ui/dialog";
-import { removeFeed, updateFeedTitle } from "../lib/fetcher";
+import { removeFeed, updateFeedTitle } from "../lib/graphql";
 import { Input, Label, TextLabel } from "./ui/input";
 import { useDashboardContext } from "../hooks/useDashboard";
 

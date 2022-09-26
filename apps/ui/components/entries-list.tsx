@@ -2,8 +2,9 @@ import { memo, useCallback } from "react";
 import useSWR from "swr";
 import type { EntryDetailsFragment, EntryFilter } from "../lib/types";
 import { classNames } from "./ui/class-names";
-import { getEntriesFromFeed, refreshFeed } from "../lib/fetcher";
+import { getEntriesFromFeed, refreshFeed } from "../lib/graphql";
 import { FeedToolbar } from "./feed-toolbar";
+import format from "date-fns/format";
 
 interface EntryListProps {
   filter?: EntryFilter;
@@ -35,6 +36,8 @@ export const EntryListItem = memo((props: EntryListItemProps) => {
     props.onSelect(props.id);
   };
 
+  const date = format(new Date(props.published), "MMM d, yyyy");
+
   return (
     <li
       className={classNames(
@@ -44,7 +47,8 @@ export const EntryListItem = memo((props: EntryListItemProps) => {
       )}
       onClick={handleSelect}>
       <div className="p-4">
-        <h3 className="text-base">{props.title}</h3>
+        <h3 className="mb-2 text-base">{props.title}</h3>
+        <p className="text-xs uppercase tracking-wide">{date}</p>
       </div>
     </li>
   );

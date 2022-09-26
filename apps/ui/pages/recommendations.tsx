@@ -1,24 +1,40 @@
-import type { InferGetStaticPropsType } from "next";
-import { RecommendationList, type RecommendedField } from "../components/recommendation-list";
 import Link from "next/link";
+import { useCallback } from "react";
+import useSWR from "swr";
+
 import { FiCornerDownLeft } from "react-icons/fi";
+import { addFeed, getFeeds } from "../lib/graphql";
+import { NEWS } from "../components/recommendation-list";
+import dynamic from "next/dynamic";
 
-type Recommendations = [string, RecommendedField[]][];
+const ClientRecommendationList = dynamic(
+  async () => {
+    const mod = await import("../components/recommendation-list");
+    return mod.RecommendationList;
+  },
+  {
+    ssr: false,
+  }
+);
 
-export const getStaticProps = async () => {
-  const response = await fetch("http://localhost:5300/recommendations");
+const RecommendationsPage = () => {
+  const { data, error, mutate } = useSWR("recommended feeds", getFeeds, {
+    fallbackData: undefined,
+  });
 
-  const { data }: { data: Recommendations } = await response.json();
-  return {
-    props: {
-      recommended: data,
+  const handleClick = useCallback(
+    async (link: string) => {
+      const data = await addFeed(link);
+
+      await mutate((prevData) => {
+        prevData?.feeds.push(data.addFeed);
+
+        return prevData;
+      });
     },
-  };
-};
+    [mutate]
+  );
 
-const RecommendationsPage = ({
-  recommended,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <div className="mx-auto max-w-7xl space-y-16 pt-16">
       <div>
@@ -30,7 +46,17 @@ const RecommendationsPage = ({
           </a>
         </Link>
       </div>
-      <RecommendationList recommended={recommended} />
+      <div className="space-y-8 pb-8">
+        {error && <div>{error.toString()}</div>}
+
+        <ClientRecommendationList
+          title="News"
+          feeds={NEWS}
+          data={data}
+          error={error}
+          onClick={handleClick}
+        />
+      </div>
     </div>
   );
 };

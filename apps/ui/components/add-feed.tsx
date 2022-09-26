@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { addFeed } from "../lib/fetcher";
+import { addFeed } from "../lib/graphql";
 import { SuperButton, Button } from "./ui/button";
 import { Label, Input, TextLabel } from "./ui/input";
 import { Dialog } from "./ui/dialog";

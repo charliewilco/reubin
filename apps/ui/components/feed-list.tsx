@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import { useDashboardContext } from "../hooks/useDashboard";
-import { getFeeds } from "../lib/fetcher";
+import { getFeeds } from "../lib/graphql";
 import { LoadingIndicator } from "./ui/activity-indicator";
 import { classNames } from "./ui/class-names";
 

@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { LoadingIndicator } from "./ui/activity-indicator";
-import { getEntry, markAsRead } from "../lib/fetcher";
+import { getEntry, markAsRead } from "../lib/graphql";
 
 interface EntryFullProps {
   id: string;

@@ -125,18 +125,22 @@ const mutation: MutationResolvers<Context> = {
     const { data: rssText } = await getFeedFromDirectURL(feed.feedURL);
     const { items } = await rss.parse(rssText);
 
-    const entries = items.map((value) => mapRSStoEntry(value, feed.id));
+    const lastFetchedISO = feed.lastFetched.toISOString();
+
+    const entries: ReturnType<typeof mapRSStoEntry>[] = [];
+
+    for (const item of items) {
+      if (item) {
+        if (lastFetchedISO < item.isoDate!) {
+          entries.push(mapRSStoEntry(item, feed.id));
+        }
+      }
+    }
+
+    console.log(entries.length, items.length);
+
     await prisma.entry.createMany({
       data: entries,
-    });
-
-    await prisma.feed.update({
-      where: {
-        id,
-      },
-      data: {
-        lastFetched: new Date(Date.now()),
-      },
     });
 
     const _ = await prisma.entry.findMany({
@@ -145,6 +149,15 @@ const mutation: MutationResolvers<Context> = {
         pubDate: {
           gte: feed.lastFetched,
         },
+      },
+    });
+
+    await prisma.feed.update({
+      where: {
+        id,
+      },
+      data: {
+        lastFetched: new Date(Date.now()),
       },
     });
 
