@@ -2,7 +2,8 @@ import { useCallback } from "react";
 import useSWR from "swr";
 import { addFeed, getFeeds } from "../lib/fetcher";
 import { RecommendationCard } from "./ui/recommendation-card";
-import type { RecommendedField } from "../server/recommended";
+
+export type RecommendedField = { link: string; displayName: string };
 
 interface RecommendationListProps {
   recommended: [string, RecommendedField[]][];

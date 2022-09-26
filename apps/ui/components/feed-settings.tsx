@@ -79,15 +79,15 @@ export const FeedSettings = () => {
   const handleSubmit = useCallback(
     (title: string) => {
       if (feed) {
-        updateFeedTitle(title, feed.id)
-          .then(() => {
+        try {
+          updateFeedTitle(title, feed.id).then(() => {
             setOpen(false);
             mutate("feeds");
-          })
-          .catch((err) => console.log(err));
+          });
+        } catch (error) {}
       }
     },
-    [feed, unselectFeed]
+    [feed]
   );
 
   return (

@@ -8,6 +8,10 @@ import type { Context } from "./context";
 import { mapFeedtoAPIFeed, mapORMEntryToAPIEntry, mapRSStoEntry } from "./structs";
 import { getFeedFromDirectURL } from "./feeds";
 
+// TODO: Create tag object
+// TODO: User sign up, registration
+// TODO: Stripe integration
+
 /**
  * TODO:
  * - recently read

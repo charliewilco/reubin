@@ -1,20 +1,24 @@
-import type { InferGetStaticPropsType, NextPage } from "next";
-import { RecommendedKeyArray } from "../server/recommended";
-import { RecommendationList } from "../components/recommendation-list";
+import type { InferGetStaticPropsType } from "next";
+import { RecommendationList, type RecommendedField } from "../components/recommendation-list";
 import Link from "next/link";
 import { FiCornerDownLeft } from "react-icons/fi";
 
+type Recommendations = [string, RecommendedField[]][];
+
 export const getStaticProps = async () => {
+  const response = await fetch("http://localhost:5300/recommendations");
+
+  const { data }: { data: Recommendations } = await response.json();
   return {
     props: {
-      recommended: RecommendedKeyArray,
+      recommended: data,
     },
   };
 };
 
-const RecommendationsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+const RecommendationsPage = ({
   recommended,
-}) => {
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <div className="mx-auto max-w-7xl space-y-16 pt-16">
       <div>
