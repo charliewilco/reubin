@@ -199,7 +199,7 @@ const mutation: MutationResolvers<Context> = {
   },
 };
 
-export const resolver: Resolvers<Context> = {
+export const resolvers: Resolvers<Context> = {
   Query: query,
   Mutation: mutation,
 };

@@ -1,4 +1,3 @@
-import { useFormik } from "formik";
 import { useCallback, useState } from "react";
 import { addFeed } from "../lib/fetcher";
 import { SuperButton, Button } from "./ui/button";
@@ -12,18 +11,23 @@ interface AddFeedFormProps {
 }
 
 export const AddFeedForm = (props: AddFeedFormProps) => {
-  const formik = useFormik({
-    initialValues: {
-      url: "",
+  const [url, setUrl] = useState("");
+
+  const handleSubmit: React.FormEventHandler = useCallback(
+    (event) => {
+      if (event) {
+        event.preventDefault();
+      }
+
+      props.onSubmit(url);
     },
-    onSubmit(values) {
-      props.onSubmit(values.url);
-    },
-  });
+    [url, props]
+  );
+
   return (
     <div>
-      <form onSubmit={formik.handleSubmit}>
-        <Input {...formik.getFieldProps("url")} />
+      <form onSubmit={handleSubmit}>
+        <Input value={url} onChange={(event) => setUrl(event.target.value)} />
         <Label htmlFor="name">URL</Label>
 
         <div className="mt-8 flex justify-end">
@@ -39,6 +43,7 @@ export const AddFeed = () => {
   const handleSubmit = useCallback((url: string) => {
     addFeed(url);
   }, []);
+
   return (
     <>
       <Button onClick={() => setOpen(true)} aria-label="Add Feed" className="block">

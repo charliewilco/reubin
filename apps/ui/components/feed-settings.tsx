@@ -3,13 +3,13 @@ import { Dialog } from "./ui/dialog";
 import { useCallback, useState } from "react";
 import { FiSettings, FiTrash2 } from "react-icons/fi";
 import { removeFeed, updateFeedTitle } from "../lib/fetcher";
-import { useFormik } from "formik";
 import { mutate } from "swr";
 import { Input, Label } from "./ui/input";
 import { useDashboardContext } from "../hooks/useDashboard";
 
 export const UpdateFeedForm = (props: { onClose(): void }) => {
   const [{ feed }, { unselectFeed }] = useDashboardContext();
+  const [title, setTitle] = useState(feed?.title || "");
   const handleRemove = useCallback(() => {
     if (feed) {
       try {
@@ -22,14 +22,14 @@ export const UpdateFeedForm = (props: { onClose(): void }) => {
     }
   }, [feed, props, unselectFeed]);
 
-  const formik = useFormik({
-    initialValues: {
-      title: feed?.title ?? "",
-    },
+  const handleSubmit: React.FormEventHandler = useCallback(
+    (event) => {
+      if (event) {
+        event.preventDefault();
+      }
 
-    onSubmit(values) {
       if (feed) {
-        updateFeedTitle(values.title, feed.id)
+        updateFeedTitle(title, feed.id)
           .then((data) => {
             console.log(data);
             props.onClose();
@@ -39,11 +39,13 @@ export const UpdateFeedForm = (props: { onClose(): void }) => {
           .catch((err) => console.log(err));
       }
     },
-  });
+    [title, props]
+  );
+
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <Label>
-        <Input {...formik.getFieldProps("title")} />
+        <Input value={title} onChange={(event) => setTitle(event.target.value)} />
         <span>Feed Names</span>
       </Label>
       <div className="mt-8 flex justify-between">

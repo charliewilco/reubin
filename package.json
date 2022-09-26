@@ -46,18 +46,18 @@
     ]
   },
   "graphql": {
-    "schema": "graphql/src/typedefs.ts",
+    "schema": "apps/graphql/src/typedefs.ts",
     "extensions": {
       "codegen": {
         "generates": {
-          "./graphql/src/types.ts": {
+          "./apps/graphql/src/types.ts": {
             "plugins": [
               "typescript",
               "typescript-resolvers"
             ]
           },
-          "./ui/lib/types.ts": {
-            "documents": "ui/lib/*.graphql",
+          "./apps/ui/lib/types.ts": {
+            "documents": "apps/ui/lib/*.graphql",
             "plugins": [
               "typescript",
               "typescript-operations",
