@@ -50,7 +50,7 @@ export const RecommendationCard = (props: RecommendationCardProps) => {
   }
 
   return (
-    <div className="divide-y divide-zinc-500 rounded-lg bg-zinc-100 dark:bg-zinc-800">
+    <div className="divide-y divide-zinc-500 rounded-lg bg-zinc-100 shadow dark:bg-zinc-800 dark:shadow-zinc-500/50">
       <div className="flex w-full items-center justify-between space-x-6 p-6">
         <div className="flex-1 truncate">
           <div className="flex items-center space-x-3">

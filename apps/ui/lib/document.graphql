@@ -19,6 +19,12 @@ fragment EntryDetails on Entry {
   published
 }
 
+query EntriesByFeedFilter($feedID: ID!, $filter: EntryFilter) {
+  entries(feed_id: $feedID, filter: $filter) {
+    ...EntryDetails
+  }
+}
+
 query EntriesByFeed($id: ID!) {
   entries(feed_id: $id) {
     ...EntryDetails

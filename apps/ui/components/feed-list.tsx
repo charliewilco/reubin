@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import useSWR from "swr";
 import { useDashboardContext } from "../hooks/useDashboard";
 import { getFeeds } from "../lib/fetcher";
@@ -18,7 +19,7 @@ export const FeedItem = (props: FeedItemProps) => {
     }
   };
 
-  const isSelected = props.id === props.selected?.id;
+  const isSelected = useMemo(() => props.id === props.selected?.id, [props]);
 
   return (
     <li

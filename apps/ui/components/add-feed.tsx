@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { addFeed } from "../lib/fetcher";
 import { SuperButton, Button } from "./ui/button";
-import { Label, Input } from "./ui/input";
+import { Label, Input, TextLabel } from "./ui/input";
 import { Dialog } from "./ui/dialog";
 import { FiPlus } from "react-icons/fi";
 
@@ -27,8 +27,10 @@ export const AddFeedForm = (props: AddFeedFormProps) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <Input value={url} onChange={(event) => setUrl(event.target.value)} />
-        <Label htmlFor="name">URL</Label>
+        <Label htmlFor="name">
+          <Input value={url} onChange={(event) => setUrl(event.target.value)} />
+          <TextLabel>URL</TextLabel>
+        </Label>
 
         <div className="mt-8 flex justify-end">
           <SuperButton type="submit">Submit</SuperButton>

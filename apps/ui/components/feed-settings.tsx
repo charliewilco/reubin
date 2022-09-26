@@ -1,26 +1,21 @@
-import { Button, SuperButton } from "./ui/button";
-import { Dialog } from "./ui/dialog";
+import { mutate } from "swr";
 import { useCallback, useState } from "react";
 import { FiSettings, FiTrash2 } from "react-icons/fi";
+
+import { Button, SuperButton } from "./ui/button";
+import { Dialog } from "./ui/dialog";
 import { removeFeed, updateFeedTitle } from "../lib/fetcher";
-import { mutate } from "swr";
-import { Input, Label } from "./ui/input";
+import { Input, Label, TextLabel } from "./ui/input";
 import { useDashboardContext } from "../hooks/useDashboard";
 
-export const UpdateFeedForm = (props: { onClose(): void }) => {
-  const [{ feed }, { unselectFeed }] = useDashboardContext();
-  const [title, setTitle] = useState(feed?.title || "");
-  const handleRemove = useCallback(() => {
-    if (feed) {
-      try {
-        removeFeed(feed.id).then(() => {
-          props.onClose();
-          unselectFeed();
-          mutate("feeds");
-        });
-      } catch (error) {}
-    }
-  }, [feed, props, unselectFeed]);
+interface FeedSettingsFormProps {
+  initialTitle: string;
+  onSubmit(title: string): void | Promise<void>;
+  onDelete(): void | Promise<void>;
+}
+
+export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
+  const [title, setTitle] = useState(props.initialTitle);
 
   const handleSubmit: React.FormEventHandler = useCallback(
     (event) => {
@@ -28,35 +23,31 @@ export const UpdateFeedForm = (props: { onClose(): void }) => {
         event.preventDefault();
       }
 
-      if (feed) {
-        updateFeedTitle(title, feed.id)
-          .then((data) => {
-            console.log(data);
-            props.onClose();
-            unselectFeed();
-            mutate("feeds");
-          })
-          .catch((err) => console.log(err));
-      }
+      props.onSubmit(title);
     },
     [title, props]
+  );
+
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event) => setTitle(event.target.value),
+    [setTitle]
   );
 
   return (
     <form onSubmit={handleSubmit}>
       <Label>
-        <Input value={title} onChange={(event) => setTitle(event.target.value)} />
-        <span>Feed Names</span>
+        <Input value={title} onChange={handleChange} />
+        <TextLabel>Feed Names</TextLabel>
       </Label>
-      <div className="mt-8 flex justify-between">
+      <div className="mt-8 flex items-center justify-between">
         <div className="block text-red-500">
           <Button
             type="button"
             aria-label="Remove Feed"
-            className="inline-flex items-center"
-            onClick={handleRemove}>
-            <FiTrash2 />
-            <span className="ml-2">Unsubscribe</span>
+            className="flex items-center"
+            onClick={props.onDelete}>
+            <FiTrash2 size={18} />
+            <span className="ml-2 text-sm font-semibold">Unsubscribe</span>
           </Button>
         </div>
 
@@ -70,18 +61,49 @@ export const UpdateFeedForm = (props: { onClose(): void }) => {
 
 export const FeedSettings = () => {
   const [isOpen, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
 
-  const [{ feed }] = useDashboardContext();
+  const [{ feed }, { unselectFeed }] = useDashboardContext();
+
+  const handleRemove = useCallback(() => {
+    if (feed) {
+      try {
+        removeFeed(feed.id).then(() => {
+          setOpen(false);
+          unselectFeed();
+          mutate("feeds");
+        });
+      } catch (error) {}
+    }
+  }, [feed, unselectFeed]);
+
+  const handleSubmit = useCallback(
+    (title: string) => {
+      if (feed) {
+        updateFeedTitle(title, feed.id)
+          .then(() => {
+            setOpen(false);
+            mutate("feeds");
+          })
+          .catch((err) => console.log(err));
+      }
+    },
+    [feed, unselectFeed]
+  );
 
   return (
     <>
-      <Button aria-label="Update feed" onClick={handleOpen}>
+      <Button aria-label="Update feed" onClick={() => setOpen(true)}>
         <FiSettings />
       </Button>
-      <Dialog isOpen={isOpen} onClose={handleClose} title={`Update feed "${feed?.title}"`}>
-        <UpdateFeedForm onClose={handleClose} />
+      <Dialog
+        isOpen={isOpen}
+        onClose={() => setOpen(false)}
+        title={`Update feed "${feed?.title}"`}>
+        <UpdateFeedForm
+          initialTitle={feed?.title || ""}
+          onSubmit={handleSubmit}
+          onDelete={handleRemove}
+        />
       </Dialog>
     </>
   );

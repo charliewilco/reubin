@@ -8,6 +8,7 @@ import { EntryFull } from "../../components/entry-full";
 import { DashboardProvider, useDashboardContext } from "../../hooks/useDashboard";
 import isEqual from "react-fast-compare";
 import { memo } from "react";
+import { EntryFilter } from "../../lib/types";
 
 function UnreadEntries() {
   const [{ feed, entry }, { selectEntry }] = useDashboardContext();
@@ -45,7 +46,12 @@ function UnreadEntries() {
             <aside className="col-span-3 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">
               <div className="relative dark:bg-zinc-900">
                 {feed !== null && (
-                  <EntryList {...feed} selectedEntry={entry} onSelect={selectEntry} />
+                  <EntryList
+                    {...feed}
+                    filter={EntryFilter.Unread}
+                    selectedEntry={entry}
+                    onSelect={selectEntry}
+                  />
                 )}
               </div>
             </aside>

@@ -33,9 +33,9 @@ const SuperButton = ({ className, ..._props }: BaseButtonProps) => {
     <Button
       {..._props}
       className={classNames(
-        "inline-flex items-center justify-center rounded-sm px-4",
-        "h-8",
-        "bg-blue-300 text-blue-700 hover:shadow-sm",
+        "inline-flex rounded-sm px-4 py-1",
+        "font-semibold",
+        "bg-blue-300 text-base text-blue-700 shadow-sm",
         className
       )}
       ref={() => {}}

@@ -1,5 +1,5 @@
 import { GraphQLClient } from "graphql-request";
-import { getSdk } from "./types";
+import { EntryFilter, getSdk } from "./types";
 
 const client = new GraphQLClient("/v1/graphql");
 
@@ -23,9 +23,9 @@ export const getFeeds = async () => {
   }
 };
 
-export const getEntriesFromFeed = async (feedID: string) => {
+export const getEntriesFromFeed = async (feedID: string, filter?: EntryFilter) => {
   try {
-    const data = await sdk.EntriesByFeed({ id: feedID });
+    const data = await sdk.EntriesByFeedFilter({ feedID, filter });
     return data;
   } catch (error: any) {
     throw new Error(error);

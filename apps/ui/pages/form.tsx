@@ -5,7 +5,7 @@ const FormPage = () => {
   return (
     <div className="mx-auto grid max-w-7xl grid-cols-3 gap-4 py-4">
       <AddFeedForm onSubmit={() => {}} />
-      <UpdateFeedForm onClose={() => {}} />
+      <UpdateFeedForm initialTitle="Something" onSubmit={() => {}} onDelete={() => {}} />
     </div>
   );
 };

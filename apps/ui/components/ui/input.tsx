@@ -42,15 +42,30 @@ const Fieldset = forwardRef<HTMLFieldSetElement, FieldsetProps>(
 
 Fieldset.displayName = "Fieldset";
 
+type TextLabelProps = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLSpanElement>,
+  HTMLSpanElement
+>;
+
+const TextLabel = forwardRef<HTMLSpanElement, TextLabelProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <span {...props} className={classNames("block pt-2 text-xs", className)} ref={ref} />
+    );
+  }
+);
+
+TextLabel.displayName = "TextLabel";
+
 type LabelProps = React.DetailedHTMLProps<
   React.LabelHTMLAttributes<HTMLLabelElement>,
   HTMLLabelElement
 >;
 
 const Label = forwardRef<HTMLLabelElement, LabelProps>(({ className, ...props }, ref) => {
-  return <label {...props} className={classNames("text-sm", className)} ref={ref} />;
+  return <label {...props} className={classNames("block", className)} ref={ref} />;
 });
 
 Label.displayName = "Label";
 
-export { Label, Input, Fieldset };
+export { Label, Input, Fieldset, TextLabel };

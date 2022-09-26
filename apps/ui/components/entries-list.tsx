@@ -1,11 +1,12 @@
 import { memo, useCallback } from "react";
 import useSWR from "swr";
-import type { EntryDetailsFragment } from "../lib/types";
+import type { EntryDetailsFragment, EntryFilter } from "../lib/types";
 import { classNames } from "./ui/class-names";
 import { getEntriesFromFeed, refreshFeed } from "../lib/fetcher";
 import { FeedToolbar } from "./feed-toolbar";
 
 interface EntryListProps {
+  filter?: EntryFilter;
   selectedEntry: null | string;
   id: string;
   title: string;
@@ -52,7 +53,7 @@ export const EntryListItem = memo((props: EntryListItemProps) => {
 EntryListItem.displayName = "EntryListItem";
 
 export const EntryList = (props: EntryListProps) => {
-  const { data, mutate } = useSWR(props.id, getEntriesFromFeed);
+  const { data, mutate } = useSWR([props.id, props.filter], getEntriesFromFeed);
 
   // const isLoading = !error && !data;
 

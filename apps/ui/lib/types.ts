@@ -141,6 +141,23 @@ export type EntryDetailsFragment = {
   published?: any | null;
 };
 
+export type EntriesByFeedFilterQueryVariables = Exact<{
+  feedID: Scalars["ID"];
+  filter?: InputMaybe<EntryFilter>;
+}>;
+
+export type EntriesByFeedFilterQuery = {
+  __typename?: "Query";
+  entries: Array<{
+    __typename?: "Entry";
+    title: string;
+    content?: string | null;
+    id: string;
+    unread: boolean;
+    published?: any | null;
+  }>;
+};
+
 export type EntriesByFeedQueryVariables = Exact<{
   id: Scalars["ID"];
 }>;
@@ -295,6 +312,14 @@ export const GetFeedsDocument = gql`
   }
   ${FeedDetailsFragmentDoc}
 `;
+export const EntriesByFeedFilterDocument = gql`
+  query EntriesByFeedFilter($feedID: ID!, $filter: EntryFilter) {
+    entries(feed_id: $feedID, filter: $filter) {
+      ...EntryDetails
+    }
+  }
+  ${EntryDetailsFragmentDoc}
+`;
 export const EntriesByFeedDocument = gql`
   query EntriesByFeed($id: ID!) {
     entries(feed_id: $id) {
@@ -397,6 +422,20 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         "GetFeeds",
+        "query"
+      );
+    },
+    EntriesByFeedFilter(
+      variables: EntriesByFeedFilterQueryVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<EntriesByFeedFilterQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<EntriesByFeedFilterQuery>(EntriesByFeedFilterDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "EntriesByFeedFilter",
         "query"
       );
     },
