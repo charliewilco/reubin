@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { FiRss, FiCheckCircle } from "react-icons/fi";
-import type { GetFeedsQuery } from "../../lib/types";
+import type { GetFeedsQuery } from "../../lib/__generated__";
 import { LoadingIndicator } from "./activity-indicator";
 
 interface RecommendationCardProps {
@@ -30,7 +30,7 @@ export const RecommendationCard = (props: RecommendationCardProps) => {
   let content = (
     <button
       onClick={handleClick}
-      className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium  hover:text-gray-500">
+      className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium hover:text-gray-500">
       <FiRss className="h-5 w-5 text-zinc-400" aria-hidden="true" />
       <span className="ml-3">Subscribe</span>
     </button>
@@ -42,7 +42,7 @@ export const RecommendationCard = (props: RecommendationCardProps) => {
 
   if (hasFeed) {
     content = (
-      <div className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium opacity-50  hover:text-gray-500">
+      <div className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium opacity-50 hover:text-gray-500">
         <FiCheckCircle className="h-5 w-5 text-zinc-400" aria-hidden="true" />
         <span className="ml-3">Subscribed</span>
       </div>

@@ -1,6 +1,6 @@
 import { memo, useCallback } from "react";
 import useSWR from "swr";
-import type { EntryDetailsFragment, EntryFilter } from "../lib/types";
+import type { EntryDetailsFragment, EntryFilter } from "../lib/__generated__";
 import { classNames } from "./ui/class-names";
 import { getEntriesFromFeed, refreshFeed } from "../lib/graphql";
 import { FeedToolbar } from "./feed-toolbar";

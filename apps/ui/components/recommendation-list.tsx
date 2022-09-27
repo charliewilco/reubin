@@ -1,4 +1,4 @@
-import type { GetFeedsQuery } from "../lib/types";
+import type { GetFeedsQuery } from "../lib/__generated__";
 import { RecommendationCard } from "./ui/recommendation-card";
 
 export type RecommendedField = { link: string; displayName: string };

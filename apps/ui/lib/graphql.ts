@@ -1,5 +1,5 @@
 import { GraphQLClient } from "graphql-request";
-import { EntryFilter, getSdk } from "./types";
+import { EntryFilter, getSdk } from "./__generated__";
 
 const client = new GraphQLClient("/v1/graphql");
 

@@ -1,4 +1,6 @@
 import Head from "next/head";
+import isEqual from "react-fast-compare";
+import { memo } from "react";
 import { EntryList } from "../../components/entries-list";
 import { AddFeed } from "../../components/add-feed";
 import { FeedList } from "../../components/feed-list";
@@ -6,9 +8,7 @@ import { SideNavigation } from "../../components/side-navigation";
 import { AppHeader } from "../../components/app-header";
 import { EntryFull } from "../../components/entry-full";
 import { DashboardProvider, useDashboardContext } from "../../hooks/useDashboard";
-import isEqual from "react-fast-compare";
-import { memo } from "react";
-import { EntryFilter } from "../../lib/types";
+import { EntryFilter } from "../../lib/__generated__";
 
 function UnreadEntries() {
   const [{ feed, entry }, { selectEntry }] = useDashboardContext();
