@@ -58,6 +58,7 @@ export type Feed = {
 export type Mutation = {
   __typename?: "Mutation";
   addFeed: Feed;
+  addTag: Tag;
   markAsFavorite: Entry;
   markAsRead: Entry;
   refreshFeed: Array<Entry>;
@@ -67,6 +68,10 @@ export type Mutation = {
 
 export type MutationAddFeedArgs = {
   url: Scalars["String"];
+};
+
+export type MutationAddTagArgs = {
+  name: Scalars["String"];
 };
 
 export type MutationMarkAsFavoriteArgs = {
@@ -97,6 +102,7 @@ export type Query = {
   entry: Entry;
   feed: Feed;
   feeds: Array<Maybe<Feed>>;
+  tags: Array<Maybe<Tag>>;
 };
 
 export type QueryEntriesArgs = {
@@ -110,6 +116,12 @@ export type QueryEntryArgs = {
 
 export type QueryFeedArgs = {
   id: Scalars["ID"];
+};
+
+export type Tag = {
+  __typename?: "Tag";
+  id: Scalars["ID"];
+  title: Scalars["String"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -207,6 +219,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
+  Tag: ResolverTypeWrapper<Tag>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -221,6 +234,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   Query: {};
   String: Scalars["String"];
+  Tag: Tag;
 };
 
 export type ActivityResolvers<
@@ -275,6 +289,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationAddFeedArgs, "url">
+  >;
+  addTag?: Resolver<
+    ResolversTypes["Tag"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddTagArgs, "name">
   >;
   markAsFavorite?: Resolver<
     ResolversTypes["Entry"],
@@ -331,6 +351,16 @@ export type QueryResolvers<
     RequireFields<QueryFeedArgs, "id">
   >;
   feeds?: Resolver<Array<Maybe<ResolversTypes["Feed"]>>, ParentType, ContextType>;
+  tags?: Resolver<Array<Maybe<ResolversTypes["Tag"]>>, ParentType, ContextType>;
+};
+
+export type TagResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Tag"] = ResolversParentTypes["Tag"]
+> = {
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -340,4 +370,5 @@ export type Resolvers<ContextType = any> = {
   Feed?: FeedResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Tag?: TagResolvers<ContextType>;
 };

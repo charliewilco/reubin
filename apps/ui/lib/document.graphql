@@ -43,6 +43,13 @@ query FavoriteEntries($feedID: ID!) {
   }
 }
 
+mutation CreateTag($name: String!) {
+  addTag(name: $name) {
+    id
+    title
+  }
+}
+
 mutation CreateFeed($url: String!) {
   addFeed(url: $url) {
     ...FeedDetails

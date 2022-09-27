@@ -41,6 +41,17 @@ export const markAsRead = async (entryID: string) => {
   }
 };
 
+export const addTag = async (name: string) => {
+  try {
+    const data = await sdk.CreateTag({
+      name,
+    });
+    return data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
 export const addFeed = async (url: string) => {
   try {
     const data = await sdk.CreateFeed({

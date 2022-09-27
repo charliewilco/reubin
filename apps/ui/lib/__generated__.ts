@@ -57,6 +57,7 @@ export type Feed = {
 export type Mutation = {
   __typename?: "Mutation";
   addFeed: Feed;
+  addTag: Tag;
   markAsFavorite: Entry;
   markAsRead: Entry;
   refreshFeed: Array<Entry>;
@@ -66,6 +67,10 @@ export type Mutation = {
 
 export type MutationAddFeedArgs = {
   url: Scalars["String"];
+};
+
+export type MutationAddTagArgs = {
+  name: Scalars["String"];
 };
 
 export type MutationMarkAsFavoriteArgs = {
@@ -96,6 +101,7 @@ export type Query = {
   entry: Entry;
   feed: Feed;
   feeds: Array<Maybe<Feed>>;
+  tags: Array<Maybe<Tag>>;
 };
 
 export type QueryEntriesArgs = {
@@ -109,6 +115,12 @@ export type QueryEntryArgs = {
 
 export type QueryFeedArgs = {
   id: Scalars["ID"];
+};
+
+export type Tag = {
+  __typename?: "Tag";
+  id: Scalars["ID"];
+  title: Scalars["String"];
 };
 
 export type FeedDetailsFragment = {
@@ -204,6 +216,15 @@ export type FavoriteEntriesQuery = {
     unread: boolean;
     published?: any | null;
   }>;
+};
+
+export type CreateTagMutationVariables = Exact<{
+  name: Scalars["String"];
+}>;
+
+export type CreateTagMutation = {
+  __typename?: "Mutation";
+  addTag: { __typename?: "Tag"; id: string; title: string };
 };
 
 export type CreateFeedMutationVariables = Exact<{
@@ -344,6 +365,14 @@ export const FavoriteEntriesDocument = gql`
   }
   ${EntryDetailsFragmentDoc}
 `;
+export const CreateTagDocument = gql`
+  mutation CreateTag($name: String!) {
+    addTag(name: $name) {
+      id
+      title
+    }
+  }
+`;
 export const CreateFeedDocument = gql`
   mutation CreateFeed($url: String!) {
     addFeed(url: $url) {
@@ -479,6 +508,20 @@ export function getSdk(
           }),
         "FavoriteEntries",
         "query"
+      );
+    },
+    CreateTag(
+      variables: CreateTagMutationVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<CreateTagMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreateTagMutation>(CreateTagDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "CreateTag",
+        "mutation"
       );
     },
     CreateFeed(

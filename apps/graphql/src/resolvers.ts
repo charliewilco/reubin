@@ -214,6 +214,23 @@ const mutation: MutationResolvers<Context> = {
       throw new Error(error);
     }
   },
+
+  async addTag(_parent, { name }, { prisma }) {
+    try {
+      const tag = await prisma.tag.create({
+        data: {
+          title: name,
+        },
+      });
+
+      return {
+        id: tag.id,
+        title: tag.title,
+      };
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  },
 };
 
 export const resolvers: Resolvers<Context> = {

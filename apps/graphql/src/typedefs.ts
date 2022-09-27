@@ -17,6 +17,11 @@ export const typeDefs = gql`
     feedURL: String!
   }
 
+  type Tag {
+    id: ID!
+    title: String!
+  }
+
   type Activity {
     unread: [Int]!
     starred: [Int]!
@@ -39,6 +44,7 @@ export const typeDefs = gql`
   }
 
   type Query {
+    tags: [Tag]!
     feeds: [Feed]!
     entry(id: ID!): Entry!
     feed(id: ID!): Feed!
@@ -47,6 +53,7 @@ export const typeDefs = gql`
 
   type Mutation {
     addFeed(url: String!): Feed!
+    addTag(name: String!): Tag!
     removeFeed(id: ID!): Feed!
     refreshFeed(id: ID!): [Entry!]!
     markAsFavorite(id: ID!, favorite: Boolean!): Entry!
