@@ -20,23 +20,12 @@ model Entry {
 }
 
 model Tag {
-  id     String        @id @default(cuid())
-  title  String
-  userId String?
-  user   User?         @relation(fields: [userId], references: [id])
-  Feed   Feed[]
-  feeds  TagsOnFeeds[]
-}
-
-model TagsOnFeeds {
-  feedId     String
-  tagId      String
-  assignedAt DateTime @default(now())
-  assignedBy String
-  post       Feed     @relation(fields: [feedId], references: [id])
-  tag        Tag      @relation(fields: [tagId], references: [id])
-
-  @@id([feedId, tagId])
+  id          String        @id @default(cuid())
+  title       String
+  userId      String?
+  user        User?         @relation(fields: [userId], references: [id])
+  feeds       Feed[]
+  TagsOnFeeds TagsOnFeeds[]
 }
 
 model Feed {
@@ -47,7 +36,7 @@ model Feed {
   feedURL     String
   lastFetched DateTime      @default(now())
   tagId       String?
-  Tag         Tag?          @relation(fields: [tagId], references: [id])
+  tag         Tag?          @relation(fields: [tagId], references: [id])
   user        User?         @relation(fields: [userId], references: [id])
   entries     Entry[]
   TagsOnFeeds TagsOnFeeds[]
@@ -65,4 +54,15 @@ model User {
   tags      Tag[]
 
   @@map("users")
+}
+
+model TagsOnFeeds {
+  feedId     String
+  tagId      String
+  assignedAt DateTime @default(now())
+  assignedBy String
+  Feed       Feed     @relation(fields: [feedId], references: [id])
+  Tag        Tag      @relation(fields: [tagId], references: [id])
+
+  @@id([feedId, tagId])
 }

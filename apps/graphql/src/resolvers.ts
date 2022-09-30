@@ -19,6 +19,11 @@ import { getFeedFromDirectURL } from "./feeds";
  * - me
  **/
 const query: QueryResolvers<Context> = {
+  async tags(_, __, { prisma }) {
+    const tags = await prisma.tag.findMany();
+
+    return tags.map((tag) => ({ id: tag.id, title: tag.title }));
+  },
   async feeds(_parent, _args, { prisma }) {
     const feeds = await prisma.feed.findMany();
 

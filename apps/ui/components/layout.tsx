@@ -4,13 +4,13 @@ import Link from "next/link";
 
 import { SiteFooter } from "./site-footer";
 
-interface ILayoutProps {
+interface LayoutProps {
   addressbar: string;
   title?: string;
   children?: React.ReactNode;
 }
 
-export const MarketingLayout = ({ title, addressbar, children }: ILayoutProps) => {
+export const MarketingLayout = ({ title, addressbar, children }: LayoutProps) => {
   return (
     <div>
       <Head>
