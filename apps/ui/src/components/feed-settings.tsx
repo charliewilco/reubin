@@ -35,9 +35,14 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Label>
-        <Input value={title} onChange={handleChange} />
-        <TextLabel>Feed Names</TextLabel>
+      <Label htmlFor="feed-title" aria-labelledby="feed-title">
+        <Input
+          name="feed-title"
+          data-testid="update-feed-name"
+          value={title}
+          onChange={handleChange}
+        />
+        <TextLabel id="feed-title">Feed Names</TextLabel>
       </Label>
       <div className="mt-8 flex items-center justify-between">
         <div className="block text-red-500">
@@ -51,7 +56,7 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
           </Button>
         </div>
 
-        <SuperButton type="submit" aria-label="Remove Feed">
+        <SuperButton type="submit" aria-label="Update Feed">
           <span>Save</span>
         </SuperButton>
       </div>
