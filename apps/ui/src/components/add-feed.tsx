@@ -21,16 +21,33 @@ export const AddFeedForm = (props: AddFeedFormProps) => {
         event.preventDefault();
       }
 
+      if (url === "") {
+        return;
+      }
+
       props.onSubmit(url);
     },
     [url, props]
   );
 
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      setUrl(event.target.value);
+    },
+    [setUrl]
+  );
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <Label htmlFor="name">
-          <Input value={url} onChange={(event) => setUrl(event.target.value)} />
+        <Label htmlFor="url">
+          <Input
+            name="url"
+            id="url"
+            data-testid="add-feed-url"
+            value={url}
+            onChange={handleChange}
+          />
           <TextLabel>URL</TextLabel>
         </Label>
 
