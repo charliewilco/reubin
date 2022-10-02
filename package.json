@@ -56,8 +56,8 @@
               "typescript-resolvers"
             ]
           },
-          "./apps/ui/lib/__generated__.ts": {
-            "documents": "apps/ui/lib/*.graphql",
+          "./apps/ui/src/lib/__generated__.ts": {
+            "documents": "apps/ui/src/lib/*.graphql",
             "plugins": [
               "typescript",
               "typescript-operations",
