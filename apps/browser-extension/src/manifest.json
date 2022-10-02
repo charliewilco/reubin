@@ -3,10 +3,23 @@
     "default_popup": "./popup.html",
     "default_title": "Open the popup"
   },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["./content.ts"]
+    }
+  ],
   "description": "Add feeds to Reubin",
   "manifest_version": 2,
   "name": "Reubin",
-  "permissions": [],
+  "permissions": [
+    "http://*/*",
+    "https://*/*",
+    "clipboardWrite",
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
   "version": "1.0.0",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
