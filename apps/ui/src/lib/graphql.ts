@@ -1,7 +1,10 @@
 import { GraphQLClient } from "graphql-request";
 import { EntryFilter, getSdk } from "./__generated__";
 
-const client = new GraphQLClient("/v1/graphql");
+const ENDPOINT =
+  process.env.NODE_ENV === "test" ? "http://localhost:3000/v1/graphql" : "/v1/graphql";
+
+const client = new GraphQLClient(ENDPOINT);
 
 export const sdk = getSdk(client);
 
