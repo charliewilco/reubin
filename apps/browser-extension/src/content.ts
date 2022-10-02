@@ -1,7 +1,4 @@
-console.log("Content script");
-
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  console.log(message);
   if (message.text === "searchRSS") {
     let types = [
       "application/rss+xml",
@@ -17,29 +14,29 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       "text/atom",
       "text/rdf",
     ];
-    let links = document.querySelectorAll("link[type]");
+    let links: NodeListOf<HTMLLinkElement> = document.querySelectorAll("link[type]");
     let feeds: RSSLink[] = [];
     for (let i = 0; i < links.length; i++) {
-      if (
-        links[i].hasAttribute("type") &&
-        types.indexOf(links[i].getAttribute("type")) !== -1
-      ) {
-        let feed_url = links[i].getAttribute("href");
+      const link = links[i];
+      if (link.hasAttribute("type") && types.indexOf(link.getAttribute("type")!) !== -1) {
+        let feed_url = link.getAttribute("href");
 
-        // If feed's url starts with "//"
-        if (feed_url.indexOf("//") === 0) feed_url = "http:" + feed_url;
-        // If feed's url starts with "/"
-        else if (feed_url.startsWith("/"))
-          feed_url = message.url.split("/")[0] + "//" + message.url.split("/")[2] + feed_url;
-        else if (!/^(http|https):\/\//i.test(feed_url))
-          feed_url = message.url + "/" + feed_url.replace(/^\//g, "");
+        if (feed_url) {
+          // If feed's url starts with "//"
+          if (feed_url.indexOf("//") === 0) feed_url = "http:" + feed_url;
+          // If feed's url starts with "/"
+          else if (feed_url.startsWith("/"))
+            feed_url = message.url.split("/")[0] + "//" + message.url.split("/")[2] + feed_url;
+          else if (!/^(http|https):\/\//i.test(feed_url))
+            feed_url = message.url + "/" + feed_url.replace(/^\//g, "");
 
-        let feed = {
-          type: links[i].getAttribute("type"),
-          href: feed_url,
-          title: links[i].getAttribute("title") || feed_url,
-        };
-        feeds.push(feed);
+          let feed = {
+            type: link.getAttribute("type") ?? "application/rss+xml",
+            href: feed_url,
+            title: link.getAttribute("title") || feed_url,
+          };
+          feeds.push(feed);
+        }
       }
     }
     sendResponse(feeds);

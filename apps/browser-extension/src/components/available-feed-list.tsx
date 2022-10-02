@@ -1,44 +1,47 @@
-import { useEffect } from "preact/hooks";
-import { signal } from "@preact/signals";
-import { parseDocumentLinks } from "../lib/search";
+import { h } from "preact";
+import { useEffect, useState } from "preact/hooks";
 import { Loading } from "./loading";
 import { List } from "./list";
 
-const availableFeeds = signal<RSSLink[]>([]);
-const hasChecked = signal(false);
+interface AvailableFeedListProps {
+  onSearch: () => Promise<RSSLink[]>;
+}
 
-export function AvailableFeedList() {
+export function AvailableFeedList(props: AvailableFeedListProps) {
   let content = null;
+  const [state, setState] = useState<{
+    hasChecked: boolean;
+    availableFeeds: RSSLink[];
+  }>({ hasChecked: false, availableFeeds: [] });
   useEffect(() => {
-    if (!hasChecked.value) {
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        var url = tabs[0].url;
-        parseDocumentLinks({}, url).then((links) => {
-          console.log(links);
-          availableFeeds.value = links;
-          hasChecked.value = true;
+    if (!state.hasChecked) {
+      props.onSearch().then((links) => {
+        setState({
+          hasChecked: true,
+          availableFeeds: links ?? [],
         });
       });
     }
   }, []);
 
-  if (!hasChecked.value) {
+  if (!state.hasChecked) {
     content = <Loading />;
-  }
-
-  if (hasChecked.value && availableFeeds.value.length === 0) {
+  } else if (state.availableFeeds.length === 0) {
     content = (
       <p>
-        No feeds found. <a href="https://reubin.app">Learn more</a>
+        <span className="opacity-50">No feeds found.</span>{" "}
+        <a className="text-sky-500 dark:text-sky-600" href="https://reubin.app">
+          Learn more here.
+        </a>
       </p>
     );
+  } else {
+    content = <List data={state.availableFeeds} />;
   }
-
-  content = <List data={availableFeeds.value} />;
 
   return (
     <div>
-      <h1 className="mb-8 flex-1 text-2xl font-semibold">Available Feeds</h1>
+      <h1 className="mb-4 flex-1 text-xl font-semibold">Available Feeds</h1>
       {content}
     </div>
   );

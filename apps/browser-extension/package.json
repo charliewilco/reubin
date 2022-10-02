@@ -8,7 +8,6 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "@preact/signals": "^1.1.1",
     "preact": "^10.11.0"
   },
   "devDependencies": {
