@@ -3,7 +3,7 @@ import {
   type QueryResolvers,
   type Resolvers,
   EntryFilter,
-} from "./types";
+} from "./__generated__";
 import type { Context } from "./context";
 import { mapFeedtoAPIFeed, mapORMEntryToAPIEntry, mapRSStoEntry } from "./structs";
 import { getFeedFromDirectURL } from "./feeds";

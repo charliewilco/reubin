@@ -50,7 +50,7 @@
     "extensions": {
       "codegen": {
         "generates": {
-          "./apps/graphql/src/types.ts": {
+          "./apps/graphql/src/__generated__.ts": {
             "plugins": [
               "typescript",
               "typescript-resolvers"

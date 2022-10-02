@@ -1,9 +1,11 @@
 import { useCallback, useState } from "react";
+import { FiPlus } from "react-icons/fi";
+
 import { addFeed } from "../lib/graphql";
+
 import { SuperButton, Button } from "./ui/button";
 import { Label, Input, TextLabel } from "./ui/input";
 import { Dialog } from "./ui/dialog";
-import { FiPlus } from "react-icons/fi";
 
 interface AddFeedFormProps {
   onSubmit(url: string): void | Promise<void>;
