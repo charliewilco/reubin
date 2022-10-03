@@ -27,7 +27,7 @@ const query: QueryResolvers<Context> = {
   async feeds(_parent, _args, { prisma }) {
     const feeds = await prisma.feed.findMany();
 
-    return feeds;
+    return feeds.map((f) => mapFeedtoAPIFeed(f));
   },
   async feed(_parent, { id }, { prisma }) {
     const feed = await prisma.feed.findUnique({
@@ -141,8 +141,6 @@ const mutation: MutationResolvers<Context> = {
         }
       }
     }
-
-    console.log(entries.length, items.length);
 
     await prisma.entry.createMany({
       data: entries,

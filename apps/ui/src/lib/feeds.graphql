@@ -1,0 +1,34 @@
+# import * from "./fragments.graphql"
+
+query GetFeeds {
+  feeds {
+    ...FeedDetails
+  }
+  tags {
+    ...TagInfo
+  }
+}
+
+mutation CreateFeed($url: String!) {
+  addFeed(url: $url) {
+    ...FeedDetails
+  }
+}
+
+mutation RefreshFeed($id: ID!) {
+  refreshFeed(id: $id) {
+    ...EntryDetails
+  }
+}
+
+mutation RemoveFeed($id: ID!) {
+  removeFeed(id: $id) {
+    ...FeedDetails
+  }
+}
+
+mutation UpdateFeedTitle($title: String!, $id: ID!) {
+  updateFeed(title: $title, id: $id) {
+    ...FeedDetails
+  }
+}

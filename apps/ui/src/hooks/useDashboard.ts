@@ -1,35 +1,29 @@
-import React, {
-  createContext,
-  createElement,
-  useCallback,
-  useContext,
-  useReducer,
-} from "react";
+import { createContext, createElement, useCallback, useContext, useReducer } from "react";
 
 interface DashboardState {
   feed: { id: string; title: string } | null;
   entry: string | null;
 }
 
-const dashboardReducer = (
-  state: DashboardState,
-  action:
-    | {
-        type: "SELECT_FEED";
-        feed: null | { id: string; title: string };
-      }
-    | { type: "SELECT_ENTRY"; entryId: string | null }
-): DashboardState => {
-  switch (action.type) {
-    case "SELECT_ENTRY":
-      return { ...state, entry: action.entryId };
-    case "SELECT_FEED":
-      return { feed: action.feed, entry: null };
-  }
-};
+type DashboardAction =
+  | {
+      type: "SELECT_FEED";
+      feed: null | { id: string; title: string };
+    }
+  | { type: "SELECT_ENTRY"; entryId: string | null };
 
 export const useDashboard = () => {
-  const [state, dispatch] = useReducer(dashboardReducer, { feed: null, entry: null });
+  const [state, dispatch] = useReducer(
+    (state: DashboardState, action: DashboardAction): DashboardState => {
+      switch (action.type) {
+        case "SELECT_ENTRY":
+          return { ...state, entry: action.entryId };
+        case "SELECT_FEED":
+          return { feed: action.feed, entry: null };
+      }
+    },
+    { feed: null, entry: null }
+  );
 
   const selectEntry = useCallback(
     (id: string) => {

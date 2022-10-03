@@ -5,6 +5,7 @@ import type { Entry as EntryType, Feed as FeedType } from "./__generated__";
 export const mapFeedtoAPIFeed = (feed: Feed): FeedType => {
   return {
     ...feed,
+    tag: feed.tagId,
   };
 };
 

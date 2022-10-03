@@ -51,6 +51,7 @@ export type Feed = {
   id: Scalars["ID"];
   lastFetched: Scalars["Date"];
   link: Scalars["String"];
+  tag?: Maybe<Scalars["ID"]>;
   title: Scalars["String"];
 };
 
@@ -123,36 +124,6 @@ export type Tag = {
   title: Scalars["String"];
 };
 
-export type FeedDetailsFragment = {
-  __typename?: "Feed";
-  id: string;
-  title: string;
-  link: string;
-  feedURL: string;
-};
-
-export type GetFeedsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetFeedsQuery = {
-  __typename?: "Query";
-  feeds: Array<{
-    __typename?: "Feed";
-    id: string;
-    title: string;
-    link: string;
-    feedURL: string;
-  } | null>;
-};
-
-export type EntryDetailsFragment = {
-  __typename?: "Entry";
-  title: string;
-  content?: string | null;
-  id: string;
-  unread: boolean;
-  published?: any | null;
-};
-
 export type EntriesByFeedFilterQueryVariables = Exact<{
   feedID: Scalars["ID"];
   filter?: InputMaybe<EntryFilter>;
@@ -218,22 +189,20 @@ export type FavoriteEntriesQuery = {
   }>;
 };
 
-export type CreateTagMutationVariables = Exact<{
-  name: Scalars["String"];
+export type IndividualEntryQueryVariables = Exact<{
+  id: Scalars["ID"];
 }>;
 
-export type CreateTagMutation = {
-  __typename?: "Mutation";
-  addTag: { __typename?: "Tag"; id: string; title: string };
-};
-
-export type CreateFeedMutationVariables = Exact<{
-  url: Scalars["String"];
-}>;
-
-export type CreateFeedMutation = {
-  __typename?: "Mutation";
-  addFeed: { __typename?: "Feed"; id: string; title: string; link: string; feedURL: string };
+export type IndividualEntryQuery = {
+  __typename?: "Query";
+  entry: {
+    __typename?: "Entry";
+    id: string;
+    published?: any | null;
+    content?: string | null;
+    title: string;
+    unread: boolean;
+  };
 };
 
 export type MarkAsReadMutationVariables = Exact<{
@@ -243,6 +212,37 @@ export type MarkAsReadMutationVariables = Exact<{
 export type MarkAsReadMutation = {
   __typename?: "Mutation";
   markAsRead: { __typename?: "Entry"; title: string; content?: string | null; id: string };
+};
+
+export type GetFeedsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetFeedsQuery = {
+  __typename?: "Query";
+  feeds: Array<{
+    __typename?: "Feed";
+    id: string;
+    title: string;
+    link: string;
+    feedURL: string;
+    tag?: string | null;
+  } | null>;
+  tags: Array<{ __typename?: "Tag"; id: string; title: string } | null>;
+};
+
+export type CreateFeedMutationVariables = Exact<{
+  url: Scalars["String"];
+}>;
+
+export type CreateFeedMutation = {
+  __typename?: "Mutation";
+  addFeed: {
+    __typename?: "Feed";
+    id: string;
+    title: string;
+    link: string;
+    feedURL: string;
+    tag?: string | null;
+  };
 };
 
 export type RefreshFeedMutationVariables = Exact<{
@@ -273,6 +273,7 @@ export type RemoveFeedMutation = {
     title: string;
     link: string;
     feedURL: string;
+    tag?: string | null;
   };
 };
 
@@ -289,23 +290,44 @@ export type UpdateFeedTitleMutation = {
     title: string;
     link: string;
     feedURL: string;
+    tag?: string | null;
   };
 };
 
-export type IndividualEntryQueryVariables = Exact<{
-  id: Scalars["ID"];
+export type FeedDetailsFragment = {
+  __typename?: "Feed";
+  id: string;
+  title: string;
+  link: string;
+  feedURL: string;
+  tag?: string | null;
+};
+
+export type TagInfoFragment = { __typename?: "Tag"; id: string; title: string };
+
+export type EntryDetailsFragment = {
+  __typename?: "Entry";
+  title: string;
+  content?: string | null;
+  id: string;
+  unread: boolean;
+  published?: any | null;
+};
+
+export type AllTagsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AllTagsQuery = {
+  __typename?: "Query";
+  tags: Array<{ __typename?: "Tag"; id: string; title: string } | null>;
+};
+
+export type CreateTagMutationVariables = Exact<{
+  name: Scalars["String"];
 }>;
 
-export type IndividualEntryQuery = {
-  __typename?: "Query";
-  entry: {
-    __typename?: "Entry";
-    id: string;
-    published?: any | null;
-    content?: string | null;
-    title: string;
-    unread: boolean;
-  };
+export type CreateTagMutation = {
+  __typename?: "Mutation";
+  addTag: { __typename?: "Tag"; id: string; title: string };
 };
 
 export const FeedDetailsFragmentDoc = gql`
@@ -314,6 +336,13 @@ export const FeedDetailsFragmentDoc = gql`
     title
     link
     feedURL
+    tag
+  }
+`;
+export const TagInfoFragmentDoc = gql`
+  fragment TagInfo on Tag {
+    id
+    title
   }
 `;
 export const EntryDetailsFragmentDoc = gql`
@@ -324,14 +353,6 @@ export const EntryDetailsFragmentDoc = gql`
     unread
     published
   }
-`;
-export const GetFeedsDocument = gql`
-  query GetFeeds {
-    feeds {
-      ...FeedDetails
-    }
-  }
-  ${FeedDetailsFragmentDoc}
 `;
 export const EntriesByFeedFilterDocument = gql`
   query EntriesByFeedFilter($feedID: ID!, $filter: EntryFilter) {
@@ -365,21 +386,16 @@ export const FavoriteEntriesDocument = gql`
   }
   ${EntryDetailsFragmentDoc}
 `;
-export const CreateTagDocument = gql`
-  mutation CreateTag($name: String!) {
-    addTag(name: $name) {
+export const IndividualEntryDocument = gql`
+  query IndividualEntry($id: ID!) {
+    entry(id: $id) {
       id
+      published
+      content
       title
+      unread
     }
   }
-`;
-export const CreateFeedDocument = gql`
-  mutation CreateFeed($url: String!) {
-    addFeed(url: $url) {
-      ...FeedDetails
-    }
-  }
-  ${FeedDetailsFragmentDoc}
 `;
 export const MarkAsReadDocument = gql`
   mutation MarkAsRead($id: ID!) {
@@ -389,6 +405,26 @@ export const MarkAsReadDocument = gql`
       id
     }
   }
+`;
+export const GetFeedsDocument = gql`
+  query GetFeeds {
+    feeds {
+      ...FeedDetails
+    }
+    tags {
+      ...TagInfo
+    }
+  }
+  ${FeedDetailsFragmentDoc}
+  ${TagInfoFragmentDoc}
+`;
+export const CreateFeedDocument = gql`
+  mutation CreateFeed($url: String!) {
+    addFeed(url: $url) {
+      ...FeedDetails
+    }
+  }
+  ${FeedDetailsFragmentDoc}
 `;
 export const RefreshFeedDocument = gql`
   mutation RefreshFeed($id: ID!) {
@@ -414,14 +450,19 @@ export const UpdateFeedTitleDocument = gql`
   }
   ${FeedDetailsFragmentDoc}
 `;
-export const IndividualEntryDocument = gql`
-  query IndividualEntry($id: ID!) {
-    entry(id: $id) {
+export const AllTagsDocument = gql`
+  query AllTags {
+    tags {
+      ...TagInfo
+    }
+  }
+  ${TagInfoFragmentDoc}
+`;
+export const CreateTagDocument = gql`
+  mutation CreateTag($name: String!) {
+    addTag(name: $name) {
       id
-      published
-      content
       title
-      unread
     }
   }
 `;
@@ -440,20 +481,6 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper
 ) {
   return {
-    GetFeeds(
-      variables?: GetFeedsQueryVariables,
-      requestHeaders?: Dom.RequestInit["headers"]
-    ): Promise<GetFeedsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<GetFeedsQuery>(GetFeedsDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        "GetFeeds",
-        "query"
-      );
-    },
     EntriesByFeedFilter(
       variables: EntriesByFeedFilterQueryVariables,
       requestHeaders?: Dom.RequestInit["headers"]
@@ -510,32 +537,18 @@ export function getSdk(
         "query"
       );
     },
-    CreateTag(
-      variables: CreateTagMutationVariables,
+    IndividualEntry(
+      variables: IndividualEntryQueryVariables,
       requestHeaders?: Dom.RequestInit["headers"]
-    ): Promise<CreateTagMutation> {
+    ): Promise<IndividualEntryQuery> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.request<CreateTagMutation>(CreateTagDocument, variables, {
+          client.request<IndividualEntryQuery>(IndividualEntryDocument, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        "CreateTag",
-        "mutation"
-      );
-    },
-    CreateFeed(
-      variables: CreateFeedMutationVariables,
-      requestHeaders?: Dom.RequestInit["headers"]
-    ): Promise<CreateFeedMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<CreateFeedMutation>(CreateFeedDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        "CreateFeed",
-        "mutation"
+        "IndividualEntry",
+        "query"
       );
     },
     MarkAsRead(
@@ -549,6 +562,34 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         "MarkAsRead",
+        "mutation"
+      );
+    },
+    GetFeeds(
+      variables?: GetFeedsQueryVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<GetFeedsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetFeedsQuery>(GetFeedsDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "GetFeeds",
+        "query"
+      );
+    },
+    CreateFeed(
+      variables: CreateFeedMutationVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<CreateFeedMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreateFeedMutation>(CreateFeedDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "CreateFeed",
         "mutation"
       );
     },
@@ -594,18 +635,32 @@ export function getSdk(
         "mutation"
       );
     },
-    IndividualEntry(
-      variables: IndividualEntryQueryVariables,
+    AllTags(
+      variables?: AllTagsQueryVariables,
       requestHeaders?: Dom.RequestInit["headers"]
-    ): Promise<IndividualEntryQuery> {
+    ): Promise<AllTagsQuery> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.request<IndividualEntryQuery>(IndividualEntryDocument, variables, {
+          client.request<AllTagsQuery>(AllTagsDocument, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        "IndividualEntry",
+        "AllTags",
         "query"
+      );
+    },
+    CreateTag(
+      variables: CreateTagMutationVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<CreateTagMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreateTagMutation>(CreateTagDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "CreateTag",
+        "mutation"
       );
     },
   };

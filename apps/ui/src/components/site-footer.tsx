@@ -4,20 +4,28 @@ import { FiGlobe } from "react-icons/fi";
 import { SiGithub, SiTwitter } from "react-icons/si";
 
 export const SiteFooter = () => (
-  <footer className="mx-auto max-w-7xl py-2 px-2">
+  <footer className="mx-auto max-w-7xl py-2 px-2" role="contentinfo">
     <div>
       <nav className="flex flex-wrap">
         <div className="py-2 pr-5">
-          <Link href="/">About</Link>
+          <Link href="/">
+            <a>About</a>
+          </Link>
         </div>
         <div className="px-5 py-2">
-          <Link href="/changelog">Changelog</Link>
+          <Link href="/changelog">
+            <a>Changelog</a>
+          </Link>
         </div>
         <div className="px-5 py-2">
-          <Link href="/login">Login</Link>
+          <Link href="/login">
+            <a>Login</a>
+          </Link>
         </div>
         <div className="px-5 py-2">
-          <Link href="/privacy">Privacy Policy</Link>
+          <Link href="/privacy">
+            <a>Privacy Policy</a>
+          </Link>
         </div>
       </nav>
       <div className="mt-8 flex">

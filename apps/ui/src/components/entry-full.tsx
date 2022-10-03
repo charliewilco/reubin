@@ -15,7 +15,6 @@ export const EntryFull = (props: EntryFullProps) => {
 
   useEffect(() => {
     async function mutator() {
-      console.log("Running mutation");
       await markAsRead(props.id);
 
       mutate(

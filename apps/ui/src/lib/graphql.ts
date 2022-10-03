@@ -10,8 +10,7 @@ export const sdk = getSdk(client);
 
 export const getEntry = async (id: string) => {
   try {
-    const data = await sdk.IndividualEntry({ id });
-    return data;
+    return sdk.IndividualEntry({ id });
   } catch (error: any) {
     throw new Error(error);
   }
@@ -19,8 +18,7 @@ export const getEntry = async (id: string) => {
 
 export const getFeeds = async () => {
   try {
-    const data = await sdk.GetFeeds();
-    return data;
+    return sdk.GetFeeds();
   } catch (error: any) {
     throw new Error(error);
   }
@@ -28,8 +26,15 @@ export const getFeeds = async () => {
 
 export const getEntriesFromFeed = async (feedID: string, filter?: EntryFilter) => {
   try {
-    const data = await sdk.EntriesByFeedFilter({ feedID, filter });
-    return data;
+    return sdk.EntriesByFeedFilter({ feedID, filter });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const getAllTags = async () => {
+  try {
+    return sdk.AllTags();
   } catch (error: any) {
     throw new Error(error);
   }
@@ -37,8 +42,7 @@ export const getEntriesFromFeed = async (feedID: string, filter?: EntryFilter) =
 
 export const markAsRead = async (entryID: string) => {
   try {
-    const data = await sdk.MarkAsRead({ id: entryID });
-    return data;
+    return sdk.MarkAsRead({ id: entryID });
   } catch (error: any) {
     throw new Error(error);
   }
@@ -46,10 +50,9 @@ export const markAsRead = async (entryID: string) => {
 
 export const addTag = async (name: string) => {
   try {
-    const data = await sdk.CreateTag({
+    return sdk.CreateTag({
       name,
     });
-    return data;
   } catch (error: any) {
     throw new Error(error);
   }
@@ -57,10 +60,9 @@ export const addTag = async (name: string) => {
 
 export const addFeed = async (url: string) => {
   try {
-    const data = await sdk.CreateFeed({
+    return sdk.CreateFeed({
       url,
     });
-    return data;
   } catch (error: any) {
     throw new Error(error);
   }

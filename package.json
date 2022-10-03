@@ -32,7 +32,8 @@
     "type-check": "turbo run type-check",
     "prepare": "husky install",
     "generate": "graphql-codegen",
-    "format": "pretty-quick --staged"
+    "format": "pretty-quick --staged",
+    "db": "npx prisma studio --schema apps/graphql/prisma/schema.prisma"
   },
   "prettier": {
     "printWidth": 95,
@@ -44,33 +45,5 @@
       "prettier-plugin-prisma",
       "prettier-plugin-tailwindcss"
     ]
-  },
-  "graphql": {
-    "schema": "apps/graphql/src/typedefs.ts",
-    "extensions": {
-      "codegen": {
-        "generates": {
-          "./apps/graphql/src/__generated__.ts": {
-            "plugins": [
-              "typescript",
-              "typescript-resolvers"
-            ]
-          },
-          "./apps/ui/src/lib/__generated__.ts": {
-            "documents": "apps/ui/src/lib/*.graphql",
-            "plugins": [
-              "typescript",
-              "typescript-operations",
-              "typescript-graphql-request"
-            ]
-          }
-        },
-        "hooks": {
-          "afterAllFileWrite": [
-            "prettier --write"
-          ]
-        }
-      }
-    }
   }
 }

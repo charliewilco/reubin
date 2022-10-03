@@ -52,6 +52,7 @@ export type Feed = {
   id: Scalars["ID"];
   lastFetched: Scalars["Date"];
   link: Scalars["String"];
+  tag?: Maybe<Scalars["ID"]>;
   title: Scalars["String"];
 };
 
@@ -276,6 +277,7 @@ export type FeedResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   lastFetched?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
   link?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  tag?: Resolver<Maybe<ResolversTypes["ID"]>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

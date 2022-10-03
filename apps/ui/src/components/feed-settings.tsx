@@ -1,21 +1,32 @@
-import { mutate } from "swr";
+import useSWR, { mutate } from "swr";
 import { useCallback, useState } from "react";
 import { FiSettings, FiTrash2 } from "react-icons/fi";
 
 import { Button, SuperButton } from "./ui/button";
 import { Dialog } from "./ui/dialog";
-import { removeFeed, updateFeedTitle } from "../lib/graphql";
+import { removeFeed, updateFeedTitle, getAllTags } from "../lib/graphql";
 import { Input, Label, TextLabel } from "./ui/input";
 import { useDashboardContext } from "../hooks/useDashboard";
+import { TagSelectionList } from "./ui/tag-selection-list";
+import { TagInfoFragment } from "../lib/__generated__";
 
 interface FeedSettingsFormProps {
   initialTitle: string;
+  initialTag?: TagInfoFragment;
   onSubmit(title: string): void | Promise<void>;
   onDelete(): void | Promise<void>;
 }
 
+/**
+ *
+ * @TODO: Use id to fetch full feed info and then render form
+ * Remove the concept of initialTitle and initialTag
+ */
+
 export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
   const [title, setTitle] = useState(props.initialTitle);
+  const [selectedTag, setTagId] = useState(props.initialTag);
+  const { data } = useSWR("tags", getAllTags);
 
   const handleSubmit: React.FormEventHandler = useCallback(
     (event) => {
@@ -43,6 +54,11 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
           onChange={handleChange}
         />
         <TextLabel id="feed-title">Feed Names</TextLabel>
+      </Label>
+      <Label>
+        {data && data.tags && (
+          <TagSelectionList selected={selectedTag} tags={data.tags} onChange={setTagId} />
+        )}
       </Label>
       <div className="mt-8 flex items-center justify-between">
         <div className="block text-red-500">

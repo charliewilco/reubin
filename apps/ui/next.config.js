@@ -7,7 +7,6 @@ const config = {
   cleanDistDir: true,
   swcMinify: true,
   experimental: {
-    newNextLinkBehavior: true,
     gzipSize: true,
   },
   async rewrites() {
