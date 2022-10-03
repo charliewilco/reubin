@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "parcel watch src/manifest.json --host localhost",
     "build": "parcel build src/manifest.json --no-source-maps",
-    "check": "tsc --noEmit"
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "types": "tsc --noEmit --pretty"
   },
   "dependencies": {
     "preact": "^10.11.0"

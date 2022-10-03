@@ -1,6 +1,6 @@
 import { h, render } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import { parseDocumentLinks } from "./lib/parse-document";
+import { parseDocumentLinks } from "./parse-document";
 
 function IconFeed(props: any) {
   return h(

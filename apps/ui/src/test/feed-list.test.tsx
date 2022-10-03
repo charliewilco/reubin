@@ -9,7 +9,7 @@ import { setupServer } from "msw/node";
 import { graphql } from "msw";
 
 const server = setupServer(
-  graphql.query<GetFeedsQuery>("GetFeeds", (req, res, ctx) => {
+  graphql.query<GetFeedsQuery>("GetFeeds", (_req, res, ctx) => {
     return res(
       ctx.data({
         feeds: [

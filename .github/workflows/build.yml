@@ -1,23 +1,42 @@
-name: Build and Generate Types
-on: [push, pull_request] # Run on Push and Pull Requests
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   build:
+    name: Build
+    timeout-minutes: 15
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x]
+    # To use Remote Caching, uncomment the next lines and follow the steps below.
+    # env:
+    #  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+    #  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    #  TURBO_REMOTE_ONLY: true
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm Install
+          node-version: 16
+          cache: "npm"
+
+      - name: Install dependencies
         run: npm ci --force
+
       - name: Generate Types
         run: npm run generate
+
+      - name: Types
+        run: npm run types --workspaces
+
       - name: Build
         run: npm run build

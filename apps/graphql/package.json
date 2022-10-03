@@ -7,6 +7,7 @@
     "build": "npx prisma generate && rollup -c",
     "dev": "npx prisma generate && rollup -c -w",
     "generate": "npx prisma generate",
+    "types": "tsc --noEmit --pretty",
     "test": "jest"
   },
   "devDependencies": {

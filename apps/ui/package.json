@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "test": "jest --verbose",
-    "test:ci": "jest --verbose --ci --runInBand --no-cache"
+    "test:ci": "jest --verbose --ci --runInBand --no-cache",
+    "types": "tsc --noEmit --pretty"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.2",

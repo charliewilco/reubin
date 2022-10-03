@@ -29,7 +29,7 @@ jobs:
       - name: npm Install
         run: npm ci --force
       - name: Setup DB
-        run: npm run db:push
+        run: npx prisma db push --schema apps/graphql/prisma/schema.prisma
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost
@@ -39,7 +39,7 @@ jobs:
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci_db_test
       - name: Test
-        run: npm run test:ci
+        run: npm run test
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost
