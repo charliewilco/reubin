@@ -1,10 +1,5 @@
-name: CI
-
-on:
-  push:
-    branches: ["main"]
-  pull_request:
-    types: [opened, synchronize]
+name: Build & Generate Types
+on: [push, pull_request] # Run on Push and Pull Requests
 
 jobs:
   build:
