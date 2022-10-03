@@ -28,7 +28,7 @@ jobs:
         run: npm ci --force
 
       - name: Generate Types
-        run: npm run generate
+        run: npm run generate && npx prisma generate --schema apps/graphql/prisma/schema.prisma
 
       - name: Types
         run: npm run types --workspaces
