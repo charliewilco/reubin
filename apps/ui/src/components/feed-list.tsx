@@ -7,11 +7,12 @@ import { mapTagsToFeed } from "../lib/map-tags-feed";
 import type { GetFeedsQuery } from "../lib/__generated__";
 import { LoadingIndicator } from "./ui/activity-indicator";
 import { classNames } from "./ui/class-names";
+import { TagWithFeeds } from "./ui/tag-with-feeds";
 
 interface FeedItemProps {
   id: string;
   title: string;
-  selected: null | { id: string; title: string };
+  selected: null | string;
   onSelect(id: string, title: string): void;
 }
 
@@ -22,7 +23,7 @@ export const FeedItem = (props: FeedItemProps) => {
     }
   };
 
-  const isSelected = useMemo(() => props.id === props.selected?.id, [props]);
+  const isSelected = useMemo(() => props.id === props.selected, [props]);
 
   const listProps = isSelected ? { "data-testid": "selected" } : {};
   return (
@@ -41,14 +42,14 @@ export const FeedItem = (props: FeedItemProps) => {
 
 interface FeedsSortedByTagProps extends GetFeedsQuery {}
 
-const FeedsSortedByTag = memo((props: FeedsSortedByTagProps) => {
+const FeedListSortedByTag = memo((props: FeedsSortedByTagProps) => {
   const [{ feed: selectedFeed }, { selectFeed }] = useDashboardContext();
 
   const sorted = useMemo(() => mapTagsToFeed(props), [props]);
 
   const getTitle = useCallback(
-    (tagId: string) => {
-      const tag = props.tags.find((t) => t?.id === tagId);
+    (tagID: string) => {
+      const tag = props.tags.find((t) => t?.id === tagID);
       return tag?.title;
     },
     [props]
@@ -56,8 +57,8 @@ const FeedsSortedByTag = memo((props: FeedsSortedByTagProps) => {
 
   return (
     <div>
-      {sorted.map(([tagId, feeds]) => {
-        if (tagId == null) {
+      {sorted.map(([tagID, feeds]) => {
+        if (tagID == null) {
           return (
             <ul role="list" key="null-tag">
               {feeds.map((feed) =>
@@ -75,13 +76,9 @@ const FeedsSortedByTag = memo((props: FeedsSortedByTagProps) => {
           );
         } else {
           return (
-            <div key={tagId}>
-              <details>
-                <summary className="block text-xs font-bold uppercase tracking-wide">
-                  {getTitle(tagId)}
-                </summary>
-
-                <ul role="list" key="null-tag">
+            <div key={tagID}>
+              <TagWithFeeds title={getTitle(tagID) ?? ""}>
+                <ul role="list">
                   {feeds.map((feed) =>
                     feed === null ? null : (
                       <FeedItem
@@ -94,7 +91,7 @@ const FeedsSortedByTag = memo((props: FeedsSortedByTagProps) => {
                     )
                   )}
                 </ul>
-              </details>
+              </TagWithFeeds>
             </div>
           );
         }
@@ -103,7 +100,7 @@ const FeedsSortedByTag = memo((props: FeedsSortedByTagProps) => {
   );
 }, isEqual);
 
-FeedsSortedByTag.displayName = "MemoFeedsSortedByTag";
+FeedListSortedByTag.displayName = "MemoFeedsSortedByTag";
 
 export const FeedList = () => {
   const { data, error } = useSWR("feeds", getFeeds);
@@ -129,7 +126,7 @@ export const FeedList = () => {
 
     return (
       <div className="absolute top-0 bottom-0 left-0 right-0 w-full">
-        <FeedsSortedByTag {...data} />
+        <FeedListSortedByTag {...data} />
       </div>
     );
   }

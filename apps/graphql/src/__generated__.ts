@@ -93,8 +93,8 @@ export type MutationRemoveFeedArgs = {
 };
 
 export type MutationUpdateFeedArgs = {
+  fields?: InputMaybe<UpdateFeedInput>;
   id: Scalars["ID"];
-  title: Scalars["String"];
 };
 
 export type Query = {
@@ -123,6 +123,11 @@ export type Tag = {
   __typename?: "Tag";
   id: Scalars["ID"];
   title: Scalars["String"];
+};
+
+export type UpdateFeedInput = {
+  tagID?: InputMaybe<Scalars["ID"]>;
+  title?: InputMaybe<Scalars["String"]>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -221,6 +226,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Tag: ResolverTypeWrapper<Tag>;
+  UpdateFeedInput: UpdateFeedInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -236,6 +242,7 @@ export type ResolversParentTypes = {
   Query: {};
   String: Scalars["String"];
   Tag: Tag;
+  UpdateFeedInput: UpdateFeedInput;
 };
 
 export type ActivityResolvers<
@@ -326,7 +333,7 @@ export type MutationResolvers<
     ResolversTypes["Feed"],
     ParentType,
     ContextType,
-    RequireFields<MutationUpdateFeedArgs, "id" | "title">
+    RequireFields<MutationUpdateFeedArgs, "id">
   >;
 };
 

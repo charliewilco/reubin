@@ -10,7 +10,6 @@ interface EntryListProps {
   filter?: EntryFilter;
   selectedEntry: null | string;
   id: string;
-  title: string;
   onSelect(id: string): void;
 }
 

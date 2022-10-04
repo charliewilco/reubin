@@ -4,7 +4,7 @@ import type { TagInfoFragment } from "../../lib/__generated__";
 
 interface TagSelectionListProps {
   tags: (TagInfoFragment | null)[];
-  selected?: TagInfoFragment;
+  selected?: TagInfoFragment | null;
   onChange(value: TagInfoFragment): void;
 }
 

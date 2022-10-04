@@ -47,7 +47,7 @@ function UnreadEntries() {
               <div className="relative dark:bg-zinc-900">
                 {feed !== null && (
                   <EntryList
-                    {...feed}
+                    id={feed}
                     filter={EntryFilter.Unread}
                     selectedEntry={entry}
                     onSelect={selectEntry}

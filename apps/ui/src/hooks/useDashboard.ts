@@ -1,14 +1,14 @@
 import { createContext, createElement, useCallback, useContext, useReducer } from "react";
 
 interface DashboardState {
-  feed: { id: string; title: string } | null;
+  feed: string | null;
   entry: string | null;
 }
 
 type DashboardAction =
   | {
       type: "SELECT_FEED";
-      feed: null | { id: string; title: string };
+      feed: null | string;
     }
   | { type: "SELECT_ENTRY"; entryId: string | null };
 
@@ -33,8 +33,8 @@ export const useDashboard = () => {
   );
 
   const selectFeed = useCallback(
-    (id: string, title: string) => {
-      dispatch({ type: "SELECT_FEED", feed: { id, title } });
+    (id: string) => {
+      dispatch({ type: "SELECT_FEED", feed: id });
     },
     [dispatch]
   );

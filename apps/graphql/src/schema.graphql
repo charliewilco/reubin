@@ -49,6 +49,11 @@ type Query {
   entries(feed_id: ID!, filter: EntryFilter): [Entry!]!
 }
 
+input UpdateFeedInput {
+  title: String
+  tagID: ID
+}
+
 type Mutation {
   addFeed(url: String!): Feed!
   addTag(name: String!): Tag!
@@ -56,7 +61,7 @@ type Mutation {
   refreshFeed(id: ID!): [Entry!]!
   markAsFavorite(id: ID!, favorite: Boolean!): Entry!
   markAsRead(id: ID!): Entry!
-  updateFeed(id: ID!, title: String!): Feed!
+  updateFeed(id: ID!, fields: UpdateFeedInput): Feed!
 }
 
 schema {

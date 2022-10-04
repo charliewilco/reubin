@@ -92,8 +92,8 @@ export type MutationRemoveFeedArgs = {
 };
 
 export type MutationUpdateFeedArgs = {
+  fields?: InputMaybe<UpdateFeedInput>;
   id: Scalars["ID"];
-  title: Scalars["String"];
 };
 
 export type Query = {
@@ -122,6 +122,11 @@ export type Tag = {
   __typename?: "Tag";
   id: Scalars["ID"];
   title: Scalars["String"];
+};
+
+export type UpdateFeedInput = {
+  tagID?: InputMaybe<Scalars["ID"]>;
+  title?: InputMaybe<Scalars["String"]>;
 };
 
 export type EntriesByFeedFilterQueryVariables = Exact<{
@@ -229,6 +234,22 @@ export type GetFeedsQuery = {
   tags: Array<{ __typename?: "Tag"; id: string; title: string } | null>;
 };
 
+export type GetFeedByIdQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type GetFeedByIdQuery = {
+  __typename?: "Query";
+  feed: {
+    __typename?: "Feed";
+    id: string;
+    title: string;
+    link: string;
+    feedURL: string;
+    tag?: string | null;
+  };
+};
+
 export type CreateFeedMutationVariables = Exact<{
   url: Scalars["String"];
 }>;
@@ -278,7 +299,7 @@ export type RemoveFeedMutation = {
 };
 
 export type UpdateFeedTitleMutationVariables = Exact<{
-  title: Scalars["String"];
+  input?: InputMaybe<UpdateFeedInput>;
   id: Scalars["ID"];
 }>;
 
@@ -418,6 +439,14 @@ export const GetFeedsDocument = gql`
   ${FeedDetailsFragmentDoc}
   ${TagInfoFragmentDoc}
 `;
+export const GetFeedByIdDocument = gql`
+  query GetFeedById($id: ID!) {
+    feed(id: $id) {
+      ...FeedDetails
+    }
+  }
+  ${FeedDetailsFragmentDoc}
+`;
 export const CreateFeedDocument = gql`
   mutation CreateFeed($url: String!) {
     addFeed(url: $url) {
@@ -443,8 +472,8 @@ export const RemoveFeedDocument = gql`
   ${FeedDetailsFragmentDoc}
 `;
 export const UpdateFeedTitleDocument = gql`
-  mutation UpdateFeedTitle($title: String!, $id: ID!) {
-    updateFeed(title: $title, id: $id) {
+  mutation UpdateFeedTitle($input: UpdateFeedInput, $id: ID!) {
+    updateFeed(id: $id, fields: $input) {
       ...FeedDetails
     }
   }
@@ -576,6 +605,20 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         "GetFeeds",
+        "query"
+      );
+    },
+    GetFeedById(
+      variables: GetFeedByIdQueryVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<GetFeedByIdQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetFeedByIdQuery>(GetFeedByIdDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "GetFeedById",
         "query"
       );
     },

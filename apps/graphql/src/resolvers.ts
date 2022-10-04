@@ -7,6 +7,7 @@ import {
 import type { Context } from "./context";
 import { mapFeedtoAPIFeed, mapORMEntryToAPIEntry, mapRSStoEntry } from "./structs";
 import { getFeedFromDirectURL } from "./feeds";
+import { Feed } from "@prisma/client";
 
 // TODO: Create tag object
 // TODO: User sign up, registration
@@ -197,15 +198,23 @@ const mutation: MutationResolvers<Context> = {
 
     return mapORMEntryToAPIEntry(entry);
   },
-  async updateFeed(_parent, { id, title }, { prisma }) {
+  async updateFeed(_parent, { id, fields }, { prisma }) {
     try {
+      const data: Partial<Feed> = {};
+
+      if (fields?.title) {
+        data.title = fields.title;
+      }
+
+      if (fields?.tagID) {
+        data.tagId = fields.tagID;
+      }
+
       const feed = await prisma.feed.update({
         where: {
           id,
         },
-        data: {
-          title,
-        },
+        data,
       });
 
       if (feed === null) {

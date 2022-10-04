@@ -45,7 +45,7 @@ function AllEntries() {
             <aside className="col-span-3 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">
               <div className="relative bg-zinc-900">
                 {feed !== null && (
-                  <EntryList {...feed} selectedEntry={entry} onSelect={selectEntry} />
+                  <EntryList id={feed} selectedEntry={entry} onSelect={selectEntry} />
                 )}
               </div>
             </aside>

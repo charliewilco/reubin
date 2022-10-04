@@ -4,28 +4,23 @@ import { FiSettings, FiTrash2 } from "react-icons/fi";
 
 import { Button, SuperButton } from "./ui/button";
 import { Dialog } from "./ui/dialog";
-import { removeFeed, updateFeedTitle, getAllTags } from "../lib/graphql";
+import { removeFeed, updateFeedTitle, getAllTags, getFeed } from "../lib/graphql";
 import { Input, Label, TextLabel } from "./ui/input";
 import { useDashboardContext } from "../hooks/useDashboard";
 import { TagSelectionList } from "./ui/tag-selection-list";
-import { TagInfoFragment } from "../lib/__generated__";
+import type { FeedDetailsFragment, TagInfoFragment } from "../lib/__generated__";
 
 interface FeedSettingsFormProps {
-  initialTitle: string;
-  initialTag?: TagInfoFragment;
-  onSubmit(title: string): void | Promise<void>;
+  onSubmit(title: string, tagID?: string | null): void | Promise<void>;
   onDelete(): void | Promise<void>;
+  initialFeed: FeedDetailsFragment;
 }
 
-/**
- *
- * @TODO: Use id to fetch full feed info and then render form
- * Remove the concept of initialTitle and initialTag
- */
-
 export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
-  const [title, setTitle] = useState(props.initialTitle);
-  const [selectedTag, setTagId] = useState(props.initialTag);
+  const [fields, setFields] = useState({
+    title: props.initialFeed.title,
+    tag: props.initialFeed.tag,
+  });
   const { data } = useSWR("tags", getAllTags);
 
   const handleSubmit: React.FormEventHandler = useCallback(
@@ -34,14 +29,33 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
         event.preventDefault();
       }
 
-      props.onSubmit(title);
+      props.onSubmit(fields.title, fields.tag);
     },
-    [title, props]
+    [fields, props]
   );
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (event) => setTitle(event.target.value),
-    [setTitle]
+  const handleTitleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event) =>
+      setFields((prev) => {
+        return {
+          ...prev,
+          title: event.target.value,
+        };
+      }),
+    [setFields]
+  );
+
+  const handleTagChange = useCallback((tag: TagInfoFragment) => {
+    setFields((prev) => {
+      return {
+        ...prev,
+        tag: tag.id,
+      };
+    });
+  }, []);
+
+  const selected: TagInfoFragment | null | undefined = data?.tags.find(
+    (t) => t?.id === fields.tag
   );
 
   return (
@@ -50,14 +64,14 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
         <Input
           name="feed-title"
           data-testid="update-feed-name"
-          value={title}
-          onChange={handleChange}
+          value={fields.title}
+          onChange={handleTitleChange}
         />
         <TextLabel id="feed-title">Feed Names</TextLabel>
       </Label>
       <Label>
         {data && data.tags && (
-          <TagSelectionList selected={selectedTag} tags={data.tags} onChange={setTagId} />
+          <TagSelectionList selected={selected} tags={data.tags} onChange={handleTagChange} />
         )}
       </Label>
       <div className="mt-8 flex items-center justify-between">
@@ -84,11 +98,12 @@ export const FeedSettings = () => {
   const [isOpen, setOpen] = useState(false);
 
   const [{ feed }, { unselectFeed }] = useDashboardContext();
+  const { data } = useSWR(feed, getFeed);
 
   const handleRemove = useCallback(() => {
     if (feed) {
       try {
-        removeFeed(feed.id).then(() => {
+        removeFeed(feed).then(() => {
           setOpen(false);
           unselectFeed();
           mutate("feeds");
@@ -98,10 +113,13 @@ export const FeedSettings = () => {
   }, [feed, unselectFeed]);
 
   const handleSubmit = useCallback(
-    (title: string) => {
+    (title: string, tagID?: string | null) => {
       if (feed) {
         try {
-          updateFeedTitle(title, feed.id).then(() => {
+          updateFeedTitle(feed, {
+            title,
+            tagID,
+          }).then(() => {
             setOpen(false);
             mutate("feeds");
           });
@@ -116,16 +134,18 @@ export const FeedSettings = () => {
       <Button aria-label="Update feed" onClick={() => setOpen(true)}>
         <FiSettings />
       </Button>
-      <Dialog
-        isOpen={isOpen}
-        onClose={() => setOpen(false)}
-        title={`Update feed "${feed?.title}"`}>
-        <UpdateFeedForm
-          initialTitle={feed?.title || ""}
-          onSubmit={handleSubmit}
-          onDelete={handleRemove}
-        />
-      </Dialog>
+      {data && data.feed && (
+        <Dialog
+          isOpen={isOpen}
+          onClose={() => setOpen(false)}
+          title={`Update feed "${data.feed.title}"`}>
+          <UpdateFeedForm
+            initialFeed={data.feed}
+            onSubmit={handleSubmit}
+            onDelete={handleRemove}
+          />
+        </Dialog>
+      )}
     </>
   );
 };

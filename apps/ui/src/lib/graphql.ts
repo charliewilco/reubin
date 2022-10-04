@@ -1,5 +1,5 @@
 import { GraphQLClient } from "graphql-request";
-import { EntryFilter, getSdk } from "./__generated__";
+import { EntryFilter, getSdk, type UpdateFeedInput } from "./__generated__";
 
 const ENDPOINT =
   process.env.NODE_ENV === "test" ? "http://localhost:3000/v1/graphql" : "/v1/graphql";
@@ -11,6 +11,14 @@ export const sdk = getSdk(client);
 export const getEntry = async (id: string) => {
   try {
     return sdk.IndividualEntry({ id });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const getFeed = async (id: string) => {
+  try {
+    return sdk.GetFeedById({ id });
   } catch (error: any) {
     throw new Error(error);
   }
@@ -86,10 +94,10 @@ export const removeFeed = async (feedID: string) => {
   }
 };
 
-export const updateFeedTitle = async (title: string, id: string) => {
+export const updateFeedTitle = async (id: string, input?: UpdateFeedInput) => {
   try {
     return sdk.UpdateFeedTitle({
-      title,
+      input,
       id,
     });
   } catch (error: any) {
