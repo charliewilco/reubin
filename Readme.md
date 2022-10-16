@@ -60,14 +60,14 @@ npm run seed
 
 ### Application
 
-- `/browser-extension`: Chrome browser extension, uses Preact and Parcel recipes
-- `/graphql`: GraphQL server uses Fastify and Mercurius
-- `/ui`: Web application uses Next.js and TailwindCSS
+- `/apps/browser-extension`: Chrome browser extension, uses Preact and Parcel recipes
+- `/apps/graphql`: GraphQL server uses Fastify and Mercurius
+- `/apps/ui`: Web application uses Next.js and TailwindCSS
 
 Each project contains
 
-- `/<app>/src/*`: source code
-- `/<app>/test/*`: all unit tests
+- `/apps/<project>/src/*`: source code
+- `/apps/<project>/test/*`: all unit tests
 
 ### Repository
 

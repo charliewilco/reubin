@@ -4,15 +4,15 @@ import { executeCodegen } from "@graphql-codegen/cli";
 
 /** @type {import('graphql-config').IGraphQLConfig} */
 const config = {
-  schema: "graphql/src/schema.graphql",
+  schema: "apps/graphql/src/schema.graphql",
   extensions: {
     codegen: {
       generates: {
-        "./graphql/src/__generated__.ts": {
+        "./apps/graphql/src/__generated__.ts": {
           plugins: ["typescript", "typescript-resolvers"],
         },
-        "./ui/src/lib/__generated__.ts": {
-          documents: "ui/src/lib/*.graphql",
+        "./apps/ui/src/lib/__generated__.ts": {
+          documents: "apps/ui/src/lib/*.graphql",
           plugins: ["typescript", "typescript-operations", "typescript-graphql-request"],
         },
       },

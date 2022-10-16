@@ -3,11 +3,8 @@
   "repository": "charliewilco/reubin.app",
   "author": "Charlie ⚡ <charliewilc0@protonmail.com>",
   "private": true,
-  "license": "BSD-4-Clause-Shortened",
   "workspaces": [
-    "browser-extension",
-    "graphql",
-    "ui"
+    "apps/*"
   ],
   "scripts": {
     "build": "turbo run build",
