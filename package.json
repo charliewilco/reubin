@@ -2,7 +2,7 @@
   "name": "reubin",
   "repository": "charliewilco/reubin.app",
   "author": "Charlie ⚡ <charliewilc0@protonmail.com>",
-  "private": true,
+  "version": "1.1.0",
   "workspaces": [
     "apps/*"
   ],
@@ -12,7 +12,6 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
-    "prepare": "npm run clean && npm run git",
     "git": "node scripts/git.mjs",
     "clean": "node scripts/clean.mjs --all",
     "generate": "node scripts/codegen.mjs",
@@ -39,7 +38,7 @@
     "prettier-plugin-tailwindcss": "^0.1.11",
     "pretty-quick": "^3.1.2",
     "prisma": "^4.4.0",
-    "turbo": "^1.5.6",
+    "turbo": "^1.5.5",
     "typescript": "^4.8.4"
   },
   "prettier": {

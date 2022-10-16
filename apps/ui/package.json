@@ -2,7 +2,7 @@
   "name": "@reubin/ui",
   "repository": "charliewilco/reubin.app",
   "author": "Charlie ⚡ <charliewilc0@protonmail.com>",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
