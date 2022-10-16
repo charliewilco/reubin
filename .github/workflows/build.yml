@@ -20,7 +20,7 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --force --no-optional
 
       - name: Generate Types
         run: npm run generate && npx prisma generate --schema graphql/prisma/schema.prisma
