@@ -4,7 +4,9 @@
   "author": "Charlie ⚡ <charliewilc0@protonmail.com>",
   "private": true,
   "workspaces": [
-    "apps/*"
+    "browser-extension",
+    "graphql",
+    "ui"
   ],
   "devDependencies": {
     "@graphql-codegen/cli": "^2.13.7",
@@ -33,7 +35,7 @@
     "prepare": "husky install",
     "generate": "graphql-codegen",
     "format": "pretty-quick --staged",
-    "db": "npx prisma studio --schema apps/graphql/prisma/schema.prisma"
+    "db": "npx prisma studio --schema graphql/prisma/schema.prisma"
   },
   "prettier": {
     "printWidth": 95,
