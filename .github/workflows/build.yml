@@ -1,23 +1,45 @@
-name: Build and Generate Types
+name: Build & Generate Types
 on: [push, pull_request] # Run on Push and Pull Requests
 
 jobs:
   build:
+    name: Build
+    timeout-minutes: 15
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x]
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - name: Check out code
+        uses: actions/checkout@v3
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm Install
-        run: npm ci --force
+          fetch-depth: 2
+          
+      - uses: actions/cache@v3
+        with:
+          # See here for caching with `yarn` https://github.com/actions/cache/blob/main/examples.md#node---yarn or you can leverage caching with actions/setup-node https://github.com/actions/setup-node
+          path: |
+            ~/.npm
+            ${{ github.workspace }}/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Generate Types
-        run: npm run generate
+        run: npm run generate && npx prisma generate --schema apps/graphql/prisma/schema.prisma
+
+      - name: Types
+        run: npm run types --workspaces
+
       - name: Build
         run: npm run build
+      
