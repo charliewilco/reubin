@@ -16,7 +16,7 @@ interface FeedItemProps {
   onSelect(id: string, title: string): void;
 }
 
-export const FeedItem = (props: FeedItemProps) => {
+export function FeedItem(props: FeedItemProps) {
   const handleSelect = () => {
     if (props.id) {
       props.onSelect(props.id, props.title);
@@ -38,11 +38,11 @@ export const FeedItem = (props: FeedItemProps) => {
       </div>
     </li>
   );
-};
+}
 
 interface FeedsSortedByTagProps extends GetFeedsQuery {}
 
-const FeedListSortedByTag = memo((props: FeedsSortedByTagProps) => {
+function SortedByTags(props: FeedsSortedByTagProps) {
   const [{ feed: selectedFeed }, { selectFeed }] = useDashboardContext();
 
   const sorted = useMemo(() => mapTagsToFeed(props), [props]);
@@ -98,11 +98,13 @@ const FeedListSortedByTag = memo((props: FeedsSortedByTagProps) => {
       })}
     </div>
   );
-}, isEqual);
+}
+
+const FeedListSortedByTag = memo(SortedByTags, isEqual);
 
 FeedListSortedByTag.displayName = "MemoFeedsSortedByTag";
 
-export const FeedList = () => {
+export function FeedList() {
   const { data, error } = useSWR("feeds", getFeeds);
 
   const isLoading = !error && !data;
@@ -132,4 +134,4 @@ export const FeedList = () => {
   }
 
   return null;
-};
+}

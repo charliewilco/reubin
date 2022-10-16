@@ -1,6 +1,6 @@
 import { SiMedium, SiReddit, SiSubstack, SiTwitter, SiWordpress } from "react-icons/si";
 
-export const Services = () => {
+export function Services() {
   return (
     <section>
       <div className="text-center">
@@ -21,4 +21,4 @@ export const Services = () => {
       </div>
     </section>
   );
-};
+}

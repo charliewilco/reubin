@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Newspaper from "./roman-kraft-unsplash.jpg";
 
-export const CTA = () => {
+export function CTA() {
   return (
     <section>
       <div className="relative grid min-h-min grid-cols-2 overflow-hidden rounded-lg bg-sky-700 text-zinc-100 dark:bg-sky-400 dark:text-zinc-900 lg:grid-cols-4">
@@ -35,4 +35,4 @@ export const CTA = () => {
       </div>
     </section>
   );
-};
+}

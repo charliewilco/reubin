@@ -12,7 +12,7 @@ interface RecommendationCardProps {
   onSubscribe(link: string): void;
 }
 
-export const RecommendationCard = (props: RecommendationCardProps) => {
+export function RecommendationCard(props: RecommendationCardProps) {
   const handleClick = useCallback(() => {
     return props.onSubscribe(props.link);
   }, [props]);
@@ -66,4 +66,4 @@ export const RecommendationCard = (props: RecommendationCardProps) => {
       </div>
     </div>
   );
-};
+}

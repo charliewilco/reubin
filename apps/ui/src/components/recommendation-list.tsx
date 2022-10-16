@@ -34,7 +34,7 @@ export const NEWS = [
   },
 ];
 
-export const RecommendationList = (props: RecommendationListItemProps) => {
+export function RecommendationList(props: RecommendationListItemProps) {
   return (
     <section>
       <h2 className="text-lg opacity-50">{props.title}</h2>
@@ -54,4 +54,4 @@ export const RecommendationList = (props: RecommendationListItemProps) => {
       </ul>
     </section>
   );
-};
+}

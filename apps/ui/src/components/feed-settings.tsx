@@ -7,7 +7,7 @@ import { Dialog } from "./ui/dialog";
 import { removeFeed, updateFeedTitle, getAllTags, getFeed } from "../lib/graphql";
 import { Input, Label, TextLabel } from "./ui/input";
 import { useDashboardContext } from "../hooks/useDashboard";
-import { TagSelectionList } from "./ui/tag-selection-list";
+import { TagSelectionList } from "./ui/tag-lists";
 import type { FeedDetailsFragment, TagInfoFragment } from "../lib/__generated__";
 
 interface FeedSettingsFormProps {
@@ -16,7 +16,7 @@ interface FeedSettingsFormProps {
   initialFeed: FeedDetailsFragment;
 }
 
-export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
+export function UpdateFeedForm(props: FeedSettingsFormProps) {
   const [fields, setFields] = useState({
     title: props.initialFeed.title,
     tag: props.initialFeed.tag,
@@ -46,10 +46,17 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
   );
 
   const handleTagChange = useCallback((tag: TagInfoFragment) => {
+    console.log(tag);
     setFields((prev) => {
+      if (tag) {
+        return {
+          ...prev,
+          tag: tag.id,
+        };
+      }
       return {
         ...prev,
-        tag: tag.id,
+        tag: null,
       };
     });
   }, []);
@@ -59,17 +66,20 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
   );
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-4">
       <Label htmlFor="feed-title" aria-labelledby="feed-title">
+        <TextLabel id="feed-title">Feed Name</TextLabel>
+
         <Input
           name="feed-title"
           data-testid="update-feed-name"
           value={fields.title}
           onChange={handleTitleChange}
         />
-        <TextLabel id="feed-title">Feed Names</TextLabel>
       </Label>
       <Label>
+        <TextLabel id="feed-title">Tag</TextLabel>
+
         {data && data.tags && (
           <TagSelectionList selected={selected} tags={data.tags} onChange={handleTagChange} />
         )}
@@ -92,9 +102,9 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
       </div>
     </form>
   );
-};
+}
 
-export const FeedSettings = () => {
+export function FeedSettings() {
   const [isOpen, setOpen] = useState(false);
 
   const [{ feed }, { unselectFeed }] = useDashboardContext();
@@ -148,4 +158,4 @@ export const FeedSettings = () => {
       )}
     </>
   );
-};
+}

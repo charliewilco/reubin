@@ -8,7 +8,7 @@ interface EntryFullProps {
   id: string;
 }
 
-export const EntryFull = (props: EntryFullProps) => {
+export function EntryFull(props: EntryFullProps) {
   const { error, data, mutate } = useSWR(props.id, getEntry);
 
   const isLoading = !error && !data;
@@ -61,4 +61,4 @@ export const EntryFull = (props: EntryFullProps) => {
   }
 
   return null;
-};
+}

@@ -28,7 +28,7 @@ const IconButton = forwardRef<HTMLButtonElement, BaseButtonProps>((props, ref) =
 
 IconButton.displayName = "UIIconButton";
 
-const SuperButton = ({ className, ..._props }: BaseButtonProps) => {
+function SuperButton({ className, ..._props }: BaseButtonProps) {
   return (
     <Button
       {..._props}
@@ -41,6 +41,6 @@ const SuperButton = ({ className, ..._props }: BaseButtonProps) => {
       ref={() => {}}
     />
   );
-};
+}
 
 export { SuperButton, Button, IconButton };

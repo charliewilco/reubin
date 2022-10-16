@@ -10,7 +10,7 @@ interface LayoutProps {
   children?: React.ReactNode;
 }
 
-export const MarketingLayout = ({ title, addressbar, children }: LayoutProps) => {
+export function MarketingLayout({ title, addressbar, children }: LayoutProps) {
   return (
     <div>
       <Head>
@@ -37,4 +37,4 @@ export const MarketingLayout = ({ title, addressbar, children }: LayoutProps) =>
       <SiteFooter />
     </div>
   );
-};
+}

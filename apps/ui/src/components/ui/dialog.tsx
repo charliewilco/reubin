@@ -9,7 +9,7 @@ interface DialogProps {
   onClose(): void;
 }
 
-export const Dialog = ({ children, isOpen, onClose, title }: DialogProps) => {
+export function Dialog({ children, isOpen, onClose, title }: DialogProps) {
   return (
     <_Dialog open={isOpen} onClose={onClose}>
       <div className="fixed inset-0 bg-zinc-900 opacity-50" aria-hidden="true" />
@@ -22,4 +22,4 @@ export const Dialog = ({ children, isOpen, onClose, title }: DialogProps) => {
       </_Dialog.Panel>
     </_Dialog>
   );
-};
+}

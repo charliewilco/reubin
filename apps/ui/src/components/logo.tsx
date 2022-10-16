@@ -1,4 +1,4 @@
-export const Logo = () => {
+export function Logo() {
   return (
     <svg
       className="max-w-[1.5rem]"
@@ -23,4 +23,4 @@ export const Logo = () => {
       />
     </svg>
   );
-};
+}

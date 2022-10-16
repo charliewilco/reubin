@@ -34,7 +34,7 @@ const tiers = [
   },
 ];
 
-export const Pricing = () => {
+export function Pricing() {
   return (
     <section>
       <div className="sm:align-center sm:flex sm:flex-col">
@@ -95,4 +95,4 @@ export const Pricing = () => {
       </div>
     </section>
   );
-};
+}

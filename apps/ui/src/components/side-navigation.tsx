@@ -16,7 +16,7 @@ interface LinkItemProps {
   children: React.ReactNode;
 }
 
-export const LinkItem = (props: LinkItemProps) => {
+export function LinkItem(props: LinkItemProps) {
   return (
     <Link key={props.name} href={props.href}>
       <a className="flex items-center rounded-lg p-2 text-zinc-700 hover:bg-sky-700 dark:text-zinc-200">
@@ -25,11 +25,11 @@ export const LinkItem = (props: LinkItemProps) => {
       </a>
     </Link>
   );
-};
+}
 
 // unread / bookmarked / all / recommendations / appearance / settings
 
-const _SideNavigation = () => {
+function _SideNavigation() {
   return (
     <nav aria-label="Sidebar" className="flex flex-col items-center space-y-4 px-2">
       <LinkItem href="/dashboard" name="Home">
@@ -52,7 +52,7 @@ const _SideNavigation = () => {
       </LinkItem>
     </nav>
   );
-};
+}
 
 const SideNavigation = memo(_SideNavigation, isEqual);
 

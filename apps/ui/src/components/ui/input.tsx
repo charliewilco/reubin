@@ -50,7 +50,7 @@ type TextLabelProps = React.DetailedHTMLProps<
 const TextLabel = forwardRef<HTMLSpanElement, TextLabelProps>(
   ({ className, ...props }, ref) => {
     return (
-      <span {...props} className={classNames("block pt-2 text-xs", className)} ref={ref} />
+      <span {...props} className={classNames("block pb-2 text-xs", className)} ref={ref} />
     );
   }
 );

@@ -6,7 +6,7 @@ interface FeedToolbarProps {
   onRefresh(): void;
 }
 
-export const FeedToolbar = (props: FeedToolbarProps) => {
+export function FeedToolbar(props: FeedToolbarProps) {
   return (
     <div
       className="flex justify-between border-b border-zinc-200 p-4 dark:border-zinc-700"
@@ -18,4 +18,4 @@ export const FeedToolbar = (props: FeedToolbarProps) => {
       </Button>
     </div>
   );
-};
+}

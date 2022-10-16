@@ -12,7 +12,7 @@ interface AddFeedFormProps {
   onSelect?(selectedFeed: unknown): void | Promise<void>;
 }
 
-export const AddFeedForm = (props: AddFeedFormProps) => {
+export function AddFeedForm(props: AddFeedFormProps) {
   const [url, setUrl] = useState("");
 
   const handleSubmit: React.FormEventHandler = useCallback(
@@ -38,28 +38,27 @@ export const AddFeedForm = (props: AddFeedFormProps) => {
   );
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <Label htmlFor="url">
-          <Input
-            name="url"
-            id="url"
-            data-testid="add-feed-url"
-            value={url}
-            onChange={handleChange}
-          />
-          <TextLabel>URL</TextLabel>
-        </Label>
+    <form onSubmit={handleSubmit}>
+      <Label htmlFor="url">
+        <TextLabel>URL</TextLabel>
 
-        <div className="mt-8 flex justify-end">
-          <SuperButton type="submit">Submit</SuperButton>
-        </div>
-      </form>
-    </div>
+        <Input
+          name="url"
+          id="url"
+          data-testid="add-feed-url"
+          value={url}
+          onChange={handleChange}
+        />
+      </Label>
+
+      <div className="mt-8 flex justify-end">
+        <SuperButton type="submit">Submit</SuperButton>
+      </div>
+    </form>
   );
-};
+}
 
-export const AddFeed = () => {
+export function AddFeed() {
   const [isOpen, setOpen] = useState(false);
   const handleSubmit = useCallback((url: string) => {
     addFeed(url);
@@ -78,4 +77,4 @@ export const AddFeed = () => {
       </Dialog>
     </>
   );
-};
+}

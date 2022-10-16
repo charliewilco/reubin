@@ -17,7 +17,7 @@ const ClientRecommendationList = dynamic(
   }
 );
 
-const RecommendationsPage = () => {
+function RecommendationsPage() {
   const { data, error, mutate } = useSWR("recommended feeds", getFeeds, {
     fallbackData: undefined,
   });
@@ -59,6 +59,6 @@ const RecommendationsPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default RecommendationsPage;
