@@ -7,11 +7,11 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
-    "test": "turbo run test",
-    "lint": "turbo run lint",
-    "type-check": "turbo run type-check",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "types": "turbo types",
+    "dev": "turbo dev --parallel",
     "git": "node scripts/git.mjs",
     "clean": "node scripts/clean.mjs --all",
     "generate": "node scripts/codegen.mjs",

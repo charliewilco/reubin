@@ -38,7 +38,7 @@ jobs:
         run: npm run generate && npx prisma generate --schema apps/graphql/prisma/schema.prisma
 
       - name: Types
-        run: npm run types --workspaces
+        run: npm run types
 
       - name: Build
         run: npm run build
