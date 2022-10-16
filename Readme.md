@@ -66,8 +66,8 @@ npm run seed
 
 Each project contains
 
-- `<app>/src/*`: source code
-- `<app>/test/*`: all unit tests
+- `/<app>/src/*`: source code
+- `/<app>/test/*`: all unit tests
 
 ### Repository
 

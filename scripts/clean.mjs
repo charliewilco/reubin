@@ -6,6 +6,7 @@ import path from "path";
 
 const turboCachePaths = ["./**/.turbo"];
 const buildOuputPaths = [
+  ".husky",
   ".parcel-cache",
   "browser-extension/dist",
   "graphql/dist",
