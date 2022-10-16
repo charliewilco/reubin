@@ -1,4 +1,4 @@
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.text === "searchRSS") {
     let types = [
       "application/rss+xml",
