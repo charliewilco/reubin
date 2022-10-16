@@ -7,15 +7,15 @@ interface CreateTagFormProps {
   onSubmit(tag: string): void | Promise<void>;
 }
 
-export const CreateTagForm = () => {
+export function CreateTag() {
   const handleSubmitTag = useCallback(async (tagName: string) => {
     await addTag(tagName);
   }, []);
 
-  return <CreateTag onSubmit={handleSubmitTag} />;
-};
+  return <CreateTagForm onSubmit={handleSubmitTag} />;
+}
 
-export const CreateTag = (props: CreateTagFormProps) => {
+export function CreateTagForm(props: CreateTagFormProps) {
   const [tagName, setTagName] = useState("");
   const handleSubmit: React.FormEventHandler = useCallback(
     (event) => {
@@ -41,23 +41,22 @@ export const CreateTag = (props: CreateTagFormProps) => {
   );
 
   return (
-    <div className="p-2">
-      <form onSubmit={handleSubmit}>
-        <Label htmlFor="tag">
-          <Input
-            name="tag"
-            id="tag"
-            data-testid="add-tag-input"
-            value={tagName}
-            onChange={handleChange}
-          />
-          <TextLabel>New Tag</TextLabel>
-        </Label>
+    <form onSubmit={handleSubmit}>
+      <Label htmlFor="tag">
+        <TextLabel>New Tag</TextLabel>
 
-        <div className="mt-8 flex justify-end">
-          <SuperButton type="submit">Submit</SuperButton>
-        </div>
-      </form>
-    </div>
+        <Input
+          name="tag"
+          id="tag"
+          data-testid="add-tag-input"
+          value={tagName}
+          onChange={handleChange}
+        />
+      </Label>
+
+      <div className="mt-8 flex justify-end">
+        <SuperButton type="submit">Submit</SuperButton>
+      </div>
+    </form>
   );
-};
+}
