@@ -1,6 +1,9 @@
-import type { IGraphQLProject } from "graphql-config";
+// @ts-check
 
-const config: IGraphQLProject = {
+import { executeCodegen } from "@graphql-codegen/cli";
+
+/** @type {import('graphql-config').IGraphQLConfig} */
+const config = {
   schema: "graphql/src/schema.graphql",
   extensions: {
     codegen: {
@@ -20,4 +23,13 @@ const config: IGraphQLProject = {
   },
 };
 
-export default config;
+if (config.extensions) {
+  try {
+    await executeCodegen({
+      schema: config.schema,
+      ...config.extensions.codegen,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}

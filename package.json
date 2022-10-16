@@ -3,17 +3,32 @@
   "repository": "charliewilco/reubin.app",
   "author": "Charlie ⚡ <charliewilc0@protonmail.com>",
   "private": true,
+  "license": "BSD-4-Clause-Shortened",
   "workspaces": [
     "browser-extension",
     "graphql",
     "ui"
   ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "prepare": "node scripts/git.mjs",
+    "clean": "node scripts/clean.mjs --all",
+    "generate": "node scripts/codegen.mjs",
+    "seed": "node scripts scripts/seed.mjs",
+    "db": "node scripts/db.mjs --push",
+    "format": "pretty-quick --staged"
+  },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.13.7",
     "@graphql-codegen/typescript": "^2.7.4",
     "@graphql-codegen/typescript-graphql-request": "^4.5.6",
     "@graphql-codegen/typescript-operations": "^2.5.4",
     "@graphql-codegen/typescript-resolvers": "^2.7.4",
+    "@prisma/migrate": "4.4.0",
     "arg": "^5.0.2",
     "del": "^7.0.0",
     "graphql": "^16.6.0",
@@ -25,20 +40,9 @@
     "prettier-plugin-prisma": "^4.2.0",
     "prettier-plugin-tailwindcss": "^0.1.11",
     "pretty-quick": "^3.1.2",
+    "prisma": "^4.4.0",
     "turbo": "^1.5.6",
     "typescript": "^4.8.4"
-  },
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
-    "test": "turbo run test",
-    "lint": "turbo run lint",
-    "type-check": "turbo run type-check",
-    "prepare": "husky install",
-    "generate": "graphql-codegen",
-    "format": "pretty-quick --staged",
-    "db": "npx prisma studio --schema graphql/prisma/schema.prisma",
-    "clean": "node scripts/clean.mjs"
   },
   "prettier": {
     "printWidth": 95,
