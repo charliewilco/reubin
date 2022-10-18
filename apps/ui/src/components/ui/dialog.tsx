@@ -1,6 +1,6 @@
 import { Button } from "./button";
 import { Dialog as _Dialog } from "@headlessui/react";
-import { FiX } from "react-icons/fi";
+import { X } from "lucide-react";
 
 interface DialogProps {
   title: string;
@@ -9,7 +9,7 @@ interface DialogProps {
   onClose(): void;
 }
 
-export const Dialog = ({ children, isOpen, onClose, title }: DialogProps) => {
+export function Dialog({ children, isOpen, onClose, title }: DialogProps) {
   return (
     <_Dialog open={isOpen} onClose={onClose}>
       <div className="fixed inset-0 bg-zinc-900 opacity-50" aria-hidden="true" />
@@ -17,9 +17,9 @@ export const Dialog = ({ children, isOpen, onClose, title }: DialogProps) => {
         <_Dialog.Title className="mb-4 text-xl font-semibold">{title}</_Dialog.Title>
         {children}
         <Button className="absolute top-0 right-0 p-2" aria-label="Close" onClick={onClose}>
-          <FiX />
+          <X />
         </Button>
       </_Dialog.Panel>
     </_Dialog>
   );
-};
+}

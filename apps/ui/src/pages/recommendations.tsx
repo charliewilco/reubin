@@ -1,11 +1,10 @@
-import Link from "next/link";
 import { useCallback } from "react";
 import useSWR from "swr";
+import dynamic from "next/dynamic";
 
-import { FiCornerDownLeft } from "react-icons/fi";
 import { addFeed, getFeeds } from "../lib/graphql";
 import { NEWS } from "../components/recommendation-list";
-import dynamic from "next/dynamic";
+import { AltHeader } from "../components/ui/alt-header";
 
 const ClientRecommendationList = dynamic(
   async () => {
@@ -17,7 +16,7 @@ const ClientRecommendationList = dynamic(
   }
 );
 
-const RecommendationsPage = () => {
+function RecommendationsPage() {
   const { data, error, mutate } = useSWR("recommended feeds", getFeeds, {
     fallbackData: undefined,
   });
@@ -37,15 +36,7 @@ const RecommendationsPage = () => {
 
   return (
     <div className="mx-auto max-w-7xl space-y-16 pt-16">
-      <div>
-        <Link href="/dashboard">
-          <a className="flex items-center gap-4">
-            <FiCornerDownLeft />
-
-            <span>Dashboard</span>
-          </a>
-        </Link>
-      </div>
+      <AltHeader />
       <div className="space-y-8 pb-8">
         {error && <div>{error.toString()}</div>}
 
@@ -59,6 +50,6 @@ const RecommendationsPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default RecommendationsPage;

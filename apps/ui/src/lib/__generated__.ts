@@ -63,6 +63,7 @@ export type Mutation = {
   markAsRead: Entry;
   refreshFeed: Array<Entry>;
   removeFeed: Feed;
+  removeTag: Tag;
   updateFeed: Feed;
 };
 
@@ -88,6 +89,10 @@ export type MutationRefreshFeedArgs = {
 };
 
 export type MutationRemoveFeedArgs = {
+  id: Scalars["ID"];
+};
+
+export type MutationRemoveTagArgs = {
   id: Scalars["ID"];
 };
 
@@ -351,6 +356,15 @@ export type CreateTagMutation = {
   addTag: { __typename?: "Tag"; id: string; title: string };
 };
 
+export type RemoveTagMutationVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type RemoveTagMutation = {
+  __typename?: "Mutation";
+  removeTag: { __typename?: "Tag"; id: string; title: string };
+};
+
 export const FeedDetailsFragmentDoc = gql`
   fragment FeedDetails on Feed {
     id
@@ -494,6 +508,14 @@ export const CreateTagDocument = gql`
       title
     }
   }
+`;
+export const RemoveTagDocument = gql`
+  mutation RemoveTag($id: ID!) {
+    removeTag(id: $id) {
+      ...TagInfo
+    }
+  }
+  ${TagInfoFragmentDoc}
 `;
 
 export type SdkFunctionWrapper = <T>(
@@ -703,6 +725,20 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         "CreateTag",
+        "mutation"
+      );
+    },
+    RemoveTag(
+      variables: RemoveTagMutationVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<RemoveTagMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<RemoveTagMutation>(RemoveTagDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "RemoveTag",
         "mutation"
       );
     },

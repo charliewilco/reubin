@@ -50,6 +50,7 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
   feeds     Feed[]
   tags      Tag[]
+  refreshInterval Int @default(60) @map("refresh_interval")
 
   @@map("users")
 }

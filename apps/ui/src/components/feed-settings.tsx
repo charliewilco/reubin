@@ -1,14 +1,14 @@
 import useSWR, { mutate } from "swr";
 import { useCallback, useState } from "react";
-import { FiSettings, FiTrash2 } from "react-icons/fi";
+import { Settings2, Trash2 } from "lucide-react";
 
 import { Button, SuperButton } from "./ui/button";
 import { Dialog } from "./ui/dialog";
-import { removeFeed, updateFeedTitle, getAllTags, getFeed } from "../lib/graphql";
 import { Input, Label, TextLabel } from "./ui/input";
-import { useDashboardContext } from "../hooks/useDashboard";
-import { TagSelectionList } from "./ui/tag-selection-list";
+import { removeFeed, updateFeedTitle, getAllTags, getFeed } from "../lib/graphql";
 import type { FeedDetailsFragment, TagInfoFragment } from "../lib/__generated__";
+import { useDashboardContext } from "../hooks/useDashboard";
+import { TagSelectionList } from "./tag-lists";
 
 interface FeedSettingsFormProps {
   onSubmit(title: string, tagID?: string | null): void | Promise<void>;
@@ -16,12 +16,12 @@ interface FeedSettingsFormProps {
   initialFeed: FeedDetailsFragment;
 }
 
-export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
+export function UpdateFeedForm(props: FeedSettingsFormProps) {
   const [fields, setFields] = useState({
     title: props.initialFeed.title,
     tag: props.initialFeed.tag,
   });
-  const { data } = useSWR("tags", getAllTags);
+  const { data } = useSWR("all-tags", getAllTags);
 
   const handleSubmit: React.FormEventHandler = useCallback(
     (event) => {
@@ -46,10 +46,17 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
   );
 
   const handleTagChange = useCallback((tag: TagInfoFragment) => {
+    console.log(tag);
     setFields((prev) => {
+      if (tag) {
+        return {
+          ...prev,
+          tag: tag.id,
+        };
+      }
       return {
         ...prev,
-        tag: tag.id,
+        tag: null,
       };
     });
   }, []);
@@ -59,19 +66,22 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
   );
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-4">
       <Label htmlFor="feed-title" aria-labelledby="feed-title">
+        <TextLabel id="feed-title">Feed Name</TextLabel>
+
         <Input
           name="feed-title"
           data-testid="update-feed-name"
           value={fields.title}
           onChange={handleTitleChange}
         />
-        <TextLabel id="feed-title">Feed Names</TextLabel>
       </Label>
       <Label>
+        <TextLabel id="feed-title">Tag</TextLabel>
+
         {data && data.tags && (
-          <TagSelectionList selected={selected} tags={data.tags} onChange={handleTagChange} />
+          <TagSelectionList selected={selected} onChange={handleTagChange} />
         )}
       </Label>
       <div className="mt-8 flex items-center justify-between">
@@ -81,7 +91,7 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
             aria-label="Remove Feed"
             className="flex items-center"
             onClick={props.onDelete}>
-            <FiTrash2 size={18} />
+            <Trash2 size={18} />
             <span className="ml-2 text-sm font-semibold">Unsubscribe</span>
           </Button>
         </div>
@@ -92,9 +102,9 @@ export const UpdateFeedForm = (props: FeedSettingsFormProps) => {
       </div>
     </form>
   );
-};
+}
 
-export const FeedSettings = () => {
+export function FeedSettings() {
   const [isOpen, setOpen] = useState(false);
 
   const [{ feed }, { unselectFeed }] = useDashboardContext();
@@ -132,7 +142,7 @@ export const FeedSettings = () => {
   return (
     <>
       <Button aria-label="Update feed" onClick={() => setOpen(true)}>
-        <FiSettings />
+        <Settings2 />
       </Button>
       {data && data.feed && (
         <Dialog
@@ -148,4 +158,4 @@ export const FeedSettings = () => {
       )}
     </>
   );
-};
+}

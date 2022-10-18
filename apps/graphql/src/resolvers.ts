@@ -16,7 +16,6 @@ import { Feed } from "@prisma/client";
 /**
  * TODO:
  * - recently read
- * - tags
  * - me
  **/
 const query: QueryResolvers<Context> = {
@@ -77,7 +76,6 @@ const query: QueryResolvers<Context> = {
 
 /**
  * TODO:
- * - create, read, update, delete tags
  * - login
  * - register user
  **/
@@ -104,6 +102,22 @@ const mutation: MutationResolvers<Context> = {
       throw new Error(err);
     }
   },
+  async addTag(_parent, { name }, { prisma }) {
+    try {
+      const tag = await prisma.tag.create({
+        data: {
+          title: name,
+        },
+      });
+
+      return {
+        id: tag.id,
+        title: tag.title,
+      };
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  },
   async removeFeed(_parent, { id }, { prisma }) {
     await prisma.entry.deleteMany({
       where: {
@@ -116,6 +130,19 @@ const mutation: MutationResolvers<Context> = {
       },
     });
     return feed;
+  },
+
+  async removeTag(_parent, { id }, { prisma }) {
+    const tag = await prisma.tag.delete({
+      where: {
+        id,
+      },
+    });
+
+    return {
+      id: tag.id,
+      title: tag.title,
+    };
   },
   async refreshFeed(_parent, { id }, { prisma, rss }) {
     const feed = await prisma.feed.findUnique({
@@ -222,23 +249,6 @@ const mutation: MutationResolvers<Context> = {
       }
 
       return mapFeedtoAPIFeed(feed);
-    } catch (error: any) {
-      throw new Error(error);
-    }
-  },
-
-  async addTag(_parent, { name }, { prisma }) {
-    try {
-      const tag = await prisma.tag.create({
-        data: {
-          title: name,
-        },
-      });
-
-      return {
-        id: tag.id,
-        title: tag.title,
-      };
     } catch (error: any) {
       throw new Error(error);
     }

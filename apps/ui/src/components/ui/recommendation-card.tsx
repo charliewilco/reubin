@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { FiRss, FiCheckCircle } from "react-icons/fi";
+import { Rss, CheckCircle } from "lucide-react";
 import type { GetFeedsQuery } from "../../lib/__generated__";
 import { LoadingIndicator } from "./activity-indicator";
 
@@ -12,7 +12,7 @@ interface RecommendationCardProps {
   onSubscribe(link: string): void;
 }
 
-export const RecommendationCard = (props: RecommendationCardProps) => {
+export function RecommendationCard(props: RecommendationCardProps) {
   const handleClick = useCallback(() => {
     return props.onSubscribe(props.link);
   }, [props]);
@@ -31,7 +31,7 @@ export const RecommendationCard = (props: RecommendationCardProps) => {
     <button
       onClick={handleClick}
       className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium hover:text-gray-500">
-      <FiRss className="h-5 w-5 text-zinc-400" aria-hidden="true" />
+      <Rss className="h-5 w-5 text-zinc-400" aria-hidden="true" />
       <span className="ml-3">Subscribe</span>
     </button>
   );
@@ -43,7 +43,7 @@ export const RecommendationCard = (props: RecommendationCardProps) => {
   if (hasFeed) {
     content = (
       <div className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium opacity-50 hover:text-gray-500">
-        <FiCheckCircle className="h-5 w-5 text-zinc-400" aria-hidden="true" />
+        <CheckCircle className="h-5 w-5 text-zinc-400" aria-hidden="true" />
         <span className="ml-3">Subscribed</span>
       </div>
     );
@@ -66,4 +66,4 @@ export const RecommendationCard = (props: RecommendationCardProps) => {
       </div>
     </div>
   );
-};
+}

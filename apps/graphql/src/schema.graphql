@@ -58,6 +58,7 @@ type Mutation {
   addFeed(url: String!): Feed!
   addTag(name: String!): Tag!
   removeFeed(id: ID!): Feed!
+  removeTag(id: ID!): Tag!
   refreshFeed(id: ID!): [Entry!]!
   markAsFavorite(id: ID!, favorite: Boolean!): Entry!
   markAsRead(id: ID!): Entry!

@@ -12,3 +12,9 @@ mutation CreateTag($name: String!) {
     title
   }
 }
+
+mutation RemoveTag($id: ID!) {
+  removeTag(id: $id) {
+    ...TagInfo
+  }
+}

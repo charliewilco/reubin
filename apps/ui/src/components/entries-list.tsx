@@ -1,10 +1,12 @@
 import { memo, useCallback } from "react";
+import isEqual from "react-fast-compare";
 import useSWR from "swr";
+import format from "date-fns/format";
+
 import type { EntryDetailsFragment, EntryFilter } from "../lib/__generated__";
 import { classNames } from "./ui/class-names";
 import { getEntriesFromFeed, refreshFeed } from "../lib/graphql";
 import { FeedToolbar } from "./feed-toolbar";
-import format from "date-fns/format";
 
 interface EntryListProps {
   filter?: EntryFilter;
@@ -30,7 +32,7 @@ function sortByNearest(
   return Math.abs(Date.parse(a) - now) - Math.abs(Date.parse(b) - now);
 }
 
-export const EntryListItem = memo((props: EntryListItemProps) => {
+function _EntryItem(props: EntryListItemProps) {
   const handleSelect = () => {
     props.onSelect(props.id);
   };
@@ -51,11 +53,13 @@ export const EntryListItem = memo((props: EntryListItemProps) => {
       </div>
     </li>
   );
-});
+}
+
+export const EntryListItem = memo(_EntryItem, isEqual);
 
 EntryListItem.displayName = "EntryListItem";
 
-export const EntryList = (props: EntryListProps) => {
+export function EntryList(props: EntryListProps) {
   const { data, mutate } = useSWR([props.id, props.filter], getEntriesFromFeed);
 
   // const isLoading = !error && !data;
@@ -98,4 +102,4 @@ export const EntryList = (props: EntryListProps) => {
       </ul>
     </div>
   );
-};
+}

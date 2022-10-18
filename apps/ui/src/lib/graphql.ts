@@ -66,6 +66,14 @@ export const addTag = async (name: string) => {
   }
 };
 
+export const removeTag = async (id: string) => {
+  try {
+    return sdk.RemoveTag({ id });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
 export const addFeed = async (url: string) => {
   try {
     return sdk.CreateFeed({

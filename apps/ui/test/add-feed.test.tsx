@@ -1,16 +1,16 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { AddFeedForm } from "../components/add-feed";
+import { AddFeedForm } from "../src/components/add-feed";
 
 describe("AddFeed", () => {
-  it("should display 'Add Feed' as the title", () => {
+  test("should display 'Add Feed' as the title", () => {
     const fn = jest.fn();
     render(<AddFeedForm onSubmit={fn} />);
     expect(screen.getByText("Submit")).toBeInTheDocument();
   });
 
-  it("Should not fire when the form is empty", async () => {
+  test("Should not fire when the form is empty", async () => {
     const fn = jest.fn();
     render(<AddFeedForm onSubmit={fn} />);
     const input = screen.getByTestId("add-feed-url");

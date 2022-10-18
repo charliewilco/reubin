@@ -1,6 +1,6 @@
 import { MarketingLayout } from "../components/layout";
 
-const LoginPage = () => {
+function LoginPage() {
   return (
     <MarketingLayout addressbar="Login | Reubin">
       <div className="flex min-h-full">
@@ -86,6 +86,6 @@ const LoginPage = () => {
       </div>
     </MarketingLayout>
   );
-};
+}
 
 export default LoginPage;

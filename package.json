@@ -12,7 +12,7 @@
     "lint": "turbo lint",
     "types": "turbo types",
     "dev": "turbo dev --parallel",
-    "generate": "graphql-codegen",
+    "generate": "graphql-codegen --config scripts/.graphqlrc.ts",
     "git": "node scripts/git.mjs",
     "clean": "node scripts/clean.mjs --all",
     "seed": "node scripts scripts/seed.mjs",

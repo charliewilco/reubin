@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { MarketingLayout } from "../components/layout";
 
-const Privacy = () => {
+function Privacy() {
   return (
     <MarketingLayout title="Privacy Policy" addressbar="Privacy Policy | Reubin">
       <div className="px-4">
@@ -143,6 +143,6 @@ const Privacy = () => {
       </div>
     </MarketingLayout>
   );
-};
+}
 
 export default Privacy;

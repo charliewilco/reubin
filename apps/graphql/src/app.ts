@@ -1,5 +1,5 @@
 import Fastify from "fastify";
-import mercurius, { type MercuriusOptions } from "mercurius";
+import mercurius from "mercurius";
 import { schema } from "./schema";
 import { context } from "./context";
 import { RecommendedKeyArray } from "./recommendations";
@@ -13,13 +13,11 @@ export const createApp = () => {
     });
   });
 
-  const options: MercuriusOptions = {
+  app.register(mercurius, {
     schema,
     graphiql: true,
     context: () => context,
-  };
-
-  app.register(mercurius, options);
+  });
 
   return app;
 };

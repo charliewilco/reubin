@@ -64,6 +64,7 @@ export type Mutation = {
   markAsRead: Entry;
   refreshFeed: Array<Entry>;
   removeFeed: Feed;
+  removeTag: Tag;
   updateFeed: Feed;
 };
 
@@ -89,6 +90,10 @@ export type MutationRefreshFeedArgs = {
 };
 
 export type MutationRemoveFeedArgs = {
+  id: Scalars["ID"];
+};
+
+export type MutationRemoveTagArgs = {
   id: Scalars["ID"];
 };
 
@@ -328,6 +333,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationRemoveFeedArgs, "id">
+  >;
+  removeTag?: Resolver<
+    ResolversTypes["Tag"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationRemoveTagArgs, "id">
   >;
   updateFeed?: Resolver<
     ResolversTypes["Feed"],

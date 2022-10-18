@@ -1,6 +1,6 @@
 interface ActivityIndicatorProps {}
 
-export const LoadingIndicator = ({}: ActivityIndicatorProps) => {
+export function LoadingIndicator({}: ActivityIndicatorProps) {
   return (
     <div className="Loading" role="alert" aria-busy="true">
       <svg height="100%" viewBox="0 0 32 32" width="100%">
@@ -26,4 +26,4 @@ export const LoadingIndicator = ({}: ActivityIndicatorProps) => {
       </svg>
     </div>
   );
-};
+}
