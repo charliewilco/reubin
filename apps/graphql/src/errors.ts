@@ -41,3 +41,13 @@ export class ForbiddenError extends SDKError {
     this.name = "ForbiddenError";
   }
 }
+
+export class ValidationError extends Error {
+  public name = "ValidationError";
+
+  public inner: Array<{ path: string; message: string }> = [];
+
+  public constructor(message: string) {
+    super(message);
+  }
+}

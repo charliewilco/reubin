@@ -29,10 +29,13 @@
     "@graphql-tools/load": "^7.7.7",
     "@graphql-tools/schema": "^9.0.4",
     "@prisma/client": "^4.4.0",
+    "@types/base-64": "^1.0.0",
     "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/sanitize-html": "^2.3.1",
     "@types/xml2js": "^0.4.11",
     "axios": "^0.27.2",
+    "base-64": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "cheerio": "^1.0.0-rc.11",
     "entities": "^4.4.0",
@@ -41,9 +44,10 @@
     "graphql-scalars": "^1.18.0",
     "graphql-tag": "^2.12.6",
     "html-entities": "^2.3.2",
-    "iconv-lite": "^0.6.3",
+    "jsonwebtoken": "^8.5.1",
     "mercurius": "^11.0.0",
     "sanitize-html": "^2.7.0",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.4.23",
+    "zod": "^3.19.1"
   }
 }

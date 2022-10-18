@@ -34,6 +34,25 @@ export const NEWS = [
   },
 ];
 
+export const TECH = [
+  {
+    link: "https://xkcd.com/atom.xml",
+    displayName: "xkcd",
+  },
+  {
+    link: "https://www.theverge.com/web/rss/index.xml",
+    displayName: "The Verge",
+  },
+  {
+    link: "https://future.a16z.com/feed/",
+    displayName: "Future",
+  },
+  {
+    link: "https://cointelegraph.com/rss",
+    displayName: "Coin Telegraph",
+  },
+];
+
 export function RecommendationList(props: RecommendationListItemProps) {
   return (
     <section>

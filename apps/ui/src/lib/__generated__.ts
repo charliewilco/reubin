@@ -59,6 +59,8 @@ export type Mutation = {
   __typename?: "Mutation";
   addFeed: Feed;
   addTag: Tag;
+  createUser: ReturnedUser;
+  login: ReturnedUser;
   markAsFavorite: Entry;
   markAsRead: Entry;
   refreshFeed: Array<Entry>;
@@ -73,6 +75,16 @@ export type MutationAddFeedArgs = {
 
 export type MutationAddTagArgs = {
   name: Scalars["String"];
+};
+
+export type MutationCreateUserArgs = {
+  email: Scalars["String"];
+  password: Scalars["String"];
+};
+
+export type MutationLoginArgs = {
+  email: Scalars["String"];
+  password: Scalars["String"];
 };
 
 export type MutationMarkAsFavoriteArgs = {
@@ -107,6 +119,7 @@ export type Query = {
   entry: Entry;
   feed: Feed;
   feeds: Array<Maybe<Feed>>;
+  me: User;
   tags: Array<Maybe<Tag>>;
 };
 
@@ -123,6 +136,12 @@ export type QueryFeedArgs = {
   id: Scalars["ID"];
 };
 
+export type ReturnedUser = {
+  __typename?: "ReturnedUser";
+  token: Scalars["String"];
+  user: User;
+};
+
 export type Tag = {
   __typename?: "Tag";
   id: Scalars["ID"];
@@ -132,6 +151,20 @@ export type Tag = {
 export type UpdateFeedInput = {
   tagID?: InputMaybe<Scalars["ID"]>;
   title?: InputMaybe<Scalars["String"]>;
+};
+
+export type UpdateUserInput = {
+  displayName?: InputMaybe<Scalars["String"]>;
+  refreshInterval?: InputMaybe<Scalars["Int"]>;
+};
+
+export type User = {
+  __typename?: "User";
+  avatarColor?: Maybe<Scalars["Int"]>;
+  displayName?: Maybe<Scalars["String"]>;
+  email: Scalars["String"];
+  id: Scalars["ID"];
+  refreshInterval: Scalars["Int"];
 };
 
 export type EntriesByFeedFilterQueryVariables = Exact<{

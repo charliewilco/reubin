@@ -11,6 +11,7 @@ const buildOuputPaths = [
   "apps/browser-extension/dist",
   "apps/graphql/dist",
   "apps/ui/.next",
+  "apps/ui/tsconfig.tsbuildinfo",
 ];
 
 const args = arg({

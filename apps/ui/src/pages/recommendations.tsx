@@ -1,20 +1,9 @@
 import { useCallback } from "react";
 import useSWR from "swr";
-import dynamic from "next/dynamic";
 
 import { addFeed, getFeeds } from "../lib/graphql";
-import { NEWS } from "../components/recommendation-list";
+import { NEWS, TECH, RecommendationList } from "../components/recommendation-list";
 import { AltHeader } from "../components/ui/alt-header";
-
-const ClientRecommendationList = dynamic(
-  async () => {
-    const mod = await import("../components/recommendation-list");
-    return mod.RecommendationList;
-  },
-  {
-    ssr: false,
-  }
-);
 
 function RecommendationsPage() {
   const { data, error, mutate } = useSWR("recommended feeds", getFeeds, {
@@ -35,14 +24,22 @@ function RecommendationsPage() {
   );
 
   return (
-    <div className="mx-auto max-w-7xl space-y-16 pt-16">
+    <div className="mx-auto max-w-7xl space-y-16">
       <AltHeader />
-      <div className="space-y-8 pb-8">
+      <div className="space-y-8 px-2 pb-8">
         {error && <div>{error.toString()}</div>}
 
-        <ClientRecommendationList
+        <RecommendationList
           title="News"
           feeds={NEWS}
+          data={data}
+          error={error}
+          onClick={handleClick}
+        />
+
+        <RecommendationList
+          title="Tech"
+          feeds={TECH}
           data={data}
           error={error}
           onClick={handleClick}

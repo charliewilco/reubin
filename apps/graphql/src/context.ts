@@ -23,9 +23,7 @@ export interface Context {
   rss: RSSKit<unknown, unknown>;
 }
 
-const rss = new RSSKit();
-
 export const context: Context = {
   prisma: prisma,
-  rss,
+  rss: new RSSKit(),
 };

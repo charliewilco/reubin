@@ -1,3 +1,5 @@
+import { Feed } from "@prisma/client";
+
 import {
   type MutationResolvers,
   type QueryResolvers,
@@ -5,9 +7,8 @@ import {
   EntryFilter,
 } from "./__generated__";
 import type { Context } from "./context";
-import { mapFeedtoAPIFeed, mapORMEntryToAPIEntry, mapRSStoEntry } from "./structs";
-import { getFeedFromDirectURL } from "./feeds";
-import { Feed } from "@prisma/client";
+import { FeedManager } from "./model/feeds";
+import { EntryManager } from "./model/entry";
 
 // TODO: Create tag object
 // TODO: User sign up, registration
@@ -27,7 +28,7 @@ const query: QueryResolvers<Context> = {
   async feeds(_parent, _args, { prisma }) {
     const feeds = await prisma.feed.findMany();
 
-    return feeds.map((f) => mapFeedtoAPIFeed(f));
+    return feeds.map((f) => FeedManager.fromORM(f));
   },
   async feed(_parent, { id }, { prisma }) {
     const feed = await prisma.feed.findUnique({
@@ -53,7 +54,7 @@ const query: QueryResolvers<Context> = {
       throw new Error("Entry not found.");
     }
 
-    return mapORMEntryToAPIEntry(entry);
+    return EntryManager.fromORM(entry);
   },
   async entries(_parent, { feed_id, filter }, { prisma }) {
     let args: any = { feedId: feed_id };
@@ -70,7 +71,7 @@ const query: QueryResolvers<Context> = {
       where: args,
     });
 
-    return entries.map((value) => mapORMEntryToAPIEntry(value));
+    return entries.map((value) => EntryManager.fromORM(value));
   },
 };
 
@@ -82,7 +83,7 @@ const query: QueryResolvers<Context> = {
 const mutation: MutationResolvers<Context> = {
   async addFeed(_parent, { url }, { prisma, rss }) {
     try {
-      const { data } = await getFeedFromDirectURL(url);
+      const { data } = await FeedManager.getFeedFromDirectURL(url);
       const parsed = await rss.parse(data);
       const feed = await prisma.feed.create({
         data: {
@@ -94,7 +95,7 @@ const mutation: MutationResolvers<Context> = {
       });
 
       await prisma.entry.createMany({
-        data: parsed.items.map((value) => mapRSStoEntry(value, feed.id)),
+        data: parsed.items.map((value) => EntryManager.fromRSS(value, feed.id)),
       });
 
       return feed;
@@ -155,17 +156,17 @@ const mutation: MutationResolvers<Context> = {
       throw new Error("Couldn't find feed");
     }
 
-    const { data: rssText } = await getFeedFromDirectURL(feed.feedURL);
+    const { data: rssText } = await FeedManager.getFeedFromDirectURL(feed.feedURL);
     const { items } = await rss.parse(rssText);
 
     const lastFetchedISO = feed.lastFetched.toISOString();
 
-    const entries: ReturnType<typeof mapRSStoEntry>[] = [];
+    const entries: ReturnType<typeof EntryManager.fromRSS>[] = [];
 
     for (const item of items) {
       if (item) {
         if (lastFetchedISO < item.isoDate!) {
-          entries.push(mapRSStoEntry(item, feed.id));
+          entries.push(EntryManager.fromRSS(item, feed.id));
         }
       }
     }
@@ -192,7 +193,7 @@ const mutation: MutationResolvers<Context> = {
       },
     });
 
-    return _.map((value) => mapORMEntryToAPIEntry(value));
+    return _.map((value) => EntryManager.fromORM(value));
   },
   async markAsRead(_parent, { id }, { prisma }) {
     const entry = await prisma.entry.update({
@@ -207,7 +208,7 @@ const mutation: MutationResolvers<Context> = {
       throw new Error("Entry not updated");
     }
 
-    return mapORMEntryToAPIEntry(entry);
+    return EntryManager.fromORM(entry);
   },
 
   async markAsFavorite(_parent, { id, favorite }, { prisma }) {
@@ -223,7 +224,7 @@ const mutation: MutationResolvers<Context> = {
       throw new Error("Entry not updated");
     }
 
-    return mapORMEntryToAPIEntry(entry);
+    return EntryManager.fromORM(entry);
   },
   async updateFeed(_parent, { id, fields }, { prisma }) {
     try {
@@ -248,7 +249,7 @@ const mutation: MutationResolvers<Context> = {
         throw new Error("Feed not updated");
       }
 
-      return mapFeedtoAPIFeed(feed);
+      return FeedManager.fromORM(feed);
     } catch (error: any) {
       throw new Error(error);
     }
