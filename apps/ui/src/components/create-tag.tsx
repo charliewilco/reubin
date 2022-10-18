@@ -1,43 +1,79 @@
-import { useCallback, useState } from "react";
-import { addTag } from "../lib/graphql";
+import { useCallback, useReducer } from "react";
+import { useTags } from "../hooks/useTags";
 import { SuperButton } from "./ui/button";
 import { Label, Input, TextLabel } from "./ui/input";
 
-interface CreateTagFormProps {
-  onSubmit(tag: string): void | Promise<void>;
+interface CreateTagFormState {
+  tag: string;
+  isSubmitting: boolean;
 }
 
-export function CreateTag() {
-  const handleSubmitTag = useCallback(async (tagName: string) => {
-    await addTag(tagName);
-  }, []);
+type CreateTagAction =
+  | {
+      type: "updateTag";
+      tag: string;
+    }
+  | {
+      type: "submit";
+    }
+  | {
+      type: "success";
+    };
 
-  return <CreateTagForm onSubmit={handleSubmitTag} />;
+function reducer(state: CreateTagFormState, action: CreateTagAction): CreateTagFormState {
+  switch (action.type) {
+    case "updateTag":
+      return {
+        ...state,
+        tag: action.tag,
+      };
+    case "submit":
+      return {
+        ...state,
+        isSubmitting: true,
+      };
+    case "success":
+      return {
+        tag: "",
+        isSubmitting: false,
+      };
+    default:
+      return state;
+  }
 }
 
-export function CreateTagForm(props: CreateTagFormProps) {
-  const [tagName, setTagName] = useState("");
+export function CreateTagForm() {
+  const [state, dispatch] = useReducer(reducer, {
+    tag: "",
+    isSubmitting: false,
+  });
+
+  const { addTag } = useTags();
+
   const handleSubmit: React.FormEventHandler = useCallback(
-    (event) => {
+    async (event) => {
       if (event) {
         event.preventDefault();
       }
 
-      if (tagName === "") {
+      if (state.tag === "") {
         return;
       }
 
-      props.onSubmit(tagName);
-      setTagName("");
+      dispatch({ type: "submit" });
+
+      await addTag(state.tag).then(() => {
+        dispatch({ type: "success" });
+      });
     },
-    [tagName, props]
+    [state, addTag]
   );
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
-      setTagName(event.target.value);
+      dispatch({ type: "updateTag", tag: event.target.value });
     },
-    [setTagName]
+    [dispatch]
   );
 
   return (
@@ -46,16 +82,19 @@ export function CreateTagForm(props: CreateTagFormProps) {
         <TextLabel>New Tag</TextLabel>
 
         <Input
+          disabled={state.isSubmitting}
           name="tag"
           id="tag"
           data-testid="add-tag-input"
-          value={tagName}
+          value={state.tag}
           onChange={handleChange}
         />
       </Label>
 
       <div className="mt-8 flex justify-end">
-        <SuperButton type="submit">Submit</SuperButton>
+        <SuperButton disabled={state.isSubmitting} type="submit">
+          Submit
+        </SuperButton>
       </div>
     </form>
   );

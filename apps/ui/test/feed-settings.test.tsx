@@ -2,12 +2,12 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { graphql } from "msw";
 import { setupServer } from "msw/node";
-import { UpdateFeedForm } from "../components/feed-settings";
+import { UpdateFeedForm } from "../src/components/feed-settings";
 import type {
   AllTagsQuery,
   GetFeedByIdQuery,
   FeedDetailsFragment,
-} from "../lib/__generated__";
+} from "../src/lib/__generated__";
 
 const mockFeed: FeedDetailsFragment = {
   __typename: "Feed",
@@ -49,15 +49,15 @@ afterEach(() => {
 afterAll(() => server.close());
 
 describe("Feed Settings", () => {
-  it("should render the feed settings form", () => {
+  test("should render the feed settings form", () => {
     render(
       <UpdateFeedForm initialFeed={mockFeed} onSubmit={jest.fn()} onDelete={jest.fn()} />
     );
-    expect(screen.getByLabelText("Feed Names")).toBeInTheDocument();
+    expect(screen.getByLabelText("Feed Name")).toBeInTheDocument();
     expect(screen.getByLabelText("Remove Feed")).toBeInTheDocument();
   });
 
-  it("should update the feed title", async () => {
+  test("should update the feed title", async () => {
     const onSubmit = jest.fn();
     render(<UpdateFeedForm initialFeed={mockFeed} onSubmit={onSubmit} onDelete={jest.fn()} />);
 
@@ -71,7 +71,7 @@ describe("Feed Settings", () => {
     expect(onSubmit).toHaveBeenCalledWith("New Feed", null);
   });
 
-  it("should delete the feed", () => {
+  test("should delete the feed", () => {
     const onDelete = jest.fn();
     render(<UpdateFeedForm initialFeed={mockFeed} onSubmit={jest.fn()} onDelete={onDelete} />);
 

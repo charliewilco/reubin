@@ -10,7 +10,7 @@ import { createMercuriusTestClient } from "mercurius-integration-testing";
 describe("Integration", () => {
   const client = createMercuriusTestClient(createApp());
 
-  it("can create feeds", async () => {
+  test("can create feeds", async () => {
     const createFeed = await client.query(
       gql`
         mutation CreateFeed($url: String!) {

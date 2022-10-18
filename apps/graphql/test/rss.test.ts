@@ -14,7 +14,7 @@ export const getFixtureAsString = async (filePath: string) => {
 const parser = new RSSKit();
 
 describe("RSS", () => {
-  it("can parse a string", async () => {
+  test("can parse a string", async () => {
     const feed = await getFixtureAsString("guardian.rss");
     const output = await parser.parse(feed);
 
@@ -22,7 +22,7 @@ describe("RSS", () => {
     expect(output.items.length).toEqual(90);
   });
 
-  it("can parse a podcast RSS feed", async () => {
+  test("can parse a podcast RSS feed", async () => {
     const feed = await getFixtureAsString("serial.rss");
     const output = await parser.parse(feed);
     expect(output.title).toBe("Serial");

@@ -1,9 +1,9 @@
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "@testing-library/react";
 import { SWRConfig } from "swr";
 
-import { FeedList } from "../components/feed-list";
-import { DashboardProvider } from "../hooks/useDashboard";
-import type { GetFeedsQuery } from "../lib/__generated__";
+import { FeedList } from "../src/components/feed-list";
+import { DashboardProvider } from "../src/hooks/useDashboard";
+import type { GetFeedsQuery } from "../src/lib/__generated__";
 
 import { setupServer } from "msw/node";
 import { graphql } from "msw";
@@ -48,7 +48,7 @@ afterEach(() => {
 afterAll(() => server.close());
 
 describe("Feed Settings", () => {
-  it("should render the feed settings form", async () => {
+  test("should render the feed settings form", async () => {
     render(
       <SWRConfig value={{ dedupingInterval: 0, provider: () => new Map() }}>
         <DashboardProvider>
@@ -64,7 +64,7 @@ describe("Feed Settings", () => {
     expect(screen.getByText("Test Feed #1")).toBeInTheDocument();
   });
 
-  it("Should select a feed", async () => {
+  test("Should select a feed", async () => {
     render(
       <SWRConfig value={{ dedupingInterval: 0, provider: () => new Map() }}>
         <DashboardProvider>
