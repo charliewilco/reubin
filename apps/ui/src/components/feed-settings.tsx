@@ -81,7 +81,7 @@ export function UpdateFeedForm(props: FeedSettingsFormProps) {
         <TextLabel id="feed-title">Tag</TextLabel>
 
         {data && data.tags && (
-          <TagSelectionList selected={selected} tags={data.tags} onChange={handleTagChange} />
+          <TagSelectionList selected={selected} onChange={handleTagChange} />
         )}
       </Label>
       <div className="mt-8 flex items-center justify-between">
