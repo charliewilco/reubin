@@ -1,8 +1,9 @@
 import { RadioGroup } from "@headlessui/react";
-import { FiCheckCircle, FiTrash2 } from "react-icons/fi";
-import { classNames } from "./class-names";
-import type { TagInfoFragment } from "../../lib/__generated__";
-import { useMemo } from "react";
+import { CheckCircle, Trash2 } from "lucide-react";
+import { classNames } from "./ui/class-names";
+import type { TagInfoFragment } from "../lib/__generated__";
+import { useMemo, useCallback } from "react";
+import { removeTag } from "../lib/graphql";
 
 interface TagSelectionListProps {
   tags: (TagInfoFragment | null)[];
@@ -40,7 +41,7 @@ export function TagSelectionList(props: TagSelectionListProps) {
                       {tag!.title}
                     </RadioGroup.Label>
 
-                    <FiCheckCircle
+                    <CheckCircle
                       className={classNames(
                         !checked ? "invisible" : "",
                         "h-4 w-4 text-sky-500"
@@ -83,17 +84,31 @@ export function TagDeletionList(props: TagDeletionListProps) {
       }),
     [props.tags]
   );
+
+  const handleRemoveTag = useCallback(
+    async (tag: TagInfoFragment) => {
+      await removeTag(tag.id);
+      props.onDelete(tag);
+    },
+    [props]
+  );
+
   return (
     <div>
       <ul>
-        {tags.map((tag) => (
-          <li key={tag?.id} className="flex items-center justify-between pb-2">
-            <span>{tag?.title}</span>
-            <button>
-              <FiTrash2 />
-            </button>
-          </li>
-        ))}
+        {tags.map((tag) => {
+          const handleDelete = () => {
+            handleRemoveTag(tag);
+          };
+          return (
+            <li key={tag.id} className="flex items-center justify-between pb-2">
+              <span>{tag.title}</span>
+              <button onClick={handleDelete} aria-label="Remove Tag">
+                <Trash2 />
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

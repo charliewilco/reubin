@@ -1,14 +1,14 @@
 import useSWR, { mutate } from "swr";
 import { useCallback, useState } from "react";
-import { FiSettings, FiTrash2 } from "react-icons/fi";
+import { Settings2, Trash2 } from "lucide-react";
 
 import { Button, SuperButton } from "./ui/button";
 import { Dialog } from "./ui/dialog";
-import { removeFeed, updateFeedTitle, getAllTags, getFeed } from "../lib/graphql";
 import { Input, Label, TextLabel } from "./ui/input";
-import { useDashboardContext } from "../hooks/useDashboard";
-import { TagSelectionList } from "./ui/tag-lists";
+import { removeFeed, updateFeedTitle, getAllTags, getFeed } from "../lib/graphql";
 import type { FeedDetailsFragment, TagInfoFragment } from "../lib/__generated__";
+import { useDashboardContext } from "../hooks/useDashboard";
+import { TagSelectionList } from "./tag-lists";
 
 interface FeedSettingsFormProps {
   onSubmit(title: string, tagID?: string | null): void | Promise<void>;
@@ -21,7 +21,7 @@ export function UpdateFeedForm(props: FeedSettingsFormProps) {
     title: props.initialFeed.title,
     tag: props.initialFeed.tag,
   });
-  const { data } = useSWR("tags", getAllTags);
+  const { data } = useSWR("all-tags", getAllTags);
 
   const handleSubmit: React.FormEventHandler = useCallback(
     (event) => {
@@ -91,7 +91,7 @@ export function UpdateFeedForm(props: FeedSettingsFormProps) {
             aria-label="Remove Feed"
             className="flex items-center"
             onClick={props.onDelete}>
-            <FiTrash2 size={18} />
+            <Trash2 size={18} />
             <span className="ml-2 text-sm font-semibold">Unsubscribe</span>
           </Button>
         </div>
@@ -142,7 +142,7 @@ export function FeedSettings() {
   return (
     <>
       <Button aria-label="Update feed" onClick={() => setOpen(true)}>
-        <FiSettings />
+        <Settings2 />
       </Button>
       {data && data.feed && (
         <Dialog

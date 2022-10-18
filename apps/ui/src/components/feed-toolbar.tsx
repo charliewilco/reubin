@@ -1,4 +1,4 @@
-import { FiRotateCw } from "react-icons/fi";
+import { RotateCw } from "lucide-react";
 import { FeedSettings } from "./feed-settings";
 import { Button } from "./ui/button";
 
@@ -14,7 +14,7 @@ export function FeedToolbar(props: FeedToolbarProps) {
       <FeedSettings />
 
       <Button onClick={props.onRefresh} aria-label="Refresh feed">
-        <FiRotateCw />
+        <RotateCw />
       </Button>
     </div>
   );

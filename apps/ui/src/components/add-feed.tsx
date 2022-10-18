@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { FiPlus } from "react-icons/fi";
+import { Plus } from "lucide-react";
 
 import { addFeed } from "../lib/graphql";
 
@@ -67,7 +67,7 @@ export function AddFeed() {
   return (
     <>
       <Button onClick={() => setOpen(true)} aria-label="Add Feed" className="block">
-        <FiPlus size={24} />
+        <Plus size={24} />
       </Button>
       <Dialog isOpen={isOpen} onClose={() => setOpen(false)} title="Add Feed">
         <div className="mt-2 mb-8 text-sm opacity-50">

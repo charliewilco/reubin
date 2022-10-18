@@ -1,4 +1,4 @@
-import { FiCheck } from "react-icons/fi";
+import { Check } from "lucide-react";
 
 const tiers = [
   {
@@ -81,10 +81,7 @@ export function Pricing() {
               <ul role="list" className="mt-6 space-y-4">
                 {tier.includedFeatures.map((feature) => (
                   <li key={feature} className="flex space-x-3">
-                    <FiCheck
-                      className="h-5 w-5 flex-shrink-0 text-sky-500"
-                      aria-hidden="true"
-                    />
+                    <Check className="h-5 w-5 flex-shrink-0 text-sky-500" aria-hidden="true" />
                     <span className="text-sm text-zinc-500">{feature}</span>
                   </li>
                 ))}

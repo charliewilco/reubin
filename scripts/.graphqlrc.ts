@@ -1,15 +1,16 @@
 import type { IGraphQLProject } from "graphql-config";
+import path from "node:path";
 
 const config: IGraphQLProject = {
-  schema: "graphql/src/schema.graphql",
+  schema: path.join(process.cwd(), "apps/graphql/src/schema.graphql"),
   extensions: {
     codegen: {
       generates: {
-        "./graphql/src/__generated__.ts": {
+        [path.join(process.cwd(), "apps/graphql/src/__generated__.ts")]: {
           plugins: ["typescript", "typescript-resolvers"],
         },
-        "./ui/src/lib/__generated__.ts": {
-          documents: "ui/src/lib/*.graphql",
+        [path.join(process.cwd(), "apps/ui/src/lib/__generated__.ts")]: {
+          documents: path.join(process.cwd(), "apps/ui/src/lib/*.graphql"),
           plugins: ["typescript", "typescript-operations", "typescript-graphql-request"],
         },
       },

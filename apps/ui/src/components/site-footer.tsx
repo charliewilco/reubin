@@ -1,7 +1,5 @@
 import Link from "next/link";
-
-import { FiGlobe } from "react-icons/fi";
-import { SiGithub, SiTwitter } from "react-icons/si";
+import { Globe, Twitter, Github } from "lucide-react";
 
 export function SiteFooter() {
   return (
@@ -31,19 +29,19 @@ export function SiteFooter() {
         </nav>
         <div className="mt-8 flex">
           <a href="https://charliewil.co/" className="text-gray-400 hover:text-gray-500">
-            <FiGlobe className="h-6 w-6" />
+            <Globe className="h-6 w-6" />
           </a>
           <a
             href="https://twitter.com/_charliewilco"
             className="ml-6 text-gray-400 hover:text-gray-500">
             <span className="sr-only">Twitter</span>
-            <SiTwitter className="h-6 w-6" />
+            <Twitter className="h-6 w-6" />
           </a>
           <a
             href="https://github.com/charliewilco"
             className="ml-6 text-gray-400 hover:text-gray-500">
             <span className="sr-only">GitHub</span>
-            <SiGithub className="h-6 w-6" />
+            <Github className="h-6 w-6" />
           </a>
         </div>
         <div className="mt-8">

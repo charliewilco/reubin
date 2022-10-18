@@ -1,24 +1,24 @@
-import { FiGlobe, FiActivity, FiMail } from "react-icons/fi";
+import { Globe, Activity, Mail } from "lucide-react";
 
 const features = [
   {
     name: "Competitive rates",
     description:
       "Consequuntur omnis dicta cumque, inventore atque ab dolores aspernatur tempora ab doloremque.",
-    icon: FiGlobe,
+    icon: Globe,
   },
 
   {
     name: "Instant transfers",
     description:
       "Omnis, illo delectus? Libero, possimus nulla nemo tenetur adipisci repellat dolore eligendi velit doloribus mollitia.",
-    icon: FiActivity,
+    icon: Activity,
   },
   {
     name: "Reminder emails",
     description:
       "Veniam necessitatibus reiciendis fugit explicabo dolorem nihil et omnis assumenda odit? Quisquam unde accusantium.",
-    icon: FiMail,
+    icon: Mail,
   },
 ];
 
