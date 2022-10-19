@@ -1,5 +1,5 @@
 import type { Entry } from "@prisma/client";
-import { Context } from "../context";
+import type { Services } from "../services";
 import type { RSSItem } from "../rss";
 import type { Entry as EntryType } from "../__generated__";
 
@@ -26,5 +26,5 @@ export class EntryManager {
       pubDate: new Date(rssItem.pubDate ?? Date.now()),
     };
   }
-  constructor(public context: Context) {}
+  constructor(public services: Services) {}
 }

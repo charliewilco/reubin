@@ -1,8 +1,8 @@
 import { Feed } from "@prisma/client";
 import axios from "axios";
-import type { Context } from "../context";
 import { EntryManager } from "./entry";
 import type { Feed as FeedType } from "../__generated__";
+import type { Services } from "../services";
 
 export class FeedManager {
   static async getFeedFromDirectURL(url: string) {
@@ -20,13 +20,13 @@ export class FeedManager {
     };
   }
 
-  constructor(public context: Context) {}
+  constructor(public services: Services) {}
 
   async add(url: string) {
     try {
       const { data } = await FeedManager.getFeedFromDirectURL(url);
-      const parsed = await this.context.rss.parse(data);
-      const feed = await this.context.prisma.feed.create({
+      const parsed = await this.services.rss.parse(data);
+      const feed = await this.services.orm.feed.create({
         data: {
           title: parsed.title ?? "Untitled Feed",
           link: parsed.link ?? url,
@@ -35,7 +35,7 @@ export class FeedManager {
         },
       });
 
-      await this.context.prisma.entry.createMany({
+      await this.services.orm.entry.createMany({
         data: parsed.items.map((value) => EntryManager.fromRSS(value, feed.id)),
       });
 
@@ -46,7 +46,7 @@ export class FeedManager {
   }
 
   async getAll() {
-    const feeds = await this.context.prisma.feed.findMany();
+    const feeds = await this.services.orm.feed.findMany();
     const converted = [];
     for (let index = 0; index < feeds.length; index++) {
       converted.push(FeedManager.fromORM(feeds[index]));

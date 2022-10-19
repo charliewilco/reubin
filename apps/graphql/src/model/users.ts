@@ -1,8 +1,7 @@
 import * as base64 from "base-64";
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 
 import { ReturnedUser, User as UserType } from "../__generated__";
-import type { Context } from "../context";
 import type { Services } from "../services";
 
 export class UserManager {
@@ -14,7 +13,7 @@ export class UserManager {
       avatarColor: 250,
     };
   }
-  constructor(public context: Context, public services: Services) {}
+  constructor(public services: Services) {}
   async create(email: string, password: string): Promise<ReturnedUser> {
     const decoded = base64.decode(password);
 
@@ -23,7 +22,7 @@ export class UserManager {
       password: decoded,
     });
 
-    const user = await this.context.prisma.user.findUnique({
+    const user = await this.services.orm.user.findUnique({
       where: {
         email: email,
       },
@@ -31,7 +30,7 @@ export class UserManager {
 
     if (user === null) {
       const hash = await this.services.password.getHash(decoded);
-      const user = await this.context.prisma.user.create({
+      const user = await this.services.orm.user.create({
         data: {
           email: email,
           password: hash,
@@ -57,7 +56,7 @@ export class UserManager {
       password: decoded,
     });
 
-    const user = await this.context.prisma.user.findUnique({
+    const user = await this.services.orm.user.findUnique({
       where: {
         email: email,
       },

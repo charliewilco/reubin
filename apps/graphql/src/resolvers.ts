@@ -9,10 +9,14 @@ import {
 import type { Context } from "./context";
 import { FeedManager } from "./model/feeds";
 import { EntryManager } from "./model/entry";
+import { Models } from "./model";
+import { services } from "./services";
 
 // TODO: Create tag object
 // TODO: User sign up, registration
 // TODO: Stripe integration
+
+const m = new Models();
 
 /**
  * TODO:
@@ -20,18 +24,18 @@ import { EntryManager } from "./model/entry";
  * - me
  **/
 const query: QueryResolvers<Context> = {
-  async tags(_, __, { prisma }) {
-    const tags = await prisma.tag.findMany();
+  async tags(_, __, { token }) {
+    const tags = await services.orm.tag.findMany();
 
     return tags.map((tag) => ({ id: tag.id, title: tag.title }));
   },
-  async feeds(_parent, _args, { prisma }) {
-    const feeds = await prisma.feed.findMany();
+  async feeds(_parent, _args, {}) {
+    const feeds = await services.orm.feed.findMany();
 
     return feeds.map((f) => FeedManager.fromORM(f));
   },
-  async feed(_parent, { id }, { prisma }) {
-    const feed = await prisma.feed.findUnique({
+  async feed(_parent, { id }, {}) {
+    const feed = await services.orm.feed.findUnique({
       where: {
         id,
       },
@@ -43,8 +47,8 @@ const query: QueryResolvers<Context> = {
 
     return feed;
   },
-  async entry(_parent, { id }, { prisma }) {
-    const entry = await prisma.entry.findUnique({
+  async entry(_parent, { id }, {}) {
+    const entry = await services.orm.entry.findUnique({
       where: {
         id,
       },
@@ -56,7 +60,7 @@ const query: QueryResolvers<Context> = {
 
     return EntryManager.fromORM(entry);
   },
-  async entries(_parent, { feed_id, filter }, { prisma }) {
+  async entries(_parent, { feed_id, filter }, {}) {
     let args: any = { feedId: feed_id };
 
     if (filter === EntryFilter.Favorited) {
@@ -67,7 +71,7 @@ const query: QueryResolvers<Context> = {
       args.unread = true;
     }
 
-    const entries = await prisma.entry.findMany({
+    const entries = await services.orm.entry.findMany({
       where: args,
     });
 
@@ -81,11 +85,11 @@ const query: QueryResolvers<Context> = {
  * - register user
  **/
 const mutation: MutationResolvers<Context> = {
-  async addFeed(_parent, { url }, { prisma, rss }) {
+  async addFeed(_parent, { url }, {}) {
     try {
       const { data } = await FeedManager.getFeedFromDirectURL(url);
-      const parsed = await rss.parse(data);
-      const feed = await prisma.feed.create({
+      const parsed = await services.rss.parse(data);
+      const feed = await services.orm.feed.create({
         data: {
           title: parsed.title ?? "Untitled Feed",
           link: parsed.link ?? url,
@@ -94,7 +98,7 @@ const mutation: MutationResolvers<Context> = {
         },
       });
 
-      await prisma.entry.createMany({
+      await services.orm.entry.createMany({
         data: parsed.items.map((value) => EntryManager.fromRSS(value, feed.id)),
       });
 
@@ -103,9 +107,9 @@ const mutation: MutationResolvers<Context> = {
       throw new Error(err);
     }
   },
-  async addTag(_parent, { name }, { prisma }) {
+  async addTag(_parent, { name }, {}) {
     try {
-      const tag = await prisma.tag.create({
+      const tag = await services.orm.tag.create({
         data: {
           title: name,
         },
@@ -119,22 +123,21 @@ const mutation: MutationResolvers<Context> = {
       throw new Error(error);
     }
   },
-  async removeFeed(_parent, { id }, { prisma }) {
-    await prisma.entry.deleteMany({
+  async removeFeed(_parent, { id }, {}) {
+    await services.orm.entry.deleteMany({
       where: {
         feedId: id,
       },
     });
-    const feed = await prisma.feed.delete({
+    const feed = await services.orm.feed.delete({
       where: {
         id,
       },
     });
     return feed;
   },
-
-  async removeTag(_parent, { id }, { prisma }) {
-    const tag = await prisma.tag.delete({
+  async removeTag(_parent, { id }, {}) {
+    const tag = await services.orm.tag.delete({
       where: {
         id,
       },
@@ -145,8 +148,8 @@ const mutation: MutationResolvers<Context> = {
       title: tag.title,
     };
   },
-  async refreshFeed(_parent, { id }, { prisma, rss }) {
-    const feed = await prisma.feed.findUnique({
+  async refreshFeed(_parent, { id }, {}) {
+    const feed = await services.orm.feed.findUnique({
       where: {
         id,
       },
@@ -157,7 +160,7 @@ const mutation: MutationResolvers<Context> = {
     }
 
     const { data: rssText } = await FeedManager.getFeedFromDirectURL(feed.feedURL);
-    const { items } = await rss.parse(rssText);
+    const { items } = await services.rss.parse(rssText);
 
     const lastFetchedISO = feed.lastFetched.toISOString();
 
@@ -171,11 +174,11 @@ const mutation: MutationResolvers<Context> = {
       }
     }
 
-    await prisma.entry.createMany({
+    await services.orm.entry.createMany({
       data: entries,
     });
 
-    const _ = await prisma.entry.findMany({
+    const _ = await services.orm.entry.findMany({
       where: {
         feedId: id,
         pubDate: {
@@ -184,7 +187,7 @@ const mutation: MutationResolvers<Context> = {
       },
     });
 
-    await prisma.feed.update({
+    await services.orm.feed.update({
       where: {
         id,
       },
@@ -195,8 +198,8 @@ const mutation: MutationResolvers<Context> = {
 
     return _.map((value) => EntryManager.fromORM(value));
   },
-  async markAsRead(_parent, { id }, { prisma }) {
-    const entry = await prisma.entry.update({
+  async markAsRead(_parent, { id }, {}) {
+    const entry = await services.orm.entry.update({
       where: {
         id,
       },
@@ -210,9 +213,8 @@ const mutation: MutationResolvers<Context> = {
 
     return EntryManager.fromORM(entry);
   },
-
-  async markAsFavorite(_parent, { id, favorite }, { prisma }) {
-    const entry = await prisma.entry.update({
+  async markAsFavorite(_parent, { id, favorite }, {}) {
+    const entry = await services.orm.entry.update({
       where: {
         id,
       },
@@ -226,7 +228,7 @@ const mutation: MutationResolvers<Context> = {
 
     return EntryManager.fromORM(entry);
   },
-  async updateFeed(_parent, { id, fields }, { prisma }) {
+  async updateFeed(_parent, { id, fields }, {}) {
     try {
       const data: Partial<Feed> = {};
 
@@ -238,7 +240,7 @@ const mutation: MutationResolvers<Context> = {
         data.tagId = fields.tagID;
       }
 
-      const feed = await prisma.feed.update({
+      const feed = await services.orm.feed.update({
         where: {
           id,
         },
@@ -253,6 +255,12 @@ const mutation: MutationResolvers<Context> = {
     } catch (error: any) {
       throw new Error(error);
     }
+  },
+  async createUser(_, { email, password }, context) {
+    return m.users.create(email, password);
+  },
+  async login(_, { email, password }, context) {
+    return m.users.verify(email, password);
   },
 };
 

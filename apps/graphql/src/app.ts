@@ -1,7 +1,7 @@
 import Fastify from "fastify";
 import mercurius from "mercurius";
 import { schema } from "./schema";
-import { context } from "./context";
+import { getContext } from "./context";
 import { RecommendedKeyArray } from "./recommendations";
 
 export const createApp = () => {
@@ -16,7 +16,7 @@ export const createApp = () => {
   app.register(mercurius, {
     schema,
     graphiql: true,
-    context: () => context,
+    context: getContext,
   });
 
   return app;

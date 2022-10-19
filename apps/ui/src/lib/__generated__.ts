@@ -398,6 +398,34 @@ export type RemoveTagMutation = {
   removeTag: { __typename?: "Tag"; id: string; title: string };
 };
 
+export type LoginMutationVariables = Exact<{
+  email: Scalars["String"];
+  password: Scalars["String"];
+}>;
+
+export type LoginMutation = {
+  __typename?: "Mutation";
+  login: {
+    __typename?: "ReturnedUser";
+    token: string;
+    user: { __typename?: "User"; id: string; email: string };
+  };
+};
+
+export type RegisterMutationVariables = Exact<{
+  email: Scalars["String"];
+  password: Scalars["String"];
+}>;
+
+export type RegisterMutation = {
+  __typename?: "Mutation";
+  createUser: {
+    __typename?: "ReturnedUser";
+    token: string;
+    user: { __typename?: "User"; id: string; email: string };
+  };
+};
+
 export const FeedDetailsFragmentDoc = gql`
   fragment FeedDetails on Feed {
     id
@@ -549,6 +577,28 @@ export const RemoveTagDocument = gql`
     }
   }
   ${TagInfoFragmentDoc}
+`;
+export const LoginDocument = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        id
+        email
+      }
+    }
+  }
+`;
+export const RegisterDocument = gql`
+  mutation Register($email: String!, $password: String!) {
+    createUser(email: $email, password: $password) {
+      token
+      user {
+        id
+        email
+      }
+    }
+  }
 `;
 
 export type SdkFunctionWrapper = <T>(
@@ -772,6 +822,34 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         "RemoveTag",
+        "mutation"
+      );
+    },
+    Login(
+      variables: LoginMutationVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<LoginMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<LoginMutation>(LoginDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "Login",
+        "mutation"
+      );
+    },
+    Register(
+      variables: RegisterMutationVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<RegisterMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<RegisterMutation>(RegisterDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "Register",
         "mutation"
       );
     },

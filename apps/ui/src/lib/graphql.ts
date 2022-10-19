@@ -1,4 +1,5 @@
 import { GraphQLClient } from "graphql-request";
+import { getToken } from "./cookies";
 import { EntryFilter, getSdk, type UpdateFeedInput } from "./__generated__";
 
 const ENDPOINT =
@@ -111,4 +112,43 @@ export const updateFeedTitle = async (id: string, input?: UpdateFeedInput) => {
   } catch (error: any) {
     throw new Error(error);
   }
+};
+
+export const login = async (email: string, password: string) => {
+  const encoded = window.btoa(password);
+
+  try {
+    return sdk.Login({
+      email,
+      password: encoded,
+    });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const register = async (email: string, password: string) => {
+  const encoded = window.btoa(password);
+
+  try {
+    return sdk.Register({
+      email,
+      password: encoded,
+    });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const initalizeHeaders = (cb: (token: string) => void) => {
+  const token = getToken();
+
+  if (token !== null) {
+    setHeaders(token);
+    cb(token);
+  }
+};
+
+export const setHeaders = (token: string) => {
+  client.setHeader("Authorization", token);
 };

@@ -10,9 +10,8 @@ import {
 } from "./core";
 import type { PartialKeys } from "./utils";
 
-import { useLayoutEffect, useEffect, useReducer, useState } from "react";
-
-const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+import { useEffect, useReducer, useState } from "react";
+import { useIsomorphicLayoutEffect } from "../../../hooks/useIsomorphicEffect";
 
 function useVirtualizerBase<TScrollElement, TItemElement = unknown>(
   options: VirtualizerOptions<TScrollElement, TItemElement>

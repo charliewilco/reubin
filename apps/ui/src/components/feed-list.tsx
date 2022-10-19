@@ -1,13 +1,26 @@
 import { memo, useCallback, useMemo } from "react";
 import isEqual from "react-fast-compare";
 import useSWR from "swr";
+import { variants } from "classname-variants";
 import { useDashboardContext } from "../hooks/useDashboard";
 import { getFeeds } from "../lib/graphql";
 import { mapTagsToFeed } from "../lib/map-tags-feed";
 import type { GetFeedsQuery } from "../lib/__generated__";
 import { LoadingIndicator } from "./ui/activity-indicator";
-import { classNames } from "./ui/class-names";
 import { TagWithFeeds } from "./ui/tag-with-feeds";
+
+const listItem = variants({
+  base: "cursor-pointer p-2",
+  variants: {
+    selected: {
+      un: "",
+      active: "bg-sky-500/50 text-white",
+    },
+  },
+  defaultVariants: {
+    selected: "un",
+  },
+});
 
 interface FeedItemProps {
   id: string;
@@ -30,7 +43,7 @@ export function FeedItem(props: FeedItemProps) {
     <li
       {...listProps}
       key={props.id}
-      className={classNames("cursor-pointer p-2", isSelected && "bg-sky-500/50 text-white")}>
+      className={listItem({ selected: isSelected ? "active" : "un" })}>
       <div className="flex justify-between">
         <div onClick={handleSelect} className="flex-1">
           <h2 className="text-base">{props.title}</h2>
