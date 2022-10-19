@@ -25,7 +25,7 @@
     "@graphql-codegen/typescript-graphql-request": "^4.5.6",
     "@graphql-codegen/typescript-operations": "^2.5.4",
     "@graphql-codegen/typescript-resolvers": "^2.7.4",
-    "@prisma/migrate": "4.4.0",
+    "@prisma/migrate": "4.5.0",
     "arg": "^5.0.2",
     "del": "^7.0.0",
     "graphql": "^16.6.0",
@@ -37,7 +37,7 @@
     "prettier-plugin-prisma": "^4.2.0",
     "prettier-plugin-tailwindcss": "^0.1.11",
     "pretty-quick": "^3.1.2",
-    "prisma": "^4.4.0",
+    "prisma": "^4.5.0",
     "turbo": "^1.5.5",
     "typescript": "^4.8.4"
   },
