@@ -7,8 +7,8 @@ import {
   EntryFilter,
 } from "./__generated__";
 import type { Context } from "./context";
-import { FeedManager } from "./model/feeds";
-import { EntryManager } from "./model/entry";
+import { FeedController } from "./model/feeds";
+import { EntryController } from "./model/entry";
 import { Models } from "./model";
 import { services } from "./services";
 
@@ -16,7 +16,7 @@ import { services } from "./services";
 // TODO: User sign up, registration
 // TODO: Stripe integration
 
-const m = new Models();
+const m = new Models(services);
 
 /**
  * TODO:
@@ -25,27 +25,25 @@ const m = new Models();
  **/
 const query: QueryResolvers<Context> = {
   async tags(_, __, { token }) {
-    const tags = await services.orm.tag.findMany();
-
-    return tags.map((tag) => ({ id: tag.id, title: tag.title }));
-  },
-  async feeds(_parent, _args, {}) {
-    const feeds = await services.orm.feed.findMany();
-
-    return feeds.map((f) => FeedManager.fromORM(f));
-  },
-  async feed(_parent, { id }, {}) {
-    const feed = await services.orm.feed.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (feed === null) {
-      throw new Error("Feed not found");
+    if (token !== null) {
+      return m.tag.getAll(token);
+    } else {
+      throw new Error("This node requires Authorization token");
     }
-
-    return feed;
+  },
+  async feeds(_parent, _args, { token }) {
+    if (token !== null) {
+      return m.feeds.getAll(token);
+    } else {
+      throw new Error("This node requires Authorization token");
+    }
+  },
+  async feed(_parent, { id }, { token }) {
+    if (token !== null) {
+      return m.feeds.getById(id, token);
+    } else {
+      throw new Error("This node requires Authorization token");
+    }
   },
   async entry(_parent, { id }, {}) {
     const entry = await services.orm.entry.findUnique({
@@ -58,7 +56,7 @@ const query: QueryResolvers<Context> = {
       throw new Error("Entry not found.");
     }
 
-    return EntryManager.fromORM(entry);
+    return EntryController.fromORM(entry);
   },
   async entries(_parent, { feed_id, filter }, {}) {
     let args: any = { feedId: feed_id };
@@ -75,7 +73,7 @@ const query: QueryResolvers<Context> = {
       where: args,
     });
 
-    return entries.map((value) => EntryManager.fromORM(value));
+    return entries.map((value) => EntryController.fromORM(value));
   },
 };
 
@@ -85,42 +83,18 @@ const query: QueryResolvers<Context> = {
  * - register user
  **/
 const mutation: MutationResolvers<Context> = {
-  async addFeed(_parent, { url }, {}) {
-    try {
-      const { data } = await FeedManager.getFeedFromDirectURL(url);
-      const parsed = await services.rss.parse(data);
-      const feed = await services.orm.feed.create({
-        data: {
-          title: parsed.title ?? "Untitled Feed",
-          link: parsed.link ?? url,
-          feedURL: parsed.feedUrl ?? url,
-          lastFetched: new Date(Date.now()),
-        },
-      });
-
-      await services.orm.entry.createMany({
-        data: parsed.items.map((value) => EntryManager.fromRSS(value, feed.id)),
-      });
-
-      return feed;
-    } catch (err: any) {
-      throw new Error(err);
+  async addFeed(_parent, { url }, { token }) {
+    if (token !== null) {
+      return m.feeds.add(url, token);
+    } else {
+      throw new Error("This node requires Authorization token");
     }
   },
-  async addTag(_parent, { name }, {}) {
-    try {
-      const tag = await services.orm.tag.create({
-        data: {
-          title: name,
-        },
-      });
-
-      return {
-        id: tag.id,
-        title: tag.title,
-      };
-    } catch (error: any) {
-      throw new Error(error);
+  async addTag(_parent, { name }, { token }) {
+    if (token !== null) {
+      return m.tag.add(name, token);
+    } else {
+      throw new Error("This node requires Authorization token");
     }
   },
   async removeFeed(_parent, { id }, {}) {
@@ -159,17 +133,17 @@ const mutation: MutationResolvers<Context> = {
       throw new Error("Couldn't find feed");
     }
 
-    const { data: rssText } = await FeedManager.getFeedFromDirectURL(feed.feedURL);
+    const { data: rssText } = await FeedController.getFeedFromDirectURL(feed.feedURL);
     const { items } = await services.rss.parse(rssText);
 
     const lastFetchedISO = feed.lastFetched.toISOString();
 
-    const entries: ReturnType<typeof EntryManager.fromRSS>[] = [];
+    const entries: ReturnType<typeof EntryController.fromRSS>[] = [];
 
     for (const item of items) {
       if (item) {
         if (lastFetchedISO < item.isoDate!) {
-          entries.push(EntryManager.fromRSS(item, feed.id));
+          entries.push(EntryController.fromRSS(item, feed.id));
         }
       }
     }
@@ -196,7 +170,7 @@ const mutation: MutationResolvers<Context> = {
       },
     });
 
-    return _.map((value) => EntryManager.fromORM(value));
+    return _.map((value) => EntryController.fromORM(value));
   },
   async markAsRead(_parent, { id }, {}) {
     const entry = await services.orm.entry.update({
@@ -211,7 +185,7 @@ const mutation: MutationResolvers<Context> = {
       throw new Error("Entry not updated");
     }
 
-    return EntryManager.fromORM(entry);
+    return EntryController.fromORM(entry);
   },
   async markAsFavorite(_parent, { id, favorite }, {}) {
     const entry = await services.orm.entry.update({
@@ -226,7 +200,7 @@ const mutation: MutationResolvers<Context> = {
       throw new Error("Entry not updated");
     }
 
-    return EntryManager.fromORM(entry);
+    return EntryController.fromORM(entry);
   },
   async updateFeed(_parent, { id, fields }, {}) {
     try {
@@ -251,7 +225,7 @@ const mutation: MutationResolvers<Context> = {
         throw new Error("Feed not updated");
       }
 
-      return FeedManager.fromORM(feed);
+      return FeedController.fromORM(feed);
     } catch (error: any) {
       throw new Error(error);
     }

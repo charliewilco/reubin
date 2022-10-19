@@ -1,5 +1,6 @@
 import { atom, useAtom } from "jotai";
 import { useEffect, useRef } from "react";
+import { setToken } from "../lib/cookies";
 import { setHeaders, initalizeHeaders } from "../lib/graphql";
 
 interface AuthState {
@@ -19,6 +20,7 @@ export function useAuthAtom() {
     if (isBrowser) {
       if (state.token !== null && initializedRef.current) {
         setHeaders(state.token);
+        setToken(state.token);
       } else {
         initializedRef.current = true;
         initalizeHeaders((token) => setState({ token }));

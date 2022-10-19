@@ -1,10 +1,10 @@
 import { useCallback, useReducer } from "react";
 import { Tab } from "@headlessui/react";
 import { Label, Input, TextLabel } from "./ui/input";
-import { useCookies } from "../hooks/useCookies";
 import { login, register } from "../lib/graphql";
 import { classNames } from "./ui/class-names";
 import { useAuthAtom } from "../hooks/useAuth";
+import { useRouter } from "next/router";
 
 interface LoginFormState {
   email: string;
@@ -43,8 +43,9 @@ export function LoginForm() {
     isSubmitting: false,
   });
 
-  const [, setCookie] = useCookies("REUBIN_TOKEN");
   const [, updateAtom] = useAuthAtom();
+
+  const router = useRouter();
 
   const handleSubmit: React.FormEventHandler = useCallback(
     async (event) => {
@@ -54,17 +55,17 @@ export function LoginForm() {
 
       dispatch({ type: "submitting" });
 
-      await register(state.email, state.password).then((value) => {
-        if (value.createUser.user && value.createUser.token) {
-          setCookie(value.createUser.token, { path: "/" });
-
+      await login(state.email, state.password).then((value) => {
+        if (value.login.user && value.login.token) {
           updateAtom({
-            token: value.createUser.token,
+            token: value.login.token,
           });
+
+          router.push("/dashboard");
         }
       });
     },
-    [state, dispatch, setCookie, updateAtom]
+    [state, dispatch, updateAtom, router]
   );
 
   const handleChange = useCallback(
@@ -128,8 +129,9 @@ export function RegisterForm() {
     isSubmitting: false,
   });
 
-  const [, setCookie] = useCookies("REUBIN_TOKEN");
+  const [, updateAtom] = useAuthAtom();
 
+  const router = useRouter();
   const handleSubmit: React.FormEventHandler = useCallback(
     async (event) => {
       if (event) {
@@ -137,14 +139,17 @@ export function RegisterForm() {
       }
 
       dispatch({ type: "submitting" });
+      await register(state.email, state.password).then((value) => {
+        if (value.createUser.user && value.createUser.token) {
+          updateAtom({
+            token: value.createUser.token,
+          });
 
-      await login(state.email, state.password).then((value) => {
-        if (value.login.user && value.login.token) {
-          setCookie(value.login.token, { path: "/" });
+          router.push("/dashboard");
         }
       });
     },
-    [state, dispatch, setCookie]
+    [state, dispatch, updateAtom, router]
   );
 
   const handleChange = useCallback(

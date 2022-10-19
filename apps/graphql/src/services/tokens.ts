@@ -37,4 +37,14 @@ export class TokenManager {
     });
     return TokenManager.isTokenContents(contents) ? { ...contents, token } : null;
   }
+
+  getUserId(token: string) {
+    const contents = this.read(token);
+
+    if (contents === null) {
+      throw new Error("Couldn't decode token");
+    }
+
+    return contents.user;
+  }
 }

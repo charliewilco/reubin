@@ -3,7 +3,7 @@ import type { Services } from "../services";
 import type { RSSItem } from "../rss";
 import type { Entry as EntryType } from "../__generated__";
 
-export class EntryManager {
+export class EntryController {
   static fromORM(entry: Entry): EntryType {
     return {
       title: entry.title,
@@ -27,4 +27,6 @@ export class EntryManager {
     };
   }
   constructor(public services: Services) {}
+
+  getAll() {}
 }

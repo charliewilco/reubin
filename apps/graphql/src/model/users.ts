@@ -4,7 +4,7 @@ import type { User } from "@prisma/client";
 import { ReturnedUser, User as UserType } from "../__generated__";
 import type { Services } from "../services";
 
-export class UserManager {
+export class UserController {
   static fromORM(user: User): UserType {
     return {
       id: user.id,
@@ -41,7 +41,7 @@ export class UserManager {
       const token = this.services.token.create(user);
 
       return {
-        user: UserManager.fromORM(user),
+        user: UserController.fromORM(user),
         token,
       };
     } else {
@@ -66,7 +66,7 @@ export class UserManager {
       const token = this.services.token.create(user);
 
       return {
-        user: UserManager.fromORM(user),
+        user: UserController.fromORM(user),
         token,
       };
     } else {

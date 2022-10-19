@@ -7,10 +7,10 @@ export interface Context {
 export function getContext(request: FastifyRequest): Context {
   const cookies = new Cookies(request.headers.cookie ?? "");
   const parsed = cookies.getAll();
-  request.headers.authorization;
+
   let token: string | null = null;
 
-  if (parsed["REUBIN_TOKEN"]) {
+  if (parsed["REUBIN_TOKEN"] || request.headers.authorization) {
     token = parsed["REUBIN_TOKEN"] ?? request.headers.authorization;
   }
 
