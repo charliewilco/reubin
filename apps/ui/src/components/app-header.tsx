@@ -1,3 +1,4 @@
+import { useAuthAtom } from "../hooks/useAuth";
 import { Logo } from "./logo";
 
 interface AppHeaderProps {
@@ -6,22 +7,21 @@ interface AppHeaderProps {
 }
 
 export function AppHeader(props: AppHeaderProps) {
+  const [{ token }] = useAuthAtom();
+
   return (
-    <header className="w-full border-b border-zinc-200 px-4 dark:border-zinc-700">
+    <header className="w-full border-b border-zinc-200 px-4 backdrop-blur-sm backdrop-saturate-150 dark:border-zinc-700">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Logo />
           <h1 className="ml-4">{props.title}</h1>
         </div>
 
-        <div>{props.children}</div>
+        <div>
+          {props.children}
+          {token && <div>Logged in</div>}
+        </div>
       </div>
-
-      <style jsx>{`
-        header {
-          backdrop-filter: saturate(180%) blur(5px);
-        }
-      `}</style>
     </header>
   );
 }

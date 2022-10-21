@@ -48,7 +48,6 @@ export class UserController {
       throw new Error("Hey ummmm, that email is already taken. This is awkward.");
     }
   }
-
   async verify(email: string, password: string): Promise<ReturnedUser> {
     const decoded = base64.decode(password);
     await this.services.validations.createUserValidation.parseAsync({
@@ -72,5 +71,20 @@ export class UserController {
     } else {
       throw new Error("No dice, slim");
     }
+  }
+  async getMe(token: string) {
+    const id = this.services.token.getUserId(token);
+
+    const user = await this.services.orm.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (user === null) {
+      throw new Error("Couldn't find user");
+    }
+
+    return UserController.fromORM(user);
   }
 }

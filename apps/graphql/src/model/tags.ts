@@ -46,18 +46,27 @@ export class TagController {
     }
   }
 
-  async remove(id: string, _token: string) {
-    // const userId = this.services.token.getUserId(token);
+  async remove(id: string, token: string) {
+    const userId = this.services.token.getUserId(token);
 
-    const tag = await this.services.orm.tag.delete({
+    const tag = await this.services.orm.tag.findUnique({
       where: {
         id,
       },
     });
 
-    return {
-      id: tag.id,
-      title: tag.title,
-    };
+    if (tag?.userId === userId) {
+      const tag = await this.services.orm.tag.delete({
+        where: {
+          id,
+        },
+      });
+      return {
+        id: tag.id,
+        title: tag.title,
+      };
+    } else {
+      throw new Error("Could not find tag");
+    }
   }
 }

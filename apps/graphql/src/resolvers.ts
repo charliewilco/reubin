@@ -21,7 +21,6 @@ const m = new Models(services);
 /**
  * TODO:
  * - recently read
- * - me
  **/
 const query: QueryResolvers<Context> = {
   async tags(_, __, { token }) {
@@ -75,13 +74,15 @@ const query: QueryResolvers<Context> = {
 
     return entries.map((value) => EntryController.fromORM(value));
   },
+  async me(_, __, { token }) {
+    if (token !== null) {
+      return m.users.getMe(token);
+    } else {
+      throw new Error("This node requires Authorization token");
+    }
+  },
 };
 
-/**
- * TODO:
- * - login
- * - register user
- **/
 const mutation: MutationResolvers<Context> = {
   async addFeed(_parent, { url }, { token }) {
     if (token !== null) {
@@ -230,10 +231,10 @@ const mutation: MutationResolvers<Context> = {
       throw new Error(error);
     }
   },
-  async createUser(_, { email, password }, context) {
+  async createUser(_, { email, password }) {
     return m.users.create(email, password);
   },
-  async login(_, { email, password }, context) {
+  async login(_, { email, password }) {
     return m.users.verify(email, password);
   },
 };

@@ -1,96 +1,56 @@
-import { useCallback, useReducer } from "react";
+import { useRouter } from "next/router";
 import { Tab } from "@headlessui/react";
+import z from "zod";
 import { Label, Input, TextLabel } from "./ui/input";
 import { login, register } from "../lib/graphql";
 import { classNames } from "./ui/class-names";
 import { useAuthAtom } from "../hooks/useAuth";
-import { useRouter } from "next/router";
+import { useForm } from "./ui/forms/core";
 
-interface LoginFormState {
-  email: string;
-  password: string;
-  isSubmitting: boolean;
-}
-
-type LoginFormAction =
-  | {
-      type: "email" | "password";
-      payload: string;
-    }
-  | {
-      type: "submitting" | "reset";
-    };
-
-function reducer(state: LoginFormState, action: LoginFormAction) {
-  switch (action.type) {
-    case "email":
-      return { ...state, email: action.payload };
-    case "password":
-      return { ...state, password: action.payload };
-    case "submitting":
-      return { ...state, isSubmitting: true };
-    case "reset":
-      return { ...state, email: "", password: "", isSubmitting: false };
-    default:
-      throw new Error("Invalid action type", action);
-  }
-}
+const validationSchema = z.object({
+  email: z.string().email("Invalid email"),
+  password: z.string().min(8),
+});
 
 export function LoginForm() {
-  const [state, dispatch] = useReducer(reducer, {
-    email: "",
-    password: "",
-    isSubmitting: false,
-  });
-
   const [, updateAtom] = useAuthAtom();
-
   const router = useRouter();
-
-  const handleSubmit: React.FormEventHandler = useCallback(
-    async (event) => {
-      if (event) {
-        event.preventDefault();
-      }
-
-      dispatch({ type: "submitting" });
-
-      await login(state.email, state.password).then((value) => {
-        if (value.login.user && value.login.token) {
-          updateAtom({
-            token: value.login.token,
-          });
-
-          router.push("/dashboard");
-        }
-      });
+  const { errors, isSubmitting, getFieldProps, getFormProps, getErrorProps } = useForm(
+    {
+      initialValues: {
+        email: "",
+        password: "",
+      },
+      validationSchema,
+      onSubmit(values) {
+        login(values.email, values.password).then(({ login: { user, token } }) => {
+          if (user && token) {
+            updateAtom({ token });
+            router.push("/dashboard");
+          }
+        });
+      },
     },
-    [state, dispatch, updateAtom, router]
-  );
-
-  const handleChange = useCallback(
-    (type: "email" | "password"): React.ChangeEventHandler<HTMLInputElement> => {
-      return (event) => dispatch({ type, payload: event.target.value });
-    },
-    [dispatch]
+    {
+      validateOnEvent: "blur",
+    }
   );
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form {...getFormProps()} className="space-y-6">
       <div>
         <Label htmlFor="email">
           <TextLabel>Email</TextLabel>
           <Input
-            disabled={state.isSubmitting}
+            disabled={isSubmitting}
             type="email"
-            name="email"
             id="email"
             autoComplete="email"
             required
             data-testid="login-email-input"
-            value={state.email}
-            onChange={handleChange("email")}
+            {...getFieldProps("email")}
           />
+          {errors["email"] && <div {...getErrorProps("email")}>{errors["email"]}</div>}
         </Label>
       </div>
 
@@ -98,22 +58,24 @@ export function LoginForm() {
         <Label htmlFor="password">
           <TextLabel>Password</TextLabel>
           <Input
-            disabled={state.isSubmitting}
+            disabled={isSubmitting}
             id="password"
-            name="password"
             type="password"
             autoComplete="current-password"
             required
-            data-testid="login-email-input"
-            value={state.password}
-            onChange={handleChange("password")}
+            data-testid="login-password-input"
+            {...getFieldProps("password")}
           />
+          {errors["password"] && (
+            <div {...getErrorProps("password")}>{errors["password"]}</div>
+          )}
         </Label>
       </div>
 
       <div>
         <button
           type="submit"
+          disabled={isSubmitting}
           className="flex w-full justify-center rounded-md border border-transparent bg-sky-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
           Login
         </button>
@@ -123,58 +85,47 @@ export function LoginForm() {
 }
 
 export function RegisterForm() {
-  const [state, dispatch] = useReducer(reducer, {
-    email: "",
-    password: "",
-    isSubmitting: false,
-  });
-
   const [, updateAtom] = useAuthAtom();
-
   const router = useRouter();
-  const handleSubmit: React.FormEventHandler = useCallback(
-    async (event) => {
-      if (event) {
-        event.preventDefault();
-      }
+  const { errors, isSubmitting, getFieldProps, getFormProps, getErrorProps } = useForm(
+    {
+      initialValues: {
+        email: "",
+        password: "",
+      },
+      validationSchema,
+      onSubmit(values) {
+        register(values.email, values.password).then((value) => {
+          if (value.createUser.user && value.createUser.token) {
+            updateAtom({
+              token: value.createUser.token,
+            });
 
-      dispatch({ type: "submitting" });
-      await register(state.email, state.password).then((value) => {
-        if (value.createUser.user && value.createUser.token) {
-          updateAtom({
-            token: value.createUser.token,
-          });
-
-          router.push("/dashboard");
-        }
-      });
+            router.push("/dashboard");
+          }
+        });
+      },
     },
-    [state, dispatch, updateAtom, router]
-  );
-
-  const handleChange = useCallback(
-    (type: "email" | "password"): React.ChangeEventHandler<HTMLInputElement> => {
-      return (event) => dispatch({ type, payload: event.target.value });
-    },
-    [dispatch]
+    {
+      validateOnEvent: "blur",
+    }
   );
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form {...getFormProps()} className="space-y-6">
       <div>
         <Label htmlFor="email">
           <TextLabel>Email</TextLabel>
           <Input
-            disabled={state.isSubmitting}
+            disabled={isSubmitting}
             type="email"
-            name="email"
             id="email"
             autoComplete="email"
             required
             data-testid="login-email-input"
-            value={state.email}
-            onChange={handleChange("email")}
+            {...getFieldProps("email")}
           />
+          {errors["email"] && <div {...getErrorProps("email")}>{errors["email"]}</div>}
         </Label>
       </div>
 
@@ -182,21 +133,23 @@ export function RegisterForm() {
         <Label htmlFor="password">
           <TextLabel>Password</TextLabel>
           <Input
-            disabled={state.isSubmitting}
+            disabled={isSubmitting}
             id="password"
-            name="password"
             type="password"
             autoComplete="current-password"
             required
             data-testid="login-email-input"
-            value={state.password}
-            onChange={handleChange("password")}
+            {...getFieldProps("password")}
           />
+          {errors["password"] && (
+            <div {...getErrorProps("password")}>{errors["password"]}</div>
+          )}
         </Label>
       </div>
 
       <div>
         <button
+          disabled={isSubmitting}
           type="submit"
           className="flex w-full justify-center rounded-md border border-transparent bg-sky-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
           Register

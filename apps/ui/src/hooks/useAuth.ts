@@ -9,7 +9,7 @@ interface AuthState {
 
 const isBrowser = typeof window !== "undefined";
 
-const authAtom = atom<AuthState>({
+export const authAtom = atom<AuthState>({
   token: null,
 });
 
