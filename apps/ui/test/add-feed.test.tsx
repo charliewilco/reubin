@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { AddFeedForm } from "../src/components/add-feed";
@@ -16,7 +16,7 @@ describe("AddFeed", () => {
     const input = screen.getByTestId("add-feed-url");
     const button = screen.getByText("Submit");
 
-    fireEvent(button, new MouseEvent("click", { bubbles: true }));
+    await userEvent.click(button);
 
     expect(fn).not.toHaveBeenCalled();
 
@@ -24,7 +24,7 @@ describe("AddFeed", () => {
 
     expect(input).toHaveValue("https://www.google.com");
 
-    fireEvent(button, new MouseEvent("click", { bubbles: true }));
+    await userEvent.click(button);
 
     expect(fn).toHaveBeenCalled();
   });

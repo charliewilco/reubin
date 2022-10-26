@@ -4,11 +4,47 @@
 
 import { createApp } from "../src/app";
 import gql from "graphql-tag";
-
+import base64 from "base-64";
+import cuid from "cuid";
 import { createMercuriusTestClient } from "mercurius-integration-testing";
+
+let authToken: string | null = null;
 
 describe("Integration", () => {
   const client = createMercuriusTestClient(createApp());
+
+  const newUser = {
+    email: `${cuid()}@charlieisamazing.com`,
+    password: base64.encode("P@ssw0rd"),
+  };
+
+  beforeAll(() => {
+    console.log("Using the following credentials:\n");
+    console.log(newUser.email, "P@ssw0rd");
+  });
+
+  test("can create users", async () => {
+    const createUser = await client.query(
+      gql`
+        mutation Register($email: String!, $password: String!) {
+          createUser(email: $email, password: $password) {
+            token
+            user {
+              id
+              email
+            }
+          }
+        }
+      `,
+      {
+        variables: newUser,
+      }
+    );
+
+    authToken = createUser.data.createUser.token;
+
+    expect(createUser.data.createUser.token).not.toBeNull();
+  });
 
   test("can create feeds", async () => {
     const createFeed = await client.query(
@@ -23,6 +59,9 @@ describe("Integration", () => {
       {
         variables: {
           url: "https://www.inputmag.com/rss",
+        },
+        headers: {
+          authorization: authToken ?? "",
         },
       }
     );

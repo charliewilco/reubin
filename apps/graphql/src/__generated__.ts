@@ -60,6 +60,8 @@ export type Mutation = {
   __typename?: "Mutation";
   addFeed: Feed;
   addTag: Tag;
+  createUser: ReturnedUser;
+  login: ReturnedUser;
   markAsFavorite: Entry;
   markAsRead: Entry;
   refreshFeed: Array<Entry>;
@@ -74,6 +76,16 @@ export type MutationAddFeedArgs = {
 
 export type MutationAddTagArgs = {
   name: Scalars["String"];
+};
+
+export type MutationCreateUserArgs = {
+  email: Scalars["String"];
+  password: Scalars["String"];
+};
+
+export type MutationLoginArgs = {
+  email: Scalars["String"];
+  password: Scalars["String"];
 };
 
 export type MutationMarkAsFavoriteArgs = {
@@ -108,6 +120,7 @@ export type Query = {
   entry: Entry;
   feed: Feed;
   feeds: Array<Maybe<Feed>>;
+  me: User;
   tags: Array<Maybe<Tag>>;
 };
 
@@ -124,6 +137,12 @@ export type QueryFeedArgs = {
   id: Scalars["ID"];
 };
 
+export type ReturnedUser = {
+  __typename?: "ReturnedUser";
+  token: Scalars["String"];
+  user: User;
+};
+
 export type Tag = {
   __typename?: "Tag";
   id: Scalars["ID"];
@@ -133,6 +152,20 @@ export type Tag = {
 export type UpdateFeedInput = {
   tagID?: InputMaybe<Scalars["ID"]>;
   title?: InputMaybe<Scalars["String"]>;
+};
+
+export type UpdateUserInput = {
+  displayName?: InputMaybe<Scalars["String"]>;
+  refreshInterval?: InputMaybe<Scalars["Int"]>;
+};
+
+export type User = {
+  __typename?: "User";
+  avatarColor?: Maybe<Scalars["Int"]>;
+  displayName?: Maybe<Scalars["String"]>;
+  email: Scalars["String"];
+  id: Scalars["ID"];
+  refreshInterval: Scalars["Int"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -229,9 +262,12 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  ReturnedUser: ResolverTypeWrapper<ReturnedUser>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Tag: ResolverTypeWrapper<Tag>;
   UpdateFeedInput: UpdateFeedInput;
+  UpdateUserInput: UpdateUserInput;
+  User: ResolverTypeWrapper<User>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -245,9 +281,12 @@ export type ResolversParentTypes = {
   Int: Scalars["Int"];
   Mutation: {};
   Query: {};
+  ReturnedUser: ReturnedUser;
   String: Scalars["String"];
   Tag: Tag;
   UpdateFeedInput: UpdateFeedInput;
+  UpdateUserInput: UpdateUserInput;
+  User: User;
 };
 
 export type ActivityResolvers<
@@ -310,6 +349,18 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationAddTagArgs, "name">
   >;
+  createUser?: Resolver<
+    ResolversTypes["ReturnedUser"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateUserArgs, "email" | "password">
+  >;
+  login?: Resolver<
+    ResolversTypes["ReturnedUser"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationLoginArgs, "email" | "password">
+  >;
   markAsFavorite?: Resolver<
     ResolversTypes["Entry"],
     ParentType,
@@ -371,7 +422,17 @@ export type QueryResolvers<
     RequireFields<QueryFeedArgs, "id">
   >;
   feeds?: Resolver<Array<Maybe<ResolversTypes["Feed"]>>, ParentType, ContextType>;
+  me?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   tags?: Resolver<Array<Maybe<ResolversTypes["Tag"]>>, ParentType, ContextType>;
+};
+
+export type ReturnedUserResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["ReturnedUser"] = ResolversParentTypes["ReturnedUser"]
+> = {
+  token?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type TagResolvers<
@@ -383,6 +444,18 @@ export type TagResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"]
+> = {
+  avatarColor?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  displayName?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  refreshInterval?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Activity?: ActivityResolvers<ContextType>;
   Date?: GraphQLScalarType;
@@ -390,5 +463,7 @@ export type Resolvers<ContextType = any> = {
   Feed?: FeedResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  ReturnedUser?: ReturnedUserResolvers<ContextType>;
   Tag?: TagResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 };

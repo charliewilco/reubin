@@ -41,12 +41,21 @@ type Entry {
   favorite: Boolean!
 }
 
+type User {
+  email: String!
+  displayName: String
+  avatarColor: Int
+  refreshInterval: Int!
+  id: ID!
+}
+
 type Query {
   tags: [Tag]!
   feeds: [Feed]!
   entry(id: ID!): Entry!
   feed(id: ID!): Feed!
   entries(feed_id: ID!, filter: EntryFilter): [Entry!]!
+  me: User!
 }
 
 input UpdateFeedInput {
@@ -54,7 +63,19 @@ input UpdateFeedInput {
   tagID: ID
 }
 
+input UpdateUserInput {
+  displayName: String
+  refreshInterval: Int
+}
+
+type ReturnedUser {
+  user: User!
+  token: String!
+}
+
 type Mutation {
+  createUser(email: String!, password: String!): ReturnedUser!
+  login(email: String!, password: String!): ReturnedUser!
   addFeed(url: String!): Feed!
   addTag(name: String!): Tag!
   removeFeed(id: ID!): Feed!

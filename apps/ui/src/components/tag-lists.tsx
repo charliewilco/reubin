@@ -100,7 +100,7 @@ export function TagListItem({ tag, onDelete }: TagListItemProps) {
     <li key={tag.id} className="flex items-center justify-between pb-2">
       <span>{tag.title}</span>
       <button onClick={handleDelete} aria-label="Remove Tag">
-        <Trash2 />
+        <Trash2 className="h-4 w-4" />
       </button>
     </li>
   );

@@ -1,31 +1,18 @@
-import { PrismaClient } from "@prisma/client";
-import { RSSKit } from "./rss";
-
-let prisma: PrismaClient;
-
-declare global {
-  var prisma: PrismaClient | undefined;
-}
-
-if (process.env.NODE_ENV === "production") {
-  prisma = new PrismaClient();
-} else {
-  if (!global.prisma) {
-    global.prisma = new PrismaClient();
-  }
-  prisma = global.prisma;
-}
-
-export { prisma };
-
+import type { FastifyRequest } from "fastify";
+import Cookies from "universal-cookie";
 export interface Context {
-  prisma: PrismaClient;
-  rss: RSSKit<unknown, unknown>;
+  token: string | null;
 }
 
-const rss = new RSSKit();
+export function getContext(request: FastifyRequest): Context {
+  const cookies = new Cookies(request.headers.cookie ?? "");
+  const parsed = cookies.getAll();
 
-export const context: Context = {
-  prisma: prisma,
-  rss,
-};
+  let token: string | null = null;
+
+  if (parsed["REUBIN_TOKEN"] || request.headers.authorization) {
+    token = parsed["REUBIN_TOKEN"] ?? request.headers.authorization;
+  }
+
+  return { token };
+}

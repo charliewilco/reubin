@@ -1,3 +1,5 @@
+import { Feed } from "@prisma/client";
+
 import {
   type MutationResolvers,
   type QueryResolvers,
@@ -5,45 +7,45 @@ import {
   EntryFilter,
 } from "./__generated__";
 import type { Context } from "./context";
-import { mapFeedtoAPIFeed, mapORMEntryToAPIEntry, mapRSStoEntry } from "./structs";
-import { getFeedFromDirectURL } from "./feeds";
-import { Feed } from "@prisma/client";
+import { FeedController } from "./model/feeds";
+import { EntryController } from "./model/entry";
+import { Models } from "./model";
+import { services } from "./services";
 
 // TODO: Create tag object
 // TODO: User sign up, registration
 // TODO: Stripe integration
 
+const m = new Models(services);
+
 /**
  * TODO:
  * - recently read
- * - me
  **/
 const query: QueryResolvers<Context> = {
-  async tags(_, __, { prisma }) {
-    const tags = await prisma.tag.findMany();
-
-    return tags.map((tag) => ({ id: tag.id, title: tag.title }));
-  },
-  async feeds(_parent, _args, { prisma }) {
-    const feeds = await prisma.feed.findMany();
-
-    return feeds.map((f) => mapFeedtoAPIFeed(f));
-  },
-  async feed(_parent, { id }, { prisma }) {
-    const feed = await prisma.feed.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (feed === null) {
-      throw new Error("Feed not found");
+  async tags(_, __, { token }) {
+    if (token !== null) {
+      return m.tag.getAll(token);
+    } else {
+      throw new Error("This node requires Authorization token");
     }
-
-    return feed;
   },
-  async entry(_parent, { id }, { prisma }) {
-    const entry = await prisma.entry.findUnique({
+  async feeds(_parent, _args, { token }) {
+    if (token !== null) {
+      return m.feeds.getAll(token);
+    } else {
+      throw new Error("This node requires Authorization token");
+    }
+  },
+  async feed(_parent, { id }, { token }) {
+    if (token !== null) {
+      return m.feeds.getById(id, token);
+    } else {
+      throw new Error("This node requires Authorization token");
+    }
+  },
+  async entry(_parent, { id }, {}) {
+    const entry = await services.orm.entry.findUnique({
       where: {
         id,
       },
@@ -53,9 +55,9 @@ const query: QueryResolvers<Context> = {
       throw new Error("Entry not found.");
     }
 
-    return mapORMEntryToAPIEntry(entry);
+    return EntryController.fromORM(entry);
   },
-  async entries(_parent, { feed_id, filter }, { prisma }) {
+  async entries(_parent, { feed_id, filter }, {}) {
     let args: any = { feedId: feed_id };
 
     if (filter === EntryFilter.Favorited) {
@@ -66,74 +68,51 @@ const query: QueryResolvers<Context> = {
       args.unread = true;
     }
 
-    const entries = await prisma.entry.findMany({
+    const entries = await services.orm.entry.findMany({
       where: args,
     });
 
-    return entries.map((value) => mapORMEntryToAPIEntry(value));
+    return entries.map((value) => EntryController.fromORM(value));
+  },
+  async me(_, __, { token }) {
+    if (token !== null) {
+      return m.users.getMe(token);
+    } else {
+      throw new Error("This node requires Authorization token");
+    }
   },
 };
 
-/**
- * TODO:
- * - login
- * - register user
- **/
 const mutation: MutationResolvers<Context> = {
-  async addFeed(_parent, { url }, { prisma, rss }) {
-    try {
-      const { data } = await getFeedFromDirectURL(url);
-      const parsed = await rss.parse(data);
-      const feed = await prisma.feed.create({
-        data: {
-          title: parsed.title ?? "Untitled Feed",
-          link: parsed.link ?? url,
-          feedURL: parsed.feedUrl ?? url,
-          lastFetched: new Date(Date.now()),
-        },
-      });
-
-      await prisma.entry.createMany({
-        data: parsed.items.map((value) => mapRSStoEntry(value, feed.id)),
-      });
-
-      return feed;
-    } catch (err: any) {
-      throw new Error(err);
+  async addFeed(_parent, { url }, { token }) {
+    if (token !== null) {
+      return m.feeds.add(url, token);
+    } else {
+      throw new Error("This node requires Authorization token");
     }
   },
-  async addTag(_parent, { name }, { prisma }) {
-    try {
-      const tag = await prisma.tag.create({
-        data: {
-          title: name,
-        },
-      });
-
-      return {
-        id: tag.id,
-        title: tag.title,
-      };
-    } catch (error: any) {
-      throw new Error(error);
+  async addTag(_parent, { name }, { token }) {
+    if (token !== null) {
+      return m.tag.add(name, token);
+    } else {
+      throw new Error("This node requires Authorization token");
     }
   },
-  async removeFeed(_parent, { id }, { prisma }) {
-    await prisma.entry.deleteMany({
+  async removeFeed(_parent, { id }, {}) {
+    await services.orm.entry.deleteMany({
       where: {
         feedId: id,
       },
     });
-    const feed = await prisma.feed.delete({
+    const feed = await services.orm.feed.delete({
       where: {
         id,
       },
     });
     return feed;
   },
-
-  async removeTag(_parent, { id }, { prisma }) {
-    const tag = await prisma.tag.delete({
+  async removeTag(_parent, { id }, {}) {
+    const tag = await services.orm.tag.delete({
       where: {
         id,
       },
@@ -144,8 +123,8 @@ const mutation: MutationResolvers<Context> = {
       title: tag.title,
     };
   },
-  async refreshFeed(_parent, { id }, { prisma, rss }) {
-    const feed = await prisma.feed.findUnique({
+  async refreshFeed(_parent, { id }, {}) {
+    const feed = await services.orm.feed.findUnique({
       where: {
         id,
       },
@@ -155,26 +134,26 @@ const mutation: MutationResolvers<Context> = {
       throw new Error("Couldn't find feed");
     }
 
-    const { data: rssText } = await getFeedFromDirectURL(feed.feedURL);
-    const { items } = await rss.parse(rssText);
+    const { data: rssText } = await FeedController.getFeedFromDirectURL(feed.feedURL);
+    const { items } = await services.rss.parse(rssText);
 
     const lastFetchedISO = feed.lastFetched.toISOString();
 
-    const entries: ReturnType<typeof mapRSStoEntry>[] = [];
+    const entries: ReturnType<typeof EntryController.fromRSS>[] = [];
 
     for (const item of items) {
       if (item) {
         if (lastFetchedISO < item.isoDate!) {
-          entries.push(mapRSStoEntry(item, feed.id));
+          entries.push(EntryController.fromRSS(item, feed.id));
         }
       }
     }
 
-    await prisma.entry.createMany({
+    await services.orm.entry.createMany({
       data: entries,
     });
 
-    const _ = await prisma.entry.findMany({
+    const _ = await services.orm.entry.findMany({
       where: {
         feedId: id,
         pubDate: {
@@ -183,7 +162,7 @@ const mutation: MutationResolvers<Context> = {
       },
     });
 
-    await prisma.feed.update({
+    await services.orm.feed.update({
       where: {
         id,
       },
@@ -192,10 +171,10 @@ const mutation: MutationResolvers<Context> = {
       },
     });
 
-    return _.map((value) => mapORMEntryToAPIEntry(value));
+    return _.map((value) => EntryController.fromORM(value));
   },
-  async markAsRead(_parent, { id }, { prisma }) {
-    const entry = await prisma.entry.update({
+  async markAsRead(_parent, { id }, {}) {
+    const entry = await services.orm.entry.update({
       where: {
         id,
       },
@@ -207,11 +186,10 @@ const mutation: MutationResolvers<Context> = {
       throw new Error("Entry not updated");
     }
 
-    return mapORMEntryToAPIEntry(entry);
+    return EntryController.fromORM(entry);
   },
-
-  async markAsFavorite(_parent, { id, favorite }, { prisma }) {
-    const entry = await prisma.entry.update({
+  async markAsFavorite(_parent, { id, favorite }, {}) {
+    const entry = await services.orm.entry.update({
       where: {
         id,
       },
@@ -223,9 +201,9 @@ const mutation: MutationResolvers<Context> = {
       throw new Error("Entry not updated");
     }
 
-    return mapORMEntryToAPIEntry(entry);
+    return EntryController.fromORM(entry);
   },
-  async updateFeed(_parent, { id, fields }, { prisma }) {
+  async updateFeed(_parent, { id, fields }, {}) {
     try {
       const data: Partial<Feed> = {};
 
@@ -237,7 +215,7 @@ const mutation: MutationResolvers<Context> = {
         data.tagId = fields.tagID;
       }
 
-      const feed = await prisma.feed.update({
+      const feed = await services.orm.feed.update({
         where: {
           id,
         },
@@ -248,10 +226,16 @@ const mutation: MutationResolvers<Context> = {
         throw new Error("Feed not updated");
       }
 
-      return mapFeedtoAPIFeed(feed);
+      return FeedController.fromORM(feed);
     } catch (error: any) {
       throw new Error(error);
     }
+  },
+  async createUser(_, { email, password }) {
+    return m.users.create(email, password);
+  },
+  async login(_, { email, password }) {
+    return m.users.verify(email, password);
   },
 };
 

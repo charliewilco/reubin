@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import type { AppProps } from "next/app";
 import Router from "next/router";
 import * as Fathom from "fathom-client";
+import { Provider } from "jotai";
+
 import "../components/styles.css";
 
 Router.events.on("routeChangeComplete", (_as, routeProps) => {
@@ -18,5 +20,9 @@ export default function RootApp({ Component, pageProps }: AppProps) {
     });
   }, []);
 
-  return <Component {...pageProps} />;
+  return (
+    <Provider>
+      <Component {...pageProps} />
+    </Provider>
+  );
 }

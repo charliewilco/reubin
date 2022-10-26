@@ -1,4 +1,5 @@
-import { createContext, createElement, useCallback, useContext, useReducer } from "react";
+import { createContext, createElement, useContext, useReducer } from "react";
+import { useEventCallback } from "./useEventCallback";
 
 interface DashboardState {
   feed: string | null;
@@ -25,23 +26,17 @@ export const useDashboard = () => {
     { feed: null, entry: null }
   );
 
-  const selectEntry = useCallback(
-    (id: string) => {
-      dispatch({ type: "SELECT_ENTRY", entryId: id });
-    },
-    [dispatch]
-  );
+  const selectEntry = useEventCallback((id: string) => {
+    dispatch({ type: "SELECT_ENTRY", entryId: id });
+  });
 
-  const selectFeed = useCallback(
-    (id: string) => {
-      dispatch({ type: "SELECT_FEED", feed: id });
-    },
-    [dispatch]
-  );
+  const selectFeed = useEventCallback((id: string) => {
+    dispatch({ type: "SELECT_FEED", feed: id });
+  });
 
-  const unselectFeed = useCallback(() => {
+  const unselectFeed = useEventCallback(() => {
     dispatch({ type: "SELECT_FEED", feed: null });
-  }, [dispatch]);
+  });
 
   return [state, { selectEntry, selectFeed, unselectFeed }] as const;
 };
