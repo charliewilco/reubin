@@ -1,13 +1,11 @@
 // @ts-check
 
 /** @type {import('jest').Config} */
-const config = {
+module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   verbose: true,
   transform: {
-    "\\.(gql|graphql)$": "<rootDir>/graphql-transformer.js",
+    "\\.(gql|graphql)$": "<rootDir>/graphql-transformer.cjs",
   },
 };
-
-module.exports = config;
