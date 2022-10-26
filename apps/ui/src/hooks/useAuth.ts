@@ -1,6 +1,6 @@
 import { atom, useAtom } from "jotai";
-import { useEffect, useRef } from "react";
-import { setToken } from "../lib/cookies";
+import { useCallback, useEffect, useRef } from "react";
+import { AuthToken } from "../lib/auth-token";
 import { setHeaders, initalizeHeaders } from "../lib/graphql";
 
 interface AuthState {
@@ -18,14 +18,32 @@ export function useAuthAtom() {
   const [state, setState] = useAtom(authAtom);
   useEffect(() => {
     if (isBrowser) {
-      if (state.token !== null && initializedRef.current) {
-        setHeaders(state.token);
-        setToken(state.token);
-      } else {
+      if (state.token === null && !initializedRef.current) {
         initializedRef.current = true;
         initalizeHeaders((token) => setState({ token }));
       }
     }
   }, [state, setState]);
-  return [state, setState] as const;
+
+  const loginWithToken = useCallback(
+    (token: string) => {
+      setHeaders(token);
+      AuthToken.manager.set(token);
+      setState({ token });
+    },
+    [setState]
+  );
+  const logout = useCallback(() => {
+    setHeaders("");
+    AuthToken.manager.delete();
+    setState({ token: null });
+  }, [setState]);
+  return [
+    state,
+    setState,
+    {
+      loginWithToken,
+      logout,
+    },
+  ] as const;
 }
