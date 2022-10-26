@@ -1,5 +1,5 @@
 import { GraphQLClient } from "graphql-request";
-import { getToken } from "./cookies";
+import { AuthToken } from "./auth-token";
 import { EntryFilter, getSdk, type UpdateFeedInput } from "./__generated__";
 
 const ENDPOINT =
@@ -141,7 +141,7 @@ export const register = async (email: string, password: string) => {
 };
 
 export const initalizeHeaders = (cb: (token: string) => void) => {
-  const token = getToken();
+  const token = AuthToken.manager.get();
 
   if (token !== null) {
     setHeaders(token);

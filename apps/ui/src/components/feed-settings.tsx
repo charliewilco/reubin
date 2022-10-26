@@ -9,6 +9,7 @@ import { removeFeed, updateFeedTitle, getAllTags, getFeed } from "../lib/graphql
 import type { FeedDetailsFragment, TagInfoFragment } from "../lib/__generated__";
 import { useDashboardContext } from "../hooks/useDashboard";
 import { TagSelectionList } from "./tag-lists";
+import { useEventCallback } from "../hooks/useEventCallback";
 
 interface FeedSettingsFormProps {
   onSubmit(title: string, tagID?: string | null): void | Promise<void>;
@@ -139,6 +140,10 @@ export function FeedSettings() {
     [feed]
   );
 
+  const handleClose = useEventCallback(() => {
+    setOpen(false);
+  });
+
   return (
     <>
       <Button aria-label="Update feed" onClick={() => setOpen(true)}>
@@ -147,7 +152,7 @@ export function FeedSettings() {
       {data && data.feed && (
         <Dialog
           isOpen={isOpen}
-          onClose={() => setOpen(false)}
+          onClose={handleClose}
           title={`Update feed "${data.feed.title}"`}>
           <UpdateFeedForm
             initialFeed={data.feed}

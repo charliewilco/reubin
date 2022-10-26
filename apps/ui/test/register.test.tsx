@@ -3,19 +3,19 @@ import userEvent from "@testing-library/user-event";
 import { Provider } from "jotai";
 import { graphql } from "msw";
 import { setupServer } from "msw/node";
-import { LoginForm } from "../src/components/login-form";
+import { RegisterForm } from "../src/components/register-form";
 import { AuthToken } from "../src/lib/auth-token";
-import { LoginMutation } from "../src/lib/__generated__";
+import { RegisterMutation } from "../src/lib/__generated__";
 
-const loginHandler = jest.fn();
+const registerUserHandler = jest.fn();
 
 const server = setupServer(
-  graphql.mutation<LoginMutation>("Login", (_req, res, ctx) => {
-    loginHandler(_req.variables);
+  graphql.mutation<RegisterMutation>("Register", (_req, res, ctx) => {
+    registerUserHandler(_req.variables);
 
     return res(
       ctx.data({
-        login: {
+        createUser: {
           token: "valid-token",
           user: {
             id: "1",
@@ -57,21 +57,20 @@ describe("Login", () => {
   test("should display 'Login' as the button", () => {
     render(
       <Provider>
-        <LoginForm />
+        <RegisterForm />
       </Provider>
     );
-    expect(screen.getByText("Login")).toBeInTheDocument();
+    expect(screen.getByText("Register")).toBeInTheDocument();
   });
 
   test("validate inputs", async () => {
     render(
       <Provider>
-        <LoginForm />
+        <RegisterForm />
       </Provider>
     );
 
-    const emailInput = screen.getByTestId("login-email-input");
-    // const passwordInput = screen.getByTestId("login-password-input");
+    const emailInput = screen.getByTestId("register-email-input");
 
     await userEvent.type(emailInput, "matt@");
 
@@ -84,19 +83,19 @@ describe("Login", () => {
   test("should respond with correct credentials", async () => {
     render(
       <Provider>
-        <LoginForm />
+        <RegisterForm />
       </Provider>
     );
 
-    const emailInput = screen.getByTestId("login-email-input");
-    const passwordInput = screen.getByTestId("login-password-input");
+    const emailInput = screen.getByTestId("register-email-input");
+    const passwordInput = screen.getByTestId("register-password-input");
     await userEvent.type(emailInput, "matt@test.com");
 
     await userEvent.type(passwordInput, "P@ssw0rd");
 
     await userEvent.click(screen.getByRole("button"));
 
-    expect(loginHandler).toBeCalledWith({
+    expect(registerUserHandler).toBeCalledWith({
       email: "matt@test.com",
       // the encoded version of "P@ssw0rd"
       password: "UEBzc3cwcmQ=",
