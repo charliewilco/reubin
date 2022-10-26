@@ -1,13 +1,15 @@
 // @ts-check
 
 /** @type {import('next').NextConfig} */
-const config = {
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
   reactStrictMode: true,
   optimizeFonts: true,
   cleanDistDir: true,
   swcMinify: true,
   experimental: {
     gzipSize: true,
+    appDir: true,
   },
   async rewrites() {
     return [
@@ -18,5 +20,3 @@ const config = {
     ];
   },
 };
-
-module.exports = config;
