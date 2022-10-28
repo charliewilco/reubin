@@ -6,7 +6,7 @@ import { defineConfig } from "rollup";
 
 const isDev = process.env.ROLLUP_WATCH === "true";
 
-/** @type {import('rollup').Plugin[]} */
+/** @type {any[]} */
 const plugins = [graphql(), ts()];
 
 if (isDev) {
