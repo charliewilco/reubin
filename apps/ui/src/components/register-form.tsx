@@ -27,7 +27,7 @@ export function RegisterForm() {
           if (value.createUser.user && value.createUser.token) {
             loginWithToken(value.createUser.token);
 
-            router.push("/dashboard");
+            router.push("/feeds");
           }
         });
       },

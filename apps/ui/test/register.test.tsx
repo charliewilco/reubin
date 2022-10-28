@@ -34,7 +34,7 @@ afterAll(() => server.close());
 
 const routerPush = jest.fn();
 
-jest.mock("next/router", () => ({
+jest.mock("next/navigation", () => ({
   useRouter() {
     return {
       route: "/",
@@ -87,7 +87,7 @@ describe("Login", () => {
       // the encoded version of "P@ssw0rd"
       password: "UEBzc3cwcmQ=",
     });
-    expect(routerPush).toHaveBeenCalledWith("/dashboard");
+    expect(routerPush).toHaveBeenCalledWith("/feeds");
 
     expect(AuthToken.manager.get()).toBe("valid-token");
   });

@@ -1,3 +1,4 @@
+"use client";
 import { memo, useCallback } from "react";
 import isEqual from "react-fast-compare";
 import useSWR from "swr";
@@ -7,6 +8,7 @@ import type { EntryDetailsFragment, EntryFilter } from "../lib/__generated__";
 import { classNames } from "./ui/class-names";
 import { getEntriesFromFeed, refreshFeed } from "../lib/graphql";
 import { FeedToolbar } from "./feed-toolbar";
+import { useDashboardContext } from "../hooks/useDashboard";
 
 interface EntryListProps {
   filter?: EntryFilter;
@@ -102,4 +104,14 @@ export function EntryList(props: EntryListProps) {
       </ul>
     </div>
   );
+}
+
+export function ConnectedEntryList(props: Pick<EntryListProps, "filter">) {
+  const [{ feed, entry }, { selectEntry }] = useDashboardContext();
+
+  if (feed) {
+    return <EntryList {...props} id={feed} onSelect={selectEntry} selectedEntry={entry} />;
+  }
+
+  return null;
 }

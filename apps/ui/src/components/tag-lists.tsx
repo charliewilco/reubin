@@ -1,3 +1,5 @@
+"use client";
+
 import { RadioGroup } from "@headlessui/react";
 import { CheckCircle, Trash2 } from "lucide-react";
 import { classNames } from "./ui/class-names";

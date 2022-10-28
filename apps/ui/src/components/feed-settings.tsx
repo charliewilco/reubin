@@ -49,7 +49,6 @@ export function UpdateFeedForm(props: FeedSettingsFormProps) {
   );
 
   const handleTagChange = useCallback((tag: TagInfoFragment) => {
-    console.log(tag);
     setFields((prev) => {
       if (tag) {
         return {

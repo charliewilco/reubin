@@ -3,7 +3,7 @@ import { TagRemovalList } from "../../../components/tag-lists";
 
 export default function SettingsPage() {
   return (
-    <section className="px-2">
+    <section className="col-span-6">
       <h1>Settings</h1>
 
       <h2>Tags</h2>

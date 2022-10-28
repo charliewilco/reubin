@@ -1,15 +1,12 @@
-import type { GetFeedsQuery } from "../lib/__generated__";
+"use client";
+
+import { useCallback } from "react";
+import useSWR from "swr";
+import { addFeed, getFeeds } from "../lib/graphql";
+
 import { RecommendationCard } from "./ui/recommendation-card";
 
 export type RecommendedField = { link: string; displayName: string };
-
-interface RecommendationListItemProps {
-  feeds: RecommendedField[];
-  title: string;
-  data?: GetFeedsQuery;
-  error?: any;
-  onClick: (link: string) => void;
-}
 
 export const NEWS = [
   {
@@ -53,7 +50,27 @@ export const TECH = [
   },
 ];
 
+interface RecommendationListItemProps {
+  feeds: RecommendedField[];
+  title: string;
+}
+
 export function RecommendationList(props: RecommendationListItemProps) {
+  const { data, error, mutate } = useSWR("recommended feeds", getFeeds);
+
+  const handleClick = useCallback(
+    async (link: string) => {
+      const data = await addFeed(link);
+
+      await mutate((prevData) => {
+        prevData?.feeds.push(data.addFeed);
+
+        return prevData;
+      });
+    },
+    [mutate]
+  );
+
   return (
     <section>
       <h2 className="text-lg opacity-50">{props.title}</h2>
@@ -64,9 +81,9 @@ export function RecommendationList(props: RecommendationListItemProps) {
             <RecommendationCard
               displayName={r.displayName}
               link={r.link}
-              feeds={props.data}
-              error={props.error}
-              onSubscribe={props.onClick}
+              feeds={data}
+              error={error}
+              onSubscribe={handleClick}
             />
           </li>
         ))}

@@ -1,10 +1,10 @@
 "use client";
 
-import Head from "next/head";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { LoadingIndicator } from "./ui/activity-indicator";
 import { getEntry, markAsRead } from "../lib/graphql";
+import { useDashboardContext } from "../hooks/useDashboard";
 
 interface EntryFullProps {
   id: string;
@@ -47,9 +47,6 @@ export function EntryFull(props: EntryFullProps) {
   if (data) {
     return (
       <div className="absolute top-0 left-0 right-0 bottom-0 w-full ">
-        <Head>
-          <title>{data.entry?.title} | Reubin</title>
-        </Head>
         <article className="px-8 pb-16">
           <header className="py-8">
             <h1 className="text-3xl font-bold">{data.entry?.title}</h1>
@@ -60,6 +57,16 @@ export function EntryFull(props: EntryFullProps) {
         </article>
       </div>
     );
+  }
+
+  return null;
+}
+
+export function ConnectedEntryFull() {
+  const [{ entry }] = useDashboardContext();
+
+  if (entry) {
+    return <EntryFull id={entry} />;
   }
 
   return null;

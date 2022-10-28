@@ -1,3 +1,5 @@
+"use client";
+
 import { memo, useCallback, useMemo } from "react";
 import isEqual from "react-fast-compare";
 import useSWR from "swr";
@@ -120,7 +122,7 @@ export function FeedList() {
   if (data) {
     if (data.feeds.length === 0) {
       return (
-        <div>
+        <div className=" p-4 text-center">
           <p>Looks like you have no feeds.</p>
         </div>
       );

@@ -26,7 +26,7 @@ export function LoginForm() {
         login(values.email, values.password).then(({ login: { user, token } }) => {
           if (user && token) {
             loginWithToken(token);
-            router.push("/dashboard");
+            router.push("/feeds");
           }
         });
       },

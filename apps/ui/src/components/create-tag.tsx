@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useReducer } from "react";
 import { useTags } from "../hooks/useTags";
 import { SuperButton } from "./ui/button";

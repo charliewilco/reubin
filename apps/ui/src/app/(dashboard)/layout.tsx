@@ -1,6 +1,6 @@
-import { AddFeed } from "../../../components/add-feed";
-import { AppHeader } from "../../../components/app-header";
-import { SideNavigation } from "../../../components/side-navigation";
+import { AddFeed } from "../../components/add-feed";
+import { AppHeader } from "../../components/app-header";
+import { SideNavigation } from "../../components/side-navigation";
 
 export default function Layout({ children }: React.PropsWithChildren<{}>) {
   return (
@@ -23,7 +23,7 @@ export default function Layout({ children }: React.PropsWithChildren<{}>) {
           <div className="relative flex h-full flex-col justify-between border-r border-zinc-200 dark:border-zinc-700">
             <SideNavigation />
           </div>
-          <main className="grid flex-1 grid-cols-12">{children}</main>
+          <main className="flex-1">{children}</main>
         </div>
       </div>
     </div>
