@@ -30,6 +30,7 @@ export function CTA() {
             className="opacity-75"
             layout="responsive"
             objectFit="cover"
+            priority
           />
         </div>
       </div>

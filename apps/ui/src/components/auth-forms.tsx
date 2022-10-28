@@ -1,3 +1,5 @@
+"use client";
+
 import { Tab } from "@headlessui/react";
 import { LoginForm } from "./login-form";
 import { RegisterForm } from "./register-form";

@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Provider } from "jotai";
 import { graphql } from "msw";
 import { setupServer } from "msw/node";
 import { LoginForm } from "../src/components/login-form";
@@ -55,20 +54,12 @@ jest.mock("next/router", () => ({
 
 describe("Login", () => {
   test("should display 'Login' as the button", () => {
-    render(
-      <Provider>
-        <LoginForm />
-      </Provider>
-    );
+    render(<LoginForm />);
     expect(screen.getByText("Login")).toBeInTheDocument();
   });
 
   test("validate inputs", async () => {
-    render(
-      <Provider>
-        <LoginForm />
-      </Provider>
-    );
+    render(<LoginForm />);
 
     const emailInput = screen.getByTestId("login-email-input");
     // const passwordInput = screen.getByTestId("login-password-input");
@@ -82,11 +73,7 @@ describe("Login", () => {
   });
 
   test("should respond with correct credentials", async () => {
-    render(
-      <Provider>
-        <LoginForm />
-      </Provider>
-    );
+    render(<LoginForm />);
 
     const emailInput = screen.getByTestId("login-email-input");
     const passwordInput = screen.getByTestId("login-password-input");

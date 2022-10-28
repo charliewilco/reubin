@@ -1,3 +1,5 @@
+"use client";
+
 import useSWR, { mutate } from "swr";
 import { useCallback, useState } from "react";
 import { Settings2, Trash2 } from "lucide-react";

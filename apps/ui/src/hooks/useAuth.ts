@@ -1,4 +1,4 @@
-import { atom, useAtom } from "jotai";
+import { proxy, useSnapshot } from "valtio";
 import { useCallback, useEffect, useRef } from "react";
 import { AuthToken } from "../lib/auth-token";
 import { setHeaders, initalizeHeaders } from "../lib/graphql";
@@ -9,38 +9,36 @@ interface AuthState {
 
 const isBrowser = typeof window !== "undefined";
 
-export const authAtom = atom<AuthState>({
+export const authAtom = proxy<AuthState>({
   token: null,
 });
 
 export function useAuthAtom() {
   const initializedRef = useRef(false);
-  const [state, setState] = useAtom(authAtom);
+  const snapshot = useSnapshot(authAtom);
   useEffect(() => {
     if (isBrowser) {
-      if (state.token === null && !initializedRef.current) {
+      if (snapshot.token === null && !initializedRef.current) {
         initializedRef.current = true;
-        initalizeHeaders((token) => setState({ token }));
+        initalizeHeaders((token) => (authAtom.token = token));
       }
     }
-  }, [state, setState]);
+  }, [snapshot]);
 
-  const loginWithToken = useCallback(
-    (token: string) => {
-      setHeaders(token);
-      AuthToken.manager.set(token);
-      setState({ token });
-    },
-    [setState]
-  );
+  const loginWithToken = useCallback((token: string) => {
+    setHeaders(token);
+    AuthToken.manager.set(token);
+    authAtom.token = token;
+  }, []);
+
   const logout = useCallback(() => {
     setHeaders("");
     AuthToken.manager.delete();
-    setState({ token: null });
-  }, [setState]);
+    authAtom.token = null;
+  }, []);
+
   return [
-    state,
-    setState,
+    snapshot,
     {
       loginWithToken,
       logout,

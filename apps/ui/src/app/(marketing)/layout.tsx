@@ -1,22 +1,15 @@
 import Image from "next/image";
-import Head from "next/head";
 import Link from "next/link";
 
-import { SiteFooter } from "./site-footer";
+import { SiteFooter } from "../../components/site-footer";
 
 interface LayoutProps {
-  addressbar: string;
-  title?: string;
   children?: React.ReactNode;
 }
 
-export function MarketingLayout({ title, addressbar, children }: LayoutProps) {
+export default function MarketingLayout({ children }: LayoutProps) {
   return (
     <div>
-      <Head>
-        <title>{addressbar}</title>
-        <link rel="icon" type="image/png" href="/favicon.png" />
-      </Head>
       <header id="header" className="mx-auto mt-8 max-w-7xl p-2">
         <Link href="/" className="block">
           <Image
@@ -28,7 +21,6 @@ export function MarketingLayout({ title, addressbar, children }: LayoutProps) {
             alt="App icon for Reubin application"
           />
         </Link>
-        {title && <h1>{title}</h1>}
       </header>
 
       <main>{children}</main>

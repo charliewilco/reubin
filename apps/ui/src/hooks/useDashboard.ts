@@ -1,10 +1,18 @@
-import { createContext, createElement, useContext, useReducer } from "react";
+"use client";
+
+import { createContext, useContext, useReducer } from "react";
+import { proxy } from "valtio";
 import { useEventCallback } from "./useEventCallback";
 
 interface DashboardState {
   feed: string | null;
   entry: string | null;
 }
+
+export const dashAtom = proxy<DashboardState>({
+  feed: null,
+  entry: null,
+});
 
 type DashboardAction =
   | {
@@ -41,7 +49,7 @@ export const useDashboard = () => {
   return [state, { selectEntry, selectFeed, unselectFeed }] as const;
 };
 
-const DashContext = createContext<ReturnType<typeof useDashboard>>([
+export const DashContext = createContext<ReturnType<typeof useDashboard>>([
   {
     feed: null,
     entry: null,
@@ -52,11 +60,6 @@ const DashContext = createContext<ReturnType<typeof useDashboard>>([
     unselectFeed() {},
   },
 ]);
-
-export const DashboardProvider = ({ children }: { children?: React.ReactNode }) => {
-  const value = useDashboard();
-  return createElement(DashContext.Provider, { value }, children);
-};
 
 export const useDashboardContext = () => {
   return useContext(DashContext);

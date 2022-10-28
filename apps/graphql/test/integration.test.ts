@@ -19,8 +19,7 @@ describe("Integration", () => {
   };
 
   beforeAll(() => {
-    console.log("Using the following credentials:\n");
-    console.log(newUser.email, "P@ssw0rd");
+    console.log("Using the following credentials:\n", JSON.stringify(newUser, null, 2));
   });
 
   test("can create users", async () => {

@@ -1,4 +1,6 @@
-import { useRouter } from "next/router";
+"use client";
+
+import { useRouter } from "next/navigation";
 import z from "zod";
 import { Label, Input, TextLabel } from "./ui/input";
 import { login } from "../lib/graphql";
@@ -11,7 +13,7 @@ const validationSchema = z.object({
 });
 
 export function LoginForm() {
-  const [, , { loginWithToken }] = useAuthAtom();
+  const [, { loginWithToken }] = useAuthAtom();
   const router = useRouter();
   const { errors, isSubmitting, getFieldProps, getFormProps, getErrorProps } = useForm(
     {

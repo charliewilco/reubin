@@ -1,9 +1,8 @@
 import { useCallback } from "react";
 import useSWR from "swr";
 
-import { addFeed, getFeeds } from "../lib/graphql";
-import { NEWS, TECH, RecommendationList } from "../components/recommendation-list";
-import { AltHeader } from "../components/ui/alt-header";
+import { addFeed, getFeeds } from "../../../lib/graphql";
+import { NEWS, TECH, RecommendationList } from "../../../components/recommendation-list";
 
 function RecommendationsPage() {
   const { data, error, mutate } = useSWR("recommended feeds", getFeeds, {
@@ -25,7 +24,6 @@ function RecommendationsPage() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-16">
-      <AltHeader />
       <div className="space-y-8 px-2 pb-8">
         {error && <div>{error.toString()}</div>}
 
