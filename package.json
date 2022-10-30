@@ -1,57 +1,58 @@
 {
-  "name": "reubin",
-  "repository": "charliewilco/reubin.app",
-  "author": "Charlie ⚡ <charliewilc0@protonmail.com>",
-  "version": "1.2.0",
-  "workspaces": [
-    "apps/*"
-  ],
-  "scripts": {
-    "build": "turbo build",
-    "test": "turbo test",
-    "lint": "turbo lint",
-    "types": "turbo types",
-    "dev": "turbo dev --parallel",
-    "generate": "graphql-codegen --config scripts/.graphqlrc.ts",
-    "git": "node scripts/git.mjs",
-    "clean": "node scripts/clean.mjs --all",
-    "seed": "node scripts/seed.mjs",
-    "db": "node scripts/db.mjs --push",
-    "format": "pretty-quick --staged"
-  },
-  "devDependencies": {
-    "@graphql-codegen/cli": "^2.13.8",
-    "@graphql-codegen/typescript": "^2.8.0",
-    "@graphql-codegen/typescript-graphql-request": "^4.5.6",
-    "@graphql-codegen/typescript-operations": "^2.5.4",
-    "@graphql-codegen/typescript-resolvers": "^2.7.4",
-    "@prisma/migrate": "4.5.0",
-    "@types/node": "^18.7.20",
-    "arg": "^5.0.2",
-    "del": "^7.0.0",
-    "graphql": "^16.6.0",
-    "graphql-request": "^5.0.0",
-    "graphql-tag": "^2.12.6",
-    "husky": "^8.0.1",
-    "jest": "^29.2.2",
-    "prettier": "^2.7.1",
-    "prettier-plugin-prisma": "^4.2.0",
-    "prettier-plugin-tailwindcss": "^0.1.11",
-    "pretty-quick": "^3.1.2",
-    "prisma": "^4.5.0",
-    "rss-parser": "^3.12.0",
-    "turbo": "^1.6.2",
-    "typescript": "^4.8.4"
-  },
-  "prettier": {
-    "printWidth": 95,
-    "useTabs": false,
-    "tabWidth": 2,
-    "bracketSpacing": true,
-    "bracketSameLine": true,
-    "plugins": [
-      "prettier-plugin-prisma",
-      "prettier-plugin-tailwindcss"
-    ]
-  }
+	"name": "reubin",
+	"repository": "charliewilco/reubin.app",
+	"author": "Charlie ⚡ <charliewilc0@protonmail.com>",
+	"version": "1.2.0",
+	"workspaces": [
+		"apps/*"
+	],
+	"scripts": {
+		"build": "turbo build",
+		"test": "turbo test",
+		"lint": "turbo lint",
+		"types": "turbo types",
+		"dev": "turbo dev --parallel",
+		"format": "pretty-quick --staged",
+		"generate": "graphql-codegen --config scripts/.graphqlrc.ts",
+		"git": "node scripts/git.mjs",
+		"clean": "node scripts/clean.mjs --all",
+		"seed": "node scripts/seed.mjs",
+		"db": "node scripts/db.mjs --push"
+	},
+	"devDependencies": {
+		"@graphql-codegen/cli": "^2.13.8",
+		"@graphql-codegen/typescript": "^2.8.0",
+		"@graphql-codegen/typescript-graphql-request": "^4.5.6",
+		"@graphql-codegen/typescript-operations": "^2.5.4",
+		"@graphql-codegen/typescript-resolvers": "^2.7.4",
+		"@prisma/migrate": "4.5.0",
+		"@types/node": "^18.7.20",
+		"arg": "^5.0.2",
+		"del": "^7.0.0",
+		"graphql": "^16.6.0",
+		"graphql-request": "^5.0.0",
+		"graphql-tag": "^2.12.6",
+		"husky": "^8.0.1",
+		"jest": "^29.2.2",
+		"prettier": "^2.7.1",
+		"prettier-plugin-prisma": "^4.2.0",
+		"prettier-plugin-tailwindcss": "^0.1.11",
+		"pretty-quick": "^3.1.2",
+		"prisma": "^4.5.0",
+		"rss-parser": "^3.12.0",
+		"turbo": "^1.6.2",
+		"typescript": "^4.8.4"
+	},
+	"prettier": {
+		"printWidth": 95,
+		"useTabs": true,
+		"tabWidth": 2,
+		"bracketSpacing": true,
+		"bracketSameLine": true,
+		"htmlWhitespaceSensitivity": "ignore",
+		"plugins": [
+			"prettier-plugin-prisma",
+			"prettier-plugin-tailwindcss"
+		]
+	}
 }

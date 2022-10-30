@@ -50,13 +50,39 @@ First push the db to setup the tables:
 npm run db
 ```
 
-Then run the seed comment to populate the db:
+#### Seeing the Project
+
+You can populate the project with data by running the seed command. This will populate the database with feeds, tags and a single user.
 
 ```
 npm run seed
 ```
 
+The seed command can also be run with an `--email` flag:
+
+```
+npm run seed -- --email='yourtest@email.com'
+```
+
+This will allow you to login to the app with:
+
+| key      | value              |
+| -------- | ------------------ |
+| email    | yourtest@email.com |
+| password | P@ssw0rd           |
+
+_NOTE_: Running this command will also clear the database of all existing data.
+
 ## Project Structure
+
+### Available Scripts
+
+| command            | description                                                      |
+| ------------------ | ---------------------------------------------------------------- |
+| `npm run build`    | Runs build in each workspace                                     |
+| `npm test`         | Executes the tests in each workspace                             |
+| `npm run clean`    | Clears out specific cache directories                            |
+| `npm run generate` | Generates types from the GraphQL documents for server and client |
 
 ### Application
 
