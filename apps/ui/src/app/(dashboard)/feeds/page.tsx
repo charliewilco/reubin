@@ -1,3 +1,4 @@
+import { use } from "react";
 import { cookies } from "next/headers";
 
 import { DashboardProvider } from "../../../hooks/useDashboard";
@@ -7,10 +8,9 @@ import { FeedList } from "../../../components/feed-list";
 import { getFeeds } from "../../../lib/graphql";
 import { TOKEN_NAME } from "../../../lib/auth-token";
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
 	const nextCookies = cookies();
-
-	const _ = await getFeeds(nextCookies.get(TOKEN_NAME));
+	const _ = use(getFeeds(nextCookies.get(TOKEN_NAME)?.value));
 
 	return (
 		<DashboardProvider>

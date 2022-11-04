@@ -9,9 +9,9 @@ import { TOKEN_NAME } from "../../../lib/auth-token";
 
 export default function SettingsPage() {
 	const nextCookies = cookies();
-	const _ = use<AllTagsQuery>(getAllTags(nextCookies.get(TOKEN_NAME)));
+	const _ = use<AllTagsQuery>(getAllTags(nextCookies.get(TOKEN_NAME)?.value));
 
-	const __ = use(me(nextCookies.get(TOKEN_NAME)));
+	const __ = use(me(nextCookies.get(TOKEN_NAME)?.value));
 
 	console.log(__);
 
