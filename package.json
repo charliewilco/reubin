@@ -36,6 +36,7 @@
 		"jest": "^29.2.2",
 		"prettier": "^2.7.1",
 		"prettier-plugin-prisma": "^4.2.0",
+		"prettier-plugin-svelte": "^2.7.0",
 		"prettier-plugin-tailwindcss": "^0.1.11",
 		"pretty-quick": "^3.1.2",
 		"prisma": "^4.5.0",
@@ -52,6 +53,7 @@
 		"htmlWhitespaceSensitivity": "ignore",
 		"plugins": [
 			"prettier-plugin-prisma",
+			"prettier-plugin-svelte",
 			"prettier-plugin-tailwindcss"
 		]
 	}
