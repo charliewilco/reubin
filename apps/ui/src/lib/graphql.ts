@@ -1,4 +1,5 @@
 import { GraphQLClient } from "graphql-request";
+import type { PatchedRequestInit } from "graphql-request/dist/types";
 import { AuthToken } from "./auth-token";
 import { EntryFilter, getSdk, type UpdateFeedInput } from "./__generated__";
 
@@ -77,9 +78,13 @@ export class ReubinClient extends GraphQLClient {
 	}
 }
 
-const client = new GraphQLClient(getURL(), {
-	fetch: fetch,
-});
+let options: PatchedRequestInit = {};
+
+if (process.env.NODE_ENV !== "test") {
+	options.fetch = fetch;
+}
+
+const client = new GraphQLClient(getURL(), options);
 
 export const setHeaders = (token: string) => {
 	client.setHeader("Authorization", token);
