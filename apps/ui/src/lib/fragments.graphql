@@ -1,20 +1,20 @@
 fragment FeedDetails on Feed {
-  id
-  title
-  link
-  feedURL
-  tag
+	id
+	title
+	link
+	feedURL
+	tag
 }
 
 fragment TagInfo on Tag {
-  id
-  title
+	id
+	title
 }
 
 fragment EntryDetails on Entry {
-  title
-  content
-  id
-  unread
-  published
+	title
+	content
+	id
+	unread
+	published
 }

@@ -5,76 +5,11 @@ import { EntryFilter, getSdk, type UpdateFeedInput } from "./__generated__";
 
 function getURL() {
 	if (process.env.NODE_ENV === "test") {
-		return "http://localhost:3000/v1/graphql";
+		return "http://localhost:3000/v1";
 	} else if (!process.env.BROWSER) {
-		return "http://localhost:3000/v1/graphql";
+		return "http://localhost:3000/v1";
 	} else {
-		return "/v1/graphql";
-	}
-}
-
-export class ReubinClient extends GraphQLClient {
-	private _auth = new AuthToken("REUBIN_TOKEN");
-	private _sdk: ReturnType<typeof getSdk>;
-	constructor() {
-		super(getURL(), {
-			fetch: fetch,
-		});
-
-		this._sdk = getSdk(this);
-	}
-
-	setAuthenticationHeader(token: string) {
-		client.setHeader("Authorization", token);
-	}
-
-	initalizeHeaders(cb: (token: string) => void) {
-		const token = this._auth.get();
-
-		if (token !== null) {
-			setHeaders(token);
-			cb(token);
-		}
-	}
-
-	async getEntry(id: string) {
-		try {
-			return this._sdk.IndividualEntry({ id });
-		} catch (error: any) {
-			throw new Error(error);
-		}
-	}
-
-	async getFeed(id: string) {
-		try {
-			return this._sdk.GetFeedById({ id });
-		} catch (error: any) {
-			throw new Error(error);
-		}
-	}
-
-	async getAllFeeds() {
-		try {
-			return this._sdk.GetFeeds();
-		} catch (error: any) {
-			throw new Error(error);
-		}
-	}
-
-	async getEntriesFromFeed(id: string, filter: EntryFilter) {
-		try {
-			return this._sdk.EntriesByFeedFilter({ feedID: id, filter });
-		} catch (error: any) {
-			throw new Error(error);
-		}
-	}
-
-	async getAllTags() {
-		try {
-			return this._sdk.AllTags();
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		return "/v1";
 	}
 }
 

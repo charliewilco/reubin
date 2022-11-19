@@ -14,154 +14,154 @@ import { TagSelectionList } from "./tag-lists";
 import { useEventCallback } from "../hooks/useEventCallback";
 
 interface FeedSettingsFormProps {
-  onSubmit(title: string, tagID?: string | null): void | Promise<void>;
-  onDelete(): void | Promise<void>;
-  initialFeed: FeedDetailsFragment;
+	onSubmit(title: string, tagID?: string | null): void | Promise<void>;
+	onDelete(): void | Promise<void>;
+	initialFeed: FeedDetailsFragment;
 }
 
 export function UpdateFeedForm(props: FeedSettingsFormProps) {
-  const [fields, setFields] = useState({
-    title: props.initialFeed.title,
-    tag: props.initialFeed.tag,
-  });
-  const { data } = useSWR("all-tags", getAllTags);
+	const [fields, setFields] = useState({
+		title: props.initialFeed.title,
+		tag: props.initialFeed.tag,
+	});
+	const { data } = useSWR("all-tags", getAllTags);
 
-  const handleSubmit: React.FormEventHandler = useCallback(
-    (event) => {
-      if (event) {
-        event.preventDefault();
-      }
+	const handleSubmit: React.FormEventHandler = useCallback(
+		(event) => {
+			if (event) {
+				event.preventDefault();
+			}
 
-      props.onSubmit(fields.title, fields.tag);
-    },
-    [fields, props]
-  );
+			props.onSubmit(fields.title, fields.tag);
+		},
+		[fields, props]
+	);
 
-  const handleTitleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (event) =>
-      setFields((prev) => {
-        return {
-          ...prev,
-          title: event.target.value,
-        };
-      }),
-    [setFields]
-  );
+	const handleTitleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+		(event) =>
+			setFields((prev) => {
+				return {
+					...prev,
+					title: event.target.value,
+				};
+			}),
+		[setFields]
+	);
 
-  const handleTagChange = useCallback((tag: TagInfoFragment) => {
-    setFields((prev) => {
-      if (tag) {
-        return {
-          ...prev,
-          tag: tag.id,
-        };
-      }
-      return {
-        ...prev,
-        tag: null,
-      };
-    });
-  }, []);
+	const handleTagChange = useCallback((tag: TagInfoFragment) => {
+		setFields((prev) => {
+			if (tag) {
+				return {
+					...prev,
+					tag: tag.id,
+				};
+			}
+			return {
+				...prev,
+				tag: null,
+			};
+		});
+	}, []);
 
-  const selected: TagInfoFragment | null | undefined = data?.tags.find(
-    (t) => t?.id === fields.tag
-  );
+	const selected: TagInfoFragment | null | undefined = data?.tags.find(
+		(t) => t?.id === fields.tag
+	);
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <Label htmlFor="feed-title" aria-labelledby="feed-title">
-        <TextLabel id="feed-title">Feed Name</TextLabel>
+	return (
+		<form onSubmit={handleSubmit} className="space-y-4">
+			<Label htmlFor="feed-title" aria-labelledby="feed-title">
+				<TextLabel id="feed-title">Feed Name</TextLabel>
 
-        <Input
-          name="feed-title"
-          data-testid="update-feed-name"
-          value={fields.title}
-          onChange={handleTitleChange}
-        />
-      </Label>
-      <Label>
-        <TextLabel id="feed-title">Tag</TextLabel>
+				<Input
+					name="feed-title"
+					data-testid="update-feed-name"
+					value={fields.title}
+					onChange={handleTitleChange}
+				/>
+			</Label>
+			<Label>
+				<TextLabel id="feed-title">Tag</TextLabel>
 
-        {data && data.tags && (
-          <TagSelectionList selected={selected} onChange={handleTagChange} />
-        )}
-      </Label>
-      <div className="mt-8 flex items-center justify-between">
-        <div className="block text-red-500">
-          <Button
-            type="button"
-            aria-label="Remove Feed"
-            className="flex items-center"
-            onClick={props.onDelete}>
-            <Trash2 size={18} />
-            <span className="ml-2 text-sm font-semibold">Unsubscribe</span>
-          </Button>
-        </div>
+				{data && data.tags && (
+					<TagSelectionList selected={selected} onChange={handleTagChange} />
+				)}
+			</Label>
+			<div className="mt-8 flex items-center justify-between">
+				<div className="block text-red-500">
+					<Button
+						type="button"
+						aria-label="Remove Feed"
+						className="flex items-center"
+						onClick={props.onDelete}>
+						<Trash2 size={18} />
+						<span className="ml-2 text-sm font-semibold">Unsubscribe</span>
+					</Button>
+				</div>
 
-        <SuperButton type="submit" aria-label="Update Feed">
-          <span>Save</span>
-        </SuperButton>
-      </div>
-    </form>
-  );
+				<SuperButton type="submit" aria-label="Update Feed">
+					<span>Save</span>
+				</SuperButton>
+			</div>
+		</form>
+	);
 }
 
 export function FeedSettings() {
-  const [isOpen, setOpen] = useState(false);
+	const [isOpen, setOpen] = useState(false);
 
-  const [{ feed }, { unselectFeed }] = useDashboardContext();
-  const { data } = useSWR(feed, getFeed);
+	const [{ feed }, { unselectFeed }] = useDashboardContext();
+	const { data } = useSWR(feed, getFeed);
 
-  const handleRemove = useCallback(() => {
-    if (feed) {
-      try {
-        removeFeed(feed).then(() => {
-          setOpen(false);
-          unselectFeed();
-          mutate("feeds");
-        });
-      } catch (error) {}
-    }
-  }, [feed, unselectFeed]);
+	const handleRemove = useCallback(() => {
+		if (feed) {
+			try {
+				removeFeed(feed).then(() => {
+					setOpen(false);
+					unselectFeed();
+					mutate("feeds");
+				});
+			} catch (error) {}
+		}
+	}, [feed, unselectFeed]);
 
-  const handleSubmit = useCallback(
-    (title: string, tagID?: string | null) => {
-      if (feed) {
-        try {
-          updateFeedTitle(feed, {
-            title,
-            tagID,
-          }).then(() => {
-            setOpen(false);
-            mutate("feeds");
-          });
-        } catch (error) {}
-      }
-    },
-    [feed]
-  );
+	const handleSubmit = useCallback(
+		(title: string, tagID?: string | null) => {
+			if (feed) {
+				try {
+					updateFeedTitle(feed, {
+						title,
+						tagID,
+					}).then(() => {
+						setOpen(false);
+						mutate("feeds");
+					});
+				} catch (error) {}
+			}
+		},
+		[feed]
+	);
 
-  const handleClose = useEventCallback(() => {
-    setOpen(false);
-  });
+	const handleClose = useEventCallback(() => {
+		setOpen(false);
+	});
 
-  return (
-    <>
-      <Button aria-label="Update feed" onClick={() => setOpen(true)}>
-        <Settings2 />
-      </Button>
-      {data && data.feed && (
-        <Dialog
-          isOpen={isOpen}
-          onClose={handleClose}
-          title={`Update feed "${data.feed.title}"`}>
-          <UpdateFeedForm
-            initialFeed={data.feed}
-            onSubmit={handleSubmit}
-            onDelete={handleRemove}
-          />
-        </Dialog>
-      )}
-    </>
-  );
+	return (
+		<>
+			<Button aria-label="Update feed" onClick={() => setOpen(true)}>
+				<Settings2 />
+			</Button>
+			{data && data.feed && (
+				<Dialog
+					isOpen={isOpen}
+					onClose={handleClose}
+					title={`Update feed "${data.feed.title}"`}>
+					<UpdateFeedForm
+						initialFeed={data.feed}
+						onSubmit={handleSubmit}
+						onDelete={handleRemove}
+					/>
+				</Dialog>
+			)}
+		</>
+	);
 }

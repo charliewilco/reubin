@@ -8,6 +8,8 @@ import { FeedList } from "../../../components/feed-list";
 import { getFeeds } from "../../../lib/graphql";
 import { TOKEN_NAME } from "../../../lib/auth-token";
 
+export const runtime = "experimental-edge";
+
 export default function DashboardPage() {
 	const nextCookies = cookies();
 	const _ = use(getFeeds(nextCookies.get(TOKEN_NAME)?.value));
