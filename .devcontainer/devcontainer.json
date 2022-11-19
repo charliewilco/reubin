@@ -1,9 +1,9 @@
 {
-  "name": "Node.js & PostgreSQL",
-  "dockerComposeFile": "docker-compose.yml",
-  "service": "app",
-  "workspaceFolder": "/workspace",
-  "forwardPorts": [5432],
-  "postCreateCommand": "npm install && npm run db && npm run seed",
-  "postAttachCommand": "npx turbo dev --parallel --filter=!@reubin/extension"
+	"name": "Node.js & PostgreSQL",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspace",
+	"forwardPorts": [5432],
+	"postCreateCommand": "npm install && npm run db && npm run seed",
+	"postAttachCommand": "npx turbo dev --parallel --filter=!@reubin/extension"
 }

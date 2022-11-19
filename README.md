@@ -87,7 +87,7 @@ _NOTE_: Running this command will also clear the database of all existing data.
 ### Application
 
 - `/apps/browser-extension`: Chrome browser extension, uses Preact and Parcel recipes
-- `/apps/graphql`: GraphQL server uses Fastify and Mercurius
+- `/apps/graphql`: GraphQL server uses Apollo Server
 - `/apps/ui`: Web application uses Next.js and TailwindCSS
 
 Each project contains
