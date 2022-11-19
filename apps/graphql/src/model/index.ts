@@ -5,14 +5,14 @@ import { TagController } from "./tags";
 import { UserController } from "./users";
 
 export class Models {
-  feeds: FeedController;
-  entry: EntryController;
-  users: UserController;
-  tag: TagController;
-  constructor(public services: Services) {
-    this.feeds = new FeedController(services);
-    this.entry = new EntryController(services);
-    this.users = new UserController(services);
-    this.tag = new TagController(services);
-  }
+	feeds: FeedController;
+	entry: EntryController;
+	users: UserController;
+	tag: TagController;
+	constructor(public services: Services) {
+		this.feeds = new FeedController(services);
+		this.entry = new EntryController(services);
+		this.users = new UserController(services);
+		this.tag = new TagController(services);
+	}
 }

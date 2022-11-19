@@ -1,7 +1,7 @@
 const fileTransfomer = {
-  process(sourceText, sourcePath, options) {
-    return {
-      code: `
+	process(sourceText, sourcePath, options) {
+		return {
+			code: `
         const { gql } = require("graphql-tag");
 
        module.exports = gql\`
@@ -9,8 +9,8 @@ const fileTransfomer = {
        \`;
       
       `,
-    };
-  },
+		};
+	},
 };
 
 module.exports = fileTransfomer;

@@ -1,53 +1,53 @@
 export interface ErrorJSON {
-  name: string;
-  message: string;
-  stack?: string;
-  statusCode?: number;
+	name: string;
+	message: string;
+	stack?: string;
+	statusCode?: number;
 }
 
 export class SDKError extends Error {
-  public readonly statusCode?: number;
-  constructor(message: string, code?: number) {
-    super(message);
-    this.name = "SDKError";
-    this.statusCode = code;
-  }
-  public toJSON(): { error: ErrorJSON } {
-    const error: ErrorJSON = {
-      name: this.name,
-      message: this.message,
-      stack: this.stack,
-    };
+	public readonly statusCode?: number;
+	constructor(message: string, code?: number) {
+		super(message);
+		this.name = "SDKError";
+		this.statusCode = code;
+	}
+	public toJSON(): { error: ErrorJSON } {
+		const error: ErrorJSON = {
+			name: this.name,
+			message: this.message,
+			stack: this.stack,
+		};
 
-    if (this.statusCode) {
-      error.statusCode = this.statusCode;
-    }
-    return {
-      error,
-    };
-  }
+		if (this.statusCode) {
+			error.statusCode = this.statusCode;
+		}
+		return {
+			error,
+		};
+	}
 }
 
 export class AuthenticationError extends SDKError {
-  constructor(message: string) {
-    super(message, 401);
-    this.name = "AuthenticationError";
-  }
+	constructor(message: string) {
+		super(message, 401);
+		this.name = "AuthenticationError";
+	}
 }
 
 export class ForbiddenError extends SDKError {
-  constructor(message: string) {
-    super(message, 403);
-    this.name = "ForbiddenError";
-  }
+	constructor(message: string) {
+		super(message, 403);
+		this.name = "ForbiddenError";
+	}
 }
 
 export class ValidationError extends Error {
-  public name = "ValidationError";
+	public name = "ValidationError";
 
-  public inner: Array<{ path: string; message: string }> = [];
+	public inner: Array<{ path: string; message: string }> = [];
 
-  public constructor(message: string) {
-    super(message);
-  }
+	public constructor(message: string) {
+		super(message);
+	}
 }
