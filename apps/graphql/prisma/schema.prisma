@@ -41,16 +41,16 @@ model Feed {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  email     String   @unique
+  id              String   @id @default(cuid())
+  name            String   @unique
+  email           String   @unique
   /// hashed obvs lol
-  password  String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  feeds     Feed[]
-  tags      Tag[]
-  refreshInterval Int @default(60) @map("refresh_interval")
+  password        String
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  feeds           Feed[]
+  tags            Tag[]
+  refreshInterval Int      @default(60) @map("refresh_interval")
 
   @@map("users")
 }

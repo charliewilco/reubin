@@ -1,20 +1,20 @@
 # import * from "./fragments.graphql"
 
 query AllTags {
-  tags {
-    ...TagInfo
-  }
+	tags {
+		...TagInfo
+	}
 }
 
 mutation CreateTag($name: String!) {
-  addTag(name: $name) {
-    id
-    title
-  }
+	addTag(name: $name) {
+		id
+		title
+	}
 }
 
 mutation RemoveTag($id: ID!) {
-  removeTag(id: $id) {
-    ...TagInfo
-  }
+	removeTag(id: $id) {
+		...TagInfo
+	}
 }

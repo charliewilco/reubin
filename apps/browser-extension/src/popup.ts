@@ -1,172 +1,180 @@
-import { h, render } from "preact";
-import { useEffect, useState } from "preact/hooks";
+import { html, render } from "htm/preact";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import { parseDocumentLinks } from "./parse-document";
 
-function IconFeed(props: any) {
-  return h(
-    "svg",
-    Object.assign(
-      {
-        stroke: "currentColor",
-        fill: "currentColor",
-        strokeWidth: 0,
-        viewBox: "0 0 24 24",
-        xmlns: "http://www.w3.org/2000/svg",
-      },
-      props
-    ),
-    h("use", { href: "#icon-feed" })
-  );
+function FeedList(props: { links: RSSLink[] }) {
+	return html`
+		<div class="overflow-hidden rounded-md bg-white shadow dark:bg-zinc-800">
+			<ul role="list" class="divide-y dark:divide-zinc-600">
+				${props.links.map(
+					({ title, href, type }) => html`
+						<li class="cursor-pointer" key=${href}>
+							<div class="block px-2 py-4 hover:bg-zinc-200 dark:hover:bg-zinc-500">
+								<div class="flex items-center gap-2">
+									<div class="flex flex-shrink-0 items-center">
+										<svg
+											stroke="currentColor"
+											fill="currentColor"
+											strokeWidth="0"
+											viewBox="0 0 24 24"
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-6 w-6 text-sky-500 dark:text-sky-600"
+											aria-hidden="true">
+											<use href="#icon-feed"></use>
+										</svg>
+									</div>
+									<div class="flex-1">
+										<div class="truncate">
+											<div>
+												<p class="truncate text-base font-bold text-sky-500 dark:text-sky-600">
+													${title}
+												</p>
+												<p class="font-mono text-xs opacity-50">${href}</p>
+											</div>
+											<div class="mt-2 flex"></div>
+										</div>
+									</div>
+									<div class="flex-shrink-0">
+										<svg
+											width="24"
+											height="24"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											class="h-5 w-5 text-zinc-400"
+											aria-hidden="true">
+											<use href="#icon-chevron-right"></use>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</li>
+					`
+				)}
+			</ul>
+		</div>
+	`;
 }
 
-function IconChevronRight(props: any) {
-  return h(
-    "svg",
-    Object.assign(
-      {
-        width: 24,
-        height: 24,
-        viewBox: "0 0 24 24",
-        fill: "none",
-        stroke: "currentColor",
-        strokeWidth: 2,
-        strokeLinecap: "round",
-        strokeLinejoin: "round",
-      },
-      props
-    ),
-    h("use", { href: "#icon-chevron-right" })
-  );
+interface AppWrapperProps {
+	children?: any;
+	onRetry(): void;
 }
 
-interface AppState {
-  hasChecked: boolean;
-  availableFeeds: RSSLink[];
+function AppWrapper({ children, onRetry }: AppWrapperProps) {
+	return html`
+		<div>
+			<header class="mb-4 flex items-center justify-between ">
+				<h2 class="flex-1 text-xl font-semibold">Available Feeds</h2>
+				<button aria-label="Refresh" onClick=${onRetry}>
+					<svg
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						strokeWidth="2"
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						class="h-5 w-5 text-zinc-400"
+						aria-hidden="true">
+						<use href="#icon-refresh"></use>
+					</svg>
+				</button>
+			</header>
+
+			${children}
+		</div>
+	`;
 }
 
+function LoadingState() {
+	return html`
+		<div class="flex justify-center">
+			<div class="h-8 w-8 text-sky-500" role="alert" aria-busy="true">
+				<svg height="100%" viewBox="0 0 32 32" width="100%" class="animate-spin">
+					<circle
+						cx="16"
+						cy="16"
+						fill="none"
+						r="14"
+						stroke-width="4"
+						stroke="currentColor"
+						opacity="0.2"></circle>
+					<circle
+						cx="16"
+						cy="16"
+						fill="none"
+						r="14"
+						stroke-width="4"
+						stroke="currentColor"
+						stroke-dashoffset="60"
+						stroke-dasharray="80"></circle>
+				</svg>
+			</div>
+		</div>
+	`;
+}
+
+function Empty() {
+	return html`
+		<div class="py-4 text-center">
+			<p class="text-lg opacity-50">No feeds found.</p>
+			<p>
+				<a class="text-sky-500 dark:text-sky-600" href="https://reubin.app">
+					Learn more here.
+				</a>
+			</p>
+		</div>
+	`;
+}
 function AvailableFeedList() {
-  let content = null;
-  const [state, setState] = useState<AppState>({ hasChecked: false, availableFeeds: [] });
+	const [state, setState] = useState<{
+		hasChecked: boolean;
+		availableFeeds: RSSLink[];
+	}>({ hasChecked: false, availableFeeds: [] });
 
-  useEffect(() => {
-    if (!state.hasChecked) {
-      parseDocumentLinks().then((links) => {
-        setState({
-          hasChecked: true,
-          availableFeeds: links ?? [],
-        });
-      });
-    }
-  }, []);
+	useEffect(() => {
+		if (!state.hasChecked) {
+			parseDocumentLinks().then((links) => {
+				setState({
+					hasChecked: true,
+					availableFeeds: links ?? [],
+				});
+			});
+		}
+	}, [state]);
 
-  if (!state.hasChecked) {
-    content = h(
-      "div",
-      { className: "h-8 w-8 text-sky-500", role: "alert", "aria-busy": "true" },
-      h(
-        "svg",
-        { height: "100%", viewBox: "0 0 32 32", width: "100%", className: "animate-spin" },
-        h("circle", {
-          cx: "16",
-          cy: "16",
-          fill: "none",
-          r: "14",
-          "stroke-width": "4",
-          stroke: "currentColor",
-          opacity: 0.2,
-        }),
-        h("circle", {
-          cx: "16",
-          cy: "16",
-          fill: "none",
-          r: "14",
-          "stroke-width": "4",
-          stroke: "currentColor",
-          "stroke-dashoffset": 60,
-          "stroke-dasharray": 80,
-        })
-      )
-    );
-  } else if (state.availableFeeds.length === 0) {
-    content = h("p", {}, [
-      h("span", { className: "opacity-50" }, "No feeds found. "),
-      h(
-        "a",
-        { className: "text-sky-500 dark:text-sky-600", href: "https://reubin.app" },
-        "Learn more here."
-      ),
-    ]);
-  } else {
-    content = h(
-      "div",
-      { className: "overflow-hidden rounded-md bg-zinc-100 shadow dark:bg-zinc-800" },
-      h(
-        "ul",
-        { role: "list", className: "divide-y dark:divide-zinc-600" },
-        state.availableFeeds.map((feed) =>
-          h(
-            "li",
-            { key: feed.href, className: "cursor-pointer" },
-            h(
-              "div",
-              { className: "block px-2 py-4 hover:bg-zinc-200 dark:hover:bg-zinc-500" },
-              h(
-                "div",
-                { className: "flex items-center gap-2" },
-                h(
-                  "div",
-                  { className: "flex flex-shrink-0 items-center" },
-                  h(IconFeed, {
-                    className: "h-6 w-6 text-sky-500 dark:text-sky-600",
-                    "aria-hidden": "true",
-                  })
-                ),
-                h(
-                  "div",
-                  { className: "flex-1" },
-                  h(
-                    "div",
-                    { className: "truncate" },
-                    h(
-                      "div",
-                      null,
-                      h(
-                        "p",
-                        {
-                          className:
-                            "truncate text-base font-bold text-sky-500 dark:text-sky-600",
-                        },
-                        feed.title
-                      ),
-                      h("p", { className: "font-mono text-xs opacity-50" }, feed.href)
-                    ),
-                    h("div", { className: "mt-2 flex" })
-                  )
-                ),
-                h(
-                  "div",
-                  { className: "flex-shrink-0" },
-                  h(IconChevronRight, {
-                    className: "h-5 w-5 text-zinc-400",
-                    "aria-hidden": "true",
-                  })
-                )
-              )
-            )
-          )
-        )
-      )
-    );
-  }
+	const handleRetry = useCallback(() => {
+		setState({
+			hasChecked: false,
+			availableFeeds: [],
+		});
+	}, []);
 
-  return h("div", {}, [
-    h("h2", { className: "mb-4 flex-1 text-xl font-semibold" }, "Available Feeds"),
-    content,
-  ]);
+	let content = null;
+
+	if (!state.hasChecked) {
+		content = LoadingState();
+	} else if (state.availableFeeds.length === 0) {
+		content = Empty();
+	} else {
+		content = FeedList({ links: state.availableFeeds });
+	}
+
+	return AppWrapper({ children: content, onRetry: handleRetry });
 }
 
 const root = document.getElementById("app");
 
 if (root !== null) {
-  render(h(AvailableFeedList, {}), root);
+	render(
+		html`
+			<${AvailableFeedList} />
+		`,
+		root
+	);
 }

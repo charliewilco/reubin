@@ -1,23 +1,17 @@
-import Fastify from "fastify";
-import mercurius from "mercurius";
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+
 import { schema } from "./schema";
 import { getContext } from "./context";
-import { RecommendedKeyArray } from "./recommendations";
+import { Context } from "vm";
 
-export const createApp = () => {
-  const app = Fastify({ logger: false });
+export const server = new ApolloServer<Context>({
+	schema,
+});
 
-  app.get("/recommendations", (_req, res) => {
-    res.send({
-      data: RecommendedKeyArray,
-    });
-  });
-
-  app.register(mercurius, {
-    schema,
-    graphiql: true,
-    context: getContext,
-  });
-
-  return app;
-};
+export function createApp() {
+	return startStandaloneServer<Context>(server, {
+		context: async ({ req, res }) => getContext(req),
+		listen: { port: 4000 },
+	});
+}

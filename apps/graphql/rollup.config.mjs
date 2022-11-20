@@ -6,23 +6,23 @@ import { defineConfig } from "rollup";
 
 const isDev = process.env.ROLLUP_WATCH === "true";
 
-/** @type {import('rollup').Plugin[]} */
+/** @type {any[]} */
 const plugins = [graphql(), ts()];
 
 if (isDev) {
-  plugins.push(run());
+	plugins.push(run());
 }
 
 export default defineConfig({
-  input: "./src/server.ts",
-  external: (id) => !/^[./]/.test(id),
-  output: [
-    {
-      file: "./dist/server.js",
-      format: "cjs",
-      sourcemap: true,
-    },
-  ],
-  // @ts-ignore
-  plugins,
+	input: "./src/server.ts",
+	external: (id) => !/^[./]/.test(id),
+	output: [
+		{
+			file: "./dist/server.js",
+			format: "cjs",
+			sourcemap: true,
+		},
+	],
+	// @ts-ignore
+	plugins,
 });

@@ -1,92 +1,92 @@
 scalar Date
 
 enum EntryFilter {
-  UNREAD
-  ALL
-  FAVORITED
+	UNREAD
+	ALL
+	FAVORITED
 }
 
 type Feed {
-  id: ID!
-  title: String!
-  link: String!
-  lastFetched: Date!
-  tag: ID
-  feedURL: String!
+	id: ID!
+	title: String!
+	link: String!
+	lastFetched: Date!
+	tag: ID
+	feedURL: String!
 }
 
 type Tag {
-  id: ID!
-  title: String!
+	id: ID!
+	title: String!
 }
 
 type Activity {
-  unread: [Int]!
-  starred: [Int]!
+	unread: [Int]!
+	starred: [Int]!
 }
 
 type Entry {
-  id: ID!
-  feed_id: ID!
-  title: String!
-  url: String
-  """
-  HTML String
-  """
-  content: String
-  author: String
-  published: Date
-  created_at: Date
-  unread: Boolean!
-  favorite: Boolean!
+	id: ID!
+	feed_id: ID!
+	title: String!
+	url: String
+	"""
+	HTML String
+	"""
+	content: String
+	author: String
+	published: Date
+	created_at: Date
+	unread: Boolean!
+	favorite: Boolean!
 }
 
 type User {
-  email: String!
-  displayName: String
-  avatarColor: Int
-  refreshInterval: Int!
-  id: ID!
+	email: String!
+	displayName: String
+	avatarColor: Int
+	refreshInterval: Int!
+	id: ID!
 }
 
 type Query {
-  tags: [Tag]!
-  feeds: [Feed]!
-  entry(id: ID!): Entry!
-  feed(id: ID!): Feed!
-  entries(feed_id: ID!, filter: EntryFilter): [Entry!]!
-  me: User!
+	tags: [Tag]!
+	feeds: [Feed]!
+	entry(id: ID!): Entry!
+	feed(id: ID!): Feed!
+	entries(feed_id: ID!, filter: EntryFilter): [Entry!]!
+	me: User!
 }
 
 input UpdateFeedInput {
-  title: String
-  tagID: ID
+	title: String
+	tagID: ID
 }
 
 input UpdateUserInput {
-  displayName: String
-  refreshInterval: Int
+	displayName: String
+	refreshInterval: Int
 }
 
 type ReturnedUser {
-  user: User!
-  token: String!
+	user: User!
+	token: String!
 }
 
 type Mutation {
-  createUser(email: String!, password: String!): ReturnedUser!
-  login(email: String!, password: String!): ReturnedUser!
-  addFeed(url: String!): Feed!
-  addTag(name: String!): Tag!
-  removeFeed(id: ID!): Feed!
-  removeTag(id: ID!): Tag!
-  refreshFeed(id: ID!): [Entry!]!
-  markAsFavorite(id: ID!, favorite: Boolean!): Entry!
-  markAsRead(id: ID!): Entry!
-  updateFeed(id: ID!, fields: UpdateFeedInput): Feed!
+	createUser(email: String!, password: String!): ReturnedUser!
+	login(email: String!, password: String!): ReturnedUser!
+	addFeed(url: String!): Feed!
+	addTag(name: String!): Tag!
+	removeFeed(id: ID!): Feed!
+	removeTag(id: ID!): Tag!
+	refreshFeed(id: ID!): [Entry!]!
+	markAsFavorite(id: ID!, favorite: Boolean!): Entry!
+	markAsRead(id: ID!): Entry!
+	updateFeed(id: ID!, fields: UpdateFeedInput): Feed!
 }
 
 schema {
-  query: Query
-  mutation: Mutation
+	query: Query
+	mutation: Mutation
 }
