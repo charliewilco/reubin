@@ -9,13 +9,14 @@ import cuid from "cuid";
 
 let authToken: string | null = null;
 let currentFeed: string | null = null;
+let currentTag: string | null = null;
+
+const newUser = {
+	email: `test-${cuid()}@charlieisamazing.com`,
+	password: base64.encode("P@ssw0rd"),
+};
 
 describe("GraphQL Server", () => {
-	const newUser = {
-		email: `test-${cuid()}@charlieisamazing.com`,
-		password: base64.encode("P@ssw0rd"),
-	};
-
 	beforeAll(() => {
 		console.log("Using the following credentials:\n", JSON.stringify(newUser, null, 2));
 	});
@@ -106,7 +107,77 @@ describe("GraphQL Server", () => {
 		expect(entryListResult.body.singleResult.data?.entries?.length).toBeGreaterThan(1);
 	});
 
-	test.todo("cannot fetch feeds user did not create");
+	test("cannot fetch feeds user did not create", async () => {
+		await prisma?.feed.create({
+			data: {
+				title: "Filecoin",
+				feedURL: "https://filecoin.io/blog/feed/index.xml",
+				link: "https://filecoin.io/",
+			},
+		});
+
+		const feedListResult = await server.executeOperation<any>(
+			{
+				query: gql`
+					query GetFeeds {
+						feeds {
+							id
+							title
+							link
+							feedURL
+						}
+					}
+				`,
+			},
+			{
+				contextValue: {
+					token: authToken,
+				},
+			}
+		);
+
+		if (feedListResult.body.kind !== "single") {
+			throw new Error("feedListResult.body.kind is not single");
+		}
+
+		expect(feedListResult.body.singleResult.data?.feeds?.length).toEqual(1);
+
+		const feeds = feedListResult.body.singleResult.data?.feeds.map((f: any) => f.feedURL);
+		expect(feeds).not.toContain("https://filecoin.io/blog/feed/index.xml");
+		expect(feeds).toContain("https://www.inverse.com/input/rss");
+	});
+
+	test("can create tags", async () => {
+		const result = await server.executeOperation<any>(
+			{
+				query: gql`
+					mutation CreateTag($name: String!) {
+						addTag(name: $name) {
+							id
+							title
+						}
+					}
+				`,
+				variables: {
+					name: "Test Tag",
+				},
+			},
+			{
+				contextValue: {
+					token: authToken,
+				},
+			}
+		);
+
+		if (result.body.kind !== "single") {
+			throw new Error("result.body.kind is not single");
+		}
+
+		currentTag = result.body.singleResult.data.addTag.id;
+		expect(result.body.singleResult.data.addTag.title).toEqual("Test Tag");
+		expect(currentTag).not.toBeNull();
+	});
+
 	test.todo("can tag feeds");
 	test.todo("can fetch feeds by tag");
 	test.todo("can fetch feeds by tag and unread");

@@ -9,6 +9,7 @@
 		"types": "tsc --noEmit --pretty"
 	},
 	"dependencies": {
+		"@apollo/client": "^3.7.1",
 		"@headlessui/react": "^1.7.3",
 		"@next/env": "^13.0.4",
 		"@next/font": "^13.0.4",
