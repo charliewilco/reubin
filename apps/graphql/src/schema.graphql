@@ -51,7 +51,7 @@ type User {
 
 type Query {
 	tags: [Tag]!
-	feeds: [Feed]!
+	feeds(tag_id: ID): [Feed]!
 	entry(id: ID!): Entry!
 	feed(id: ID!): Feed!
 	entries(feed_id: ID!, filter: EntryFilter): [Entry!]!

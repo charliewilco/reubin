@@ -13,7 +13,6 @@ import { Models } from "./model";
 import { services } from "./services";
 
 // TODO: Create tag object
-// TODO: User sign up, registration
 // TODO: Stripe integration
 
 const m = new Models(services);
@@ -30,9 +29,9 @@ const query: QueryResolvers<Context> = {
 			throw new Error("This node requires Authorization token");
 		}
 	},
-	async feeds(_parent, _args, { token }) {
+	async feeds(_parent, { tag_id }, { token }) {
 		if (token !== null) {
-			return m.feeds.getAll(token);
+			return tag_id ? m.feeds.getByTagID(tag_id, token) : m.feeds.getAll(token);
 		} else {
 			throw new Error("This node requires Authorization token");
 		}

@@ -61,6 +61,23 @@ export class FeedController {
 		return feed;
 	}
 
+	async getByTagID(id: string, token: string) {
+		const userId = this.services.token.getUserId(token);
+		const feeds = await this.services.orm.feed.findMany({
+			where: {
+				userId,
+				tagId: id,
+			},
+		});
+
+		const converted = [];
+		for (let index = 0; index < feeds.length; index++) {
+			converted.push(FeedController.fromORM(feeds[index]));
+		}
+
+		return converted;
+	}
+
 	async getAll(token: string) {
 		const userId = this.services.token.getUserId(token);
 		const feeds = await this.services.orm.feed.findMany({

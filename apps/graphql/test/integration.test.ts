@@ -178,9 +178,79 @@ describe("GraphQL Server", () => {
 		expect(currentTag).not.toBeNull();
 	});
 
-	test.todo("can tag feeds");
-	test.todo("can fetch feeds by tag");
-	test.todo("can fetch feeds by tag and unread");
+	test("can tag feeds", async () => {
+		const result = await server.executeOperation<any>(
+			{
+				query: gql`
+					fragment FeedDetails on Feed {
+						id
+						title
+						link
+						feedURL
+						tag
+					}
+
+					mutation UpdateFeedTitle($input: UpdateFeedInput, $id: ID!) {
+						updateFeed(id: $id, fields: $input) {
+							...FeedDetails
+						}
+					}
+				`,
+				variables: {
+					input: {
+						tagID: currentTag,
+					},
+					id: currentFeed,
+				},
+			},
+			{
+				contextValue: {
+					token: authToken,
+				},
+			}
+		);
+
+		if (result.body.kind !== "single") {
+			throw new Error("result.body.kind is not single");
+		}
+
+		expect(currentTag).not.toBeNull();
+		expect(result.body.singleResult.data.updateFeed.tag).toEqual(currentTag);
+	});
+
+	test("can fetch feeds by tag", async () => {
+		const result = await server.executeOperation<any>(
+			{
+				query: gql`
+					query GetFeedsByTag($id: ID!) {
+						feeds(tag_id: $id) {
+							id
+							title
+							link
+							feedURL
+							tag
+						}
+					}
+				`,
+				variables: {
+					id: currentTag,
+				},
+			},
+			{
+				contextValue: {
+					token: authToken,
+				},
+			}
+		);
+
+		if (result.body.kind !== "single") {
+			throw new Error("result.body.kind is not single");
+		}
+
+		expect(result.body.singleResult.data?.feeds?.length).toEqual(1);
+		expect(result.body.singleResult.data?.feeds[0].tag).toEqual(currentTag);
+	});
+	test.todo("can fetch entries by tag and unread");
 	test.todo("can remove tags");
 	test.todo("removing tag does not remove feed");
 	test.todo("can remove feed and all relevant entries");

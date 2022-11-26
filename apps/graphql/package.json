@@ -9,7 +9,7 @@
 		"bundle": "rollup -c",
 		"generate": "npx prisma generate",
 		"types": "tsc --noEmit --pretty",
-		"test": "jest"
+		"test": "jest --runInBand"
 	},
 	"devDependencies": {
 		"@apollo/rover": "^0.10.0",
