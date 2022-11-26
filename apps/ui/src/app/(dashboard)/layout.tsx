@@ -1,38 +1,35 @@
-import { ApolloProvider } from "@apollo/client";
+"use client";
+
 import { AddFeed } from "../../components/add-feed";
 import { AppHeader } from "../../components/app-header";
 import { SideNavigation } from "../../components/side-navigation";
-import { getClient } from "../../lib/graphql";
 
 export default function Layout({ children }: React.PropsWithChildren<{}>) {
-	const client = getClient();
 	return (
-		<ApolloProvider client={client}>
-			<div className="h-screen">
-				<div className="flex h-screen flex-col">
-					<AppHeader>
-						<div className="flex justify-end gap-4">
-							<AddFeed />
+		<div className="h-screen">
+			<div className="flex h-screen flex-col">
+				<AppHeader>
+					<div className="flex justify-end gap-4">
+						<AddFeed />
 
-							<div>
-								<object className="mx-auto block h-8 w-8 rounded-full bg-gradient-to-r from-sky-500 to-blue-500" />
-								<div className="sr-only">
-									<p>Some Name</p>
-									<p>Account settings</p>
-								</div>
+						<div>
+							<object className="mx-auto block h-8 w-8 rounded-full bg-gradient-to-r from-sky-500 to-blue-500" />
+							<div className="sr-only">
+								<p>Some Name</p>
+								<p>Account settings</p>
 							</div>
 						</div>
-					</AppHeader>
-					<div className="flex flex-1">
-						<div className="relative flex h-full flex-col justify-between border-r border-zinc-200 dark:border-zinc-700">
-							<SideNavigation />
-						</div>
-						<main className="flex-1" id="feed-container">
-							{children}
-						</main>
 					</div>
+				</AppHeader>
+				<div className="flex flex-1">
+					<div className="relative flex h-full flex-col justify-between border-r border-zinc-200 dark:border-zinc-700">
+						<SideNavigation />
+					</div>
+					<main className="flex-1" id="feed-container">
+						{children}
+					</main>
 				</div>
 			</div>
-		</ApolloProvider>
+		</div>
 	);
 }

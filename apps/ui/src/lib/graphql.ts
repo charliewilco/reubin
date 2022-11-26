@@ -1,9 +1,3 @@
-import {
-	ApolloClient,
-	InMemoryCache,
-	HttpLink,
-	type NormalizedCacheObject,
-} from "@apollo/client";
 import { GraphQLClient } from "graphql-request";
 import type { PatchedRequestInit } from "graphql-request/dist/types";
 import { AuthToken } from "./auth-token";
@@ -17,21 +11,6 @@ function getURL() {
 	} else {
 		return "/v1";
 	}
-}
-
-let _apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
-export function getClient() {
-	if (_apolloClient === null) {
-		_apolloClient = new ApolloClient({
-			cache: new InMemoryCache(),
-			link: new HttpLink({
-				uri: getURL(),
-			}),
-			connectToDevTools: process.env.NODE_ENV === "development",
-		});
-	}
-
-	return _apolloClient;
 }
 
 let options: PatchedRequestInit = {};
