@@ -2,7 +2,7 @@
 	"name": "reubin",
 	"repository": "charliewilco/reubin.app",
 	"author": "Charlie ⚡ <charliewilc0@protonmail.com>",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"workspaces": [
 		"apps/*"
 	],
