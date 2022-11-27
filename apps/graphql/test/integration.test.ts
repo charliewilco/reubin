@@ -7,18 +7,20 @@ import gql from "graphql-tag";
 import base64 from "base-64";
 import cuid from "cuid";
 
-let authToken: string | null = null;
-let currentFeed: string | null = null;
-let currentTag: string | null = null;
-
-const newUser = {
+const newUserMock = {
 	email: `test-${cuid()}@charlieisamazing.com`,
 	password: base64.encode("P@ssw0rd"),
 };
 
+const mocks: Record<"authToken" | "currentFeed" | "currentTag", string | null> = {
+	authToken: null,
+	currentFeed: null,
+	currentTag: null,
+};
+
 describe("GraphQL Server", () => {
 	beforeAll(() => {
-		console.log("Using the following credentials:\n", JSON.stringify(newUser, null, 2));
+		console.log("Using the following credentials:\n", JSON.stringify(newUserMock, null, 2));
 	});
 
 	test("can create users", async () => {
@@ -34,11 +36,11 @@ describe("GraphQL Server", () => {
 					}
 				}
 			`,
-			variables: newUser,
+			variables: newUserMock,
 		});
 
 		if (result.body.kind === "single") {
-			authToken = result.body.singleResult.data?.createUser?.token;
+			mocks.authToken = result.body.singleResult.data?.createUser?.token;
 			const { data } = result.body.singleResult;
 			expect(data.createUser.token).not.toBeNull();
 			expect(data.createUser.user.email).not.toBeNull();
@@ -60,12 +62,12 @@ describe("GraphQL Server", () => {
 					}
 				`,
 				variables: {
-					url: "https://www.inputmag.com/rss",
+					url: "https://discord.com/blog/rss.xml",
 				},
 			},
 			{
 				contextValue: {
-					token: authToken,
+					token: mocks.authToken,
 				},
 			}
 		);
@@ -74,9 +76,9 @@ describe("GraphQL Server", () => {
 			throw new Error("feedResult.body.kind is not single");
 		}
 
-		expect(feedResult.body.singleResult.data.addFeed.title).toEqual("Input");
+		expect(feedResult.body.singleResult.data.addFeed.title).toEqual("Discord Blog");
 
-		currentFeed = feedResult.body.singleResult.data.addFeed.id;
+		mocks.currentFeed = feedResult.body.singleResult.data.addFeed.id;
 	});
 
 	test("feeds can create entries", async () => {
@@ -96,7 +98,7 @@ describe("GraphQL Server", () => {
 				}
 			`,
 			variables: {
-				id: currentFeed,
+				id: mocks.currentFeed,
 			},
 		});
 
@@ -131,7 +133,7 @@ describe("GraphQL Server", () => {
 			},
 			{
 				contextValue: {
-					token: authToken,
+					token: mocks.authToken,
 				},
 			}
 		);
@@ -144,7 +146,7 @@ describe("GraphQL Server", () => {
 
 		const feeds = feedListResult.body.singleResult.data?.feeds.map((f: any) => f.feedURL);
 		expect(feeds).not.toContain("https://filecoin.io/blog/feed/index.xml");
-		expect(feeds).toContain("https://www.inverse.com/input/rss");
+		expect(feeds).toContain("https://discord.com/blog/rss.xml");
 	});
 
 	test("can create tags", async () => {
@@ -164,7 +166,7 @@ describe("GraphQL Server", () => {
 			},
 			{
 				contextValue: {
-					token: authToken,
+					token: mocks.authToken,
 				},
 			}
 		);
@@ -173,9 +175,9 @@ describe("GraphQL Server", () => {
 			throw new Error("result.body.kind is not single");
 		}
 
-		currentTag = result.body.singleResult.data.addTag.id;
+		mocks.currentTag = result.body.singleResult.data.addTag.id;
 		expect(result.body.singleResult.data.addTag.title).toEqual("Test Tag");
-		expect(currentTag).not.toBeNull();
+		expect(mocks.currentTag).not.toBeNull();
 	});
 
 	test("can tag feeds", async () => {
@@ -198,14 +200,14 @@ describe("GraphQL Server", () => {
 				`,
 				variables: {
 					input: {
-						tagID: currentTag,
+						tagID: mocks.currentTag,
 					},
-					id: currentFeed,
+					id: mocks.currentFeed,
 				},
 			},
 			{
 				contextValue: {
-					token: authToken,
+					token: mocks.authToken,
 				},
 			}
 		);
@@ -214,8 +216,8 @@ describe("GraphQL Server", () => {
 			throw new Error("result.body.kind is not single");
 		}
 
-		expect(currentTag).not.toBeNull();
-		expect(result.body.singleResult.data.updateFeed.tag).toEqual(currentTag);
+		expect(mocks.currentTag).not.toBeNull();
+		expect(result.body.singleResult.data.updateFeed.tag).toEqual(mocks.currentTag);
 	});
 
 	test("can fetch feeds by tag", async () => {
@@ -233,12 +235,12 @@ describe("GraphQL Server", () => {
 					}
 				`,
 				variables: {
-					id: currentTag,
+					id: mocks.currentTag,
 				},
 			},
 			{
 				contextValue: {
-					token: authToken,
+					token: mocks.authToken,
 				},
 			}
 		);
@@ -248,7 +250,7 @@ describe("GraphQL Server", () => {
 		}
 
 		expect(result.body.singleResult.data?.feeds?.length).toEqual(1);
-		expect(result.body.singleResult.data?.feeds[0].tag).toEqual(currentTag);
+		expect(result.body.singleResult.data?.feeds[0].tag).toEqual(mocks.currentTag);
 	});
 	test.todo("can fetch entries by tag and unread");
 	test.todo("can remove tags");
