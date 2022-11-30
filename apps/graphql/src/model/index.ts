@@ -10,9 +10,9 @@ export class Models {
 	users: UserController;
 	tag: TagController;
 	constructor(public services: Services) {
-		this.feeds = new FeedController(services);
-		this.entry = new EntryController(services);
-		this.users = new UserController(services);
-		this.tag = new TagController(services);
+		this.feeds = new FeedController(this.services);
+		this.entry = new EntryController(this.services);
+		this.users = new UserController(this.services);
+		this.tag = new TagController(this.services);
 	}
 }

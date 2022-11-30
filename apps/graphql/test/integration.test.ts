@@ -252,13 +252,95 @@ describe("GraphQL Server", () => {
 		expect(result.body.singleResult.data?.feeds?.length).toEqual(1);
 		expect(result.body.singleResult.data?.feeds[0].tag).toEqual(mocks.currentTag);
 	});
-	test.todo("can fetch entries by tag and unread");
-	test.todo("can remove tags");
-	test.todo("removing tag does not remove feed");
-	test.todo("can remove feed and all relevant entries");
+
+	test("can remove tags", async () => {
+		const result = await server.executeOperation<any>(
+			{
+				query: gql`
+					mutation RemoveTag($id: ID!) {
+						removeTag(id: $id) {
+							id
+							title
+						}
+					}
+				`,
+				variables: {
+					id: mocks.currentTag,
+				},
+			},
+			{
+				contextValue: {
+					token: mocks.authToken,
+				},
+			}
+		);
+
+		if (result.body.kind !== "single") {
+			throw new Error("result.body.kind is not single");
+		}
+
+		expect(result.body.singleResult.data.removeTag.id).toEqual(mocks.currentTag);
+
+		const tagResult = await server.executeOperation<any>(
+			{
+				query: gql`
+					query AllTags {
+						tags {
+							id
+							title
+						}
+					}
+				`,
+			},
+			{
+				contextValue: {
+					token: mocks.authToken,
+				},
+			}
+		);
+
+		if (tagResult.body.kind !== "single") {
+			throw new Error("tagResult.body.kind is not single");
+		}
+
+		expect(tagResult.body.singleResult.data?.tags?.length).toEqual(0);
+	});
+
+	test("removing tag does not remove feed", async () => {
+		const feedResult = await server.executeOperation<any>(
+			{
+				query: gql`
+					query AllFeeds {
+						feeds {
+							id
+							title
+							link
+							feedURL
+							tag
+						}
+					}
+				`,
+			},
+			{
+				contextValue: {
+					token: mocks.authToken,
+				},
+			}
+		);
+
+		if (feedResult.body.kind !== "single") {
+			throw new Error("feedResult.body.kind is not single");
+		}
+
+		expect(feedResult.body.singleResult.data?.feeds?.length).toEqual(1);
+		expect(feedResult.body.singleResult.data?.feeds[0].tag).not.toEqual(mocks.currentTag);
+	});
+
 	test.todo("can bookmark entries");
 	test.todo("can fetch entries by bookmarked");
 	test.todo("can mark entries as read");
 	test.todo("can fetch entries by unread");
 	test.todo("can refresh feeds");
+	test.todo("can fetch entries by tag and unread");
+	test.todo("can remove feed and all relevant entries");
 });
