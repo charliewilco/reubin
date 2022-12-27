@@ -1,4 +1,4 @@
-import { Feed } from "@prisma/client";
+import type { Feed } from "@prisma/client";
 
 import {
 	type MutationResolvers,
@@ -12,7 +12,6 @@ import { EntryController } from "./model/entry";
 import { Models } from "./model";
 import { services } from "./services";
 
-// TODO: Create tag object
 // TODO: Stripe integration
 
 const m = new Models(services);
@@ -21,7 +20,7 @@ const m = new Models(services);
  * TODO:
  * - recently read
  **/
-const query: QueryResolvers<Context> = {
+const Query: QueryResolvers<Context> = {
 	async tags(_, __, { token }) {
 		if (token !== null) {
 			return m.tag.getAll(token);
@@ -82,7 +81,7 @@ const query: QueryResolvers<Context> = {
 	},
 };
 
-const mutation: MutationResolvers<Context> = {
+const Mutation: MutationResolvers<Context> = {
 	async addFeed(_parent, { url }, { token }) {
 		if (token !== null) {
 			return m.feeds.add(url, token);
@@ -233,6 +232,6 @@ const mutation: MutationResolvers<Context> = {
 };
 
 export const resolvers: Resolvers<Context> = {
-	Query: query,
-	Mutation: mutation,
+	Query,
+	Mutation,
 };

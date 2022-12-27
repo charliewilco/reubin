@@ -9,7 +9,7 @@
 	],
 	"scripts": {
 		"build": "turbo build",
-		"test": "turbo test",
+		"test": "turbo test --filter=!@reubin/e2e",
 		"lint": "turbo lint",
 		"types": "turbo types",
 		"dev": "turbo dev --parallel",
@@ -42,7 +42,7 @@
 		"prisma": "^4.8.0",
 		"rss-parser": "^3.12.0",
 		"turbo": "^1.6.3",
-		"typescript": "^4.9.3"
+		"typescript": "^4.9.4"
 	},
 	"prettier": {
 		"printWidth": 95,
