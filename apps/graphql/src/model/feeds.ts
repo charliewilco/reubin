@@ -61,6 +61,23 @@ export class FeedController {
 		return feed;
 	}
 
+	async getByTagID(id: string, token: string) {
+		const userId = this.services.token.getUserId(token);
+		const feeds = await this.services.orm.feed.findMany({
+			where: {
+				userId,
+				tagId: id,
+			},
+		});
+
+		const converted = [];
+		for (let index = 0; index < feeds.length; index++) {
+			converted.push(FeedController.fromORM(feeds[index]));
+		}
+
+		return converted;
+	}
+
 	async getAll(token: string) {
 		const userId = this.services.token.getUserId(token);
 		const feeds = await this.services.orm.feed.findMany({
@@ -74,5 +91,32 @@ export class FeedController {
 		}
 
 		return converted;
+	}
+
+	async remove(id: string, token: string) {
+		const userId = this.services.token.getUserId(token);
+		const feed = await this.services.orm.feed.findUnique({
+			where: {
+				id,
+			},
+		});
+
+		if (feed === null || feed.userId !== userId) {
+			throw new Error("Feed not found");
+		}
+
+		await this.services.orm.entry.deleteMany({
+			where: {
+				feedId: id,
+			},
+		});
+
+		const removed = await this.services.orm.feed.delete({
+			where: {
+				id,
+			},
+		});
+
+		return removed;
 	}
 }

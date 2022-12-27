@@ -137,6 +137,10 @@ export type QueryFeedArgs = {
 	id: Scalars["ID"];
 };
 
+export type QueryFeedsArgs = {
+	tag_id?: InputMaybe<Scalars["ID"]>;
+};
+
 export type ReturnedUser = {
 	__typename?: "ReturnedUser";
 	token: Scalars["String"];
@@ -421,7 +425,12 @@ export type QueryResolvers<
 		ContextType,
 		RequireFields<QueryFeedArgs, "id">
 	>;
-	feeds?: Resolver<Array<Maybe<ResolversTypes["Feed"]>>, ParentType, ContextType>;
+	feeds?: Resolver<
+		Array<Maybe<ResolversTypes["Feed"]>>,
+		ParentType,
+		ContextType,
+		Partial<QueryFeedsArgs>
+	>;
 	me?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
 	tags?: Resolver<Array<Maybe<ResolversTypes["Tag"]>>, ParentType, ContextType>;
 };

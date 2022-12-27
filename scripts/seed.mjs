@@ -113,11 +113,17 @@ async function createFeedWithTag(title, feeds, userId) {
 }
 
 async function clearAll() {
-	const models = Reflect.ownKeys(orm).filter((key) => key[0] !== "_" && key[0] !== "$");
+	const models = Reflect.ownKeys(orm).filter(
+		(key) => key[0] !== "_" && key[0] !== "$" && typeof key !== "symbol"
+	);
 
 	console.log({ models });
 
-	return Promise.all(models.map((modelKey) => orm[modelKey].deleteMany()));
+	return Promise.all(
+		models.map((modelKey) => {
+			return orm[modelKey].deleteMany();
+		})
+	);
 }
 
 /**

@@ -13,6 +13,7 @@ const buildOuputPaths = [
 	"apps/ui/.next",
 	"apps/ui/coverage",
 	"apps/ui/tsconfig.tsbuildinfo",
+	"e2e/playwright-report",
 ];
 
 const args = arg({

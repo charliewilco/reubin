@@ -1,4 +1,4 @@
-import { Feed } from "@prisma/client";
+import type { Feed } from "@prisma/client";
 
 import {
 	type MutationResolvers,
@@ -12,8 +12,6 @@ import { EntryController } from "./model/entry";
 import { Models } from "./model";
 import { services } from "./services";
 
-// TODO: Create tag object
-// TODO: User sign up, registration
 // TODO: Stripe integration
 
 const m = new Models(services);
@@ -22,7 +20,7 @@ const m = new Models(services);
  * TODO:
  * - recently read
  **/
-const query: QueryResolvers<Context> = {
+const Query: QueryResolvers<Context> = {
 	async tags(_, __, { token }) {
 		if (token !== null) {
 			return m.tag.getAll(token);
@@ -30,9 +28,9 @@ const query: QueryResolvers<Context> = {
 			throw new Error("This node requires Authorization token");
 		}
 	},
-	async feeds(_parent, _args, { token }) {
+	async feeds(_parent, { tag_id }, { token }) {
 		if (token !== null) {
-			return m.feeds.getAll(token);
+			return tag_id ? m.feeds.getByTagID(tag_id, token) : m.feeds.getAll(token);
 		} else {
 			throw new Error("This node requires Authorization token");
 		}
@@ -83,7 +81,7 @@ const query: QueryResolvers<Context> = {
 	},
 };
 
-const mutation: MutationResolvers<Context> = {
+const Mutation: MutationResolvers<Context> = {
 	async addFeed(_parent, { url }, { token }) {
 		if (token !== null) {
 			return m.feeds.add(url, token);
@@ -98,18 +96,12 @@ const mutation: MutationResolvers<Context> = {
 			throw new Error("This node requires Authorization token");
 		}
 	},
-	async removeFeed(_parent, { id }, {}) {
-		await services.orm.entry.deleteMany({
-			where: {
-				feedId: id,
-			},
-		});
-		const feed = await services.orm.feed.delete({
-			where: {
-				id,
-			},
-		});
-		return feed;
+	async removeFeed(_parent, { id }, { token }) {
+		if (token !== null) {
+			return m.feeds.remove(id, token);
+		} else {
+			throw new Error("This node requires Authorization token");
+		}
 	},
 	async removeTag(_parent, { id }, {}) {
 		const tag = await services.orm.tag.delete({
@@ -240,6 +232,6 @@ const mutation: MutationResolvers<Context> = {
 };
 
 export const resolvers: Resolvers<Context> = {
-	Query: query,
-	Mutation: mutation,
+	Query,
+	Mutation,
 };

@@ -1,6 +1,6 @@
 {
 	"name": "@reubin/extension",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"private": true,
 	"scripts": {
 		"dev": "parcel watch src/manifest.json --host localhost",
@@ -10,17 +10,18 @@
 	},
 	"dependencies": {
 		"htm": "^3.1.1",
-		"preact": "^10.11.0"
+		"preact": "^10.11.3"
 	},
 	"devDependencies": {
 		"@tailwindcss/aspect-ratio": "^0.4.2",
 		"@tailwindcss/forms": "^0.5.3",
-		"@tailwindcss/typography": "^0.5.7",
-		"@parcel/config-webextension": "^2.6.2",
+		"@tailwindcss/typography": "^0.5.8",
+		"@parcel/config-webextension": "^2.8.2",
 		"@types/chrome": "^0.0.200",
-		"parcel": "^2.6.2",
+		"lightningcss": "^1.17.1",
+		"parcel": "^2.8.2",
 		"tailwindcss": "^3.2.1",
-		"typescript": "^4.8.4"
+		"typescript": "^4.9.4"
 	},
 	"alias": {
 		"preact/jsx-dev-runtime": "preact/jsx-runtime",

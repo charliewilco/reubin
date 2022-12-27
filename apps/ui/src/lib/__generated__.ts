@@ -136,6 +136,10 @@ export type QueryFeedArgs = {
 	id: Scalars["ID"];
 };
 
+export type QueryFeedsArgs = {
+	tag_id?: InputMaybe<Scalars["ID"]>;
+};
+
 export type ReturnedUser = {
 	__typename?: "ReturnedUser";
 	token: Scalars["String"];
