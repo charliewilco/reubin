@@ -4,23 +4,14 @@
 
 import { server } from "../src/app";
 import gql from "graphql-tag";
-import base64 from "base-64";
-import cuid from "cuid";
+import isAfter from "date-fns/isAfter";
+import { TestingMocks } from "./fixtures/mocks";
 
-const newUserMock = {
-	email: `test-${cuid()}@charlieisamazing.com`,
-	password: base64.encode("P@ssw0rd"),
-};
-
-const mocks: Record<"authToken" | "currentFeed" | "currentTag", string | null> = {
-	authToken: null,
-	currentFeed: null,
-	currentTag: null,
-};
+const mocks = new TestingMocks();
 
 describe("GraphQL Server", () => {
 	beforeAll(() => {
-		console.log("Using the following credentials:\n", JSON.stringify(newUserMock, null, 2));
+		console.log("Using the following credentials:\n", JSON.stringify(mocks.user, null, 2));
 	});
 
 	test("can create users", async () => {
@@ -36,7 +27,7 @@ describe("GraphQL Server", () => {
 					}
 				}
 			`,
-			variables: newUserMock,
+			variables: mocks.user,
 		});
 
 		if (result.body.kind === "single") {
@@ -58,6 +49,7 @@ describe("GraphQL Server", () => {
 						addFeed(url: $url) {
 							id
 							title
+							lastFetched
 						}
 					}
 				`,
@@ -77,7 +69,7 @@ describe("GraphQL Server", () => {
 		}
 
 		expect(feedResult.body.singleResult.data.addFeed.title).toEqual("Discord Blog");
-
+		mocks.lastFetched = feedResult.body.singleResult.data.addFeed.lastFetched;
 		mocks.currentFeed = feedResult.body.singleResult.data.addFeed.id;
 	});
 
@@ -107,6 +99,9 @@ describe("GraphQL Server", () => {
 		}
 
 		expect(entryListResult.body.singleResult.data?.entries?.length).toBeGreaterThan(1);
+		expect(entryListResult.body.singleResult.data?.entries[0].title).not.toBeNull();
+		mocks.currentEntry = entryListResult.body.singleResult.data?.entries[0].id;
+		mocks.entryCount = entryListResult.body.singleResult.data?.entries.length;
 	});
 
 	test("cannot fetch feeds user did not create", async () => {
@@ -336,11 +331,242 @@ describe("GraphQL Server", () => {
 		expect(feedResult.body.singleResult.data?.feeds[0].tag).not.toEqual(mocks.currentTag);
 	});
 
-	test.todo("can bookmark entries");
-	test.todo("can fetch entries by bookmarked");
-	test.todo("can mark entries as read");
-	test.todo("can fetch entries by unread");
-	test.todo("can refresh feeds");
-	test.todo("can fetch entries by tag and unread");
-	test.todo("can remove feed and all relevant entries");
+	test("can bookmark entries", async () => {
+		const bookmarkResult = await server.executeOperation<any>(
+			{
+				query: gql`
+					mutation MarkAsFavorite($id: ID!) {
+						markAsFavorite(id: $id, favorite: true) {
+							id
+						}
+					}
+				`,
+				variables: {
+					id: mocks.currentEntry,
+				},
+			},
+			{
+				contextValue: {
+					token: mocks.authToken,
+				},
+			}
+		);
+
+		if (bookmarkResult.body.kind !== "single") {
+			throw new Error("bookmarkResult.body.kind is not single");
+		}
+
+		expect(bookmarkResult.body.singleResult.data.markAsFavorite.id).toEqual(
+			mocks.currentEntry
+		);
+	});
+
+	test("can fetch entries by bookmarked", async () => {
+		const bookmarkedResult = await server.executeOperation<any>(
+			{
+				query: gql`
+					query FavoriteEntries($feedID: ID!) {
+						entries(feed_id: $feedID, filter: FAVORITED) {
+							title
+							content
+							id
+							unread
+							published
+							favorite
+						}
+					}
+				`,
+				variables: {
+					feedID: mocks.currentFeed,
+				},
+			},
+			{
+				contextValue: {
+					token: mocks.authToken,
+				},
+			}
+		);
+
+		if (bookmarkedResult.body.kind !== "single") {
+			throw new Error("bookmarkedResult.body.kind is not single");
+		}
+
+		expect(bookmarkedResult.body.singleResult.data?.entries?.length).toEqual(1);
+		expect(bookmarkedResult.body.singleResult.data?.entries[0].id).toEqual(mocks.currentEntry);
+		expect(bookmarkedResult.body.singleResult.data?.entries[0].favorite).toEqual(true);
+		expect(bookmarkedResult.body.singleResult.data?.entries[0].unread).toEqual(true);
+	});
+
+	test("can mark entries as read", async () => {
+		const unreadResult = await server.executeOperation<any>(
+			{
+				query: gql`
+					mutation MarkAsRead($id: ID!) {
+						markAsRead(id: $id) {
+							id
+						}
+					}
+				`,
+				variables: {
+					id: mocks.currentEntry,
+				},
+			},
+			{
+				contextValue: {
+					token: mocks.authToken,
+				},
+			}
+		);
+
+		if (unreadResult.body.kind !== "single") {
+			throw new Error("unreadResult.body.kind is not single");
+		}
+
+		expect(unreadResult.body.singleResult.data.markAsRead.id).toEqual(mocks.currentEntry);
+	});
+
+	test("can fetch entries by unread", async () => {
+		const unreadResult = await server.executeOperation<any>(
+			{
+				query: gql`
+					query UnreadEntries($feedID: ID!) {
+						entries(feed_id: $feedID, filter: UNREAD) {
+							title
+							content
+							id
+							unread
+							published
+							favorite
+						}
+					}
+				`,
+				variables: {
+					feedID: mocks.currentFeed,
+				},
+			},
+			{
+				contextValue: {
+					token: mocks.authToken,
+				},
+			}
+		);
+
+		if (unreadResult.body.kind !== "single") {
+			throw new Error("unreadResult.body.kind is not single");
+		}
+
+		expect(unreadResult.body.singleResult.data?.entries?.length).toEqual(mocks.entryCount - 1);
+		expect(unreadResult.body.singleResult.data?.entries[0].id).not.toEqual(mocks.currentEntry);
+		expect(unreadResult.body.singleResult.data?.entries[0].unread).toEqual(true);
+	});
+
+	test("can refresh feeds", async () => {
+		const refreshResult = await server.executeOperation<any>(
+			{
+				query: gql`
+					mutation RefreshFeeds($id: ID!) {
+						refreshFeed(id: $id) {
+							id
+						}
+					}
+				`,
+				variables: {
+					id: mocks.currentFeed,
+				},
+			},
+			{
+				contextValue: {
+					token: mocks.authToken,
+				},
+			}
+		);
+
+		if (refreshResult.body.kind !== "single") {
+			throw new Error("refreshResult.body.kind is not single");
+		}
+
+		expect(refreshResult.body.singleResult.data.refreshFeed.length).toBeGreaterThanOrEqual(0);
+
+		const feedResult = await server.executeOperation<any>(
+			{
+				query: gql`
+					query Feed($id: ID!) {
+						feed(id: $id) {
+							id
+							title
+							lastFetched
+						}
+					}
+				`,
+				variables: {
+					id: mocks.currentFeed,
+				},
+			},
+			{
+				contextValue: {
+					token: mocks.authToken,
+				},
+			}
+		);
+
+		if (feedResult.body.kind !== "single") {
+			throw new Error("feedResult.body.kind is not single");
+		}
+
+		expect(feedResult.body.singleResult.data.feed.id).toEqual(mocks.currentFeed);
+		expect(
+			isAfter(feedResult.body.singleResult.data.feed.lastFetched, mocks.lastFetched)
+		).toEqual(true);
+	});
+
+	test("can remove feed and all relevant entries", async () => {
+		const removedFeed = await server.executeOperation<any>(
+			{
+				query: gql`
+					mutation RemoveFeed($id: ID!) {
+						removeFeed(id: $id) {
+							id
+						}
+					}
+				`,
+				variables: {
+					id: mocks.currentFeed,
+				},
+			},
+			{
+				contextValue: {
+					token: mocks.authToken,
+				},
+			}
+		);
+
+		if (removedFeed.body.kind !== "single") {
+			throw new Error("removedFeed.body.kind is not single");
+		}
+
+		expect(removedFeed.body.singleResult.data.removeFeed.id).toEqual(mocks.currentFeed);
+
+		const entryListResult = await server.executeOperation<any>({
+			query: gql`
+				query EntriesByFeed($id: ID!) {
+					entries(feed_id: $id) {
+						title
+						content
+						id
+						unread
+						published
+					}
+				}
+			`,
+			variables: {
+				id: mocks.currentFeed,
+			},
+		});
+
+		if (entryListResult.body.kind !== "single") {
+			throw new Error("entryListResult.body.kind is not single");
+		}
+
+		expect(entryListResult.body.singleResult.data.entries.length).toEqual(0);
+	});
 });

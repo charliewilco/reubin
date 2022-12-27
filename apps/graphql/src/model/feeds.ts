@@ -92,4 +92,31 @@ export class FeedController {
 
 		return converted;
 	}
+
+	async remove(id: string, token: string) {
+		const userId = this.services.token.getUserId(token);
+		const feed = await this.services.orm.feed.findUnique({
+			where: {
+				id,
+			},
+		});
+
+		if (feed === null || feed.userId !== userId) {
+			throw new Error("Feed not found");
+		}
+
+		await this.services.orm.entry.deleteMany({
+			where: {
+				feedId: id,
+			},
+		});
+
+		const removed = await this.services.orm.feed.delete({
+			where: {
+				id,
+			},
+		});
+
+		return removed;
+	}
 }

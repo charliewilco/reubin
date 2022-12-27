@@ -97,18 +97,12 @@ const mutation: MutationResolvers<Context> = {
 			throw new Error("This node requires Authorization token");
 		}
 	},
-	async removeFeed(_parent, { id }, {}) {
-		await services.orm.entry.deleteMany({
-			where: {
-				feedId: id,
-			},
-		});
-		const feed = await services.orm.feed.delete({
-			where: {
-				id,
-			},
-		});
-		return feed;
+	async removeFeed(_parent, { id }, { token }) {
+		if (token !== null) {
+			return m.feeds.remove(id, token);
+		} else {
+			throw new Error("This node requires Authorization token");
+		}
 	},
 	async removeTag(_parent, { id }, {}) {
 		const tag = await services.orm.tag.delete({
