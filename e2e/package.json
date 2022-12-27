@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"test": "playwright test",
-		"pretest": "playwright install --with-deps"
+		"deps": "playwright install --with-deps"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.29.1",
