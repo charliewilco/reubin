@@ -5,10 +5,8 @@
 export default {
 	reactStrictMode: true,
 	optimizeFonts: true,
-	cleanDistDir: true,
 	swcMinify: true,
 	experimental: {
-		gzipSize: true,
 		appDir: true,
 	},
 	async rewrites() {

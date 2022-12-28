@@ -5,11 +5,3 @@
 article {
 	font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1, "ss06" 1;
 }
-
-/**
-* This hack is for the extra divs created by nested layouts in Next.js
-*/
-#feed-container > div,
-#feed-container > div > div {
-	@apply flex h-full flex-1;
-}

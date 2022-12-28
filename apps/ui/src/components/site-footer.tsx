@@ -18,6 +18,9 @@ export function SiteFooter() {
 						<Link href="/login">Login</Link>
 					</div>
 					<div className="px-5 py-2">
+						<Link href="/register">Register</Link>
+					</div>
+					<div className="px-5 py-2">
 						<Link href="/privacy">Privacy Policy</Link>
 					</div>
 				</nav>

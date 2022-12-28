@@ -71,7 +71,7 @@ export function AddFeed() {
 				<Plus size={24} />
 			</Button>
 			<Dialog isOpen={isOpen} onClose={() => setOpen(false)} title="Add Feed">
-				<div className="mt-2 mb-8 text-sm opacity-50">
+				<div className="mt-2 mb-8 text-sm opacity-50" data-testid="add-feed-modal">
 					Make changes to your profile here. Click save when you&apos;re done.
 				</div>
 				<AddFeedForm onSubmit={handleSubmit} />

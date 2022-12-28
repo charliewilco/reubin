@@ -1,8 +1,11 @@
+import { LogoDisplay } from "../../components/logo";
+
 export default function Layout({ children }: React.PropsWithChildren<{}>) {
 	return (
-		<div>
-			<h1> AAUTHH LAYOUT</h1>
-
+		<div className="py-16 px-2">
+			<div className="mb-4 flex justify-center">
+				<LogoDisplay />
+			</div>
 			<div className="mx-auto max-w-md">{children}</div>
 		</div>
 	);

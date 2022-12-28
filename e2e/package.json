@@ -4,7 +4,8 @@
 	"private": true,
 	"scripts": {
 		"test": "playwright test",
-		"deps": "playwright install --with-deps"
+		"deps": "playwright install --with-deps",
+		"codegen": "playwright codegen localhost:3000"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.29.1",
