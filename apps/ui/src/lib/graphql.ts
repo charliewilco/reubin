@@ -52,11 +52,7 @@ export const getFeed = async (id: string) => {
 	}
 };
 
-export const getFeeds = async (authorization?: string) => {
-	if (authorization) {
-		setHeaders(authorization);
-	}
-
+export const getFeeds = async () => {
 	try {
 		return sdk.GetFeeds();
 	} catch (error: any) {
@@ -72,11 +68,7 @@ export const getEntriesFromFeed = async (feedID: string, filter?: EntryFilter) =
 	}
 };
 
-export const getAllTags = async (authorization?: string) => {
-	if (authorization) {
-		setHeaders(authorization);
-	}
-
+export const getAllTags = async () => {
 	try {
 		return sdk.AllTags();
 	} catch (error: any) {
@@ -175,10 +167,7 @@ export const register = async (email: string, password: string) => {
 	}
 };
 
-export const me = async (authorization?: string) => {
-	if (authorization) {
-		setHeaders(authorization);
-	}
+export const me = async () => {
 	try {
 		return sdk.Me();
 	} catch (error: any) {

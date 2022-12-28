@@ -5,13 +5,13 @@ import { CreateTagForm } from "../../../components/create-tag";
 import { TagRemovalList } from "../../../components/tag-lists";
 import { getAllTags, me } from "../../../lib/graphql";
 import type { AllTagsQuery } from "../../../lib/__generated__";
-import { TOKEN_NAME } from "../../../lib/auth-token";
+import { authorizeRequest } from "../../../lib/authorized-request";
 
 export default function SettingsPage() {
 	const nextCookies = cookies();
-	const _ = use<AllTagsQuery>(getAllTags(nextCookies.get(TOKEN_NAME)?.value));
+	const _ = use<AllTagsQuery>(authorizeRequest(nextCookies, getAllTags()));
 
-	const __ = use(me(nextCookies.get(TOKEN_NAME)?.value));
+	const __ = use(me());
 
 	console.log(__);
 
