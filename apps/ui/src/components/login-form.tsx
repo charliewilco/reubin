@@ -37,7 +37,7 @@ export function LoginForm() {
 	);
 
 	return (
-		<form {...getFormProps()} className="space-y-6">
+		<form {...getFormProps()} className="space-y-8">
 			<div>
 				<Label htmlFor="email">
 					<TextLabel>Email</TextLabel>

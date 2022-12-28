@@ -56,11 +56,22 @@ const config: PlaywrightTestConfig = {
 	/* Folder for test artifacts such as screenshots, videos, traces, etc. */
 	outputDir: "test-results/",
 
-	/* Run your local dev server before starting the tests */
-	// webServer: {
-	//   command: 'npm run start',
-	//   port: 3000,
-	// },
+	/* A successful `npm run build` will need to happen in order for these to actually work */
+
+	webServer: [
+		{
+			command: "npm start --workspace=@reubin/ui",
+			port: 3000,
+			timeout: 120 * 1000,
+			reuseExistingServer: !process.env.CI,
+		},
+		{
+			command: "npm start --workspace=@reubin/graphql",
+			port: 4000,
+			timeout: 120 * 1000,
+			reuseExistingServer: !process.env.CI,
+		},
+	],
 };
 
 export default config;
