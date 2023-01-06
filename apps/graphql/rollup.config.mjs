@@ -16,10 +16,11 @@ if (isDev) {
 export default defineConfig({
 	input: "./src/server.ts",
 	external: (id) => !/^[./]/.test(id),
+	shimMissingExports: true,
 	output: [
 		{
 			file: "./dist/server.js",
-			format: "cjs",
+			format: "esm",
 			sourcemap: true,
 		},
 	],

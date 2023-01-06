@@ -1,6 +1,6 @@
 import type { Entry } from "@prisma/client";
 import type { Services } from "../services";
-import type { RSSItem } from "../rss";
+import type { RSSItem } from "@reubin/rsskit";
 import type { Entry as EntryType } from "../__generated__";
 
 export class EntryController {

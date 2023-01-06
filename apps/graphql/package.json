@@ -1,6 +1,7 @@
 {
 	"name": "@reubin/graphql",
 	"version": "1.2.1",
+	"type": "module",
 	"private": true,
 	"scripts": {
 		"start": "node dist/server",
@@ -30,11 +31,12 @@
 		"@apollo/server": "^4.3.0",
 		"@graphql-tools/schema": "^9.0.12",
 		"@prisma/client": "^4.8.0",
+		"@reubin/graphql-date-ts": "*",
+		"@reubin/rsskit": "*",
 		"@types/base-64": "^1.0.0",
 		"@types/bcryptjs": "^2.4.2",
 		"@types/jsonwebtoken": "^9.0.0",
 		"@types/sanitize-html": "^2.8.0",
-		"@types/xml2js": "^0.4.11",
 		"axios": "^1.2.0",
 		"base-64": "^1.0.0",
 		"bcryptjs": "^2.4.3",
