@@ -7,10 +7,9 @@
 	"types": "dist/index.d.ts",
 	"private": true,
 	"scripts": {
-		"build": "tsup",
+		"xbuild": "tsup",
 		"dev": "tsup --watch",
-		"bundle": "tsc",
-		"types": "tsc --noEmit --pretty",
+		"xtypes": "tsc --noEmit --pretty",
 		"xtest": "jest --runInBand"
 	},
 	"dependencies": {
