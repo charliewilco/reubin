@@ -19,8 +19,9 @@ test("Register for an account", async ({ page }) => {
 	await page.getByTestId("register-email-input").press("Tab");
 	await page.getByTestId("register-password-input").fill(mockUser.password);
 	await page.getByRole("button", { name: "Register" }).click();
-	await page.getByRole("button", { name: "Add Feed" }).click();
+	await page.waitForLoadState("networkidle");
 	await expect(page).toHaveURL("http://localhost:3000/feeds");
+	await page.getByRole("button", { name: "Add Feed" }).click();
 	await expect(page.getByTestId("add-feed-modal")).toHaveText(
 		"Add a website URL to see if it has an RSS feed."
 	);
