@@ -38,8 +38,10 @@ jobs:
           POSTGRES_DB: ci_db_test
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci_db_test
+      - name: Build
+        run: npm run build
       - name: Test
-        run: npm run test
+        run: npm test
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost

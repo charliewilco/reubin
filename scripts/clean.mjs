@@ -2,9 +2,9 @@
 
 import { deleteAsync } from "del";
 import arg from "arg";
-import path from "path";
+import path from "node:path";
 
-const turboCachePaths = ["./apps/**/.turbo"];
+const turboCachePaths = ["./apps/**/.turbo", "./packages/**/.turbo"];
 const buildOuputPaths = [
 	".husky",
 	".parcel-cache",

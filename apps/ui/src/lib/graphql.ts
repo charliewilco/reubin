@@ -4,12 +4,13 @@ import { AuthToken } from "./auth-token";
 import { EntryFilter, getSdk, type UpdateFeedInput } from "./__generated__";
 
 function getURL() {
+	const fallbackURL = "http://localhost:3000/graphql";
 	if (process.env.NODE_ENV === "test") {
-		return "http://localhost:3000/v1";
+		return "http://localhost:3000/graphql";
 	} else if (!process.env.BROWSER) {
-		return "http://localhost:3000/v1";
+		return "http://localhost:3000/graphql";
 	} else {
-		return "/v1";
+		return fallbackURL;
 	}
 }
 

@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { RSSKit } from "../rss";
+import { RSSKit } from "@reubin/rsskit";
 import { Passwords } from "./passwords";
 import { TokenManager } from "./tokens";
 import * as Validations from "./validations";

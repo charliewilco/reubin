@@ -9,6 +9,9 @@ const args = arg({
 	"--email": String,
 });
 
+const EMAIL = args["--email"] ?? "charlespeters42@gmail.com";
+const PASSWORD = "P@ssw0rd";
+
 const orm = new PrismaClient();
 const parser = new RSSParser();
 
@@ -131,7 +134,7 @@ async function clearAll() {
  * @param {String} email
  * @param {String} password
  */
-async function seedProject(email, password = "P@ssw0rd") {
+async function seedProject(email, password) {
 	await clearAll().then(() => console.log("Cleared all data"));
 
 	const hashed = await bcrypt.hash(password, 10);
@@ -161,7 +164,7 @@ async function seedProject(email, password = "P@ssw0rd") {
 	);
 }
 
-seedProject(args["--email"] ?? "charlespeters42@gmail.com")
+seedProject(EMAIL, PASSWORD)
 	.then(async () => {
 		await orm.$disconnect();
 	})

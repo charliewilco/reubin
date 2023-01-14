@@ -1,7 +1,7 @@
-import { RSSKit } from "../src/rss";
+import { RSSKit } from "../src";
 
-import { readFile } from "fs/promises";
-import path from "path";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 
 export const getFixtureAsString = async (filePath: string) => {
 	const buffer = await readFile(path.join("test/fixtures", filePath), {

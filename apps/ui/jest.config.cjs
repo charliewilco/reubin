@@ -1,7 +1,7 @@
-// @type-check
+// @ts-check
 const nextJest = require("next/jest");
 
-const createJestConfig = nextJest({
+const createJestConfig = nextJest.default({
 	// Provide the path to your Next.js app to load next.config.js and .env files in your test environment
 	dir: "./",
 });

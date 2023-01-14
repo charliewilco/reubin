@@ -8,6 +8,7 @@
 		"codegen": "playwright codegen localhost:3000"
 	},
 	"devDependencies": {
+		"cuid": "^2.1.8",
 		"@playwright/test": "^1.29.1",
 		"typescript": "^4.8.4"
 	}

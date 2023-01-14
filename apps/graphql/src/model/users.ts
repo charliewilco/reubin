@@ -1,4 +1,4 @@
-import * as base64 from "base-64";
+import base64 from "base-64";
 import type { User } from "@prisma/client";
 
 import { ReturnedUser, User as UserType } from "../__generated__";

@@ -1,4 +1,4 @@
-import type { IncomingMessage } from "http";
+import type { IncomingMessage } from "node:http";
 import Cookies from "universal-cookie";
 
 export interface Context {
