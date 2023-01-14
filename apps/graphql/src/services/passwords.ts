@@ -1,4 +1,4 @@
-import * as bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 
 export class Passwords {
 	async isValidPassword(password: string, hashPassword: string): Promise<boolean> {

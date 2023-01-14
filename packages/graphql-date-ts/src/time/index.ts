@@ -1,6 +1,5 @@
 import { GraphQLScalarType, Kind, isValueNode } from "graphql";
 import type { GraphQLScalarTypeConfig } from "graphql";
-import is from "@sindresorhus/is";
 import {
 	isListTypeNode,
 	isNullNode,
@@ -41,7 +40,7 @@ const config: GraphQLScalarTypeConfig<Date, string> = {
 				return serializeTime(value);
 			}
 			throw new TypeError("Time cannot represent an invalid Date instance");
-		} else if (is.string(value)) {
+		} else if (typeof value === "string") {
 			if (validateTime(value)) {
 				return serializeTimeString(value);
 			}
@@ -55,7 +54,7 @@ const config: GraphQLScalarTypeConfig<Date, string> = {
 		}
 	},
 	parseValue(value): Date {
-		if (!is.string(value)) {
+		if (typeof value !== "string") {
 			throw new TypeError(`Time cannot represent non string type ${JSON.stringify(value)}`);
 		}
 

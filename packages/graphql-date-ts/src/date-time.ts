@@ -1,6 +1,5 @@
 import { GraphQLScalarType, Kind } from "graphql";
 import type { GraphQLScalarTypeConfig } from "graphql";
-import is from "@sindresorhus/is";
 
 import {
 	validateDateTime,
@@ -43,12 +42,12 @@ const config: GraphQLScalarTypeConfig<Date, string> = {
 				return serializeDateTime(value);
 			}
 			throw new TypeError("DateTime cannot represent an invalid Date instance");
-		} else if (is.string(value)) {
+		} else if (typeof value === "string") {
 			if (validateDateTime(value)) {
 				return serializeDateTimeString(value);
 			}
 			throw new TypeError(`DateTime cannot represent an invalid date-time-string ${value}.`);
-		} else if (is.number(value)) {
+		} else if (typeof value === "number") {
 			if (validateUnixTimestamp(value)) {
 				return serializeUnixTimestamp(value);
 			}
@@ -62,7 +61,7 @@ const config: GraphQLScalarTypeConfig<Date, string> = {
 		}
 	},
 	parseValue(value) {
-		if (!is.string(value)) {
+		if (typeof value !== "string") {
 			throw new TypeError(
 				`DateTime cannot represent non string type ${JSON.stringify(value)}`
 			);

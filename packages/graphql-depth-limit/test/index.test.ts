@@ -1,7 +1,7 @@
 import { depthLimit } from "../src";
 import { buildSchema, Source, parse, validate, specifiedRules } from "graphql";
 
-function createDocument(query) {
+function createDocument(query: any) {
 	const source = new Source(query, "GraphQL request");
 	return parse(source);
 }
@@ -11,7 +11,7 @@ const petMixin = `
   owner: Human!
 `;
 
-const schema = buildSchema(`
+const schema = buildSchema(`#graphql
   type Query {
     user(name: String): Human
     version: String
@@ -42,8 +42,9 @@ const schema = buildSchema(`
   }
 `);
 
-test("should count depth without fragment", (t) => {
-	const query = `
+describe("graphql-depth-limit", () => {
+	test("should count depth without fragment", () => {
+		const query = `#graphql
     query read0 {
       version
     }
@@ -82,21 +83,21 @@ test("should count depth without fragment", (t) => {
       }
     }
   `;
-	const document = createDocument(query);
-	const expect = {
-		read0: 0,
-		read1: 1,
-		read2: 2,
-		read3: 3,
-	};
-	t.plan(2);
-	const spec = (depths) => t.deepEqual(expect, depths);
-	const errors = validate(schema, document, [...specifiedRules, depthLimit(10, {}, spec)]);
-	t.deepEqual([], errors);
-});
+		const document = createDocument(query);
+		const values = {
+			read0: 0,
+			read1: 1,
+			read2: 2,
+			read3: 3,
+		};
+		const spec = (depths: any) => Object.is(values, depths);
+		// @ts-ignore
+		const errors = validate(schema, document, [...specifiedRules, depthLimit(10, {}, spec)]);
+		expect(errors).toEqual([]);
+	});
 
-test("should count with fragments", (t) => {
-	const query = `
+	test("should count with fragments", () => {
+		const query = `#graphql
     query read0 {
       ... on Query {
         version
@@ -147,28 +148,31 @@ test("should count with fragments", (t) => {
       }
     }
   `;
-	const document = createDocument(query);
-	const expect = {
-		read0: 0,
-		read1: 1,
-		read2: 2,
-		read3: 3,
-	};
-	t.plan(2);
-	const spec = (depths) => t.deepEqual(expect, depths);
-	const errors = validate(schema, document, [...specifiedRules, depthLimit(10, {}, spec)]);
-	t.deepEqual([], errors);
-});
+		const document = createDocument(query);
+		const values = {
+			read0: 0,
+			read1: 1,
+			read2: 2,
+			read3: 3,
+		};
 
-test("should ignore the introspection query", (t) => {
-	const document = createDocument(introQuery);
-	t.plan(1);
-	const errors = validate(schema, document, [...specifiedRules, depthLimit(5)]);
-	t.deepEqual([], errors);
-});
+		const spec = (depths: any) => Object.is(values, depths);
+		// @ts-ignore
+		const errors = validate(schema, document, [...specifiedRules, depthLimit(10, {}, spec)]);
 
-test("should catch a query thats too deep", (t) => {
-	const query = `{
+		expect(errors).toEqual([]);
+	});
+
+	test("should ignore the introspection query", () => {
+		const document = createDocument(introQuery);
+		// @ts-ignore
+		const errors = validate(schema, document, [...specifiedRules, depthLimit(5)]);
+
+		expect(errors).toEqual([]);
+	});
+
+	test("should catch a query thats too deep", () => {
+		const query = `{
     user {
       pets {
         owner {
@@ -183,15 +187,17 @@ test("should catch a query thats too deep", (t) => {
       }
     }
   }`;
-	t.plan(2);
-	const document = createDocument(query);
-	const errors = validate(schema, document, [...specifiedRules, depthLimit(4)]);
-	t.is(1, errors.length);
-	t.deepEqual("'' exceeds maximum operation depth of 4", errors[0].message);
-});
+		const document = createDocument(query);
+		// @ts-ignore
+		const errors = validate(schema, document, [...specifiedRules, depthLimit(4)]);
 
-test("should ignore a field", (t) => {
-	const query = `
+		expect(errors.length).toEqual(1);
+		// What would the next line look like if we were using Jest?
+		expect(errors[0].message).toEqual("'' exceeds maximum operation depth of 4");
+	});
+
+	test("should ignore a field", () => {
+		const query = `
     query read1 {
       user { address { city } }
     }
@@ -201,24 +207,27 @@ test("should ignore a field", (t) => {
       user3 { address { city } }
     }
   `;
-	const document = createDocument(query);
-	const options = {
-		ignore: ["user1", /user2/, (fieldName) => fieldName === "user3"],
-	};
-	const expect = {
-		read1: 2,
-		read2: 0,
-	};
-	t.plan(2);
-	const spec = (depths) => t.deepEqual(expect, depths);
-	const errors = validate(schema, document, [
-		...specifiedRules,
-		depthLimit(10, options, spec),
-	]);
-	t.deepEqual([], errors);
-});
+		const document = createDocument(query);
+		const options = {
+			ignore: ["user1", /user2/, (fieldName: any) => fieldName === "user3"],
+		};
+		const values = {
+			read1: 2,
+			read2: 0,
+		};
+		const spec = (depths: any) => Object.is(values, depths);
+		// @ts-ignore
+		const errors = validate(schema, document, [
+			// @ts-ignore
+			...specifiedRules,
+			// @ts-ignore
+			depthLimit(10, options, spec),
+		]);
 
-const introQuery = `
+		expect(errors).toEqual([]);
+	});
+
+	const introQuery = `
   query IntrospectionQuery {
     __schema {
       queryType { name }
@@ -308,3 +317,4 @@ const introQuery = `
     }
   }
 `;
+});

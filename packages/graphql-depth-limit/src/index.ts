@@ -1,4 +1,21 @@
-import { GraphQLError, Kind } from "graphql";
+import {
+	GraphQLError,
+	Kind,
+	type ValidationContext,
+	type DefinitionNode,
+	type OperationDefinitionNode,
+	type FragmentDefinitionNode,
+	type SelectionNode,
+} from "graphql";
+
+interface DepthCallback {
+	(depths: Record<string, number>): void;
+}
+
+interface Options {
+	ignore?: Array<string | RegExp | ((queryDepths: any) => boolean)>;
+}
+
 /**
  * Creates a validator for the GraphQL query depth
  * @param {Number} maxDepth - The maximum allowed depth for any operation in a GraphQL document.
@@ -8,13 +25,13 @@ import { GraphQLError, Kind } from "graphql";
  * @returns {Function} The validator function for GraphQL validation phase.
  */
 export const depthLimit =
-	(maxDepth, options = {}, callback = () => {}) =>
-	(validationContext) => {
+	(maxDepth: number, options: Options = {}, callback: DepthCallback = (value: any) => {}) =>
+	(validationContext: ValidationContext) => {
 		try {
 			const { definitions } = validationContext.getDocument();
 			const fragments = getFragments(definitions);
 			const queries = getQueriesAndMutations(definitions);
-			const queryDepths = {};
+			const queryDepths: Record<string, number> = {};
 			for (let name in queries) {
 				queryDepths[name] = determineDepth(
 					queries[name],
@@ -24,21 +41,20 @@ export const depthLimit =
 					validationContext,
 					name,
 					options
-				);
+				) as number;
 			}
 			callback(queryDepths);
 			return validationContext;
 		} catch (err) {
-			/* istanbul ignore next */ {
-				// eslint-disable-line no-lone-blocks
-				console.error(err);
-				throw err;
-			}
+			console.error(err);
+			throw err;
 		}
 	};
 
-function getFragments(definitions) {
-	return definitions.reduce((map, definition) => {
+function getFragments(
+	definitions: readonly DefinitionNode[]
+): Record<string, FragmentDefinitionNode> {
+	return definitions.reduce((map: Record<string, FragmentDefinitionNode>, definition) => {
 		if (definition.kind === Kind.FRAGMENT_DEFINITION) {
 			map[definition.name.value] = definition;
 		}
@@ -47,8 +63,10 @@ function getFragments(definitions) {
 }
 
 // this will actually get both queries and mutations. we can basically treat those the same
-function getQueriesAndMutations(definitions) {
-	return definitions.reduce((map, definition) => {
+function getQueriesAndMutations(
+	definitions: readonly DefinitionNode[]
+): Record<string, OperationDefinitionNode> {
+	return definitions.reduce((map: Record<string, OperationDefinitionNode>, definition) => {
 		if (definition.kind === Kind.OPERATION_DEFINITION) {
 			map[definition.name ? definition.name.value : ""] = definition;
 		}
@@ -57,15 +75,17 @@ function getQueriesAndMutations(definitions) {
 }
 
 function determineDepth(
-	node,
-	fragments,
-	depthSoFar,
-	maxDepth,
-	context,
-	operationName,
-	options
-) {
+	node: OperationDefinitionNode | SelectionNode | FragmentDefinitionNode,
+	fragments: Record<string, FragmentDefinitionNode>,
+	depthSoFar: number,
+	maxDepth: number,
+	context: ValidationContext,
+	operationName: string,
+	options: Options
+): number {
 	if (depthSoFar > maxDepth) {
+		// @ts-expect-error
+		// this should bubble up the error
 		return context.reportError(
 			new GraphQLError(`'${operationName}' exceeds maximum operation depth of ${maxDepth}`, [
 				node,
@@ -123,30 +143,71 @@ function determineDepth(
 					)
 				)
 			);
-		/* istanbul ignore next */
 		default:
+			// @ts-expect-error
 			throw new Error("uh oh! depth crawler cannot handle: " + node.kind);
 	}
 }
 
-function seeIfIgnored(node, ignore) {
+function getFieldName(
+	node: OperationDefinitionNode | SelectionNode | FragmentDefinitionNode
+): string {
+	let fieldName = "";
+
+	if (node.kind === Kind.FIELD) {
+		fieldName = node.name.value;
+	}
+
+	if (node.kind === Kind.FRAGMENT_SPREAD) {
+		fieldName = node.name.value;
+	}
+
+	if (node.kind === Kind.INLINE_FRAGMENT) {
+		fieldName = node.loc + "inlineFragment";
+	}
+
+	if (node.kind === Kind.FRAGMENT_DEFINITION) {
+		fieldName = node.name.value;
+	}
+
+	if (node.kind === Kind.OPERATION_DEFINITION) {
+		fieldName = node.name ? node.name.value : "";
+	}
+
+	return fieldName;
+}
+
+function typeCheckRule(rule: any): rule is string | RegExp | ((queryDepths: any) => boolean) {
+	if (typeof rule === "string" || rule instanceof RegExp) {
+		return true;
+	}
+
+	if (typeof rule === "function") {
+		return true;
+	}
+
+	return false;
+}
+
+function seeIfIgnored(
+	node: OperationDefinitionNode | SelectionNode | FragmentDefinitionNode,
+	ignore: Array<string | RegExp | ((queryDepths: any) => boolean)> = []
+) {
 	for (let rule of Array.from(ignore)) {
-		const fieldName = node.name.value;
-		switch (rule.constructor) {
-			case Function:
-				if (rule(fieldName)) {
-					return true;
-				}
-				break;
-			case String:
-			case RegExp:
-				if (fieldName.match(rule)) {
-					return true;
-				}
-				break;
-			/* istanbul ignore next */
-			default:
-				throw new Error(`Invalid ignore option: ${rule}`);
+		const fieldName = getFieldName(node);
+
+		if (!typeCheckRule(rule)) {
+			throw new Error(`Invalid ignore option: ${rule}`);
+		}
+
+		if (typeof rule === "function") {
+			if (rule(fieldName)) {
+				return true;
+			}
+		} else {
+			if (fieldName.match(rule)) {
+				return true;
+			}
 		}
 	}
 	return false;
