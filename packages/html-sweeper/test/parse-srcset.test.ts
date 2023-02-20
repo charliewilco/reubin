@@ -1,4 +1,4 @@
-import { parseSrcset } from "../src/parse-srcset";
+import { Srcset } from "../src/parse-srcset";
 import { decode, encode } from "he";
 
 type TestCase = {
@@ -78,7 +78,7 @@ describe("Splitting loop", () => {
 		test.skip(desc.concat("encodedUrl should match expected value"), () => {
 			const origAttr = srcset;
 			const attrDecoded = decode(origAttr);
-			const parsed = parseSrcset(attrDecoded);
+			const parsed = Srcset.parse(attrDecoded);
 
 			const firstCandidate = parsed[0];
 
@@ -137,7 +137,7 @@ describe("Descriptor Tokenizer", () => {
 		test.skip(desc.concat("encodedUrl should match expected value"), () => {
 			const origAttr = srcset;
 			const attrDecoded = decode(origAttr);
-			const parsed = parseSrcset(attrDecoded);
+			const parsed = Srcset.parse(attrDecoded);
 
 			const firstCandidate = parsed[0];
 
@@ -358,7 +358,7 @@ describe("Descriptor Parser", () => {
 		test.skip(desc.concat("encodedUrl should match expected value"), () => {
 			const origAttr = srcset;
 			const attrDecoded = decode(origAttr);
-			const parsed = parseSrcset(attrDecoded);
+			const parsed = Srcset.parse(attrDecoded);
 
 			const firstCandidate = parsed[0];
 

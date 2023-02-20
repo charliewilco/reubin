@@ -1,6 +1,6 @@
-import { HTMLSanitizer } from "../src";
+import { createSanitizer } from "../src";
 
-const sanitizer = new HTMLSanitizer();
+const sanitizer = createSanitizer();
 
 describe("HTML", () => {
 	test.todo("can parse a string");
@@ -12,9 +12,9 @@ describe("HTML", () => {
 	test.todo("removes unsafe attributes with values");
 	test.todo("resolves relative URLs on image tags and media tags");
 
-	test.skip("handles normally", () => {
+	test("handles normally", () => {
 		const html = "<p>hello world</p>";
-		const result = sanitizer.clean(html);
+		const result = sanitizer.cleanSync(html);
 		expect(result).toEqual("<p>hello world</p>");
 	});
 });

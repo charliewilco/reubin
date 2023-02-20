@@ -1,13 +1,22 @@
-import htmlparser, { type ParserOptions } from "htmlparser2";
+import { ImageSanitizerPlugin } from "./plugins/images";
+import { HrefSanitizerPlugin } from "./plugins/naughty-href";
+import { XSSSanitizerPlugin } from "./plugins/xss";
+import { ScriptAndStyleTagRemoverPlugin } from "./plugins/remove-js-css";
+import { YoutubeIframeSanitizerPlugin } from "./plugins/youtube";
+import type { SanitizerPlugin } from "./plugins/plugin";
 
-interface CleanOptions {
-	baseURL: string;
+import { HTMLSanitizer } from "./sanitizer";
+
+let DEFAULT_PLUGINS: SanitizerPlugin[] = [
+	new ImageSanitizerPlugin(),
+	new HrefSanitizerPlugin(),
+	new XSSSanitizerPlugin(),
+	new ScriptAndStyleTagRemoverPlugin(),
+	new YoutubeIframeSanitizerPlugin(),
+];
+
+function createSanitizer(plugins: SanitizerPlugin[] = DEFAULT_PLUGINS): HTMLSanitizer {
+	return new HTMLSanitizer(plugins);
 }
 
-export class HTMLSanitizer {
-	constructor() {}
-
-	public clean(htmlBody: string, opts: Partial<CleanOptions> = {}): string {
-		return "";
-	}
-}
+export { SanitizerPlugin, createSanitizer };

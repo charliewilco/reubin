@@ -1,28 +1,26 @@
-import { Parser, DomHandler, } from "htmlparser2";
-import type { ChildNode } from "domhandler"
+import { Parser, DomHandler } from "htmlparser2";
+import type { ChildNode } from "domhandler";
+import type { SanitizerPlugin } from "./plugins/plugin";
 
+/**
+ * 1. Read HTML
+ * 2. Detect any malicious HTML
+ * 3. Sanitize the malicious HTML
+ * 4. Return the sanitized HTML
+ */
 export class HTMLSanitizer {
-	private allowedTags: Set<string> = new Set([
-		"a",
-		"abbr",
-		"acronym",
-		"b",
-		"blockquote",
-		"code",
-		"em",
-		"i",
-		"li",
-		"ol",
-		"strong",
-		"ul",
-	]);
-	private allowedAttributes: Set<string> = new Set(["href", "title"]);
+	private plugins: SanitizerPlugin[];
+	private htmlParser?: Parser;
 
-	public sanitize(html: string): string {
+	constructor(plugins: SanitizerPlugin[]) {
+		this.plugins = plugins;
+	}
+
+	public cleanSync(html: string): string {
 		let sanitizedHtml = "";
 
 		// Create a new parser
-		const parser = new Parser(
+		this.htmlParser = new Parser(
 			new DomHandler((err, dom) => {
 				if (err) {
 					throw err;
@@ -33,8 +31,8 @@ export class HTMLSanitizer {
 		);
 
 		// Parse the HTML
-		parser.write(html);
-		parser.end();
+		this.htmlParser.write(html);
+		this.htmlParser.end();
 
 		return sanitizedHtml;
 	}
@@ -43,26 +41,71 @@ export class HTMLSanitizer {
 		let result = "";
 
 		nodes.forEach((node) => {
-			if (node.type === "tag" && this.allowedTags.has(node.name)) {
-				result += `<${node.name}`;
+			if (node.type === "tag") {
+				let tag = node.name;
+				let attrs = node.attribs;
 
-				if (node.attribs) {
-					Object.keys(node.attribs).forEach((attr) => {
-						if (this.allowedAttributes.has(attr)) {
-							result += ` ${attr}="${node.attribs[attr]}"`;
+				let filteredAttrs: { [key: string]: string } = {};
+				let allowedByPlugins = false;
+
+				for (let i = 0; i < this.plugins.length; i++) {
+					const plugin = this.plugins[i];
+					if (plugin.allowedTags.has(tag)) {
+						allowedByPlugins = true;
+
+						if (plugin.onTag) {
+							const newTag = plugin.onTag(tag, attrs);
+							if (newTag) {
+								tag = newTag;
+							} else {
+								// Plugin returned falsy value, skip this tag
+								return;
+							}
 						}
-					});
+
+						for (const attr in attrs) {
+							if (plugin.allowedAttributes.has(attr)) {
+								const value = attrs[attr];
+								filteredAttrs[attr] = value;
+							}
+						}
+					}
 				}
 
-				result += ">";
+				if (!allowedByPlugins) {
+					return;
+				}
+
+				if (Object.keys(filteredAttrs).length === 0) {
+					result += `<${tag}>`;
+				} else {
+					result += `<${tag} ${Object.entries(filteredAttrs)
+						.map(([name, value]) => `${name}="${value}"`)
+						.join(" ")}>`;
+				}
 
 				if (node.children) {
 					result += this.traverse(node.children);
 				}
 
-				result += `</${node.name}>`;
+				result += `</${tag}>`;
 			} else if (node.type === "text") {
-				result += node.data;
+				let text = node.data;
+
+				for (let i = 0; i < this.plugins.length; i++) {
+					const plugin = this.plugins[i];
+					if (plugin.onText) {
+						const newText = plugin.onText(text);
+						if (newText) {
+							text = newText;
+						} else {
+							// Plugin returned falsy value, skip this text node
+							return;
+						}
+					}
+				}
+
+				result += text;
 			}
 		});
 
