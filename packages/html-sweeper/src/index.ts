@@ -1,3 +1,5 @@
+import htmlparser, { type ParserOptions } from "htmlparser2";
+
 interface CleanOptions {
 	baseURL: string;
 }

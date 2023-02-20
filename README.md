@@ -14,7 +14,7 @@ brew install postgres@14 node
 
 ### Node
 
-Make sure you're using `16.x` because [Vercel](https://vercel.com/docs/runtimes#official-runtimes/node-js/node-js-version) currently lists their default runtime as that version. This project uses [npm workspaces](https://docs.npmjs.com/cli/v8/using-npm/workspaces) & [Turborepo](https://turborepo.org/) and setup is simple:
+Make sure you're using `18.x` because [Vercel](https://vercel.com/docs/runtimes#official-runtimes/node-js/node-js-version) currently lists their default runtime as that version. This project uses [npm workspaces](https://docs.npmjs.com/cli/v8/using-npm/workspaces) & [Turborepo](https://turborepo.org/) and setup is simple:
 
 ```
 npm install
@@ -75,7 +75,7 @@ _NOTE_: Running this command will also clear the database of all existing data.
 
 ## Project Structure
 
-### Available Scripts
+### Commands
 
 | command            | description                                                      |
 | ------------------ | ---------------------------------------------------------------- |
@@ -83,10 +83,20 @@ _NOTE_: Running this command will also clear the database of all existing data.
 | `npm test`         | Executes the tests in each workspace                             |
 | `npm run clean`    | Clears out specific cache directories                            |
 | `npm run generate` | Generates types from the GraphQL documents for server and client |
+| `npm run dev`      | Run all projects in development mode                             |
+| `npm run e2e`      | Kick of integration tests                                        |
+
+### Scripts
+
+Quality of life project scripts found in:
+
+- `/scripts/*.mjs`
+
+Use `.mjs` with `// @ts-check` at the top of the file.
 
 ### Application
 
-- `/apps/browser-extension`: Chrome browser extension, uses Preact and Parcel recipes
+- `/apps/browser-extension`: Chrome browser extension, uses React and Parcel recipes
 - `/apps/graphql`: GraphQL server uses Apollo Server
 - `/apps/ui`: Web application uses Next.js and TailwindCSS
 
@@ -94,6 +104,22 @@ Each project contains
 
 - `/apps/<project>/src/*`: source code
 - `/apps/<project>/test/*`: all unit tests
+
+### Packages
+
+- `/packages/rsskit`: Converts RSS to JSON
+- `/packages/html-sweeper`: Returns safe HTML to render
+- `/packages/graphql-date-ts`: Custom date scalar for GQL
+- `/packages/graphql-depth-limit`: TS port of `graphql-depth-limit`
+
+Each project contains
+
+- `/packages/<project>/src/*`: source code
+- `/packages/<project>/test/*`: all unit tests
+
+### End-to-end Tests
+
+- `/e2e`: Built with [Playwright](https://playwright.dev/)
 
 ### Repository
 
