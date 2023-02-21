@@ -28,7 +28,7 @@ export class HrefSanitizerPlugin implements SanitizerPlugin {
 			return tag;
 		} catch (err) {
 			// Invalid URL, skip the tag
-			return "";
+			return tag;
 		}
 	}
 }
