@@ -105,37 +105,37 @@ const mockStringDate: Record<string, [string, Date][]> = {
 
 describe("formatting", () => {
 	mockDateString.a.forEach(([date, time]) => {
-		it(`serializes ${stringify(date)} into time-string ${time}`, () => {
+		test(`serializes ${stringify(date)} into time-string ${time}`, () => {
 			expect(serializeTime(date)).toEqual(time);
 		});
 	});
 
 	mockStringString.a.forEach(([input, output]) => {
-		it(`serializes time-string ${input} into UTC time-string ${output}`, () => {
+		test(`serializes time-string ${input} into UTC time-string ${output}`, () => {
 			expect(serializeTimeString(input)).toEqual(output);
 		});
 	});
 
 	mockDateString.b.forEach(([date, dateString]) => {
-		it(`serializes ${stringify(date)} into date-string ${dateString}`, () => {
+		test(`serializes ${stringify(date)} into date-string ${dateString}`, () => {
 			expect(serializeDate(date)).toEqual(dateString);
 		});
 	});
 
 	mockDateString.c.forEach(([date, dateTimeString]) => {
-		it(`serializes ${stringify(date)} into date-time-string ${dateTimeString}`, () => {
+		test(`serializes ${stringify(date)} into date-time-string ${dateTimeString}`, () => {
 			expect(serializeDateTime(date)).toEqual(dateTimeString);
 		});
 	});
 
 	mockDateString.d.forEach(([date, dateTimeString]) => {
-		it(`serializes ${stringify(date)} into date-time-string ${dateTimeString}`, () => {
+		test(`serializes ${stringify(date)} into date-time-string ${dateTimeString}`, () => {
 			expect(serializeDateTime(date)).toEqual(dateTimeString);
 		});
 	});
 
 	mockNumberString.a.forEach(([timestamp, dateTimeString]) => {
-		it(`serializes Unix timestamp ${stringify(
+		test(`serializes Unix timestamp ${stringify(
 			timestamp
 		)} into date-time-string ${dateTimeString}`, () => {
 			expect(serializeUnixTimestamp(timestamp)).toEqual(dateTimeString);
@@ -143,25 +143,25 @@ describe("formatting", () => {
 	});
 
 	mockStringDate.a.forEach(([time, date]) => {
-		it(`parses time ${stringify(time)} into Date ${stringify(date)}`, () => {
+		test(`parses time ${stringify(time)} into Date ${stringify(date)}`, () => {
 			expect(parseTime(time)).toEqual(date);
 		});
 	});
 
 	mockStringDate.b.forEach(([dateString, date]) => {
-		it(`parses date ${stringify(dateString)} into Date ${stringify(date)}`, () => {
+		test(`parses date ${stringify(dateString)} into Date ${stringify(date)}`, () => {
 			expect(parseDate(dateString)).toEqual(date);
 		});
 	});
 
 	mockStringDate.c.forEach(([dateTime, date]) => {
-		it(`parses date-time ${stringify(dateTime)} into Date ${stringify(date)}`, () => {
+		test(`parses date-time ${stringify(dateTime)} into Date ${stringify(date)}`, () => {
 			expect(parseDateTime(dateTime)).toEqual(date);
 		});
 	});
 
 	mockStringString.b.forEach(([input, output]) => {
-		it(`serializes date-time-string ${input} into UTC date-time-string ${output}`, () => {
+		test(`serializes date-time-string ${input} into UTC date-time-string ${output}`, () => {
 			expect(serializeDateTimeString(input)).toEqual(output);
 		});
 	});

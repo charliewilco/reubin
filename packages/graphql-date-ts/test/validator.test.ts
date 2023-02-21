@@ -28,7 +28,7 @@ describe("validator", () => {
 			"00:00:00.45643222345664443Z",
 			"00:00:00.3455334564433+01:00",
 		].forEach((time) => {
-			it(`identifies ${time} as a valid time`, () => {
+			test(`identifies ${time} as a valid time`, () => {
 				expect(validateTime(time)).toEqual(true);
 			});
 		});
@@ -59,7 +59,7 @@ describe("validator", () => {
 			"2016-01-01T00:00:00.223Z",
 			"2016-01-01T00Z",
 		].forEach((time) => {
-			it(`identifies ${time} as an invalid date`, () => {
+			test(`identifies ${time} as an invalid date`, () => {
 				expect(validateTime(time)).toEqual(false);
 			});
 		});
@@ -76,7 +76,7 @@ describe("validator", () => {
 			"2016-05-31",
 			"2016-11-20",
 		].forEach((date) => {
-			it(`identifies ${date} as a valid date`, () => {
+			test(`identifies ${date} as a valid date`, () => {
 				expect(validateDate(date)).toEqual(true);
 			});
 		});
@@ -102,7 +102,7 @@ describe("validator", () => {
 			"2016-02-30",
 			"9999-00-31",
 		].forEach((date) => {
-			it(`identifies ${date} as an invalid date`, () => {
+			test(`identifies ${date} as an invalid date`, () => {
 				expect(validateDate(date)).toEqual(false);
 			});
 		});
@@ -116,7 +116,7 @@ describe("validator", () => {
 			// The minimum representable unit timestamp
 			-2147483648,
 		].forEach((timestamp) => {
-			it(`identifies ${timestamp} as a valid Unix timestamp`, () => {
+			test(`identifies ${timestamp} as a valid Unix timestamp`, () => {
 				expect(validateUnixTimestamp(timestamp)).toEqual(true);
 			});
 		});
@@ -128,7 +128,7 @@ describe("validator", () => {
 			2147483648,
 			-2147483649,
 		].forEach((timestamp) => {
-			it(`identifies ${timestamp} as an invalid Unix timestamp`, () => {
+			test(`identifies ${timestamp} as an invalid Unix timestamp`, () => {
 				expect(validateUnixTimestamp(timestamp)).toEqual(false);
 			});
 		});
@@ -153,7 +153,7 @@ describe("validator", () => {
 			"2017-01-01T10:23:11.45686664Z",
 			"2017-01-01T10:23:11.23545654+01:00",
 		].forEach((dateTime) => {
-			it(`identifies ${dateTime} as a valid date-time`, () => {
+			test(`identifies ${dateTime} as a valid date-time`, () => {
 				expect(validateDateTime(dateTime)).toEqual(true);
 			});
 		});
@@ -184,18 +184,18 @@ describe("validator", () => {
 			"2017-01-07T25:25:00.450+01:00",
 			"2017-01-07T11:11:11+24:00",
 		].forEach((dateTime) => {
-			it(`identifies ${dateTime} as an invalid date-time`, () => {
+			test(`identifies ${dateTime} as an invalid date-time`, () => {
 				expect(validateDateTime(dateTime)).toEqual(false);
 			});
 		});
 	});
 
 	describe("validateJSDate", () => {
-		it("identifies invalid Date", () => {
+		test("identifies invalid Date", () => {
 			expect(validateJSDate(new Date("invalid"))).toBeFalsy();
 		});
 
-		it("identifies a valid Date", () => {
+		test("identifies a valid Date", () => {
 			expect(validateJSDate(new Date(2016, 1, 1))).toBeTruthy();
 		});
 	});

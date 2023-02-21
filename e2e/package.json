@@ -7,9 +7,13 @@
 		"deps": "playwright install --with-deps",
 		"codegen": "playwright codegen localhost:3000"
 	},
+	"dependencies": {
+		"@reubin/ui": "*",
+		"@reubin/graphql": "*"
+	},
 	"devDependencies": {
 		"cuid": "^2.1.8",
 		"@playwright/test": "^1.29.1",
-		"typescript": "^4.8.4"
+		"typescript": "^4.9.4"
 	}
 }
