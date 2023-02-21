@@ -1,5 +1,5 @@
-import { Parser, DomHandler } from "htmlparser2";
 import type { ChildNode } from "domhandler";
+import { DomHandler, Parser } from "htmlparser2";
 import type { SanitizerPlugin } from "./plugins/plugin";
 
 /**
@@ -50,7 +50,7 @@ export class HTMLSanitizer {
 
 				for (let i = 0; i < this.plugins.length; i++) {
 					const plugin = this.plugins[i];
-					if (plugin.allowedTags.has(tag)) {
+					if (plugin.allowedTags.has(tag) || plugin.allowedTags.has('*')) {
 						allowedByPlugins = true;
 
 						if (plugin.onTag) {
@@ -64,8 +64,8 @@ export class HTMLSanitizer {
 						}
 
 						for (const attr in attrs) {
-							if (plugin.allowedAttributes.has(attr)) {
-								const value = attrs[attr];
+							if (plugin.allowedAttributes.has(attr) || plugin.allowedAttributes.has('*')) {
+								const value = plugin.onAttribute ? plugin.onAttribute(attr, attrs[attr]) : attrs[attr];
 								filteredAttrs[attr] = value;
 							}
 						}

@@ -1,13 +1,14 @@
 import { ImageSanitizerPlugin } from "./plugins/images";
 import { HrefSanitizerPlugin } from "./plugins/naughty-href";
-import { XSSSanitizerPlugin } from "./plugins/xss";
-import { ScriptAndStyleTagRemoverPlugin } from "./plugins/remove-js-css";
-import { YoutubeIframeSanitizerPlugin } from "./plugins/youtube";
 import type { SanitizerPlugin } from "./plugins/plugin";
+import { ScriptAndStyleTagRemoverPlugin } from "./plugins/remove-js-css";
+import { XSSSanitizerPlugin } from "./plugins/xss";
+import { YoutubeIframeSanitizerPlugin } from "./plugins/youtube";
 
+import { RelativeHrefSanitizerPlugin } from "./plugins/relative-href";
 import { HTMLSanitizer } from "./sanitizer";
 
-let DEFAULT_PLUGINS: SanitizerPlugin[] = [
+export const DEFAULT_PLUGINS: SanitizerPlugin[] = [
 	new ImageSanitizerPlugin(),
 	new HrefSanitizerPlugin(),
 	new XSSSanitizerPlugin(),
@@ -15,8 +16,11 @@ let DEFAULT_PLUGINS: SanitizerPlugin[] = [
 	new YoutubeIframeSanitizerPlugin(),
 ];
 
-function createSanitizer(plugins: SanitizerPlugin[] = DEFAULT_PLUGINS): HTMLSanitizer {
-	return new HTMLSanitizer(plugins);
+function createSanitizer(plugins: SanitizerPlugin[] = DEFAULT_PLUGINS, baseURI: string = ''): HTMLSanitizer {
+	return new HTMLSanitizer([
+		...plugins,
+		new RelativeHrefSanitizerPlugin(baseURI)
+	]);
 }
 
 export { SanitizerPlugin, createSanitizer };
