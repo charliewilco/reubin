@@ -1,4 +1,7 @@
+import { useCallback } from "react";
 import useSWR from "swr";
+import { createAddLink } from "./create-add-link";
+import type { RSSLink } from "./rss";
 
 function Empty() {
 	return (
@@ -64,9 +67,15 @@ function Wrapper(props: WrapperProps) {
 
 interface FeedListProps {
 	links: RSSLink[];
+	onLinkClick(url: string): void;
 }
 
-function FeedListItem(props: RSSLink) {
+function FeedListItem(props: RSSLink & Pick<FeedListProps, "onLinkClick">) {
+	let handleClick = useCallback(() => {
+		let url = createAddLink(props);
+
+		props.onLinkClick(url);
+	}, [props]);
 	return (
 		<li className="cursor-pointer" key={props.href}>
 			<div className="block px-2 py-4 hover:bg-zinc-200 dark:hover:bg-zinc-500">
@@ -94,19 +103,21 @@ function FeedListItem(props: RSSLink) {
 						</div>
 					</div>
 					<div className="flex-shrink-0">
-						<svg
-							width={24}
-							height={24}
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth={2}
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							className="h-5 w-5 text-zinc-400"
-							aria-hidden={true}>
-							<use href="#icon-chevron-right"></use>
-						</svg>
+						<button onClick={handleClick} aria-label="Add Feed">
+							<svg
+								width={24}
+								height={24}
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth={2}
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								className="h-5 w-5 text-zinc-400"
+								aria-hidden={true}>
+								<use href="#icon-chevron-right" />
+							</svg>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -119,7 +130,7 @@ function FeedList(props: FeedListProps) {
 		<div className="overflow-hidden rounded-md bg-white shadow dark:bg-zinc-800">
 			<ul role="list" className="divide-y dark:divide-zinc-600">
 				{props.links.map((item) => (
-					<FeedListItem {...item} key={item.href} />
+					<FeedListItem {...item} key={item.href} onLinkClick={props.onLinkClick} />
 				))}
 			</ul>
 		</div>
@@ -159,23 +170,27 @@ function LoadingSpinner() {
 export interface AppProps {
 	id: string;
 	onParse(): Promise<RSSLink[]>;
+	onAddLink(url: string): void;
 }
 
 export function App(props: AppProps) {
-	let query = useSWR<RSSLink[], Error>(["tab", props.id], props.onParse);
+	let { data, error, mutate, isLoading, isValidating } = useSWR<RSSLink[], Error>(
+		["tab", props.id],
+		props.onParse
+	);
 
-	let isEmpty = (query.data && query.data?.length === 0) || (!query.data && !query.error);
+	let isEmpty = (data && data?.length === 0) || (!data && !error);
 
 	return (
-		<Wrapper onRetry={query.mutate}>
-			{query.isLoading ? (
+		<Wrapper onRetry={mutate}>
+			{isLoading || isValidating ? (
 				<LoadingSpinner />
 			) : isEmpty ? (
 				<Empty />
-			) : query.error ? (
-				<ErrorMessage message={query.error.message} />
-			) : query.data ? (
-				<FeedList links={query.data} />
+			) : error ? (
+				<ErrorMessage message={error.message} />
+			) : data ? (
+				<FeedList links={data} onLinkClick={props.onAddLink} />
 			) : null}
 		</Wrapper>
 	);

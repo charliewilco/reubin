@@ -1,4 +1,5 @@
 import type { RSSMessageRequest } from "./message";
+import type { RSSLink } from "./rss";
 
 chrome.runtime.onMessage.addListener((message: RSSMessageRequest, sender, sendResponse) => {
 	if (message.text === "searchRSS") {
@@ -17,9 +18,9 @@ chrome.runtime.onMessage.addListener((message: RSSMessageRequest, sender, sendRe
 			"text/rdf",
 		];
 		let links: NodeListOf<HTMLLinkElement> = document.querySelectorAll("link[type]");
-		const feeds: RSSLink[] = [];
+		let feeds: RSSLink[] = [];
 		for (let i = 0; i < links.length; i++) {
-			const link = links[i];
+			let link = links[i];
 			if (link.hasAttribute("type") && types.indexOf(link.getAttribute("type")!) !== -1) {
 				let feed_url = link.getAttribute("href");
 

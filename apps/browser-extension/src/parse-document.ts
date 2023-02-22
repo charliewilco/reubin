@@ -1,13 +1,14 @@
 import type { RSSMessageRequest } from "./message";
+import type { RSSLink } from "./rss";
 
 export async function parseDocumentLinks() {
 	try {
-		const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+		let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 		if (!tab.id || !tab.url) {
 			throw new Error("No tab id");
 		}
 
-		const response = await chrome.tabs.sendMessage<RSSMessageRequest, RSSLink[]>(tab.id, {
+		let response = await chrome.tabs.sendMessage<RSSMessageRequest, RSSLink[]>(tab.id, {
 			text: "searchRSS",
 			url: tab.url,
 		});

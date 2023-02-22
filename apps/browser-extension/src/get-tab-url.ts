@@ -7,3 +7,7 @@ export function getTabURL() {
 
 	return currentTabUrl;
 }
+
+export function createTab(newURL: string) {
+	chrome.tabs.create({ url: newURL });
+}

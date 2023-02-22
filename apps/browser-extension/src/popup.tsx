@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { SWRConfig } from "swr";
 import { parseDocumentLinks } from "./parse-document";
-import { getTabURL } from "./get-tab-url";
+import { createTab, getTabURL } from "./get-tab-url";
 import { App } from "./app";
 
 let domNode = document.getElementById("app");
@@ -18,7 +18,7 @@ if (domNode !== null) {
 				value={{
 					provider,
 				}}>
-				<App id={currentTabUrl} onParse={parseDocumentLinks} />
+				<App id={currentTabUrl} onParse={parseDocumentLinks} onAddLink={createTab} />
 			</SWRConfig>
 		</StrictMode>
 	);
