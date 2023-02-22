@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { graphql } from "msw";
 import { setupServer } from "msw/node";
@@ -64,9 +64,10 @@ describe("Login", () => {
 		const emailInput = screen.getByTestId("login-email-input");
 		// const passwordInput = screen.getByTestId("login-password-input");
 
-		await userEvent.type(emailInput, "matt@");
-
-		await userEvent.tab();
+		await act(async () => {
+			await userEvent.type(emailInput, "matt@");
+			await userEvent.tab();
+		});
 
 		expect(screen.getByText("Invalid email")).toBeInTheDocument();
 		expect(screen.getByRole("button")).toBeDisabled();
@@ -77,11 +78,11 @@ describe("Login", () => {
 
 		const emailInput = screen.getByTestId("login-email-input");
 		const passwordInput = screen.getByTestId("login-password-input");
-		await userEvent.type(emailInput, "matt@test.com");
-
-		await userEvent.type(passwordInput, "P@ssw0rd");
-
-		await userEvent.click(screen.getByRole("button"));
+		await act(async () => {
+			await userEvent.type(emailInput, "matt@test.com");
+			await userEvent.type(passwordInput, "P@ssw0rd");
+			await userEvent.click(screen.getByRole("button"));
+		});
 
 		expect(loginHandler).toBeCalledWith({
 			email: "matt@test.com",

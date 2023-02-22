@@ -1,4 +1,10 @@
-import { render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
+import {
+	act,
+	render,
+	screen,
+	waitFor,
+	waitForElementToBeRemoved,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SWRConfig } from "swr";
 import { graphql } from "msw";
@@ -84,8 +90,10 @@ describe("Tags", () => {
 
 		render(<CreateTagForm />);
 
-		await user.type(screen.getByRole("textbox"), "Test Tag #2");
-		await user.click(screen.getByText("Submit"));
+		await act(async () => {
+			await user.type(screen.getByRole("textbox"), "Test Tag #2");
+			await user.click(screen.getByText("Submit"));
+		});
 
 		expect(createTagMockFn).toHaveBeenCalledWith("Test Tag #2");
 
@@ -105,7 +113,10 @@ describe("Tags", () => {
 
 		await waitForElementToBeRemoved(screen.getByRole("alert"));
 		expect(screen.getByRole("list")).toBeInTheDocument();
-		await user.click(screen.getAllByLabelText("Remove Tag")[0]);
+
+		await act(async () => {
+			await user.click(screen.getAllByLabelText("Remove Tag")[0]);
+		});
 
 		expect(removeTagMockFn).toHaveBeenCalledWith("1");
 	});
