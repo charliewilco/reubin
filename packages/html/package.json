@@ -1,5 +1,5 @@
 {
-	"name": "@reubin/html-sweeper",
+	"name": "@reubin/purify-html",
 	"version": "1.2.1",
 	"type": "module",
 	"main": "dist/index.cjs",
