@@ -12,23 +12,8 @@
 		"types": "tsc --noEmit --pretty",
 		"test": "jest --runInBand"
 	},
-	"devDependencies": {
-		"@apollo/rover": "^0.10.0",
-		"@rollup/plugin-graphql": "^2.0.2",
-		"@rollup/plugin-run": "^3.0.1",
-		"@rollup/plugin-typescript": "^11.0.0",
-		"@types/jest": "^29.2.6",
-		"@types/node": "^18.11.18",
-		"babel-jest": "^29.3.1",
-		"cuid": "^2.1.8",
-		"jest": "^29.3.1",
-		"prisma": "^4.9.0",
-		"rollup": "^3.10.0",
-		"ts-jest": "^29.0.5",
-		"typescript": "^4.9.4"
-	},
 	"dependencies": {
-		"@apollo/server": "^4.3.0",
+		"@apollo/server": "^4.4.0",
 		"@graphql-tools/schema": "^9.0.13",
 		"@graphql-tools/utils": "^9.1.4",
 		"@prisma/client": "^4.9.0",
@@ -51,5 +36,20 @@
 		"universal-cookie": "^4.0.4",
 		"xml2js": "^0.4.23",
 		"zod": "^3.20.2"
+	},
+	"devDependencies": {
+		"@apollo/rover": "^0.10.0",
+		"@paralleldrive/cuid2": "^2.2.0",
+		"@rollup/plugin-graphql": "^2.0.2",
+		"@rollup/plugin-run": "^3.0.1",
+		"@rollup/plugin-typescript": "^11.0.0",
+		"@types/jest": "^29.4.0",
+		"@types/node": "^18.11.18",
+		"babel-jest": "^29.4.3",
+		"jest": "^29.4.3",
+		"prisma": "^4.9.0",
+		"rollup": "^3.10.0",
+		"ts-jest": "^29.0.5",
+		"typescript": "^4.9.5"
 	}
 }
