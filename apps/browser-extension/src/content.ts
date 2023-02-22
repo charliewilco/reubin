@@ -41,7 +41,6 @@ chrome.runtime.onMessage.addListener((message: RSSMessageRequest, sender, sendRe
 				}
 			}
 		}
-		console.log("FEEDS", feeds);
 		sendResponse(feeds);
 	}
 });

@@ -6,6 +6,7 @@ export async function parseDocumentLinks() {
 		if (!tab.id || !tab.url) {
 			throw new Error("No tab id");
 		}
+
 		const response = await chrome.tabs.sendMessage<RSSMessageRequest, RSSLink[]>(tab.id, {
 			text: "searchRSS",
 			url: tab.url,
