@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { AddFeedForm } from "../src/components/add-feed";
@@ -16,16 +16,20 @@ describe("AddFeed", () => {
 		const input = screen.getByTestId("add-feed-url");
 		const button = screen.getByText("Submit");
 
-		await userEvent.click(button);
+		await act(async () => {
+			await userEvent.click(button);
+		});
 
 		expect(fn).not.toHaveBeenCalled();
-
-		await userEvent.type(input, "https://www.google.com");
+		await act(async () => {
+			await userEvent.type(input, "https://www.google.com");
+		});
 
 		expect(input).toHaveValue("https://www.google.com");
 
-		await userEvent.click(button);
-
+		await act(async () => {
+			await userEvent.click(button);
+		});
 		expect(fn).toHaveBeenCalled();
 	});
 });

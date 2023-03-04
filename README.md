@@ -108,7 +108,7 @@ Each project contains
 ### Packages
 
 - `/packages/rsskit`: Converts RSS to JSON
-- `/packages/html-sweeper`: Returns safe HTML to render
+- `/packages/html`: Returns safe HTML to render
 - `/packages/graphql-date-ts`: Custom date scalar for GQL
 - `/packages/graphql-depth-limit`: TS port of `graphql-depth-limit`
 
