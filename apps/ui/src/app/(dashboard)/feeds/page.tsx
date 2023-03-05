@@ -1,7 +1,6 @@
-import { use } from "react";
 import { cookies } from "next/headers";
 
-import { DashboardProvider } from "../../../hooks/useDashboard";
+import { DashboardProvider } from "../../../components/dashboard-wrapper";
 import { ConnectedEntryList } from "../../../components/entries-list";
 import { ConnectedEntryFull } from "../../../components/entry-full";
 import { FeedList } from "../../../components/feed-list";
@@ -10,9 +9,9 @@ import { authorizeRequest } from "../../../lib/authorized-request";
 
 export const runtime = "experimental-edge";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
 	const nextCookies = cookies();
-	const _ = use(authorizeRequest(nextCookies, getFeeds()));
+	const _ = await authorizeRequest(nextCookies, getFeeds());
 
 	return (
 		<DashboardProvider>

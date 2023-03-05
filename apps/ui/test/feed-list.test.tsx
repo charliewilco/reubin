@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitForElementToBeRemoved } from "@testing-l
 import { SWRConfig } from "swr";
 
 import { FeedList } from "../src/components/feed-list";
-import { DashboardProvider } from "../src/hooks/useDashboard";
+import { DashboardProvider } from "../src/components/dashboard-wrapper";
 import type { GetFeedsQuery } from "../src/lib/__generated__";
 
 import { setupServer } from "msw/node";

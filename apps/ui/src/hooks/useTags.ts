@@ -1,5 +1,3 @@
-"use client";
-
 import useSWR from "swr";
 import { useCallback } from "react";
 import { addTag, getAllTags, removeTag } from "../lib/graphql";
