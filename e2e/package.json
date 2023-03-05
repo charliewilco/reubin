@@ -1,6 +1,6 @@
 {
 	"name": "@reubin/e2e",
-	"version": "1.2.1",
+	"version": "1.2.3",
 	"private": true,
 	"scripts": {
 		"test": "playwright test",
@@ -12,8 +12,8 @@
 		"@reubin/graphql": "*"
 	},
 	"devDependencies": {
-		"cuid": "^2.1.8",
-		"@playwright/test": "^1.29.1",
-		"typescript": "^4.9.4"
+		"@paralleldrive/cuid2": "^2.2.0",
+		"@playwright/test": "^1.31.2",
+		"typescript": "^4.9.5"
 	}
 }

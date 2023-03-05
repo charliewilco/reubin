@@ -1,5 +1,5 @@
 import base64 from "base-64";
-import cuid from "cuid";
+import cuid from "@paralleldrive/cuid2";
 
 export class TestingMocks {
 	user: { email: string; password: string };
@@ -10,7 +10,7 @@ export class TestingMocks {
 
 	constructor() {
 		this.user = {
-			email: `test-${cuid()}@charlieisamazing.com`,
+			email: `test-${cuid.createId()}@charlieisamazing.com`,
 			password: base64.encode("P@ssw0rd"),
 		};
 	}

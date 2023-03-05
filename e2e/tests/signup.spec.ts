@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
-import cuid from "cuid";
+import cuid from "@paralleldrive/cuid2";
 
 const mockUser = {
-	email: `charliewilco-${cuid()}@gmail.com`,
+	email: `charliewilco-${cuid.createId()}@gmail.com`,
 	password: "P@ssw0rd",
 };
 

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { graphql } from "msw";
 import { setupServer } from "msw/node";
@@ -63,8 +63,11 @@ describe("Feed Settings", () => {
 
 		const button = screen.getByText("Save");
 		const input = screen.getByTestId("update-feed-name");
-		await userEvent.clear(input);
-		await userEvent.type(input, "New Feed");
+
+		await act(async () => {
+			await userEvent.clear(input);
+			await userEvent.type(input, "New Feed");
+		});
 
 		fireEvent(button, new MouseEvent("click", { bubbles: true }));
 
@@ -75,9 +78,8 @@ describe("Feed Settings", () => {
 		const onDelete = jest.fn();
 		render(<UpdateFeedForm initialFeed={mockFeed} onSubmit={jest.fn()} onDelete={onDelete} />);
 
-		const button = screen.getByText("Unsubscribe");
-
-		fireEvent(button, new MouseEvent("click", { bubbles: true }));
+		expect(screen.getByText("Unsubscribe")).toBeInTheDocument();
+		fireEvent(screen.getByText("Unsubscribe"), new MouseEvent("click", { bubbles: true }));
 		expect(onDelete).toHaveBeenCalled();
 	});
 });
