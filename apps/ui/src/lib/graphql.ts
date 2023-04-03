@@ -45,7 +45,10 @@ export const getEntry = async (id: string) => {
 	}
 };
 
-export const getFeed = async (id: string) => {
+export const getFeed = async (id: string | null) => {
+	if (id === null) {
+		return;
+	}
 	try {
 		return sdk.GetFeedById({ id });
 	} catch (error: any) {

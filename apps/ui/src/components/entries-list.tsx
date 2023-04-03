@@ -62,7 +62,9 @@ export const EntryListItem = memo(_EntryItem, isEqual);
 EntryListItem.displayName = "EntryListItem";
 
 export function EntryList(props: EntryListProps) {
-	const { data, mutate } = useSWR([props.id, props.filter], getEntriesFromFeed);
+	const { data, mutate } = useSWR([props.id, props.filter], ([id, filter]) =>
+		getEntriesFromFeed(id, filter)
+	);
 
 	// const isLoading = !error && !data;
 
@@ -82,7 +84,7 @@ export function EntryList(props: EntryListProps) {
 	}, [mutate, props.id]);
 
 	return (
-		<div className="absolute top-0 left-0 w-full">
+		<div className="absolute left-0 top-0 w-full">
 			<FeedToolbar onRefresh={handleRefresh} />
 
 			<ul>

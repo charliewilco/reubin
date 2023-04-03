@@ -4,14 +4,16 @@ import { DashboardProvider } from "../../../components/dashboard-wrapper";
 import { ConnectedEntryList } from "../../../components/entries-list";
 import { ConnectedEntryFull } from "../../../components/entry-full";
 import { FeedList } from "../../../components/feed-list";
-import { getFeeds } from "../../../lib/graphql";
-import { authorizeRequest } from "../../../lib/authorized-request";
+import { sdk } from "../../../lib/graphql";
+import { TOKEN_NAME } from "../../../lib/auth-token";
 
 export const runtime = "experimental-edge";
 
 export default async function DashboardPage() {
 	const nextCookies = cookies();
-	const _ = await authorizeRequest(nextCookies, getFeeds());
+	const _ = await sdk.GetFeeds(undefined, {
+		Authorization: nextCookies.get(TOKEN_NAME)?.value ?? "",
+	});
 
 	return (
 		<DashboardProvider>

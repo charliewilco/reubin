@@ -110,7 +110,7 @@ export function FeedSettings() {
 	const [isOpen, setOpen] = useState(false);
 
 	const [{ feed }, { unselectFeed }] = useDashboardContext();
-	const { data } = useSWR(feed, getFeed);
+	const { data } = useSWR([feed], ([feed]) => getFeed(feed));
 
 	const handleRemove = useCallback(() => {
 		if (feed) {
