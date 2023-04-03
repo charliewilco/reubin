@@ -60,13 +60,13 @@ const config: PlaywrightTestConfig = {
 
 	webServer: [
 		{
-			command: "npm start --workspace=@reubin/ui",
+			command: "yarn workspace @reubin/ui start",
 			port: 3000,
 			timeout: 120 * 1000,
 			reuseExistingServer: !process.env.CI,
 		},
 		{
-			command: "npm start --workspace=@reubin/graphql",
+			command: "yarn workspace @reubin/graphql start",
 			port: 4000,
 			timeout: 120 * 1000,
 			reuseExistingServer: !process.env.CI,

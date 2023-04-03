@@ -18,7 +18,6 @@ export default function SettingsPage() {
 	return (
 		<section className="w-full flex-1 p-4">
 			<h1 className="text-3xl font-bold tracking-tight ">Settings</h1>
-			<pre>{JSON.stringify(__, null, 4)}</pre>
 			<h2>Tags</h2>
 			<div className="grid max-w-6xl grid-cols-12 gap-8">
 				<div className="col-span-12 lg:col-span-6">

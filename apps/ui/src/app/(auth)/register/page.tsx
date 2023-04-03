@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { RegisterForm } from "../../../components/register-form";
 import { Card } from "../../../components/ui/card";
+
+export const metadata: Metadata = {
+	title: "Sign up | Reubin",
+};
 
 export default function RegistrationPage() {
 	return (

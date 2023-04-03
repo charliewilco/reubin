@@ -1,4 +1,5 @@
 {
+	"private": true,
 	"name": "reubin",
 	"repository": "charliewilco/reubin.app",
 	"author": "Charlie ⚡ <charliewilc0@protonmail.com>",
@@ -9,7 +10,7 @@
 		"packages/*"
 	],
 	"scripts": {
-		"start": "npm start --workspace=@reubin/graphql",
+		"start": "yarn workspace @reubin/graphql start",
 		"build": "turbo build",
 		"test": "turbo test --filter=!@reubin/e2e",
 		"e2e": "turbo test --filter=@reubin/e2e",
@@ -43,6 +44,7 @@
 		"prettier-plugin-tailwindcss": "^0.2.4",
 		"pretty-quick": "^3.1.3",
 		"prisma": "^4.11.0",
+		"process": "^0.11.10",
 		"rss-parser": "^3.12.0",
 		"turbo": "^1.8.3",
 		"typescript": "^4.9.5"

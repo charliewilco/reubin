@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import isEqual from "react-fast-compare";
 import { memo } from "react";

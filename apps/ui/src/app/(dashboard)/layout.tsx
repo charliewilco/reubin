@@ -1,5 +1,3 @@
-"use client";
-
 import { AddFeed } from "../../components/add-feed";
 import { AppHeader } from "../../components/app-header";
 import { SideNavigation } from "../../components/side-navigation";
