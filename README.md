@@ -14,10 +14,10 @@ brew install postgres@14 node
 
 ### Node
 
-Make sure you're using `18.x` because [Vercel](https://vercel.com/docs/runtimes#official-runtimes/node-js/node-js-version) currently lists their default runtime as that version. This project uses [npm workspaces](https://docs.npmjs.com/cli/v8/using-npm/workspaces) & [Turborepo](https://turborepo.org/) and setup is simple:
+Make sure you're using `18.x` because [Vercel](https://vercel.com/docs/runtimes#official-runtimes/node-js/node-js-version) currently lists their default runtime as that version. This project uses [yarn workspaces](https://classic.yarnpkg.com/lang/en/docs/workspaces/) & [Turborepo](https://turborepo.org/) and setup is simple:
 
 ```
-npm install
+yarn
 ```
 
 ### Database
@@ -47,7 +47,7 @@ DATABASE_URL="postgresql://reubinadmin:password@localhost:5432/reubindb?schema=p
 First push the db to setup the tables:
 
 ```
-npm run db
+yarn db
 ```
 
 #### Seeing the Project
@@ -55,13 +55,13 @@ npm run db
 You can populate the project with data by running the seed command. This will populate the database with feeds, tags and a single user.
 
 ```
-npm run seed
+yarn seed
 ```
 
 The seed command can also be run with an `--email` flag:
 
 ```
-npm run seed -- --email='yourtest@email.com'
+yarn seed -- --email='yourtest@email.com'
 ```
 
 This will allow you to login to the app with:
@@ -77,14 +77,14 @@ _NOTE_: Running this command will also clear the database of all existing data.
 
 ### Commands
 
-| command            | description                                                      |
-| ------------------ | ---------------------------------------------------------------- |
-| `npm run build`    | Runs build in each workspace                                     |
-| `npm test`         | Executes the tests in each workspace                             |
-| `npm run clean`    | Clears out specific cache directories                            |
-| `npm run generate` | Generates types from the GraphQL documents for server and client |
-| `npm run dev`      | Run all projects in development mode                             |
-| `npm run e2e`      | Kick of integration tests                                        |
+| command         | description                                                      |
+| --------------- | ---------------------------------------------------------------- |
+| `yarn build`    | Runs build in each workspace                                     |
+| `yarn test`     | Executes the tests in each workspace                             |
+| `yarn clean`    | Clears out specific cache directories                            |
+| `yarn generate` | Generates types from the GraphQL documents for server and client |
+| `yarn dev`      | Run all projects in development mode                             |
+| `yarn e2e`      | Kick of integration tests                                        |
 
 ### Scripts
 

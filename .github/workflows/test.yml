@@ -26,8 +26,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm Install
-        run: npm install
+      - name: Install
+        run: yarn install
       - name: Setup DB
         run: npx prisma db push --schema apps/graphql/prisma/schema.prisma
         env:
@@ -39,9 +39,9 @@ jobs:
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci_db_test
       - name: Build
-        run: npm run build
+        run: yarn build
       - name: Test
-        run: npm test
+        run: yarn test
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost

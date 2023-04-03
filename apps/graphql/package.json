@@ -5,8 +5,8 @@
 	"private": true,
 	"scripts": {
 		"start": "node dist/server",
-		"build": "npx prisma generate && npm run bundle",
-		"dev": "npx prisma generate && npm run bundle -- -w",
+		"build": "yarn prisma generate && yarn bundle",
+		"dev": "yarn prisma generate && yarn bundle -w",
 		"bundle": "rollup -c",
 		"generate": "npx prisma generate",
 		"types": "tsc --noEmit --pretty",

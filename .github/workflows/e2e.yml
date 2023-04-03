@@ -15,15 +15,15 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn
       - name: Generate Types
-        run: npm run generate && npx prisma generate --schema apps/graphql/prisma/schema.prisma
+        run: yarn generate && yarn prisma generate --schema apps/graphql/prisma/schema.prisma
       - name: Build
-        run: npm run build
+        run: yarn build
       - name: Install Playwright Browsers
-        run: npm run deps --workspace=@reubin/e2e
+        run: yarn workspace @reubin/e2e deps
       - name: Run Playwright tests
-        run: npm test --workspace=@reubin/e2e
+        run: yarn workspace @reubin/e2e test
       - uses: actions/upload-artifact@v3
         if: always()
         with:

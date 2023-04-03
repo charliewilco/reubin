@@ -10,11 +10,11 @@ RUN npm install -g turbo
 COPY package*.json ./
 COPY turbo.json ./
 
-RUN npm install
-RUN npm run build
+RUN yarn install
+RUN yarn build
 
 # Bundle app source
 COPY . .
 
 EXPOSE 4000
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
