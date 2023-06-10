@@ -17,13 +17,13 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Generate Types
-        run: yarn generate && yarn prisma generate --schema apps/graphql/prisma/schema.prisma
+        run: yarn generate && yarn prisma generate --schema apps/db/prisma/schema.prisma
       - name: Build
         run: yarn build
       - name: Install Playwright Browsers
-        run: yarn workspace @reubin/e2e deps
+        run: yarn playwright install --with-deps
       - name: Run Playwright tests
-        run: yarn workspace @reubin/e2e test
+        run: yarn e2e
       - uses: actions/upload-artifact@v3
         if: always()
         with:

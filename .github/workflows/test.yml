@@ -29,7 +29,7 @@ jobs:
       - name: Install
         run: yarn install
       - name: Setup DB
-        run: npx prisma db push --schema apps/graphql/prisma/schema.prisma
+        run: yarn prisma db push
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost

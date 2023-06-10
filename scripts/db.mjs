@@ -1,7 +1,7 @@
 import arg from "arg";
 import { DbPush, DbPull, DbDrop } from "@prisma/migrate";
 
-const argsToParse = ["--schema", "apps/graphql/prisma/schema.prisma"];
+const argsToParse = ["--schema", "apps/db/prisma/schema.prisma"];
 
 const args = arg({ "--push": Boolean, "--pull": Boolean, "--drop": Boolean });
 

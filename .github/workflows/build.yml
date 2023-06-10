@@ -35,7 +35,7 @@ jobs:
         run: yarn install
 
       - name: Generate Types
-        run: yarn generate && yarn prisma generate --schema apps/graphql/prisma/schema.prisma
+        run: yarn prisma generate
 
       - name: Build
         run: yarn build

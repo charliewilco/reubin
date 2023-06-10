@@ -9,7 +9,6 @@ const buildOuputPaths = [
 	".husky",
 	".parcel-cache",
 	"apps/browser-extension/dist",
-	"apps/graphql/dist",
 	"apps/ui/.next",
 	"apps/ui/coverage",
 	"apps/ui/tsconfig.tsbuildinfo",
