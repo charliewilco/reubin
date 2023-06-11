@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import "../components/styles.css";
 
 export const metadata: Metadata = {
-	title: "Reubin | An RSS Client for the Next Generation",
+	title: {
+		default: "Reubin | An RSS Client for the Next Generation",
+		template: "%s | Reubin"
+	},
 	icons: [
 		{
 			type: "image/png",

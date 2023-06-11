@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Privacy Policy | Reubin",
+	title: "Privacy Policy",
 };
 
 function Privacy() {

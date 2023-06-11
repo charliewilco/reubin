@@ -3,6 +3,11 @@ import { cookies } from "next/headers";
 import { RecommendationList } from "$/components/recommendation-list";
 import { Auth } from "$/lib/auth";
 import { ORM } from "$/lib/orm";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Recommendations",
+};
 
 async function RecommendationsPage() {
 	let lists = Array.from(RecommendationMap);

@@ -5,9 +5,9 @@ import useSWR from "swr";
 import format from "date-fns/format";
 import type { Entry } from "@prisma/client";
 
-import type { EntryDetailsFragment, EntryFilter } from "../lib/__generated__";
+import type { EntryFilter } from "../lib/__generated__";
 import { classNames } from "./ui/class-names";
-import { getEntriesFromFeed, refreshFeed } from "../lib/graphql";
+import { getEntriesFromFeed } from "../lib/graphql";
 import { FeedToolbar } from "./feed-toolbar";
 import { useDashboardContext } from "../hooks/useDashboard";
 
@@ -62,26 +62,12 @@ export const EntryListItem = memo(_EntryItem, isEqual);
 EntryListItem.displayName = "EntryListItem";
 
 export function EntryList(props: EntryListProps) {
-	const { data, mutate } = useSWR([props.id, props.filter], ([id, filter]) =>
+	const { data } = useSWR([props.id, props.filter], ([id, filter]) =>
 		getEntriesFromFeed(id, filter)
 	);
 
-	// const isLoading = !error && !data;
 
-	const handleRefresh = useCallback(async () => {
-		const result = await refreshFeed(props.id);
-
-		mutate(
-			(prev) => {
-				if (prev && result.refreshFeed) {
-					// TODO: write mutation to call refresh on feed.
-					const entries: EntryDetailsFragment[] = [...result.refreshFeed, ...prev.entries];
-					return { ...prev, entries };
-				}
-			},
-			{ rollbackOnError: true }
-		);
-	}, [mutate, props.id]);
+	const handleRefresh = useCallback(async () => {}, []);
 
 	return (
 		<div className="absolute left-0 top-0 w-full">

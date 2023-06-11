@@ -1,25 +1,23 @@
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
 import { DashboardProvider } from "$/components/dashboard-wrapper";
 import { ConnectedEntryList } from "$/components/entries-list";
 import { ConnectedEntryFull } from "$/components/entry-full";
 import { FeedList } from "$/components/feed-list";
-
-import { ORM } from "$/lib/orm";
 import { Auth } from "$/lib/auth";
+import { Controllers } from "$/lib/controllers";
+
+export const metadata: Metadata = {
+	title: "Feeds",
+};
 
 export default async function DashboardPage() {
 	const authRequest = Auth.handleRequest({ cookies });
 	const { user } = await authRequest.validateUser();
 	if (!user) redirect("/login");
 
-	console.log(user);
-	let feeds = await ORM.feed.findMany({
-		where: {
-			userId: user.userId,
-		},
-	});
+	let feeds = await Controllers.feed.getAll(user.userId);
 
 	return (
 		<DashboardProvider>

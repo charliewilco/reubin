@@ -7,7 +7,6 @@ export const GET = async () => {
 	const authRequest = Auth.handleRequest({ cookies });
 	const { user } = await authRequest.validateUser();
 
-	console.log(user);
 	let feeds = await ORM.feed.findMany({
 		where: {
 			userId: user.userId,

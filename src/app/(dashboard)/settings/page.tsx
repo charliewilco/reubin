@@ -1,9 +1,13 @@
-import { Controllers } from "$/lib/controllers";
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { CreateTagForm } from "../../../components/create-tag";
-import { TagRemovalList } from "../../../components/tag-lists";
 import { Auth } from "$/lib/auth";
+import { Controllers } from "$/lib/controllers";
+import { CreateTagForm } from "$/components/create-tag";
+import { TagRemovalList } from "$/components/tag-lists";
 
+export const metadata: Metadata = {
+	title: "Recommendations",
+};
 export default async function SettingsPage() {
 	const authRequest = Auth.handleRequest({ cookies: cookies });
 	const { user } = await authRequest.validateUser();

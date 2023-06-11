@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Changelog | Reubin",
+	title: "Changelog",
 };
 
 export default function ChangelogPage() {

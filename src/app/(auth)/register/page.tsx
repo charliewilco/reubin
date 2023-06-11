@@ -7,7 +7,7 @@ import { RegisterForm } from "$/components/register-form";
 import { Card } from "$/components/ui/card";
 
 export const metadata: Metadata = {
-	title: "Sign up | Reubin",
+	title: "Sign up",
 };
 
 export default async function RegistrationPage() {

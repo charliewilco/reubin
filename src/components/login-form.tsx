@@ -35,11 +35,7 @@ export function LoginForm() {
 				password: "",
 			},
 			validationSchema,
-			onSubmit(values) {
-				loginUser(values).then((json) => {
-					console.log(json);
-				});
-			},
+			onSubmit: loginUser,
 		},
 		{
 			validateOnEvent: "blur",
