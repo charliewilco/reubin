@@ -4,7 +4,6 @@ import type { Tag } from "@prisma/client";
 import { RadioGroup } from "@headlessui/react";
 import { CheckCircle, Trash2 } from "lucide-react";
 import { classNames } from "./ui/class-names";
-import type { TagInfoFragment } from "../lib/__generated__";
 import { LoadingIndicator } from "./ui/activity-indicator";
 import { useCallback } from "react";
 
@@ -13,8 +12,8 @@ interface TagListProps {
 }
 
 interface TagSelectionListProps extends TagListProps {
-	selected?: TagInfoFragment | null;
-	onChange(value: TagInfoFragment): void;
+	selected?: Tag | null;
+	onChange(value: Tag): void;
 }
 
 export function TagSelectionList(props: TagSelectionListProps) {
@@ -92,8 +91,8 @@ export function TagSelectionList(props: TagSelectionListProps) {
 }
 
 interface TagListItemProps {
-	tag: TagInfoFragment;
-	onDelete(tag: TagInfoFragment): void;
+	tag: Tag;
+	onDelete(tag: Tag): void;
 }
 
 export function TagListItem({ tag, onDelete }: TagListItemProps) {

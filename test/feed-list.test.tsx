@@ -2,44 +2,10 @@ import { fireEvent, render, screen, waitForElementToBeRemoved } from "@testing-l
 import { SWRConfig } from "swr";
 
 import { FeedList } from "../src/components/feed-list";
-import { DashboardProvider } from "../src/components/dashboard-wrapper";
-import type { GetFeedsQuery } from "../src/lib/__generated__";
 
 import { setupServer } from "msw/node";
-import { graphql } from "msw";
 
-const server = setupServer(
-	graphql.query<GetFeedsQuery>("GetFeeds", (_req, res, ctx) => {
-		return res(
-			ctx.data({
-				feeds: [
-					{
-						__typename: "Feed",
-						id: "1",
-						title: "Test Feed #1",
-						feedURL: "https://example.com",
-						link: "",
-					},
-					{
-						__typename: "Feed",
-						id: "2",
-						title: "Test Feed #2",
-						feedURL: "https://example.com",
-						link: "",
-					},
-					{
-						__typename: "Feed",
-						id: "3",
-						title: "Test Feed #3",
-						feedURL: "https://example.com",
-						link: "",
-					},
-				],
-				tags: [],
-			})
-		);
-	})
-);
+const server = setupServer();
 
 beforeAll(() => server.listen());
 afterEach(() => {
@@ -51,9 +17,7 @@ describe("Feed Settings", () => {
 	test("should render the feed settings form", async () => {
 		render(
 			<SWRConfig value={{ dedupingInterval: 0, provider: () => new Map() }}>
-				<DashboardProvider>
-					<FeedList />
-				</DashboardProvider>
+				<FeedList />
 			</SWRConfig>
 		);
 		expect(screen.getByRole("alert")).toBeInTheDocument();
@@ -67,9 +31,7 @@ describe("Feed Settings", () => {
 	test("Should select a feed", async () => {
 		render(
 			<SWRConfig value={{ dedupingInterval: 0, provider: () => new Map() }}>
-				<DashboardProvider>
-					<FeedList />
-				</DashboardProvider>
+				<FeedList />
 			</SWRConfig>
 		);
 

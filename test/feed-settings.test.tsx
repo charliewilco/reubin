@@ -1,46 +1,21 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { graphql } from "msw";
 import { setupServer } from "msw/node";
 import { UpdateFeedForm } from "../src/components/feed-settings";
-import type {
-	AllTagsQuery,
-	GetFeedByIdQuery,
-	FeedDetailsFragment,
-} from "../src/lib/__generated__";
 
-const mockFeed: FeedDetailsFragment = {
-	__typename: "Feed",
+import { Feed } from "@prisma/client";
+
+const mockFeed: Feed = {
 	id: "2",
 	title: "Test Feed #2",
 	feedURL: "https://example.com",
 	link: "",
-	tag: null,
+	tagId: null,
+	lastFetched: new Date(),
+	userId: "1",
 };
 
-const server = setupServer(
-	graphql.query<GetFeedByIdQuery>("GetFeedById", (_req, res, ctx) => {
-		return res(
-			ctx.data({
-				feed: mockFeed,
-			})
-		);
-	}),
-
-	graphql.query<AllTagsQuery>("AllTags", (_req, res, ctx) => {
-		return res(
-			ctx.data({
-				tags: [
-					{
-						__typename: "Tag",
-						id: "1",
-						title: "Test Tag #1",
-					},
-				],
-			})
-		);
-	})
-);
+const server = setupServer();
 
 beforeAll(() => server.listen());
 afterEach(() => {

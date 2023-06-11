@@ -1,30 +1,27 @@
 "use client";
 
-import useSWR, { mutate } from "swr";
 import { useCallback, useState } from "react";
 import { Settings2, Trash2 } from "lucide-react";
 
 import { Button, SuperButton } from "./ui/button";
-import { Dialog } from "./ui/dialog";
+import { Dialog, DialogTitle } from "./ui/dialog";
 import { Input, Label, TextLabel } from "./ui/input";
-import { removeFeed, updateFeedTitle, getAllTags, getFeed } from "../lib/graphql";
-import type { FeedDetailsFragment, TagInfoFragment } from "../lib/__generated__";
-import { useDashboardContext } from "../hooks/useDashboard";
 import { TagSelectionList } from "./tag-lists";
 import { useEventCallback } from "../hooks/useEventCallback";
+import type { Feed, Tag } from "@prisma/client";
 
 interface FeedSettingsFormProps {
 	onSubmit(title: string, tagID?: string | null): void | Promise<void>;
 	onDelete(): void | Promise<void>;
-	initialFeed: FeedDetailsFragment;
+	initialFeed: Feed;
 }
 
 export function UpdateFeedForm(props: FeedSettingsFormProps) {
 	const [fields, setFields] = useState({
 		title: props.initialFeed.title,
-		tag: props.initialFeed.tag,
+		tag: props.initialFeed.tagId,
 	});
-	const { data } = useSWR("all-tags", getAllTags);
+	const data: any = {};
 
 	const handleSubmit: React.FormEventHandler = useCallback(
 		(event) => {
@@ -48,7 +45,7 @@ export function UpdateFeedForm(props: FeedSettingsFormProps) {
 		[setFields]
 	);
 
-	const handleTagChange = useCallback((tag: TagInfoFragment) => {
+	const handleTagChange = useCallback((tag: Tag) => {
 		setFields((prev) => {
 			if (tag) {
 				return {
@@ -63,9 +60,7 @@ export function UpdateFeedForm(props: FeedSettingsFormProps) {
 		});
 	}, []);
 
-	const selected: TagInfoFragment | null | undefined = data?.tags.find(
-		(t) => t?.id === fields.tag
-	);
+	const selected: Tag | null | undefined = data?.tags.find((t: any) => t?.id === fields.tag);
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
@@ -109,37 +104,17 @@ export function UpdateFeedForm(props: FeedSettingsFormProps) {
 export function FeedSettings() {
 	const [isOpen, setOpen] = useState(false);
 
-	const [{ feed }, { unselectFeed }] = useDashboardContext();
-	const { data } = useSWR([feed], ([feed]) => getFeed(feed));
+	const data: any = {};
 
 	const handleRemove = useCallback(() => {
-		if (feed) {
-			try {
-				removeFeed(feed).then(() => {
-					setOpen(false);
-					unselectFeed();
-					mutate("feeds");
-				});
-			} catch (error) {}
-		}
-	}, [feed, unselectFeed]);
+		try {
+		} catch (error) {}
+	}, []);
 
-	const handleSubmit = useCallback(
-		(title: string, tagID?: string | null) => {
-			if (feed) {
-				try {
-					updateFeedTitle(feed, {
-						title,
-						tagID,
-					}).then(() => {
-						setOpen(false);
-						mutate("feeds");
-					});
-				} catch (error) {}
-			}
-		},
-		[feed]
-	);
+	const handleSubmit = useCallback((_title: string, _tagID?: string | null) => {
+		try {
+		} catch (error) {}
+	}, []);
 
 	const handleClose = useEventCallback(() => {
 		setOpen(false);
@@ -151,10 +126,8 @@ export function FeedSettings() {
 				<Settings2 />
 			</Button>
 			{data && data.feed && (
-				<Dialog
-					isOpen={isOpen}
-					onClose={handleClose}
-					title={`Update feed "${data.feed.title}"`}>
+				<Dialog>
+					<DialogTitle>Update feed {data.feed.title}</DialogTitle>
 					<UpdateFeedForm
 						initialFeed={data.feed}
 						onSubmit={handleSubmit}

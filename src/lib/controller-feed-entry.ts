@@ -1,5 +1,5 @@
-import type { Entry, Feed } from "@prisma/client";
-import { RSSItem } from "./rss";
+import type { Entry } from "@prisma/client";
+import type { RSSItem } from "$/lib/rss";
 import { ORM } from "$/lib/orm";
 import { EntryFilter } from "$/lib/filters";
 
@@ -27,16 +27,42 @@ export class EntryController {
 		};
 	}
 
-	async getFeedFromEntry(id: string): Promise<Feed> {}
+	async markAsRead(id: string): Promise<Entry> {
+		const entry = await ORM.entry.update({
+			where: {
+				id,
+			},
+			data: {
+				unread: false,
+			},
+		});
+		if (entry === null) {
+			throw new Error("Entry not updated");
+		}
 
-	async getByFeed(feedId: string, filter: EntryFilter): Promise<Entry[]> {
+		return entry;
+	}
+
+	async getById(id: string): Promise<Entry> {
+		const entry = await ORM.entry.findUnique({ where: { id } });
+
+		if (!entry) {
+			throw new Error("Entry not found");
+		}
+
+		return entry;
+	}
+
+	// async getFeedFromEntry(id: string): Promise<Feed> {}
+
+	async getByFeed(feedId: string, filter?: EntryFilter): Promise<Entry[]> {
 		let args: any = { feedId: feedId };
 
-		if (filter === EntryFilter.Favorited) {
+		if (filter === "favorited") {
 			args.favorite = true;
 		}
 
-		if (filter === EntryFilter.Unread) {
+		if (filter === "unread") {
 			args.unread = true;
 		}
 

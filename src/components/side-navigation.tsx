@@ -1,8 +1,4 @@
-"use client";
 import Link from "next/link";
-import isEqual from "react-fast-compare";
-import { memo } from "react";
-
 import { Home, Gift, Settings2, Newspaper, Bookmark } from "lucide-react";
 
 interface LinkItemProps {
@@ -25,7 +21,7 @@ export function LinkItem(props: LinkItemProps) {
 
 // unread / bookmarked / all / recommendations / appearance / settings
 
-function _SideNavigation() {
+export function SideNavigation() {
 	return (
 		<nav aria-label="Sidebar" className="flex flex-col items-center space-y-4 px-2">
 			<LinkItem href="/feeds" name="Home">
@@ -47,9 +43,3 @@ function _SideNavigation() {
 		</nav>
 	);
 }
-
-const SideNavigation = memo(_SideNavigation, isEqual);
-
-SideNavigation.displayName = "SideNavigation";
-
-export { SideNavigation };

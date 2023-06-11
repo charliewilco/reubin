@@ -9,12 +9,4 @@ export default {
 	experimental: {
 		serverActions: true,
 	},
-	async rewrites() {
-		return [
-			{
-				source: "/graphql/:path*",
-				destination: `http://localhost:4000/:path*`,
-			},
-		];
-	},
 };

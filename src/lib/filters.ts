@@ -1,5 +1,1 @@
-export enum EntryFilter {
-	All = "ALL",
-	Favorited = "FAVORITED",
-	Unread = "UNREAD",
-}
+export type EntryFilter = "all" | "favorited" | "unread";

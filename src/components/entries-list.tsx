@@ -1,15 +1,10 @@
 "use client";
-import { memo, useCallback } from "react";
-import isEqual from "react-fast-compare";
-import useSWR from "swr";
-import format from "date-fns/format";
-import type { Entry } from "@prisma/client";
 
-import type { EntryFilter } from "../lib/__generated__";
+import format from "date-fns/format";
+
+import type { EntryFilter } from "$/lib/filters";
 import { classNames } from "./ui/class-names";
-import { getEntriesFromFeed } from "../lib/graphql";
 import { FeedToolbar } from "./feed-toolbar";
-import { useDashboardContext } from "../hooks/useDashboard";
 
 interface EntryListProps {
 	filter?: EntryFilter;
@@ -27,14 +22,7 @@ interface EntryListItemProps {
 	published: string;
 }
 
-function sortByNearest({ pubDate: a }: Entry, { pubDate: b }: Entry) {
-	const now = Date.now();
-	return (
-		Math.abs(Date.parse(a.toDateString()) - now) - Math.abs(Date.parse(b.toDateString()) - now)
-	);
-}
-
-function _EntryItem(props: EntryListItemProps) {
+export function _EntryItem(props: EntryListItemProps) {
 	const handleSelect = () => {
 		props.onSelect(props.id);
 	};
@@ -57,49 +45,10 @@ function _EntryItem(props: EntryListItemProps) {
 	);
 }
 
-export const EntryListItem = memo(_EntryItem, isEqual);
-
-EntryListItem.displayName = "EntryListItem";
-
-export function EntryList(props: EntryListProps) {
-	const { data } = useSWR([props.id, props.filter], ([id, filter]) =>
-		getEntriesFromFeed(id, filter)
-	);
-
-
-	const handleRefresh = useCallback(async () => {}, []);
-
+export function EntryList() {
 	return (
 		<div className="absolute left-0 top-0 w-full">
-			<FeedToolbar onRefresh={handleRefresh} />
-
-			<ul>
-				{data?.entries.sort(sortByNearest).map((entry) => {
-					const isUnread = !!entry?.unread;
-
-					return (
-						<EntryListItem
-							isSelected={entry.id === props.selectedEntry}
-							key={entry.id}
-							title={entry.title}
-							id={entry.id}
-							isUnread={isUnread}
-							published={entry.published}
-							onSelect={props.onSelect}
-						/>
-					);
-				})}
-			</ul>
+			<FeedToolbar onRefresh={() => {}} />
 		</div>
 	);
-}
-
-export function ConnectedEntryList(props: Pick<EntryListProps, "filter">) {
-	const [{ feed, entry }, { selectEntry }] = useDashboardContext();
-
-	if (feed) {
-		return <EntryList {...props} id={feed} onSelect={selectEntry} selectedEntry={entry} />;
-	}
-
-	return null;
 }

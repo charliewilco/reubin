@@ -4,28 +4,25 @@ import type { Feed } from "@prisma/client";
 import { memo, useCallback, useMemo } from "react";
 import isEqual from "react-fast-compare";
 import useSWR from "swr";
-import { useDashboardContext } from "../hooks/useDashboard";
-import { mapTagsToFeed } from "../lib/map-tags-feed";
-import type { GetFeedsQuery } from "../lib/__generated__";
+import { TagsToMap, mapTagsToFeed } from "$/lib/map-tags-feed";
 import { LoadingIndicator } from "./ui/activity-indicator";
 import { classNames } from "./ui/class-names";
-import { TagWithFeeds } from "./ui/tag-with-feeds";
+import { TagWithFeeds } from "./tag-with-feeds";
 
 interface FeedItemProps {
 	id: string;
 	title: string;
 	selected: null | string;
-	onSelect(id: string, title: string): void;
 }
 
 export function FeedItem(props: FeedItemProps) {
 	const handleSelect = () => {
 		if (props.id) {
-			props.onSelect(props.id, props.title);
+			// props.onSelect(props.id, props.title);
 		}
 	};
 
-	const isSelected = useMemo(() => props.id === props.selected, [props]);
+	let isSelected = props.id === props.selected;
 
 	const listProps = isSelected ? { "data-testid": "selected" } : {};
 	return (
@@ -42,11 +39,9 @@ export function FeedItem(props: FeedItemProps) {
 	);
 }
 
-interface FeedsSortedByTagProps extends GetFeedsQuery {}
+interface FeedsSortedByTagProps extends TagsToMap {}
 
 function SortedByTags(props: FeedsSortedByTagProps) {
-	const [{ feed: selectedFeed }, { selectFeed }] = useDashboardContext();
-
 	const sorted = useMemo(() => mapTagsToFeed(props), [props]);
 
 	const getTitle = useCallback(
@@ -65,13 +60,7 @@ function SortedByTags(props: FeedsSortedByTagProps) {
 						<ul role="list" key="null-tag">
 							{feeds.map((feed) =>
 								feed === null ? null : (
-									<FeedItem
-										key={feed?.id}
-										id={feed?.id}
-										title={feed?.title}
-										onSelect={selectFeed}
-										selected={selectedFeed}
-									/>
+									<FeedItem key={feed?.id} id={feed?.id} title={feed?.title} selected={null} />
 								)
 							)}
 						</ul>
@@ -87,8 +76,7 @@ function SortedByTags(props: FeedsSortedByTagProps) {
 												key={feed?.id}
 												id={feed?.id}
 												title={feed?.title}
-												onSelect={selectFeed}
-												selected={selectedFeed}
+												selected={null}
 											/>
 										)
 									)}
@@ -156,7 +144,6 @@ export function FeedList(props: FeedListProps) {
 									key={feed?.id}
 									id={feed?.id}
 									title={feed?.title}
-									onSelect={selectFeed}
 									selected={selectedFeed}
 								/>
 							)

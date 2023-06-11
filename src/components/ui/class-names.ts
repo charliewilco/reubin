@@ -17,3 +17,5 @@ export function classNames(...arguments_: any[]) {
 
 	return [...result].join(" ");
 }
+
+export const cn = classNames;

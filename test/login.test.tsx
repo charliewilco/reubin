@@ -1,29 +1,11 @@
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { graphql } from "msw";
 import { setupServer } from "msw/node";
 import { LoginForm } from "../src/components/login-form";
-import { LoginMutation } from "../src/lib/__generated__";
 
 const loginHandler = jest.fn();
 
-const server = setupServer(
-	graphql.mutation<LoginMutation>("Login", (_req, res, ctx) => {
-		loginHandler(_req.variables);
-
-		return res(
-			ctx.data({
-				login: {
-					token: "valid-token",
-					user: {
-						id: "1",
-						email: _req.variables.email,
-					},
-				},
-			})
-		);
-	})
-);
+const server = setupServer();
 
 beforeAll(() => server.listen());
 afterEach(() => {

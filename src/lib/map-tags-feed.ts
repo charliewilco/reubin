@@ -1,6 +1,7 @@
+import { createWeakUID } from "@charliewilco/toolkit";
 import type { Feed, Tag } from "@prisma/client";
 
-interface TagsToMap {
+export interface TagsToMap {
 	tags: Tag[];
 	feeds: Feed[];
 }
@@ -44,10 +45,12 @@ export function mapTagsToFeed(query: TagsToMap) {
 }
 
 export function createFakeFeeds(count: number, tagCount: number): TagsToMap {
+	let userId = createWeakUID();
 	const int = Math.floor(Math.random() * 100);
 	const tags: Tag[] = Array.from({ length: tagCount }, (_, i) => ({
 		id: `${i}`,
 		title: `Tag #${i}`,
+		userId,
 	}));
 
 	const feeds: Feed[] = Array.from({ length: count }, (_, i) => {
@@ -57,13 +60,17 @@ export function createFakeFeeds(count: number, tagCount: number): TagsToMap {
 			tag = tags[Math.floor(Math.random() * tags.length)].id;
 		}
 
-		return {
+		let mockFeed: Feed = {
 			id: `${i}`,
 			title: `Test Feed #${i}`,
 			feedURL: "https://example.com",
 			link: "",
-			tag,
+			tagId: tag,
+			lastFetched: new Date(),
+			userId,
 		};
+
+		return mockFeed;
 	});
 	return {
 		feeds,

@@ -48,7 +48,7 @@ export function CreateTagForm() {
 		isSubmitting: false,
 	});
 
-	const addTag = useCallback(async (name: string) => {}, []);
+	const addTag = useCallback(async (_name: string) => {}, []);
 
 	const handleSubmit: React.FormEventHandler = useCallback(
 		async (event) => {

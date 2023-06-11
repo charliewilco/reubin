@@ -1,29 +1,11 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { graphql } from "msw";
 import { setupServer } from "msw/node";
 import { RegisterForm } from "$/components/register-form";
-import { RegisterMutation } from "$/lib/__generated__";
 
 const registerUserHandler = jest.fn();
 
-const server = setupServer(
-	graphql.mutation<RegisterMutation>("Register", (_req, res, ctx) => {
-		registerUserHandler(_req.variables);
-
-		return res(
-			ctx.data({
-				createUser: {
-					token: "valid-token",
-					user: {
-						id: "1",
-						email: _req.variables.email,
-					},
-				},
-			})
-		);
-	})
-);
+const server = setupServer();
 
 beforeAll(() => server.listen());
 afterEach(() => {
