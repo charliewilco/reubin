@@ -1,4 +1,4 @@
-import { PurifySourceSet } from "../src/lib/purify-parsers";
+import { PurifySourceSet } from "../lib/purify-parsers";
 import { decode, encode } from "he";
 
 type TestCase = {

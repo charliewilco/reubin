@@ -1,4 +1,4 @@
-import { classNames } from "../src/components/ui/class-names";
+import { classNames } from "../components/ui/class-names";
 
 describe("Classnames", () => {
 	test("can concat class names", () => {

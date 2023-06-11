@@ -1,8 +1,5 @@
-import { PurifyHTML } from "../src/lib/purify-html";
-import {
-	ScriptAndStyleTagRemoverPlugin,
-	XSSSanitizerPlugin,
-} from "../src/lib/purify-middleware";
+import { PurifyHTML } from "../lib/purify-html";
+import { ScriptAndStyleTagRemoverPlugin, XSSSanitizerPlugin } from "../lib/purify-middleware";
 
 describe.skip("XSSSanitizerPlugin", () => {
 	describe("onText", () => {

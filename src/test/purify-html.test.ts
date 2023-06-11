@@ -1,5 +1,5 @@
-import { PurifyHTML } from "../src/lib/purify-html";
-import { DEFAULT_MIDDLEWARE } from "../src/lib/purify-middleware";
+import { PurifyHTML } from "../lib/purify-html";
+import { DEFAULT_MIDDLEWARE } from "../lib/purify-middleware";
 
 const purifier = PurifyHTML.create(DEFAULT_MIDDLEWARE, "https://test/workbench/");
 

@@ -1,4 +1,4 @@
-import { mapTagsToFeed, createFakeFeeds, getFeedCount } from "../src/lib/map-tags-feed";
+import { mapTagsToFeed, createFakeFeeds, getFeedCount } from "../lib/map-tags-feed";
 
 describe("Map Feeds", () => {
 	test("basic return the same number of feeds as input", () => {

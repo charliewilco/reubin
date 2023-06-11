@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { setupServer } from "msw/node";
-import { UpdateFeedForm } from "../src/components/feed-settings";
+import { UpdateFeedForm } from "../components/feed-settings";
 
 import { Feed } from "@prisma/client";
 

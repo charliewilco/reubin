@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "@testing-library/react";
 import { SWRConfig } from "swr";
 
-import { FeedList } from "../src/components/feed-list";
+import { FeedList } from "../components/feed-list";
 
 import { setupServer } from "msw/node";
 

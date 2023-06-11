@@ -1,7 +1,7 @@
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { setupServer } from "msw/node";
-import { LoginForm } from "../src/components/login-form";
+import { LoginForm } from "../components/login-form";
 
 const loginHandler = jest.fn();
 
