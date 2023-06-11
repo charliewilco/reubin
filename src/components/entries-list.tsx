@@ -3,6 +3,7 @@ import { memo, useCallback } from "react";
 import isEqual from "react-fast-compare";
 import useSWR from "swr";
 import format from "date-fns/format";
+import type { Entry } from "@prisma/client";
 
 import type { EntryDetailsFragment, EntryFilter } from "../lib/__generated__";
 import { classNames } from "./ui/class-names";
@@ -26,12 +27,11 @@ interface EntryListItemProps {
 	published: string;
 }
 
-function sortByNearest(
-	{ published: a }: EntryDetailsFragment,
-	{ published: b }: EntryDetailsFragment
-) {
+function sortByNearest({ pubDate: a }: Entry, { pubDate: b }: Entry) {
 	const now = Date.now();
-	return Math.abs(Date.parse(a) - now) - Math.abs(Date.parse(b) - now);
+	return (
+		Math.abs(Date.parse(a.toDateString()) - now) - Math.abs(Date.parse(b.toDateString()) - now)
+	);
 }
 
 function _EntryItem(props: EntryListItemProps) {

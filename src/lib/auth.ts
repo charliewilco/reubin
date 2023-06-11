@@ -5,7 +5,7 @@ import { ORM } from "./orm";
 
 export const Auth = lucia({
 	adapter: prisma(ORM),
-	env: "DEV", // "PROD" if prod
+	env: process.env.NODE_ENV === "development" ? "DEV" : "PROD",
 	middleware: nextjs(),
 	transformDatabaseUser: (userData) => {
 		return {

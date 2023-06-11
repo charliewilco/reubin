@@ -1,16 +1,14 @@
+import { Controllers } from "$/lib/controllers";
 import { cookies } from "next/headers";
-
 import { CreateTagForm } from "../../../components/create-tag";
 import { TagRemovalList } from "../../../components/tag-lists";
-import { getAllTags, me } from "../../../lib/graphql";
-import { authorizeRequest } from "../../../lib/authorized-request";
+import { Auth } from "$/lib/auth";
 
 export default async function SettingsPage() {
-	const _ = await authorizeRequest(getAllTags());
+	const authRequest = Auth.handleRequest({ cookies: cookies });
+	const { user } = await authRequest.validateUser();
 
-	const __ = await me();
-
-	console.log(__);
+	const _ = await Controllers.tags.getAll(user.userId);
 
 	return (
 		<section className="w-full flex-1 p-4">

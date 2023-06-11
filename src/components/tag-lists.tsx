@@ -1,14 +1,15 @@
 "use client";
 
+import type { Tag } from "@prisma/client";
 import { RadioGroup } from "@headlessui/react";
 import { CheckCircle, Trash2 } from "lucide-react";
 import { classNames } from "./ui/class-names";
-import type { AllTagsQuery, TagInfoFragment } from "../lib/__generated__";
-import { useTags } from "../hooks/useTags";
+import type { TagInfoFragment } from "../lib/__generated__";
 import { LoadingIndicator } from "./ui/activity-indicator";
+import { useCallback } from "react";
 
 interface TagListProps {
-	initialData?: AllTagsQuery;
+	initialData?: Tag[];
 }
 
 interface TagSelectionListProps extends TagListProps {
@@ -17,11 +18,9 @@ interface TagSelectionListProps extends TagListProps {
 }
 
 export function TagSelectionList(props: TagSelectionListProps) {
-	const { data, error } = useTags(props.initialData);
-
 	let content;
 
-	const isLoading = !error && !data;
+	const isLoading = !props.initialData;
 
 	if (isLoading) {
 		content = (
@@ -31,8 +30,8 @@ export function TagSelectionList(props: TagSelectionListProps) {
 		);
 	}
 
-	if (data) {
-		content = data.tags
+	if (props.initialData) {
+		content = props.initialData
 			.filter((t) => t !== null)
 			.map((tag) => (
 				<RadioGroup.Option
@@ -113,11 +112,11 @@ export function TagListItem({ tag, onDelete }: TagListItemProps) {
 }
 
 export function TagRemovalList(props: TagListProps) {
-	const { data, error, removeTag } = useTags(props.initialData);
-
 	let content;
 
-	const isLoading = !error && !data;
+	const isLoading = !props.initialData;
+
+	let removeTag = useCallback(() => {}, []);
 
 	if (isLoading) {
 		content = (
@@ -127,13 +126,13 @@ export function TagRemovalList(props: TagListProps) {
 		);
 	}
 
-	if (data) {
-		if (data.tags.length === 0) {
+	if (props.initialData) {
+		if (props.initialData.length === 0) {
 			content = <p className="text-center">No Tags</p>;
 		} else {
 			content = (
 				<ul>
-					{data.tags
+					{props.initialData
 						.filter((t) => t !== null)
 						.map((tag) => {
 							return <TagListItem key={tag?.id} tag={tag!} onDelete={removeTag} />;

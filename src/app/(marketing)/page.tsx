@@ -1,7 +1,7 @@
-import { FeatureList } from "../../components/promo/features";
-import { Services } from "../../components/promo/services";
-import { Hero } from "../../components/promo/hero";
-import { CTA } from "../../components/promo/call-to-action";
+import { FeatureList } from "$/components/promo/features";
+import { Services } from "$/components/promo/services";
+import { Hero } from "$/components/promo/hero";
+import { CTA } from "$/components/promo/call-to-action";
 
 function IndexPage() {
 	return (

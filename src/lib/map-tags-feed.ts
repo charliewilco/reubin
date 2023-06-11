@@ -1,11 +1,16 @@
-import type { FeedDetailsFragment, TagInfoFragment, GetFeedsQuery } from "./__generated__";
+import type { Feed, Tag } from "@prisma/client";
 
-export function mapTagsToFeed(query: GetFeedsQuery) {
-	const m = new Map<string | null, FeedDetailsFragment[]>();
+interface TagsToMap {
+	tags: Tag[];
+	feeds: Feed[];
+}
+
+export function mapTagsToFeed(query: TagsToMap) {
+	const m = new Map<string | null, Feed[]>();
 	const remainingTags = Array.from(query.tags);
 	for (const feed of query.feeds) {
 		if (feed !== null) {
-			const tag = feed.tag ?? null;
+			const tag = feed.tagId ?? null;
 
 			const feeds = m.has(tag) ? m.get(tag)! : [];
 
@@ -21,8 +26,8 @@ export function mapTagsToFeed(query: GetFeedsQuery) {
 		}
 	}
 
-	const _: [string | null, FeedDetailsFragment[]][] = [];
-	const untaggedFeeds: [null, FeedDetailsFragment[]] = [null, []];
+	const _: [string | null, Feed[]][] = [];
+	const untaggedFeeds: [null, Feed[]] = [null, []];
 	for (const [key, value] of m) {
 		if (key === null) {
 			untaggedFeeds[1] = value;
@@ -31,25 +36,21 @@ export function mapTagsToFeed(query: GetFeedsQuery) {
 		}
 	}
 
-	const emptyTags: [string | null, FeedDetailsFragment[]][] = remainingTags.map((t) => [
-		t?.id!,
-		[],
-	]);
+	const emptyTags: [string | null, Feed[]][] = remainingTags.map((t) => [t?.id!, []]);
 
 	_.push(...emptyTags, untaggedFeeds);
 
 	return _;
 }
 
-export function createFakeFeeds(count: number, tagCount: number): GetFeedsQuery {
+export function createFakeFeeds(count: number, tagCount: number): TagsToMap {
 	const int = Math.floor(Math.random() * 100);
-	const tags: TagInfoFragment[] = Array.from({ length: tagCount }, (_, i) => ({
-		__typename: "Tag",
+	const tags: Tag[] = Array.from({ length: tagCount }, (_, i) => ({
 		id: `${i}`,
 		title: `Tag #${i}`,
 	}));
 
-	const feeds: FeedDetailsFragment[] = Array.from({ length: count }, (_, i) => {
+	const feeds: Feed[] = Array.from({ length: count }, (_, i) => {
 		let tag: string | null = null;
 
 		if (int % i !== 0) {
@@ -57,7 +58,6 @@ export function createFakeFeeds(count: number, tagCount: number): GetFeedsQuery 
 		}
 
 		return {
-			__typename: "Feed",
 			id: `${i}`,
 			title: `Test Feed #${i}`,
 			feedURL: "https://example.com",

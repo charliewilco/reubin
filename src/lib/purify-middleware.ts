@@ -105,7 +105,7 @@ export class ScriptAndStyleTagRemoverPlugin implements PurifyMiddleware {
 	]);
 	allowedAttributes: Set<string> = new Set(["style", "href", "alt", "src", "class", "id"]);
 
-	onTag(tag: string, attrs: { [key: string]: string }): string {
+	onTag(tag: string, _attrs: { [key: string]: string }): string {
 		if (tag === "script" || tag === "style") {
 			return ""; // remove the tag
 		} else if (!this.allowedTags.has(tag)) {
@@ -155,7 +155,7 @@ export class XSSSanitizerPlugin implements PurifyMiddleware {
 		value = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
 
 		// Replace any XSS attack strings with spaces
-		value = value.replace(/&(#[0-9]+|[a-z]+);?/gi, (match, capture) => {
+		value = value.replace(/&(#[0-9]+|[a-z]+);?/gi, (match, _capture) => {
 			const entity = match.toLowerCase();
 			if (entity.startsWith("on")) {
 				return " ";

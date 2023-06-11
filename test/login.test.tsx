@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { graphql } from "msw";
 import { setupServer } from "msw/node";
 import { LoginForm } from "../src/components/login-form";
-import { AuthToken } from "../src/lib/auth-token";
 import { LoginMutation } from "../src/lib/__generated__";
 
 const loginHandler = jest.fn();
@@ -90,7 +89,5 @@ describe("Login", () => {
 			password: "UEBzc3cwcmQ=",
 		});
 		expect(routerPush).toHaveBeenCalledWith("/feeds");
-
-		expect(AuthToken.new.get()).toBe("valid-token");
 	});
 });

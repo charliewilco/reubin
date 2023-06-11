@@ -1,20 +1,24 @@
 import { cookies } from "next/headers";
-import request from "graphql-request";
+import { redirect } from "next/navigation";
 
-import { DashboardProvider } from "../../../components/dashboard-wrapper";
-import { ConnectedEntryList } from "../../../components/entries-list";
-import { ConnectedEntryFull } from "../../../components/entry-full";
-import { FeedList } from "../../../components/feed-list";
-import { TOKEN_NAME } from "../../../lib/auth-token";
-import { GetFeedsDocument, type GetFeedsQuery } from "../../../lib/__generated__";
-import { getGraphQLEndpoint } from "../../../lib/url";
+import { DashboardProvider } from "$/components/dashboard-wrapper";
+import { ConnectedEntryList } from "$/components/entries-list";
+import { ConnectedEntryFull } from "$/components/entry-full";
+import { FeedList } from "$/components/feed-list";
 
-export const runtime = "experimental-edge";
+import { ORM } from "$/lib/orm";
+import { Auth } from "$/lib/auth";
 
 export default async function DashboardPage() {
-	const nextCookies = cookies();
-	let _ = await request<GetFeedsQuery>(getGraphQLEndpoint(), GetFeedsDocument, undefined, {
-		Authorization: nextCookies.get(TOKEN_NAME)?.value ?? "",
+	const authRequest = Auth.handleRequest({ cookies });
+	const { user } = await authRequest.validateUser();
+	if (!user) redirect("/login");
+
+	console.log(user);
+	let feeds = await ORM.feed.findMany({
+		where: {
+			userId: user.userId,
+		},
 	});
 
 	return (
@@ -22,7 +26,7 @@ export default async function DashboardPage() {
 			<div className="grid h-full w-full flex-1 grid-cols-12">
 				<aside className="col-span-2 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">
 					<div className="relative h-full dark:bg-zinc-900">
-						<FeedList initialData={_} />
+						<FeedList initialData={feeds} />
 					</div>
 				</aside>
 				<aside className="col-span-3 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">

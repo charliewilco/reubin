@@ -1,11 +1,37 @@
-import { NEWS, TECH, RecommendationList } from "../../../components/recommendation-list";
+import { RecommendationMap } from "$/lib/recommendations";
+import { cookies } from "next/headers";
+import { RecommendationList } from "$/components/recommendation-list";
+import { Auth } from "$/lib/auth";
+import { ORM } from "$/lib/orm";
 
-function RecommendationsPage() {
+async function RecommendationsPage() {
+	let lists = Array.from(RecommendationMap);
+
+	const authRequest = Auth.handleRequest({ cookies });
+	const { user } = await authRequest.validateUser();
+
+	let subscribed =
+		(await ORM?.feed.findMany({
+			where: {
+				userId: user.userId,
+			},
+		})) ?? [];
+
+	console.log(subscribed);
 	return (
 		<div className="mx-auto max-w-7xl space-y-16">
-			<div className="space-y-8 px-2 pb-8">
-				<RecommendationList title="News" feeds={NEWS} />
-				<RecommendationList title="Tech" feeds={TECH} />
+			<div className="space-y-8 px-2 pb-8 pt-8">
+				{lists.map(([title, recommendations], idx) => {
+					let key = title.concat("-", idx.toString());
+					return (
+						<RecommendationList
+							subscribed={subscribed}
+							title={title}
+							feeds={recommendations}
+							key={key}
+						/>
+					);
+				})}
 			</div>
 		</div>
 	);

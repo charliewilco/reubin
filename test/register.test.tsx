@@ -2,9 +2,8 @@ import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { graphql } from "msw";
 import { setupServer } from "msw/node";
-import { RegisterForm } from "../src/components/register-form";
-import { AuthToken } from "../src/lib/auth-token";
-import { RegisterMutation } from "../src/lib/__generated__";
+import { RegisterForm } from "$/components/register-form";
+import { RegisterMutation } from "$/lib/__generated__";
 
 const registerUserHandler = jest.fn();
 
@@ -90,7 +89,5 @@ describe("Login", () => {
 			password: "UEBzc3cwcmQ=",
 		});
 		expect(routerPush).toHaveBeenCalledWith("/feeds");
-
-		expect(AuthToken.new.get()).toBe("valid-token");
 	});
 });

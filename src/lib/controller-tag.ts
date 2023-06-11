@@ -10,17 +10,11 @@ export class TagController {
 	}
 
 	async getAll(userId: string) {
-		const tags = await ORM.tag.findMany({
+		return ORM.tag.findMany({
 			where: {
 				userId,
 			},
 		});
-		const converted = [];
-		for (let index = 0; index < tags.length; index++) {
-			converted.push(TagController.fromORM(tags[index]));
-		}
-
-		return converted;
 	}
 
 	async add(name: string, userId: string) {

@@ -2,5 +2,8 @@
 /// <reference types="lucia-auth" />
 declare namespace Lucia {
 	type Auth = import("./auth").AuthAdapter;
-	type UserAttributes = {};
+	type UserAttributes = {
+		username: string;
+		email: string;
+	};
 }

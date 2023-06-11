@@ -55,7 +55,7 @@ export class unstable_RSSKit {
 		}
 	}
 
-	containsEnclousure(item: RSSItem) {}
+	containsEnclousure(_item: RSSItem) {}
 
 	async parse(data: string) {
 		return new Promise<RSSFeed>((resolve, reject) => {

@@ -20,11 +20,10 @@ model AuthSession {
 
 model AuthUser {
   id              String   @id @unique @default(cuid())
-  name            String   @unique
   verified        Boolean  @default(false)
+  username        String   @unique
   email           String   @unique
-  /// hashed obvs lol
-  password        String
+  isVerified      Boolean  @default(false) @map("is_verified")
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
   feeds           Feed[]

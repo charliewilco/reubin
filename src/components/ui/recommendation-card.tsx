@@ -1,44 +1,41 @@
-import { useCallback, useMemo } from "react";
+import { Controllers } from "$/lib/controllers";
+import { Auth } from "$/lib/auth";
+import type { Feed } from "@prisma/client";
+import { cookies } from "next/headers";
 import { Rss, CheckCircle } from "lucide-react";
-import type { GetFeedsQuery } from "../../lib/__generated__";
-import { LoadingIndicator } from "./activity-indicator";
+import { revalidatePath } from "next/cache";
 
 interface RecommendationCardProps {
 	displayName: string;
 	link: string;
 	type?: "feed" | "twitter";
-	feeds?: GetFeedsQuery;
-	error?: any;
-	onSubscribe(link: string): void;
+	feeds?: Feed[];
 }
 
 export function RecommendationCard(props: RecommendationCardProps) {
-	const handleClick = useCallback(() => {
-		return props.onSubscribe(props.link);
-	}, [props]);
+	let feeds = props.feeds ?? [];
 
-	const isLoading = !props.error && !props.feeds;
+	const hasFeed = feeds.findIndex((f) => f?.feedURL === props.link) > -1;
 
-	const hasFeed = useMemo(() => {
-		if (props.feeds) {
-			return props.feeds.feeds.findIndex((f) => f?.feedURL === props.link) > -1;
-		}
+	async function _addFeed() {
+		"use server";
 
-		return false;
-	}, [props.feeds, props.link]);
+		const authRequest = Auth.handleRequest({ cookies });
+		const { user } = await authRequest.validateUser();
+		await Controllers.feed.add(props.link, user.userId);
+		revalidatePath("/recommendations");
+	}
 
 	let content = (
-		<button
-			onClick={handleClick}
-			className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium hover:text-gray-500">
-			<Rss className="h-5 w-5 text-zinc-400" aria-hidden="true" />
-			<span className="ml-3">Subscribe</span>
-		</button>
+		<form action={_addFeed} className="block w-full text-center">
+			<button
+				type="submit"
+				className="flex w-full items-center justify-center rounded-bl-lg border border-transparent  py-4 text-sm font-medium hover:text-gray-500">
+				<Rss className="h-5 w-5 text-zinc-400" aria-hidden="true" />
+				<span className="ml-3">Subscribe</span>
+			</button>
+		</form>
 	);
-
-	if (isLoading) {
-		content = <LoadingIndicator />;
-	}
 
 	if (hasFeed) {
 		content = (

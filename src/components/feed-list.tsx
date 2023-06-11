@@ -1,10 +1,10 @@
 "use client";
 
+import type { Feed } from "@prisma/client";
 import { memo, useCallback, useMemo } from "react";
 import isEqual from "react-fast-compare";
 import useSWR from "swr";
 import { useDashboardContext } from "../hooks/useDashboard";
-import { getFeeds } from "../lib/graphql";
 import { mapTagsToFeed } from "../lib/map-tags-feed";
 import type { GetFeedsQuery } from "../lib/__generated__";
 import { LoadingIndicator } from "./ui/activity-indicator";
@@ -107,7 +107,15 @@ const FeedListSortedByTag = memo(SortedByTags, isEqual);
 FeedListSortedByTag.displayName = "MemoFeedsSortedByTag";
 
 interface FeedListProps {
-	initialData?: GetFeedsQuery;
+	initialData?: Feed[];
+}
+
+async function getFeeds() {
+	const response = await fetch("/api/feeds");
+
+	const { data } = await response.json();
+
+	return data.feeds as Feed[];
 }
 
 export function FeedList(props: FeedListProps) {
@@ -126,7 +134,7 @@ export function FeedList(props: FeedListProps) {
 	}
 
 	if (data) {
-		if (data.feeds.length === 0) {
+		if (data.length === 0) {
 			return (
 				<div className=" p-4 text-center">
 					<p>Looks like you have no feeds.</p>
@@ -134,9 +142,27 @@ export function FeedList(props: FeedListProps) {
 			);
 		}
 
+		const selectedFeed = null;
+
+		let selectFeed = () => {};
+
 		return (
-			<div className="absolute top-0 bottom-0 left-0 right-0 w-full">
-				<FeedListSortedByTag {...data} />
+			<div className="absolute bottom-0 left-0 right-0 top-0 w-full">
+				<div>
+					<ul role="list">
+						{data.map((feed) =>
+							feed === null ? null : (
+								<FeedItem
+									key={feed?.id}
+									id={feed?.id}
+									title={feed?.title}
+									onSelect={selectFeed}
+									selected={selectedFeed}
+								/>
+							)
+						)}
+					</ul>
+				</div>
 			</div>
 		);
 	}

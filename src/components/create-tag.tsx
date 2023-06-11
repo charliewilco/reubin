@@ -1,6 +1,5 @@
 "use client";
 import { useCallback, useReducer } from "react";
-import { useTags } from "../hooks/useTags";
 import { SuperButton } from "./ui/button";
 import { Label, Input, TextLabel } from "./ui/input";
 
@@ -49,7 +48,7 @@ export function CreateTagForm() {
 		isSubmitting: false,
 	});
 
-	const { addTag } = useTags();
+	const addTag = useCallback(async (name: string) => {}, []);
 
 	const handleSubmit: React.FormEventHandler = useCallback(
 		async (event) => {

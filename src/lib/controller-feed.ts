@@ -1,6 +1,6 @@
 import type { Feed } from "@prisma/client";
 import axios from "axios";
-import { EntryController } from "./feed-entry-controller";
+import { EntryController } from "./controller-feed-entry";
 import { ORM } from "./orm";
 import { RSSKit } from "./rss";
 
