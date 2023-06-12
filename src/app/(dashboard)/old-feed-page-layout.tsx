@@ -1,20 +1,4 @@
-import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { Auth } from "$/lib/auth";
-import { Controllers } from "$/lib/controllers";
-
-export const metadata: Metadata = {
-	title: "Feeds",
-};
-
-export default async function DashboardPage() {
-	const authRequest = Auth.handleRequest({ cookies });
-	const { user } = await authRequest.validateUser();
-	if (!user) redirect("/login");
-
-	let feeds = await Controllers.feed.getAll(user.userId);
-
+export function DashboardPage() {
 	return (
 		<div className="grid h-full w-full flex-1 grid-cols-12">
 			<aside className="col-span-2 overflow-y-scroll border-r border-zinc-200 dark:border-zinc-700">

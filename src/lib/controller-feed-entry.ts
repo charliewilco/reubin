@@ -58,7 +58,7 @@ export class EntryController {
 	async getByFeed(feedId: string, filter?: EntryFilter): Promise<Entry[]> {
 		let args: any = { feedId: feedId };
 
-		if (filter === "favorited") {
+		if (filter === "favorite") {
 			args.favorite = true;
 		}
 

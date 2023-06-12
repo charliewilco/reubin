@@ -24,13 +24,13 @@ export function LinkItem(props: LinkItemProps) {
 export function SideNavigation() {
 	return (
 		<nav aria-label="Sidebar" className="flex flex-col items-center space-y-4 px-2">
-			<LinkItem href="/feeds" name="Home">
+			<LinkItem href="/unread" name="Home">
 				<Home className="h-6 w-6" aria-hidden="true" />
 			</LinkItem>
-			<LinkItem href="/feeds" name="All">
+			<LinkItem href="/all" name="All">
 				<Newspaper className="h-6 w-6" aria-hidden="true" />
 			</LinkItem>
-			<LinkItem href="/bookmarks" name="Bookmarks">
+			<LinkItem href="/favorites" name="Bookmarks">
 				<Bookmark className="h-6 w-6" aria-hidden="true" />
 			</LinkItem>
 			<LinkItem href="/recommendations" name="Recommendations">

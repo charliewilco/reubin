@@ -1,5 +1,3 @@
-import { cookies } from "next/headers";
-import { Auth } from "$/lib/auth";
 import { Controllers } from "$/lib/controllers";
 import type { EntryFilter } from "$/lib/filters";
 import Link from "next/link";
