@@ -36,6 +36,7 @@ export class EntryController {
 				unread: false,
 			},
 		});
+		console.log(entry);
 		if (entry === null) {
 			throw new Error("Entry not updated");
 		}

@@ -1,5 +1,5 @@
 import type { Tag } from "@prisma/client";
-import { ORM } from "./orm";
+import { ORM } from "$/lib/orm";
 
 export class TagController {
 	static fromORM(tag: Tag) {

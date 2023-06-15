@@ -1,4 +1,4 @@
-import { EntriesList } from "$/components/entries-list-rsc";
+import { EntriesList } from "$/components/entries-list";
 import { EntryFilter } from "$/lib/filters";
 
 interface FeedLayoutProps {

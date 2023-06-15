@@ -16,6 +16,7 @@
 	},
 	"dependencies": {
 		"@charliewilco/toolkit": "^0.5.0",
+		"@defer/client": "^1.4.0",
 		"@headlessui/react": "^1.7.13",
 		"@lucia-auth/adapter-prisma": "2.0.0",
 		"@orama/orama": "^1.0.6",
@@ -40,7 +41,7 @@
 		"htmlparser2": "^8.0.1",
 		"lodash": "4.17.21",
 		"lucia-auth": "^1.8.0",
-		"lucide-react": "^0.241.0",
+		"lucide-react": "^0.244.0",
 		"next": "^13.4.5",
 		"postcss": "^8.4.21",
 		"react": "^18.2.0",

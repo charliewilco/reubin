@@ -12,5 +12,9 @@ export async function generateMetadata({ params }: { params: PageParams }) {
 }
 
 export default async function FilterPage() {
-	return <h1>TopLevelFilterPage</h1>;
+	return (
+		<div className="col-span-3 flex h-full items-center justify-center ">
+			<pre className="opacity-50">Select a Feed</pre>
+		</div>
+	);
 }

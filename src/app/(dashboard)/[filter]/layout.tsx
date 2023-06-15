@@ -1,4 +1,4 @@
-import { FeedList } from "$/components/feed-list-rsc";
+import { FeedList } from "$/components/feed-list";
 import type { EntryFilter } from "$/lib/filters";
 
 interface FilterLayoutProps {

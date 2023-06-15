@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import "../components/styles.css";
+import "./styles.css";
 
 export const metadata: Metadata = {
 	title: {
 		default: "Reubin | An RSS Client for the Next Generation",
-		template: "%s | Reubin"
+		template: "%s | Reubin",
 	},
 	icons: [
 		{
@@ -15,11 +15,15 @@ export const metadata: Metadata = {
 	],
 };
 
-export default function RootLayout({ children }: React.PropsWithChildren<{}>) {
+interface LayoutProps {
+	children: React.ReactNode;
+}
+
+export default function RootLayout({ children }: LayoutProps) {
 	return (
 		<html className="dark:bg-zinc-900 dark:text-white">
 			<head />
-			<body>{children}</body>
+			<body className="">{children}</body>
 		</html>
 	);
 }

@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import type { Metadata } from "next";
 
+
 export const metadata: Metadata = {
 	title: "Privacy Policy",
 };
@@ -8,8 +9,7 @@ export const metadata: Metadata = {
 function Privacy() {
 	return (
 		<div className="px-4">
-			<h1>Privacy Policy</h1>
-			<div className="prose dark:prose-invert mx-auto">
+			<article className="prose mx-auto dark:prose-invert">
 				<h1>Privacy Policy of Reubin</h1>
 
 				<p>
@@ -143,7 +143,7 @@ function Privacy() {
 					If you have any questions or suggestions about our Privacy Policy, do not hesitate to
 					contact us.
 				</p>
-			</div>
+			</article>
 		</div>
 	);
 }

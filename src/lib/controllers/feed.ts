@@ -1,8 +1,8 @@
 import type { Feed } from "@prisma/client";
 import axios from "axios";
-import { EntryController } from "./controller-feed-entry";
-import { ORM } from "./orm";
-import { RSSKit } from "./rss";
+import { ORM } from "$/lib/orm";
+import { RSSKit } from "$/lib/rss";
+import { EntryController } from "./entry";
 
 export class FeedController {
 	static async getFeedFromDirectURL(url: string) {

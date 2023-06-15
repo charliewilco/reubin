@@ -6,7 +6,7 @@ import { ORM } from "$/lib/orm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Recommendations",
+	title: "Feed Recommendations",
 };
 
 async function RecommendationsPage() {
@@ -15,14 +15,14 @@ async function RecommendationsPage() {
 	const authRequest = Auth.handleRequest({ cookies });
 	const { user } = await authRequest.validateUser();
 
-	let subscribed =
-		(await ORM?.feed.findMany({
-			where: {
-				userId: user.userId,
-			},
-		})) ?? [];
+	let subscribed = await ORM?.feed.findMany({
+		where: {
+			userId: user.userId,
+		},
+	});
 
-	console.log(subscribed);
+	subscribed = subscribed ?? [] 
+
 	return (
 		<div className="mx-auto max-w-7xl space-y-16">
 			<div className="space-y-8 px-2 pb-8 pt-8">
