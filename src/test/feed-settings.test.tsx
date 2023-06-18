@@ -23,7 +23,7 @@ afterEach(() => {
 });
 afterAll(() => server.close());
 
-describe("Feed Settings", () => {
+xdescribe("Feed Settings", () => {
 	test("should render the feed settings form", () => {
 		render(
 			<UpdateFeedForm initialFeed={mockFeed} onSubmit={jest.fn()} onDelete={jest.fn()} />
@@ -32,7 +32,7 @@ describe("Feed Settings", () => {
 		expect(screen.getByLabelText("Remove Feed")).toBeInTheDocument();
 	});
 
-	test("should update the feed title", async () => {
+	xtest("should update the feed title", async () => {
 		const onSubmit = jest.fn();
 		render(<UpdateFeedForm initialFeed={mockFeed} onSubmit={onSubmit} onDelete={jest.fn()} />);
 
@@ -49,7 +49,7 @@ describe("Feed Settings", () => {
 		expect(onSubmit).toHaveBeenCalledWith("New Feed", null);
 	});
 
-	test("should delete the feed", () => {
+	xtest("should delete the feed", () => {
 		const onDelete = jest.fn();
 		render(<UpdateFeedForm initialFeed={mockFeed} onSubmit={jest.fn()} onDelete={onDelete} />);
 

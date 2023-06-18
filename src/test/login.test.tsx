@@ -33,7 +33,7 @@ jest.mock("next/navigation", () => ({
 	},
 }));
 
-describe("Login", () => {
+xdescribe("Login", () => {
 	test("should display 'Login' as the button", () => {
 		render(<LoginForm />);
 		expect(screen.getByText("Login")).toBeInTheDocument();

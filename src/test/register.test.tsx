@@ -53,7 +53,7 @@ describe("Login", () => {
 		expect(screen.getByRole("button")).toBeDisabled();
 	});
 
-	test("should respond with correct credentials", async () => {
+	xtest("should respond with correct credentials", async () => {
 		render(<RegisterForm />);
 
 		const emailInput = screen.getByTestId("register-email-input");

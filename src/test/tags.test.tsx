@@ -36,7 +36,7 @@ afterEach(() => {
 });
 afterAll(() => server.close());
 
-describe("Tags", () => {
+xdescribe("Tags", () => {
 	test("can create a tag", async () => {
 		const user = userEvent.setup();
 

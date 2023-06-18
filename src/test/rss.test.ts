@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 export const getFixtureAsString = async (filePath: string) => {
-	const buffer = await readFile(path.join("test/fixtures", filePath), {
+	const buffer = await readFile(path.join("src/test/fixtures", filePath), {
 		encoding: "utf-8",
 	});
 
