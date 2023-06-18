@@ -18,6 +18,12 @@ model AuthSession {
   @@map("auth_session")
 }
 
+enum Theme {
+  DEFAULT
+  SERIF
+  MONO
+}
+
 model AuthUser {
   id              String   @id @unique @default(cuid())
   verified        Boolean  @default(false)
@@ -26,6 +32,7 @@ model AuthUser {
   isVerified      Boolean  @default(false) @map("is_verified")
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
+  preferredTheme  Theme    @default(DEFAULT)
   feeds           Feed[]
   tags            Tag[]
   refreshInterval Int      @default(60) @map("refresh_interval")
@@ -51,7 +58,7 @@ model AuthKey {
 }
 
 model Entry {
-  id       String    @id @default(cuid())
+  id       String    @id @default(uuid())
   title    String
   content  String
   pubDate  DateTime  @default(now())
@@ -63,7 +70,7 @@ model Entry {
 }
 
 model Tag {
-  id     String    @id @default(cuid())
+  id     String    @id @default(uuid())
   title  String
   userId String?
   user   AuthUser? @relation(fields: [userId], references: [id])
@@ -71,7 +78,7 @@ model Tag {
 }
 
 model Feed {
-  id          String    @id @default(cuid())
+  id          String    @id @default(uuid())
   title       String
   userId      String?
   link        String

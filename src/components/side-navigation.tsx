@@ -30,7 +30,7 @@ export function SideNavigation() {
 			<LinkItem href="/all" name="All">
 				<Newspaper className="h-6 w-6" aria-hidden="true" />
 			</LinkItem>
-			<LinkItem href="/favorites" name="Bookmarks">
+			<LinkItem href="/favorite" name="Bookmarks">
 				<Bookmark className="h-6 w-6" aria-hidden="true" />
 			</LinkItem>
 			<LinkItem href="/recommendations" name="Recommendations">

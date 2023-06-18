@@ -7,7 +7,7 @@ import base64 from "base-64";
 
 export const runtime = "nodejs";
 
-export const POST = async (request: Request) => {
+export async function POST(request: Request) {
 	const { username, email, password } = (await request.json()) as Partial<{
 		username: string;
 		password: string;
@@ -80,4 +80,4 @@ export const POST = async (request: Request) => {
 			}
 		);
 	}
-};
+}

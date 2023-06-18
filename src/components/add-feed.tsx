@@ -9,7 +9,11 @@ import {
 } from "./ui/dialog";
 import { AddFeedForm } from "./add-feed-form";
 
-export function AddFeed() {
+interface AddFeedProps {
+	onAdd(formData: FormData): Promise<void>;
+}
+
+export function AddFeed(props: AddFeedProps) {
 	return (
 		<Dialog>
 			<DialogTrigger aria-label="Add Feed">
@@ -22,7 +26,7 @@ export function AddFeed() {
 					data-testid="add-feed-modal">
 					Add a website URL to see if it has an RSS feed.
 				</DialogDescription>
-				<AddFeedForm />
+				<AddFeedForm onSubmit={props.onAdd} />
 			</DialogContent>
 		</Dialog>
 	);

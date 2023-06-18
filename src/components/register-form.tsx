@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import z from "zod";
 import { Label, Input, TextLabel } from "./ui/input";
 import { useForm } from "./ui/forms/core";
@@ -30,7 +29,6 @@ async function registerUser({ username, email, password }: RegisterFormValues) {
 }
 
 export function RegisterForm() {
-	const router = useRouter();
 	const { errors, isSubmitting, getFieldProps, getFormProps, getErrorProps } = useForm(
 		{
 			initialValues: {
@@ -40,9 +38,7 @@ export function RegisterForm() {
 			},
 			validationSchema,
 			onSubmit(values) {
-				registerUser(values).then((json) => {
-					console.log(json);
-				});
+				return registerUser(values);
 			},
 		},
 		{

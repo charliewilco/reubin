@@ -9,6 +9,22 @@ interface PageParams {
 export async function generateMetadata({ params }: { params: PageParams }) {
 	let entry = await Controllers.entry.getById(params.entry);
 
+	if (entry) {
+	}
+
+	console.log(
+		JSON.stringify(
+			{
+				id: entry.id,
+				title: entry.title,
+			},
+			null,
+			2
+		),
+		params,
+		"Generate Metadata"
+	);
+
 	return {
 		title: entry.title ?? "",
 	};
@@ -17,7 +33,7 @@ export async function generateMetadata({ params }: { params: PageParams }) {
 export default async function EntryPage({ params }: { params: PageParams }) {
 	try {
 		let entry = await Controllers.entry.getById(params.entry);
-		return <EntryBody title={entry.title} content={entry.content} />;
+		return <EntryBody title={entry.title} content={entry.content} id={params.entry} />;
 	} catch (error) {
 		return notFound();
 	}

@@ -1,6 +1,7 @@
-import { AddFeed } from "../../components/add-feed";
-import { AppHeader } from "../../components/app-header";
-import { SideNavigation } from "../../components/side-navigation";
+import { AddFeed } from "$/components/add-feed";
+import { AppHeader } from "$/components/app-header";
+import { SideNavigation } from "$/components/side-navigation";
+import { addFeed } from "./actions";
 
 export default function Layout({ children }: React.PropsWithChildren<{}>) {
 	return (
@@ -8,7 +9,7 @@ export default function Layout({ children }: React.PropsWithChildren<{}>) {
 			<div className="flex h-screen flex-col">
 				<AppHeader>
 					<div className="flex justify-end gap-4">
-						<AddFeed />
+						<AddFeed onAdd={addFeed} />
 
 						<div>
 							<object className="mx-auto block h-8 w-8 rounded-full bg-gradient-to-r from-sky-500 to-blue-500" />

@@ -1,25 +1,13 @@
 import { SuperButton } from "./ui/button";
 import { Label, Input, TextLabel } from "./ui/input";
 
-import { Controllers } from "$/lib/controllers";
-import { Auth } from "$/lib/auth";
-import { cookies } from "next/headers";
-
-async function addFeed(formData: FormData) {
-	"use server";
-	let url = formData.get("url") as string;
-	if (url === "") {
-		return;
-	}
-
-	const authRequest = Auth.handleRequest({ cookies });
-	const { user } = await authRequest.validateUser();
-	await Controllers.feed.add(url, user.userId);
+interface AddFeedFormProps {
+	onSubmit(formData: FormData): Promise<void>;
 }
 
-export function AddFeedForm() {
+export function AddFeedForm(props: AddFeedFormProps) {
 	return (
-		<form action={addFeed}>
+		<form action={props.onSubmit}>
 			<Label htmlFor="url">
 				<TextLabel>URL</TextLabel>
 

@@ -4,17 +4,6 @@ import { ORM } from "$/lib/orm";
 import { EntryFilter } from "$/lib/filters";
 
 export class EntryController {
-	static fromORM(entry: any) {
-		return {
-			title: entry.title,
-			id: entry.id,
-			content: entry.content,
-			feed_id: entry.feedId!,
-			published: entry.pubDate,
-			unread: entry.unread,
-			favorite: entry.favorite,
-		};
-	}
 	static fromRSS(
 		rssItem: RSSItem,
 		feedId: string
@@ -26,7 +15,36 @@ export class EntryController {
 			pubDate: new Date(rssItem.pubDate ?? Date.now()),
 		};
 	}
+	async favorite(id: string) {
+		const entry = await ORM.entry.update({
+			where: {
+				id,
+			},
+			data: {
+				favorite: true,
+			},
+		});
+		if (entry === null) {
+			throw new Error("Entry not updated");
+		}
 
+		return entry;
+	}
+	async markAsUnread(id: string): Promise<Entry> {
+		const entry = await ORM.entry.update({
+			where: {
+				id,
+			},
+			data: {
+				unread: true,
+			},
+		});
+		if (entry === null) {
+			throw new Error("Entry not updated");
+		}
+
+		return entry;
+	}
 	async markAsRead(id: string): Promise<Entry> {
 		const entry = await ORM.entry.update({
 			where: {
@@ -36,7 +54,6 @@ export class EntryController {
 				unread: false,
 			},
 		});
-		console.log(entry);
 		if (entry === null) {
 			throw new Error("Entry not updated");
 		}
@@ -66,6 +83,8 @@ export class EntryController {
 		if (filter === "unread") {
 			args.unread = true;
 		}
+
+		// console.log("args", args);
 
 		const entries =
 			(await ORM.entry.findMany({

@@ -36,7 +36,7 @@ const TECH: RecommendedField[] = [
 		displayName: "The Verge",
 	},
 	{
-		link: "https://future.a16z.com/feed/",
+		link: "https://future.com/feed/",
 		displayName: "Future",
 	},
 	{

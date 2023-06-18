@@ -7,7 +7,7 @@ interface FeedListProps {
 	currentFilter: string;
 }
 
-export async function FeedList({ currentFilter }: FeedListProps) {
+export async function FeedList(props: FeedListProps) {
 	let authRequest = Auth.handleRequest({ cookies: cookies });
 	const { user } = await authRequest.validateUser();
 
@@ -32,7 +32,7 @@ export async function FeedList({ currentFilter }: FeedListProps) {
 									key={feed?.id}
 									id={feed?.id}
 									title={feed?.title}
-									filter={currentFilter}
+									filter={props.currentFilter}
 								/>
 							)
 						)}
