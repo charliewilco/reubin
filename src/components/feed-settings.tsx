@@ -23,7 +23,7 @@ export async function FeedSettings(props: FeedSettingsProps) {
 			<DialogContent>
 				<Dialog>
 					<DialogTitle>Update feed: {feed.title}</DialogTitle>
-					<UpdateFeedForm id={feed.id} initialTitle={feed.title} />
+					<UpdateFeedForm id={feed.id} initialTitle={feed.title} tagId={feed.tagId} />
 				</Dialog>
 			</DialogContent>
 		</Dialog>

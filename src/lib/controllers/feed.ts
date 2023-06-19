@@ -167,4 +167,35 @@ export class FeedController {
 
 		return _;
 	}
+
+	async attachTag(feedId: string, tagId: string, userId: string) {
+		const feed = await ORM.feed.updateMany({
+			where: {
+				AND: [
+					{
+						id: feedId,
+					},
+					{
+						userId,
+					},
+				],
+			},
+			data: {
+				tagId,
+			},
+		});
+
+		return feed;
+	}
+
+	async markAllAsRead(feedId: string, _userId: string) {
+		await ORM.entry.updateMany({
+			where: {
+				feedId,
+			},
+			data: {
+				unread: false,
+			},
+		});
+	}
 }

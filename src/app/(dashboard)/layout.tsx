@@ -10,14 +10,6 @@ export default function Layout({ children }: React.PropsWithChildren<{}>) {
 				<AppHeader>
 					<div className="flex justify-end gap-4">
 						<AddFeed onAdd={addFeed} />
-
-						<div>
-							<object className="mx-auto block h-8 w-8 rounded-full bg-gradient-to-tr from-amber-500 to-red-500" />
-							<div className="sr-only">
-								<p>Some Name</p>
-								<p>Account settings</p>
-							</div>
-						</div>
 					</div>
 				</AppHeader>
 				<div className="flex flex-1">

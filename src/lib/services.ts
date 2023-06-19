@@ -1,6 +1,7 @@
 import { Auth } from "./auth";
 import { Email } from "./email";
 import { EntrySearch } from "./search";
+import { ORM } from "./orm";
 import { RSSKit } from "./rss";
 import { CronJob } from "./cron";
 import { PurifyHTML } from "./purify-html";

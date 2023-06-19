@@ -2,10 +2,12 @@ import { Trash2 } from "lucide-react";
 import { Button, SuperButton } from "./ui/button";
 import { Input, Label, TextLabel } from "./ui/input";
 import { removeFeed } from "$/actions";
+import { TagSelectionList } from "./tag-lists";
 
 interface UpdateFeedFormProps {
 	initialTitle?: string;
 	id: string;
+	tagId: string | null;
 }
 
 export function UpdateFeedForm(props: UpdateFeedFormProps) {
@@ -20,10 +22,10 @@ export function UpdateFeedForm(props: UpdateFeedFormProps) {
 				/>
 			</Label>
 			<input type="hidden" name="id" value={props.id} />
+			<TagSelectionList />
 			<div className="mt-8 flex items-center justify-between">
 				<div className="block text-red-500">
 					<Button
-						type="button"
 						aria-label="Remove Feed"
 						className="flex items-center"
 						formAction={removeFeed}>

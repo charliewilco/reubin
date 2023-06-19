@@ -1,9 +1,11 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
 import { Auth } from "$/lib/auth";
 import { Controllers } from "$/lib/controllers";
-import { revalidatePath } from "next/cache";
 
 export async function addFeed(formData: FormData) {
 	let url = formData.get("url") as string;
@@ -35,10 +37,14 @@ export async function removeFeed(formData: FormData) {
 		const authRequest = Auth.handleRequest({ cookies });
 		const { user } = await authRequest.validateUser();
 		await Controllers.feed.remove(id, user.userId);
+		revalidatePath("/all");
+		redirect("/all");
 	}
 }
 
-export async function refreshFeed(id: string, filter: string) {
+export async function refreshFeed(formData: FormData) {
+	let id = formData.get("id") as string;
+	let filter = formData.get("filter") as string;
 	await Controllers.feed.refresh(id);
 
 	revalidatePath(`/${filter}/${id}`);
@@ -60,5 +66,25 @@ export async function removeTag(formData: FormData) {
 		const authRequest = Auth.handleRequest({ cookies });
 		const { user } = await authRequest.validateUser();
 		await Controllers.tags.remove(id, user.userId);
+	}
+}
+
+export async function attachFeedToTag(formData: FormData) {
+	let feedId = formData.get("feedId") as string;
+	let tagId = formData.get("tagId") as string;
+
+	if (feedId && tagId) {
+		const authRequest = Auth.handleRequest({ cookies });
+		const { user } = await authRequest.validateUser();
+		await Controllers.feed.attachTag(feedId, tagId, user.userId);
+	}
+}
+
+export async function markAllEntriesAsRead(formData: FormData) {
+	let id = formData.get("id") as string;
+	if (id) {
+		const authRequest = Auth.handleRequest({ cookies });
+		const { user } = await authRequest.validateUser();
+		await Controllers.feed.markAllAsRead(id, user.userId);
 	}
 }
