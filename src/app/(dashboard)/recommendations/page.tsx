@@ -26,6 +26,8 @@ async function RecommendationsPage() {
 	return (
 		<div className="mx-auto max-w-7xl space-y-16">
 			<div className="space-y-8 px-2 pb-8 pt-8">
+				<h1 className="text-3xl font-bold tracking-tight">Recommended Feeds</h1>
+
 				{lists.map(([title, recommendations], idx) => {
 					let key = title.concat("-", idx.toString());
 					return (

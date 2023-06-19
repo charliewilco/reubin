@@ -2,6 +2,7 @@ import type { Entry } from "@prisma/client";
 import { Controllers } from "$/lib/controllers";
 import type { EntryFilter } from "$/lib/filters";
 import { EntryListItem } from "./entry-list-item";
+import { FeedToolbar } from "./feed-toolbar";
 
 interface EntriesListProps {
 	feedId: string;
@@ -23,6 +24,7 @@ export async function EntriesList(props: EntriesListProps) {
 
 	return (
 		<div className="absolute left-0 top-0 w-full">
+			<FeedToolbar id={props.feedId} />
 			<ul className="divide-y">
 				{entries.sort(sortByNearest).map((entry) => {
 					return <EntryListItem key={entry.id} entry={entry} filter={props.filter} />;

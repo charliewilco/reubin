@@ -1,7 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { AddFeedForm } from "../components/add-feed-form";
+import { AddFeedForm } from "../components/feed-create-form";
 
 xdescribe("AddFeed", () => {
 	test("should display 'Add Feed' as the title", () => {
@@ -12,7 +12,7 @@ xdescribe("AddFeed", () => {
 
 	test("Should not fire when the form is empty", async () => {
 		const fn = jest.fn();
-		render(<AddFeedForm onSubmit={fn}/>);
+		render(<AddFeedForm onSubmit={fn} />);
 		const input = screen.getByTestId("add-feed-url");
 		const button = screen.getByText("Submit");
 

@@ -37,7 +37,7 @@ function SuperButton({ className, ..._props }: BaseButtonProps) {
 			className={classNames(
 				"inline-flex rounded-sm px-4 py-1",
 				"font-semibold",
-				"bg-blue-300 text-base text-blue-700 shadow-sm",
+				"bg-sky-500 text-base text-white shadow-sm",
 				className
 			)}
 			ref={() => {}}

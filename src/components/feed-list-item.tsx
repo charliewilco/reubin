@@ -17,13 +17,14 @@ export function FeedListItem(props: FeedItemProps) {
 
 	let href = isSelected ? `/${props.filter}` : `/${props.filter}/${props.id}`;
 
+	let innerClassName = classNames("cursor-pointer p-2", isSelected && "bg-sky-600 text-white");
+
 	return (
 		<li {...listProps} key={props.id}>
-			<div
-				className={classNames("cursor-pointer p-2", isSelected && "bg-sky-500/25 text-white")}>
+			<div className={innerClassName}>
 				<div className="flex justify-between">
 					<Link href={href} className="flex-1">
-						<h2 className="text-base">{props.title}</h2>
+						<h2 className="text-sm">{props.title}</h2>
 					</Link>
 				</div>
 			</div>

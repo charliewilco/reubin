@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Home, Gift, Settings2, Newspaper, Bookmark } from "lucide-react";
+import { Home, Sparkles, Cog } from "lucide-react";
 
 interface LinkItemProps {
 	href: string;
@@ -21,24 +21,17 @@ export function LinkItem(props: LinkItemProps) {
 
 // unread / bookmarked / all / recommendations / appearance / settings
 
-export function SideNavigation() {
+export function DashboardNavigationRail() {
 	return (
-		<nav aria-label="Sidebar" className="flex flex-col items-center space-y-4 px-2">
-			<LinkItem href="/unread" name="Home">
+		<nav aria-label="Sidebar" className="flex flex-col items-center space-y-4 px-2 py-2">
+			<LinkItem href="/all" name="Home">
 				<Home className="h-6 w-6" aria-hidden="true" />
 			</LinkItem>
-			<LinkItem href="/all" name="All">
-				<Newspaper className="h-6 w-6" aria-hidden="true" />
-			</LinkItem>
-			<LinkItem href="/favorite" name="Bookmarks">
-				<Bookmark className="h-6 w-6" aria-hidden="true" />
-			</LinkItem>
 			<LinkItem href="/recommendations" name="Recommendations">
-				<Gift className="h-6 w-6" aria-hidden="true" />
+				<Sparkles className="h-6 w-6" aria-hidden="true" />
 			</LinkItem>
-
 			<LinkItem href="/settings" name="Settings">
-				<Settings2 className="h-6 w-6" aria-hidden="true" />
+				<Cog className="h-6 w-6" aria-hidden="true" />
 			</LinkItem>
 		</nav>
 	);

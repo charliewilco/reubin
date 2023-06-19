@@ -8,8 +8,8 @@ import {
 import userEvent from "@testing-library/user-event";
 import { SWRConfig } from "swr";
 import { setupServer } from "msw/node";
-import { CreateTagForm } from "$/components/create-tag";
-import { TagRemovalList } from "$/components/tag-lists";
+import { CreateTagForm } from "$/components/tag-create-form";
+import { TagRemovalList } from "$/components/tag-removal-list";
 
 import type { Tag } from "@prisma/client";
 
@@ -59,7 +59,7 @@ xdescribe("Tags", () => {
 
 		render(
 			<SWRConfig value={{ dedupingInterval: 0, provider: () => new Map() }}>
-				<TagRemovalList />
+				<TagRemovalList tags={tags} />
 			</SWRConfig>
 		);
 

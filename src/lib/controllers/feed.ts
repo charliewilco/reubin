@@ -116,4 +116,55 @@ export class FeedController {
 
 		return removed;
 	}
+
+	async refresh(id: string) {
+		const feed = await ORM.feed.findUnique({
+			where: {
+				id,
+			},
+		});
+
+		if (feed === null) {
+			throw new Error("Couldn't find feed");
+		}
+
+		const { data: rssText } = await FeedController.getFeedFromDirectURL(feed.feedURL);
+		const { items } = await this.rss.parse(rssText);
+
+		const lastFetchedISO = feed.lastFetched.toISOString();
+
+		const entries: ReturnType<typeof EntryController.fromRSS>[] = [];
+
+		for (const item of items) {
+			if (item) {
+				if (lastFetchedISO < item.isoDate!) {
+					entries.push(EntryController.fromRSS(item, feed.id));
+				}
+			}
+		}
+
+		await ORM.entry.createMany({
+			data: entries,
+		});
+
+		const _ = await ORM.entry.findMany({
+			where: {
+				feedId: id,
+				pubDate: {
+					gte: feed.lastFetched,
+				},
+			},
+		});
+
+		await ORM.feed.update({
+			where: {
+				id,
+			},
+			data: {
+				lastFetched: new Date(Date.now()),
+			},
+		});
+
+		return _;
+	}
 }

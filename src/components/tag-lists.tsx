@@ -1,8 +1,9 @@
 "use client";
 
 import type { Tag } from "@prisma/client";
-import { RadioGroup } from "@headlessui/react";
+import { RadioGroup as _RadioGroup } from "@headlessui/react";
 import { CheckCircle, Trash2 } from "lucide-react";
+import {} from "./ui/radio-group";
 import { classNames } from "./ui/class-names";
 import { LoadingIndicator } from "./ui/activity-indicator";
 import { useCallback } from "react";
@@ -33,7 +34,7 @@ export function TagSelectionList(props: TagSelectionListProps) {
 		content = props.initialData
 			.filter((t) => t !== null)
 			.map((tag) => (
-				<RadioGroup.Option
+				<_RadioGroup.Option
 					key={tag!.id}
 					value={tag}
 					className={({ checked, active }) =>
@@ -46,14 +47,14 @@ export function TagSelectionList(props: TagSelectionListProps) {
 					{({ active, checked }) => (
 						<>
 							<span className="flex w-full items-center justify-between">
-								<RadioGroup.Label
+								<_RadioGroup.Label
 									as="span"
 									className={classNames(
 										"mr-4 font-medium",
 										checked ? "text-sky-500" : "text-gray-900 dark:text-white"
 									)}>
 									{tag!.title}
-								</RadioGroup.Label>
+								</_RadioGroup.Label>
 
 								<CheckCircle
 									className={classNames(!checked ? "invisible" : "", "h-4 w-4 text-sky-500")}
@@ -70,23 +71,23 @@ export function TagSelectionList(props: TagSelectionListProps) {
 								aria-hidden="true"></span>
 						</>
 					)}
-				</RadioGroup.Option>
+				</_RadioGroup.Option>
 			));
 	}
 
 	return (
-		<RadioGroup value={props.selected} className="select-none" onChange={props.onChange}>
-			<RadioGroup.Label className="sr-only">Selected Tag</RadioGroup.Label>
+		<_RadioGroup value={props.selected} className="select-none" onChange={props.onChange}>
+			<_RadioGroup.Label className="sr-only">Selected Tag</_RadioGroup.Label>
 			<div className="flex flex-wrap gap-2">
 				{content}
 
-				<RadioGroup.Option key="null" value={null}>
+				<_RadioGroup.Option key="null" value={null}>
 					<span className="flex w-full items-center justify-between">
-						<RadioGroup.Label as="span">No Tag</RadioGroup.Label>
+						<_RadioGroup.Label as="span">No Tag</_RadioGroup.Label>
 					</span>
-				</RadioGroup.Option>
+				</_RadioGroup.Option>
 			</div>
-		</RadioGroup>
+		</_RadioGroup>
 	);
 }
 
@@ -108,38 +109,4 @@ export function TagListItem({ tag, onDelete }: TagListItemProps) {
 			</button>
 		</li>
 	);
-}
-
-export function TagRemovalList(props: TagListProps) {
-	let content;
-
-	const isLoading = !props.initialData;
-
-	let removeTag = useCallback(() => {}, []);
-
-	if (isLoading) {
-		content = (
-			<div className="flex items-center justify-center">
-				<LoadingIndicator />
-			</div>
-		);
-	}
-
-	if (props.initialData) {
-		if (props.initialData.length === 0) {
-			content = <p className="text-center">No Tags</p>;
-		} else {
-			content = (
-				<ul>
-					{props.initialData
-						.filter((t) => t !== null)
-						.map((tag) => {
-							return <TagListItem key={tag?.id} tag={tag!} onDelete={removeTag} />;
-						})}
-				</ul>
-			);
-		}
-	}
-
-	return <div>{content}</div>;
 }
