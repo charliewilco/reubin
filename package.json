@@ -12,6 +12,7 @@
 		"test": "jest --verbose",
 		"types": "tsc --noEmit --pretty",
 		"e2e": "playwright test",
+		"format": "pretty-quick --staged",
 		"clean": "node scripts/clean.mjs"
 	},
 	"dependencies": {
