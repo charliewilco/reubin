@@ -91,10 +91,13 @@ export class FeedController {
 		return converted;
 	}
 
-	async updateTitle(id: string, title: string, _userId: string) {
+	async updateTitle(id: string, title: string, userId: string) {
 		let feed = await ORM.feed.update({
 			where: {
-				id,
+                feedUserId: {
+                    id,
+                    userId: userId
+                }
 			},
 			data: {
 				title: title,

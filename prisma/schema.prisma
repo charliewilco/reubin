@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeed = ["extendedWhereUnique"]
 }
 
 datasource db {
@@ -66,26 +67,28 @@ model Entry {
   unread   Boolean   @default(true)
   feedId   String?
   readAt   DateTime? @map("read_at")
-  feed     Feed?     @relation(fields: [feedId], references: [id])
+  feed     Feed?     @relation(fields: [feedId], references: [id], onDelete: Cascade)
 }
 
 model Tag {
   id     String    @id @default(uuid())
   title  String
   userId String?
-  user   AuthUser? @relation(fields: [userId], references: [id])
+  user   AuthUser? @relation(fields: [userId], references: [id], onDelete: Cascade)
   feeds  Feed[]
 }
 
 model Feed {
   id          String    @id @default(uuid())
   title       String
-  userId      String?
+  userId      String
   link        String
   feedURL     String
   lastFetched DateTime  @default(now())
   tagId       String?
-  tag         Tag?      @relation(fields: [tagId], references: [id])
-  user        AuthUser? @relation(fields: [userId], references: [id])
+  tag         Tag?      @relation(fields: [tagId], references: [id], onDelete: SetNull)
+  user        AuthUser? @relation(fields: [userId], references: [id], onDelete: Cascade)
   entries     Entry[]
+
+  @@unique(fields: [userId, id], name: "feedUserId")
 }
