@@ -16,7 +16,7 @@ export function CTA() {
 							adipiscing sagittis vel nulla nec.
 						</p>
 						<a
-							href="#"
+							href="/register"
 							className="mt-8 inline-flex items-center rounded-md border border-transparent bg-white px-5 py-3 text-base font-medium text-sky-600 shadow hover:bg-indigo-50">
 							Sign up for free
 						</a>

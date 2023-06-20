@@ -38,12 +38,8 @@ export async function POST(request: Request) {
 		const session = await Auth.createSession(user.userId);
 		const authRequest = Auth.handleRequest({ request, cookies });
 		authRequest.setSession(session);
-		new Response(null, {
-			status: 302,
-			headers: {
-				location: "/",
-			},
-		});
+
+        return NextResponse.redirect(new URL('/dashboard', request.url));
 	} catch (error) {
 		if (
 			error instanceof Prisma.PrismaClientKnownRequestError &&
