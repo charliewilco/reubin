@@ -91,6 +91,19 @@ export class FeedController {
 		return converted;
 	}
 
+	async updateTitle(id: string, title: string, _userId: string) {
+		let feed = await ORM.feed.update({
+			where: {
+				id,
+			},
+			data: {
+				title: title,
+			},
+		});
+
+		return feed;
+	}
+
 	async remove(id: string, userId: string) {
 		const feed = await ORM.feed.findUnique({
 			where: {
