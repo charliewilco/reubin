@@ -27,12 +27,16 @@ function HeroLogo() {
 	);
 }
 
-const serif = Newsreader({ weight: "variable", subsets: ["latin"] });
+const serif = Newsreader({
+	weight: "variable",
+	subsets: ["latin"],
+	fallback: ["ui-serif", "Charter", "Georgia", "serif"],
+});
 
 export function Hero() {
 	const headline = classNames(
 		serif.className,
-		"inline-block font-semibold bg-gradient-to-tr from-sky-200 to-sky-600 bg-clip-text text-8xl text-transparent"
+		"inline-block font-semibold bg-gradient-to-tr from-sky-300 to-sky-600 bg-clip-text text-8xl text-transparent"
 	);
 	return (
 		<section>
