@@ -1,7 +1,7 @@
 "use client";
 
+import { Suspense, useCallback } from "react";
 import { useTimeout } from "$/hooks/useTimeout";
-import { Suspense, useCallback, useEffect } from "react";
 
 interface MarkAsReadProps {
 	id: string;

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { classNames } from "./ui/class-names";
+import { cx } from "class-variance-authority";
 
 interface FeedItemProps {
 	id: string;
@@ -17,7 +17,7 @@ export function FeedListItem(props: FeedItemProps) {
 
 	let href = isSelected ? `/${props.filter}` : `/${props.filter}/${props.id}`;
 
-	let innerClassName = classNames("cursor-pointer p-2", isSelected && "bg-sky-600 text-white");
+	let innerClassName = cx("cursor-pointer p-2", isSelected && "bg-sky-600 text-white");
 
 	return (
 		<li {...listProps} key={props.id}>

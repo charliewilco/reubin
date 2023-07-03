@@ -1,14 +1,9 @@
-import { Newsreader } from "next/font/google";
 import Link from "next/link";
-import { classNames } from "../ui/class-names";
+import { cx } from "class-variance-authority";
 
 function HeroLogo() {
 	return (
-		<svg
-			className="mx-auto mb-12 max-w-[4rem]"
-			viewBox="0 0 45 56"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg">
+		<svg className="mx-auto mb-12 max-w-[4rem]" viewBox="0 0 45 56" fill="none">
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
@@ -27,15 +22,9 @@ function HeroLogo() {
 	);
 }
 
-const serif = Newsreader({
-	weight: "variable",
-	subsets: ["latin"],
-	fallback: ["ui-serif", "Charter", "Georgia", "serif"],
-});
-
 export function Hero() {
-	const headline = classNames(
-		serif.className,
+	const headline = cx(
+		"font-serif",
 		"inline-block font-semibold bg-gradient-to-tr from-sky-300 to-sky-600 bg-clip-text text-8xl text-transparent"
 	);
 	return (

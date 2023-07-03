@@ -1,6 +1,7 @@
 import base64 from "base-64";
 import { Auth } from "../auth";
 import { Services } from "../services";
+import { ORM } from "../orm";
 
 interface CreateUserArgs {
 	username: string;
@@ -9,7 +10,7 @@ interface CreateUserArgs {
 }
 
 export class UserController {
-	async createUser({ username, password, email }: CreateUserArgs) {
+	async create({ username, password, email }: CreateUserArgs) {
 		let user = await Auth.createUser({
 			primaryKey: {
 				providerId: "username",
@@ -23,5 +24,15 @@ export class UserController {
 		});
 
 		await Services.mail.createVerificationEmail(user.userId, "...");
+	}
+
+	async remove(userId: string) {
+		let user = await ORM.authUser.delete({
+			where: {
+				id: userId,
+			},
+		});
+
+		return user;
 	}
 }

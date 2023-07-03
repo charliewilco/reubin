@@ -3,8 +3,7 @@
 import { forwardRef } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-
-import { cn } from "./class-names";
+import { cx } from "class-variance-authority";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -15,7 +14,7 @@ const DialogPortal = ({
 	children,
 	...props
 }: DialogPrimitive.DialogPortalProps) => (
-	<DialogPrimitive.Portal className={cn(className)} {...props}>
+	<DialogPrimitive.Portal className={cx(className)} {...props}>
 		<div className="fixed inset-0 z-50 flex items-start justify-center sm:items-center">
 			{children}
 		</div>
@@ -29,7 +28,7 @@ const DialogOverlay = forwardRef<
 >(({ className, ...props }, ref) => (
 	<DialogPrimitive.Overlay
 		ref={ref}
-		className={cn(
+		className={cx(
 			"bg-background/80 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in fixed inset-0 z-50 backdrop-blur-sm transition-all duration-100",
 			className
 		)}
@@ -46,7 +45,7 @@ const DialogContent = forwardRef<
 		<DialogOverlay />
 		<DialogPrimitive.Content
 			ref={ref}
-			className={cn(
+			className={cx(
 				"animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 fixed z-50 grid w-full gap-4 rounded-b-lg bg-white p-6 shadow-lg dark:bg-zinc-900 sm:max-w-lg sm:rounded-lg",
 				className
 			)}
@@ -63,7 +62,7 @@ DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
 	<div
-		className={cn("flex flex-col space-y-1.5 text-center sm:text-left", className)}
+		className={cx("flex flex-col space-y-1.5 text-center sm:text-left", className)}
 		{...props}
 	/>
 );
@@ -71,7 +70,7 @@ DialogHeader.displayName = "DialogHeader";
 
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
 	<div
-		className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}
+		className={cx("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}
 		{...props}
 	/>
 );
@@ -83,7 +82,7 @@ const DialogTitle = forwardRef<
 >(({ className, ...props }, ref) => (
 	<DialogPrimitive.Title
 		ref={ref}
-		className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+		className={cx("text-lg font-semibold leading-none tracking-tight", className)}
 		{...props}
 	/>
 ));
@@ -95,7 +94,7 @@ const DialogDescription = forwardRef<
 >(({ className, ...props }, ref) => (
 	<DialogPrimitive.Description
 		ref={ref}
-		className={cn("text-muted-foreground text-sm", className)}
+		className={cx("text-muted-foreground text-sm", className)}
 		{...props}
 	/>
 ));

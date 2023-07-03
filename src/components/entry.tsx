@@ -21,7 +21,7 @@ export function EntryBody(props: EntryBodyProps) {
 					<h1 className="mb-2 text-3xl font-bold">{props.title}</h1>
 					<p className="font-mono text-sm opacity-50">{props.date.toDateString()}</p>
 				</header>
-				<section className="prose prose-invert max-w-none">
+				<section className="prose dark:prose-invert max-w-none">
 					<div dangerouslySetInnerHTML={{ __html: props.content ?? "" }} />
 				</section>
 			</article>

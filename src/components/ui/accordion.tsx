@@ -1,10 +1,9 @@
 "use client";
 
 import { forwardRef } from "react";
+import { cx } from "class-variance-authority";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
-
-import { cn } from "./class-names";
 
 const Accordion = AccordionPrimitive.Root;
 
@@ -12,7 +11,7 @@ const AccordionItem = forwardRef<
 	React.ElementRef<typeof AccordionPrimitive.Item>,
 	React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(({ className, ...props }, ref) => (
-	<AccordionPrimitive.Item ref={ref} className={cn("border-b", className)} {...props} />
+	<AccordionPrimitive.Item ref={ref} className={cx("border-b", className)} {...props} />
 ));
 AccordionItem.displayName = "AccordionItem";
 
@@ -23,7 +22,7 @@ const AccordionTrigger = forwardRef<
 	<AccordionPrimitive.Header className="flex">
 		<AccordionPrimitive.Trigger
 			ref={ref}
-			className={cn(
+			className={cx(
 				"flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
 				className
 			)}
@@ -41,7 +40,7 @@ const AccordionContent = forwardRef<
 >(({ className, children, ...props }, ref) => (
 	<AccordionPrimitive.Content
 		ref={ref}
-		className={cn(
+		className={cx(
 			"data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm transition-all",
 			className
 		)}

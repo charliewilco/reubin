@@ -2,16 +2,16 @@
 
 import { forwardRef } from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import { cx } from "class-variance-authority"; 
 import { Circle } from "lucide-react";
 
-import { cn } from "./class-names";
 
 const RadioGroup = forwardRef<
 	React.ElementRef<typeof RadioGroupPrimitive.Root>,
 	React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
 >(({ className, ...props }, ref) => {
 	return (
-		<RadioGroupPrimitive.Root className={cn("grid gap-2", className)} {...props} ref={ref} />
+		<RadioGroupPrimitive.Root className={cx("grid gap-2", className)} {...props} ref={ref} />
 	);
 });
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
@@ -23,7 +23,7 @@ const RadioGroupItem = forwardRef<
 	return (
 		<RadioGroupPrimitive.Item
 			ref={ref}
-			className={cn(
+			className={cx(
 				"aspect-square border-primary text-primary ring-offset-background focus-visible:ring-ring h-4 w-4 rounded-full border focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
 				className
 			)}

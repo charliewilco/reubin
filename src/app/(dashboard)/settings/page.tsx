@@ -8,6 +8,7 @@ import { TagRemovalList } from "$/components/tag-removal-list";
 export const metadata: Metadata = {
 	title: "Settings",
 };
+
 export default async function SettingsPage() {
 	const authRequest = Auth.handleRequest({ cookies: cookies });
 	const { user } = await authRequest.validateUser();

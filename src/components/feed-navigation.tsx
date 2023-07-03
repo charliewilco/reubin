@@ -10,14 +10,41 @@ let link = cva(["rounded-md", "py-1", "px-2"], {
 			active: [
 				"opacity-100",
 				"bg-gradient-to-tr",
-				"from-sky-800",
-				"to-sky-500",
+				"dark:from-sky-800",
+				"dark:to-sky-500",
+				"from-sky-500",
+				"to-sky-300",
 				"font-bold",
 				"shadow-md",
 			],
 		},
 	},
 });
+
+interface FeedFilterLinkProps {
+	isActive: boolean;
+	filter: string;
+
+	children?: React.ReactNode;
+}
+function FeedFilterLink(props: FeedFilterLinkProps) {
+	let params = useParams();
+
+	let href = `/${props.filter}`;
+	let className = link({ active: props.isActive ? "active" : "inactive" });
+
+	if (params.feed) {
+		href += `/${params.feed}`;
+	}
+
+	return (
+		<li>
+			<Link href={href} className={className}>
+				{props.children}
+			</Link>
+		</li>
+	);
+}
 
 export function FeedNavigation() {
 	let params = useParams();
@@ -29,25 +56,16 @@ export function FeedNavigation() {
 	return (
 		<nav>
 			<ul className="flex justify-center gap-2 p-2 text-sm">
-				<li>
-					<Link
-						href="/unread"
-						className={link({ active: isUnreadActive ? "active" : "inactive" })}>
-						Unread
-					</Link>
-				</li>
-				<li>
-					<Link href="/all" className={link({ active: isAllActive ? "active" : "inactive" })}>
-						All
-					</Link>
-				</li>
-				<li>
-					<Link
-						href="/favorite"
-						className={link({ active: isBookmarkActive ? "active" : "inactive" })}>
-						Bookmarks
-					</Link>
-				</li>
+				<FeedFilterLink filter="unread" isActive={isUnreadActive}>
+					Unread
+				</FeedFilterLink>
+				<FeedFilterLink filter="all" isActive={isAllActive}>
+					All
+				</FeedFilterLink>
+
+				<FeedFilterLink filter="favorite" isActive={isBookmarkActive}>
+					Bookmarks
+				</FeedFilterLink>
 			</ul>
 		</nav>
 	);

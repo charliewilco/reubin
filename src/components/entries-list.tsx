@@ -25,7 +25,7 @@ export async function EntriesList(props: EntriesListProps) {
 	return (
 		<div className="absolute left-0 top-0 w-full">
 			<FeedToolbar id={props.feedId} filter={props.filter} />
-			<ul className="divide-y">
+			<ul>
 				{entries.sort(sortByNearest).map((entry) => {
 					return <EntryListItem key={entry.id} entry={entry} filter={props.filter} />;
 				})}

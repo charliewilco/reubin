@@ -1,9 +1,8 @@
 "use client";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import z from "zod";
 import { Label, Input, TextLabel } from "./ui/input";
 import { useForm } from "./ui/forms/core";
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 
 const validationSchema = z.object({
 	username: z.string(),
@@ -17,7 +16,12 @@ interface RegisterFormValues {
 	password: string;
 }
 
-async function registerUser({ username, email, password }: RegisterFormValues, router: AppRouterInstance) {
+type AuthCallback = (url: string) => void;
+
+async function registerUser(
+	{ username, email, password }: RegisterFormValues,
+	cb: AuthCallback
+) {
 	let response = await fetch("/api/register", {
 		method: "POST",
 		body: JSON.stringify({ email, username, password: window.btoa(password) }),
@@ -26,13 +30,13 @@ async function registerUser({ username, email, password }: RegisterFormValues, r
 		},
 	});
 
-    if (response.redirected) {
-        return router.push(response.url);
-    }
+	if (response.redirected) {
+		return cb(response.url);
+	}
 }
 
 export function RegisterForm() {
-    const router = useRouter();
+	const router = useRouter();
 	const { errors, isSubmitting, getFieldProps, getFormProps, getErrorProps } = useForm(
 		{
 			initialValues: {
@@ -42,13 +46,15 @@ export function RegisterForm() {
 			},
 			validationSchema,
 			onSubmit(values) {
-				return registerUser(values, router);
+				return registerUser(values, router.push);
 			},
 		},
 		{
 			validateOnEvent: "blur",
 		}
 	);
+
+	let isDisabled = isSubmitting || Object.keys(errors).length > 0;
 
 	return (
 		<form {...getFormProps()} className="space-y-6">
@@ -104,7 +110,7 @@ export function RegisterForm() {
 
 			<div>
 				<button
-					disabled={isSubmitting || Object.keys(errors).length > 0}
+					disabled={isSubmitting}
 					type="submit"
 					className="flex w-full justify-center rounded-md border border-transparent bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
 					Register

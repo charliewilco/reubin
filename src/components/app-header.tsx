@@ -24,7 +24,7 @@ export async function AppHeader(props: AppHeaderProps) {
 						{props.children}
 						<div>
 							<object
-								className="mx-auto block h-8 w-8 rounded-full bg-gradient-to-tr from-amber-500 to-red-500"
+								className="mx-auto block h-8 w-8 rounded-full bg-gradient-to-tr from-amber-500 to-red-500 shadow-md"
 								title={user.username}
 							/>
 							<div className="sr-only">

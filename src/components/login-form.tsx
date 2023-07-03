@@ -1,11 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import z from "zod";
 import { Label, Input, TextLabel } from "./ui/input";
 
 import { useForm } from "./ui/forms/core";
-import { useRouter } from "next/navigation";
-import { type AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 
 const validationSchema = z.object({
 	username: z.string(),
@@ -17,7 +16,9 @@ interface LoginFormValues {
 	password: string;
 }
 
-async function loginUser({ username, password }: LoginFormValues, router: AppRouterInstance) {
+type AuthCallback = (url: string) => void;
+
+async function loginUser({ username, password }: LoginFormValues, cb: AuthCallback) {
 	let response = await fetch("/api/login", {
 		method: "POST",
 		body: JSON.stringify({ username, password: window.btoa(password) }),
@@ -26,13 +27,13 @@ async function loginUser({ username, password }: LoginFormValues, router: AppRou
 		},
 	});
 
-    if (response.redirected) {
-        return router.push(response.url);
-    }
+	if (response.redirected) {
+		return cb(response.url);
+	}
 }
 
 export function LoginForm() {
-    const router = useRouter();
+	const router = useRouter();
 	const { errors, isSubmitting, getFieldProps, getFormProps, getErrorProps } = useForm(
 		{
 			initialValues: {
@@ -40,7 +41,7 @@ export function LoginForm() {
 				password: "",
 			},
 			validationSchema,
-			onSubmit: (values) => loginUser(values, router),
+			onSubmit: (values) => loginUser(values, router.push),
 		},
 		{
 			validateOnEvent: "blur",
