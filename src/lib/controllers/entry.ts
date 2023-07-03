@@ -30,6 +30,16 @@ export class EntryController {
 
 		return entry;
 	}
+    async feedBelongsToUser(feedId: string, userId: string): Promise<boolean> {
+       return await ORM.entry.count({
+            where: {
+                id: feedId,
+                feed: {
+                    userId
+                }
+            },
+        }) !== 0;
+    }
 	async markAsUnread(id: string): Promise<Entry> {
 		const entry = await ORM.entry.update({
 			where: {

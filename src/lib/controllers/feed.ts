@@ -91,10 +91,13 @@ export class FeedController {
 		return converted;
 	}
 
-	async updateTitle(id: string, title: string, _userId: string) {
+	async updateTitle(id: string, title: string, userId: string) {
 		let feed = await ORM.feed.update({
 			where: {
-				id,
+				feedUserId: {
+					id,
+					userId: userId,
+				},
 			},
 			data: {
 				title: title,
@@ -115,11 +118,11 @@ export class FeedController {
 			throw new Error("Feed not found");
 		}
 
-		await ORM.entry.deleteMany({
-			where: {
-				feedId: id,
-			},
-		});
+		// await ORM.entry.deleteMany({
+		// 	where: {
+		// 		feedId: id,
+		// 	},
+		// });
 
 		const removed = await ORM.feed.delete({
 			where: {
@@ -181,17 +184,12 @@ export class FeedController {
 		return _;
 	}
 
+
 	async attachTag(feedId: string, tagId: string, userId: string) {
-		const feed = await ORM.feed.updateMany({
+        const feed = await ORM.feed.updateMany({
 			where: {
-				AND: [
-					{
-						id: feedId,
-					},
-					{
-						userId,
-					},
-				],
+				id: feedId,
+				userId,
 			},
 			data: {
 				tagId,

@@ -1,8 +1,9 @@
 "use client";
-
+import { useRouter } from 'next/navigation';
 import z from "zod";
 import { Label, Input, TextLabel } from "./ui/input";
 import { useForm } from "./ui/forms/core";
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 
 const validationSchema = z.object({
 	username: z.string(),
@@ -16,7 +17,7 @@ interface RegisterFormValues {
 	password: string;
 }
 
-async function registerUser({ username, email, password }: RegisterFormValues) {
+async function registerUser({ username, email, password }: RegisterFormValues, router: AppRouterInstance) {
 	let response = await fetch("/api/register", {
 		method: "POST",
 		body: JSON.stringify({ email, username, password: window.btoa(password) }),
@@ -25,10 +26,13 @@ async function registerUser({ username, email, password }: RegisterFormValues) {
 		},
 	});
 
-	return response.json();
+    if (response.redirected) {
+        return router.push(response.url);
+    }
 }
 
 export function RegisterForm() {
+    const router = useRouter();
 	const { errors, isSubmitting, getFieldProps, getFormProps, getErrorProps } = useForm(
 		{
 			initialValues: {
@@ -38,7 +42,7 @@ export function RegisterForm() {
 			},
 			validationSchema,
 			onSubmit(values) {
-				return registerUser(values);
+				return registerUser(values, router);
 			},
 		},
 		{

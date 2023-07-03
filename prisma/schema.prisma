@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider    = "prisma-client-js"
+  previewFeed = ["extendedWhereUnique"]
 }
 
 datasource db {
@@ -8,10 +9,10 @@ datasource db {
 }
 
 model AuthSession {
-  id             String   @id @unique
-  user_id        String
-  active_expires BigInt
-  idle_expires   BigInt
+  id            String   @id @unique
+  user_id        String   
+  active_expires BigInt   
+  idle_expires   BigInt  
   auth_user      AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
@@ -26,7 +27,6 @@ enum Theme {
 
 model AuthUser {
   id              String   @id @unique @default(cuid())
-  verified        Boolean  @default(false)
   username        String   @unique
   email           String   @unique
   isVerified      Boolean  @default(false) @map("is_verified")
@@ -37,8 +37,8 @@ model AuthUser {
   tags            Tag[]
   refreshInterval Int      @default(60) @map("refresh_interval")
 
-  auth_session AuthSession[]
-  auth_key     AuthKey[]
+  authSessions AuthSession[]
+  authKeys     AuthKey[]
   // here you can add custom fields for your user
   // e.g. name, email, username, roles, etc.
 
@@ -46,11 +46,11 @@ model AuthUser {
 }
 
 model AuthKey {
-  id              String   @id @unique
-  hashed_password String?
-  user_id         String
-  primary_key     Boolean
-  expires         BigInt?
+  id             String   @id @unique
+  hashed_password String?  
+  user_id         String   
+  primary_key     Boolean 
+  expires        BigInt?
   auth_user       AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
@@ -66,26 +66,33 @@ model Entry {
   unread   Boolean   @default(true)
   feedId   String?
   readAt   DateTime? @map("read_at")
-  feed     Feed?     @relation(fields: [feedId], references: [id])
+  feed     Feed?     @relation(fields: [feedId], references: [id], onDelete: Cascade)
+
+  @@map("entry")
 }
 
 model Tag {
   id     String    @id @default(uuid())
   title  String
   userId String?
-  user   AuthUser? @relation(fields: [userId], references: [id])
+  user   AuthUser? @relation(fields: [userId], references: [id], onDelete: Cascade)
   feeds  Feed[]
+
+  @@map("tag")
 }
 
 model Feed {
   id          String    @id @default(uuid())
   title       String
-  userId      String?
+  userId      String
   link        String
   feedURL     String
   lastFetched DateTime  @default(now())
   tagId       String?
-  tag         Tag?      @relation(fields: [tagId], references: [id])
-  user        AuthUser? @relation(fields: [userId], references: [id])
+  tag         Tag?      @relation(fields: [tagId], references: [id], onDelete: SetNull)
+  user        AuthUser? @relation(fields: [userId], references: [id], onDelete: Cascade)
   entries     Entry[]
+
+  @@unique(fields: [userId, id], name: "feedUserId")
+  @@map("feed")
 }

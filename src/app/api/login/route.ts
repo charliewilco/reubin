@@ -20,17 +20,14 @@ export const POST = async (request: Request) => {
 			}
 		);
 	}
+
 	try {
 		const authRequest = Auth.handleRequest({ request, cookies });
 		const key = await Auth.useKey("username", username, base64.decode(password));
 		const session = await Auth.createSession(key.userId);
 		authRequest.setSession(session);
-		return new Response(null, {
-			status: 302,
-			headers: {
-				location: "/",
-			},
-		});
+
+        return NextResponse.redirect(new URL('/dashboard', request.url));
 	} catch (error) {
 		if (
 			(error instanceof LuciaError && error.message === "AUTH_INVALID_KEY_ID") ||
