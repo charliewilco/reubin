@@ -3,15 +3,27 @@ import { nextjs } from "lucia-auth/middleware";
 import prisma from "@lucia-auth/adapter-prisma";
 import { ORM } from "./orm";
 import { cookies } from "next/headers";
+import type { Theme } from "@prisma/client";
+
+interface TransformedUser {
+	userId: string;
+	username: string;
+	preferredTheme: Theme;
+	isVerified: boolean;
+	refreshInterval: number;
+}
 
 export const Auth = lucia({
-	adapter: prisma(ORM),
+	adapter: prisma(ORM as any),
 	env: process.env.NODE_ENV === "development" ? "DEV" : "PROD",
 	middleware: nextjs(),
-	transformDatabaseUser: (userData) => {
+	transformDatabaseUser: (userData): TransformedUser => {
 		return {
 			userId: userData.id,
 			username: userData.username,
+			preferredTheme: userData.preferredTheme,
+			isVerified: userData.isVerified,
+			refreshInterval: userData.refreshInterval,
 		};
 	},
 	sessionExpiresIn: {
@@ -20,7 +32,32 @@ export const Auth = lucia({
 	},
 });
 
-export async function getUserSession() {
+interface LuciaSessionType {
+	sessionId: string;
+	userId: string;
+	activePeriodExpiresAt: Date;
+	idlePeriodExpiresAt: Date;
+	state: "idle" | "active";
+	fresh: boolean;
+}
+
+interface ValidatedSession {
+	user: TransformedUser;
+	session: Readonly<LuciaSessionType>;
+}
+
+interface NullSession {
+	user: null;
+	session: null;
+}
+
+export type AuthUserSession = ValidatedSession | NullSession;
+
+export function isValidatedSession(session: AuthUserSession): session is ValidatedSession {
+	return session.user !== null;
+}
+
+export async function getUserSession(): Promise<AuthUserSession> {
 	const authRequest = Auth.handleRequest({ cookies });
 	return authRequest.validateUser();
 }

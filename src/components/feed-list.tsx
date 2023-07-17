@@ -35,7 +35,7 @@ interface FeedListProps {
 export async function FeedList(props: FeedListProps) {
 	const { user } = await getUserSession();
 
-	let feeds = await Controllers.feed.getAll(user.userId);
+	let feeds = await Controllers.feed.getAll(user?.userId);
 
 	if (feeds) {
 		if (feeds.length === 0) {

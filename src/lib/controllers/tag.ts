@@ -20,7 +20,7 @@ export class TagController {
 		});
 	}
 
-	async getAll(userId: string) {
+	async getAll(userId?: string) {
 		return ORM.tag.findMany({
 			where: {
 				userId,
@@ -42,8 +42,10 @@ export class TagController {
 		});
 	}
 
-	async add(name: string, userId: string) {
+	async add(name: string, userId?: string) {
 		try {
+			if (!userId) throw new Error("No user id");
+
 			const tag = await ORM.tag.create({
 				data: {
 					title: name,

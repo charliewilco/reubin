@@ -77,7 +77,7 @@ export class FeedController {
 		return converted;
 	}
 
-	async getAll(userId: string) {
+	async getAll(userId?: string) {
 		const feeds = await ORM.feed.findMany({
 			where: {
 				userId,
@@ -184,9 +184,8 @@ export class FeedController {
 		return _;
 	}
 
-
 	async attachTag(feedId: string, tagId: string, userId: string) {
-        const feed = await ORM.feed.updateMany({
+		const feed = await ORM.feed.updateMany({
 			where: {
 				id: feedId,
 				userId,

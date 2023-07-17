@@ -10,7 +10,7 @@ interface TagListProps {
 
 export async function TagSelectionList(props: TagListProps) {
 	const { user } = await getUserSession();
-	const tags = await unstable_cache(() => Controllers.tags.getAll(user.userId), [], {
+	const tags = await unstable_cache(() => Controllers.tags.getAll(user?.userId), [], {
 		tags: ["tag:all"],
 	})();
 
