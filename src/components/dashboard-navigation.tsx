@@ -1,5 +1,8 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Home, Sparkles, Cog } from "lucide-react";
+import { cx } from "class-variance-authority";
 
 interface LinkItemProps {
 	href: string;
@@ -8,11 +11,16 @@ interface LinkItemProps {
 }
 
 export function LinkItem(props: LinkItemProps) {
+	let pathName = usePathname();
+	let isActive = pathName === props.href;
+
+	let container = cx(
+		"flex items-center rounded-lg p-2 text-zinc-700  dark:text-zinc-200",
+		isActive ? "bg-sky-700 hover:bg-sky-900" : "hover:bg-sky-700"
+	);
+
 	return (
-		<Link
-			key={props.name}
-			href={props.href}
-			className="flex items-center rounded-lg p-2 text-zinc-700 hover:bg-sky-700 dark:text-zinc-200">
+		<Link key={props.name} href={props.href} className={container}>
 			{props.children}
 			<span className="sr-only">{props.name}</span>
 		</Link>
