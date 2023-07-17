@@ -1,32 +1,29 @@
-import type { Entry } from "@prisma/client";
 import { Controllers } from "$/lib/controllers";
 import type { EntryFilter } from "$/lib/filters";
-import { EntryListItem } from "./entry-list-item";
+import { sortEntriesByNearest } from "$/utils/entries";
 import { FeedToolbar } from "./feed-toolbar";
+import { EntryListItem } from "./entry-list-item";
+import { unstable_cache } from "next/cache";
 
 interface EntriesListProps {
 	feedId: string;
 	filter: EntryFilter;
 }
 
-function sortByNearest({ pubDate: a }: Entry, { pubDate: b }: Entry) {
-	const now = Date.now();
-	return (
-		Math.abs(Date.parse(a.toDateString()) - now) - Math.abs(Date.parse(b.toDateString()) - now)
-	);
-}
-
 export async function EntriesList(props: EntriesListProps) {
-	// let authRequest = Auth.handleRequest({ cookies: cookies });
-	// const { user } = await authRequest.validateUser();
-
-	let entries = await Controllers.entry.getByFeed(props.feedId, props.filter);
+	let entries = await unstable_cache(
+		() => Controllers.entry.getByFeed(props.feedId, props.filter),
+		[props.filter, props.feedId],
+		{
+			tags: [`feed:${props.feedId}`, `filter:${props.filter}`],
+		}
+	)();
 
 	return (
 		<div className="absolute left-0 top-0 w-full">
 			<FeedToolbar id={props.feedId} filter={props.filter} />
 			<ul>
-				{entries.sort(sortByNearest).map((entry) => {
+				{entries.sort(sortEntriesByNearest).map((entry) => {
 					return <EntryListItem key={entry.id} entry={entry} filter={props.filter} />;
 				})}
 			</ul>

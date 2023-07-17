@@ -3,6 +3,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import type { Entry } from "@prisma/client";
 import { cva } from "class-variance-authority";
+import { getDateString } from "$/utils/dates";
 
 interface EntryListItemProps {
 	entry: Entry;
@@ -34,15 +35,19 @@ export function EntryListItem(props: EntryListItemProps) {
 	// let isRead = !props.entry.unread;
 	// let isBoth = isRead && isSelected;
 
+	let dateString = getDateString(props.entry.pubDate);
+
 	return (
 		<li
 			key={props.entry.id}
 			className={entryContainer({
 				state: isSelected ? "selected" : props.entry.unread ? "unread" : "read",
 			})}>
-			<Link href={href} className="block p-4">
-				<h3 className="mb-2 text-base">{props.entry.title}</h3>
-				<p className="text-xs uppercase tracking-wide">{props.entry.pubDate.toDateString()}</p>
+			<Link href={href} className="flex p-4">
+				<div className="flex-1">
+					<h3 className="mb-2 text-base">{props.entry.title}</h3>
+					<p className="text-xs uppercase tracking-wide">{dateString}</p>
+				</div>
 			</Link>
 		</li>
 	);

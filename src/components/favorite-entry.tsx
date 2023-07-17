@@ -29,7 +29,7 @@ export function FavoriteEntry(props: FavoriteEntryProps) {
 			}}>
 			<input type="hidden" name="id" value={props.id} />
 
-			<button title="Favorite Entry">
+			<button title="Favorite Entry" type="submit">
 				{pending ? "Hang on..." : optimisticValue ? <BookmarkMinus /> : <BookmarkPlus />}
 			</button>
 		</form>

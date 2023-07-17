@@ -1,3 +1,4 @@
+import { getDateString } from "$/utils/dates";
 import { FavoriteEntry } from "./favorite-entry";
 import { MarkAsRead } from "./mark-as-read";
 
@@ -10,6 +11,7 @@ interface EntryBodyProps {
 }
 
 export function EntryBody(props: EntryBodyProps) {
+	let date = getDateString(props.date);
 	return (
 		<div className="absolute bottom-0 left-0 right-0 top-0 w-full ">
 			<MarkAsRead id={props.id} />
@@ -19,9 +21,9 @@ export function EntryBody(props: EntryBodyProps) {
 						<FavoriteEntry id={props.id} isFavorite={props.isFavorite} />
 					</div>
 					<h1 className="mb-2 text-3xl font-bold">{props.title}</h1>
-					<p className="font-mono text-sm opacity-50">{props.date.toDateString()}</p>
+					<p className="font-mono text-sm opacity-50">{date}</p>
 				</header>
-				<section className="prose dark:prose-invert max-w-none">
+				<section className="prose max-w-none dark:prose-invert">
 					<div dangerouslySetInnerHTML={{ __html: props.content ?? "" }} />
 				</section>
 			</article>

@@ -1,9 +1,8 @@
-import { cookies } from "next/headers";
-import { Auth } from "$/lib/auth";
-import { Controllers } from "$/lib/controllers";
-import { FeedListItem } from "./feed-list-item";
 import Link from "next/link";
+import { getUserSession } from "$/lib/auth";
+import { Controllers } from "$/lib/controllers";
 import { RecommendationMap, RecommendedField } from "$/lib/recommendations";
+import { FeedListItem } from "./feed-list-item";
 import { RecommendationCard } from "./recommendation-card";
 import { FeedNavigation } from "./feed-navigation";
 
@@ -34,8 +33,7 @@ interface FeedListProps {
 }
 
 export async function FeedList(props: FeedListProps) {
-	let authRequest = Auth.handleRequest({ cookies: cookies });
-	const { user } = await authRequest.validateUser();
+	const { user } = await getUserSession();
 
 	let feeds = await Controllers.feed.getAll(user.userId);
 

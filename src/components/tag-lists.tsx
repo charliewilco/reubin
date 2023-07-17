@@ -1,6 +1,6 @@
+import { unstable_cache } from "next/cache";
 import { Controllers } from "$/lib/controllers";
-import { Auth } from "$/lib/auth";
-import { cookies } from "next/headers";
+import { getUserSession } from "$/lib/auth";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/input";
 
@@ -9,9 +9,10 @@ interface TagListProps {
 }
 
 export async function TagSelectionList(props: TagListProps) {
-	let authRequest = Auth.handleRequest({ cookies: cookies });
-	const { user } = await authRequest.validateUser();
-	const tags = await Controllers.tags.getAll(user.userId);
+	const { user } = await getUserSession();
+	const tags = await unstable_cache(() => Controllers.tags.getAll(user.userId), [], {
+		tags: ["tag:all"],
+	})();
 
 	let value = props.selected === null ? undefined : props.selected;
 	return (

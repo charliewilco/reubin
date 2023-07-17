@@ -1,3 +1,4 @@
+import * as React from "react";
 import { removeTag } from "$/actions";
 import type { Tag } from "@prisma/client";
 import { Trash2 } from "lucide-react";
@@ -5,6 +6,8 @@ import { Trash2 } from "lucide-react";
 interface TagListProps {
 	tags: Tag[];
 }
+
+console.log(Object.keys(React));
 
 export function TagRemovalList(props: TagListProps) {
 	let content;

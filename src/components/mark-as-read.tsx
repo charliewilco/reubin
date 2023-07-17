@@ -18,7 +18,7 @@ async function markAsRead(id: string) {
 		throw new Error("Failed to mark entry as read");
 	}
 }
-export function _MarkAsRead(props: MarkAsReadProps) {
+export function NotMarkAsRead(props: MarkAsReadProps) {
 	let callback = useCallback(() => markAsRead(props.id), [props.id]);
 
 	useTimeout(callback, 1500);
@@ -29,7 +29,7 @@ export function _MarkAsRead(props: MarkAsReadProps) {
 export function MarkAsRead(props: MarkAsReadProps) {
 	return (
 		<Suspense fallback={null}>
-			<_MarkAsRead {...props} />
+			<NotMarkAsRead {...props} />
 		</Suspense>
 	);
 }
