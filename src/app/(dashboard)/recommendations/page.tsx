@@ -6,7 +6,7 @@ import { ORM } from "$/lib/orm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Feed Recommendations",
+	title: "Recommended Feeds",
 };
 
 async function RecommendationsPage() {

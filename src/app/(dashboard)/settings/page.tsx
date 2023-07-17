@@ -4,6 +4,7 @@ import { Auth } from "$/lib/auth";
 import { Controllers } from "$/lib/controllers";
 import { CreateTagForm } from "$/components/tag-create-form";
 import { TagRemovalList } from "$/components/tag-removal-list";
+import { unstable_cache } from "next/cache";
 
 export const metadata: Metadata = {
 	title: "Settings",
@@ -12,8 +13,16 @@ export const metadata: Metadata = {
 export default async function SettingsPage() {
 	const authRequest = Auth.handleRequest({ cookies: cookies });
 	const { user } = await authRequest.validateUser();
-
-	const tags = await Controllers.tags.getAll(user.userId);
+	let cachedTags = unstable_cache(
+		(user) => {
+			return Controllers.tags.getAll(user.userId);
+		},
+		["tags", "all"],
+		{
+			tags: ["tag:all"],
+		}
+	);
+	const tags = await cachedTags(user);
 
 	return (
 		<div className="w-full flex-1 p-4">

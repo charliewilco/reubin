@@ -9,10 +9,35 @@ export class TagController {
 		};
 	}
 
+	async getById(id: string, userId: string) {
+		return ORM.tag.findUnique({
+			where: {
+				tagUserId: {
+					id,
+					userId: userId,
+				},
+			},
+		});
+	}
+
 	async getAll(userId: string) {
 		return ORM.tag.findMany({
 			where: {
 				userId,
+			},
+		});
+	}
+
+	async updateById(title: string, id: string, userId: string) {
+		return ORM.tag.update({
+			where: {
+				tagUserId: {
+					id,
+					userId: userId,
+				},
+			},
+			data: {
+				title: title,
 			},
 		});
 	}

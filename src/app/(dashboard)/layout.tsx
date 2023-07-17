@@ -1,13 +1,16 @@
 import { AddFeed } from "$/components/feed-create";
 import { AppHeader } from "$/components/app-header";
 import { DashboardNavigationRail } from "$/components/dashboard-navigation";
+import { getUserSession } from "$/lib/auth";
 import { addFeed } from "$/actions";
 
-export default function Layout({ children }: React.PropsWithChildren<{}>) {
+export default async function Layout({ children }: React.PropsWithChildren<{}>) {
+	const { user } = await getUserSession();
+
 	return (
 		<div className="h-screen">
 			<div className="flex h-screen flex-col">
-				<AppHeader>
+				<AppHeader username={user.username}>
 					<div className="flex justify-end gap-4">
 						<AddFeed onAdd={addFeed} />
 					</div>

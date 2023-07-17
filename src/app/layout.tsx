@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./styles.css";
 import { cx } from "class-variance-authority";
-import { MONOSPACE_FONT, SERIF_FONT } from "$/utils/fonts";
+import { MONOSPACE_FONT, SANS_FONT, SERIF_FONT } from "$/utils/fonts";
 
 export const metadata: Metadata = {
 	title: {
@@ -22,7 +22,12 @@ interface LayoutProps {
 }
 
 export default function RootLayout({ children }: LayoutProps) {
-	let className= cx('dark:bg-zinc-900 dark:text-white', SERIF_FONT.variable, MONOSPACE_FONT.variable)
+	let className = cx(
+		"dark:bg-zinc-900 dark:text-white",
+		SERIF_FONT.variable,
+		MONOSPACE_FONT.variable,
+		SANS_FONT.variable
+	);
 	return (
 		<html className={className}>
 			<head />

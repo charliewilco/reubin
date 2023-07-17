@@ -1,10 +1,8 @@
 "use server";
-
-import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { Auth } from "$/lib/auth";
+import { getUserSession } from "$/lib/auth";
 import { Controllers } from "$/lib/controllers";
 
 export async function addFeed(formData: FormData) {
@@ -13,29 +11,28 @@ export async function addFeed(formData: FormData) {
 		return;
 	}
 
-	const authRequest = Auth.handleRequest({ cookies });
-	const { user } = await authRequest.validateUser();
+	const { user } = await getUserSession();
 	await Controllers.feed.add(url, user.userId);
 }
 
 export async function addFeedFromRecommendation(formData: FormData) {
 	let link = formData.get("link") as string;
 
-	const authRequest = Auth.handleRequest({ cookies });
-	const { user } = await authRequest.validateUser();
+	const { user } = await getUserSession();
 	await Controllers.feed.add(link, user.userId);
 	revalidatePath("/recommendations");
+	revalidatePath("/dashboard");
 }
 
 export async function addFavorite(id: string) {
 	await Controllers.entry.favorite(id);
+	revalidateTag(`entry:${id}`);
 }
 
 export async function removeFeed(formData: FormData) {
 	let id = formData.get("id") as string;
 	if (id) {
-		const authRequest = Auth.handleRequest({ cookies });
-		const { user } = await authRequest.validateUser();
+		const { user } = await getUserSession();
 		await Controllers.feed.remove(id, user.userId);
 		revalidatePath("/all");
 		redirect("/all");
@@ -53,19 +50,18 @@ export async function refreshFeed(formData: FormData) {
 export async function createTag(formData: FormData) {
 	let name = formData.get("name") as string;
 	if (name) {
-		const authRequest = Auth.handleRequest({ cookies });
-		const { user } = await authRequest.validateUser();
+		const { user } = await getUserSession();
 		await Controllers.tags.add(name, user.userId);
-		revalidatePath("/settings");
+		revalidateTag("tag:all");
 	}
 }
 
 export async function removeTag(formData: FormData) {
 	let id = formData.get("id") as string;
 	if (id) {
-		const authRequest = Auth.handleRequest({ cookies });
-		const { user } = await authRequest.validateUser();
+		const { user } = await getUserSession();
 		await Controllers.tags.remove(id, user.userId);
+		revalidateTag("tag:all");
 	}
 }
 
@@ -74,8 +70,7 @@ export async function attachFeedToTag(formData: FormData) {
 	let tagId = formData.get("tagId") as string;
 
 	if (feedId && tagId) {
-		const authRequest = Auth.handleRequest({ cookies });
-		const { user } = await authRequest.validateUser();
+		const { user } = await getUserSession();
 		await Controllers.feed.attachTag(feedId, tagId, user.userId);
 	}
 }
@@ -83,8 +78,7 @@ export async function attachFeedToTag(formData: FormData) {
 export async function markAllEntriesAsRead(formData: FormData) {
 	let id = formData.get("id") as string;
 	if (id) {
-		const authRequest = Auth.handleRequest({ cookies });
-		const { user } = await authRequest.validateUser();
+		const { user } = await getUserSession();
 		await Controllers.feed.markAllAsRead(id, user.userId);
 	}
 }
