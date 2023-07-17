@@ -12,7 +12,7 @@ export async function GET(request: Request, context: { params: Params }) {
 	const { user } = await authRequest.validateUser();
 	let id = context.params.id;
 
-	let entries = await Controllers.entry.getByFeed(id, user.userId);
+	let entries = await Controllers.entry.getByFeed(id);
 
 	return NextResponse.json({
 		data: {

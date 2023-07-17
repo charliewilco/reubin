@@ -4,7 +4,11 @@ import { NextResponse } from "next/server";
 import { Auth } from "$/lib/auth";
 import { Controllers } from "$/lib/controllers";
 
-export async function PUT(_request: Request, context: { params: { id: string } }) {
+interface Params {
+	id: string;
+}
+
+export async function PUT(_request: Request, context: { params: Params }) {
 	let { id } = context.params;
 	const authRequest = Auth.handleRequest({ cookies });
 	const { user } = await authRequest.validateUser();
@@ -22,3 +26,5 @@ export async function PUT(_request: Request, context: { params: { id: string } }
 		},
 	});
 }
+
+export async function GET(_request: Request, _context: { params: Params }) {}
