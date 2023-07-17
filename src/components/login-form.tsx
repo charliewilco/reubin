@@ -1,69 +1,46 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import z from "zod";
+import { useId, useState } from "react";
+import { experimental_useFormStatus } from "react-dom";
 import { Label, Input, TextLabel } from "./ui/input";
-
-import { useForm } from "./ui/forms/core";
-
-const validationSchema = z.object({
-	username: z.string(),
-	password: z.string().min(8),
-});
-
-interface LoginFormValues {
-	username: string;
-	password: string;
-}
-
-type AuthCallback = (url: string) => void;
-
-async function loginUser({ username, password }: LoginFormValues, cb: AuthCallback) {
-	let response = await fetch("/api/login", {
-		method: "POST",
-		body: JSON.stringify({ username, password: window.btoa(password) }),
-		headers: {
-			"Content-Type": "application/json",
-		},
-	});
-
-	if (response.redirected) {
-		return cb(response.url);
-	}
-}
+import { submitLoginForm, type LoginFormValues } from "$/client";
+import type { FieldErrors } from "$/utils/validation";
 
 export function LoginForm() {
 	const router = useRouter();
-	const { errors, isSubmitting, getFieldProps, getFormProps, getErrorProps } = useForm(
-		{
-			initialValues: {
-				username: "",
-				password: "",
-			},
-			validationSchema,
-			onSubmit: (values) => loginUser(values, router.push),
-		},
-		{
-			validateOnEvent: "blur",
-		}
-	);
+	let { pending } = experimental_useFormStatus();
+	let [errors, setErrors] = useState<FieldErrors<LoginFormValues>>({});
+
+	let formId = useId();
 
 	return (
-		<form {...getFormProps()} className="space-y-8">
+		<form
+			action={(formData) =>
+				submitLoginForm(formData, {
+					onSuccess(url) {
+						router.push(url);
+					},
+					onError(errors) {
+						setErrors(errors);
+					},
+				})
+			}
+			className="space-y-8">
 			<div>
 				<Label htmlFor="username">
 					<TextLabel>Username</TextLabel>
 					<Input
-						disabled={isSubmitting}
+						disabled={pending}
 						id="username"
 						autoComplete="username"
 						required
 						data-testid="login-username-input"
-						{...getFieldProps("username")}
+						name="username"
+						aria-invalid={!!errors["username"]}
+						aria-errormessage={`err-${formId}-username}`}
 					/>
-					{errors["username"] && (
-						<div {...getErrorProps("username")}>{errors["username"]}</div>
-					)}
+					{errors["username"] && <div id={`err-${formId}-username`}>{errors["username"]}</div>}
 				</Label>
 			</div>
 
@@ -71,24 +48,24 @@ export function LoginForm() {
 				<Label htmlFor="password">
 					<TextLabel>Password</TextLabel>
 					<Input
-						disabled={isSubmitting}
+						disabled={pending}
 						id="password"
 						type="password"
 						autoComplete="current-password"
 						required
 						data-testid="login-password-input"
-						{...getFieldProps("password")}
+						name="password"
+						aria-invalid={!!errors["password"]}
+						aria-errormessage={`err-${formId}-password}`}
 					/>
-					{errors["password"] && (
-						<div {...getErrorProps("password")}>{errors["password"]}</div>
-					)}
+					{errors["password"] && <div id={`err-${formId}-password`}>{errors["password"]}</div>}
 				</Label>
 			</div>
 
 			<div>
 				<button
 					type="submit"
-					disabled={isSubmitting || Object.keys(errors).length > 0}
+					disabled={pending}
 					className="flex w-full justify-center rounded-md border border-transparent bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
 					Login
 				</button>
