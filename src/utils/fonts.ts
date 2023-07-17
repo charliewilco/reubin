@@ -1,4 +1,26 @@
-import { Newsreader, Source_Code_Pro } from "next/font/google";
+import { JetBrains_Mono, Newsreader, Inter } from "next/font/google";
+
+export const SANS_FONT = Inter({
+	weight: "variable",
+	subsets: ["latin"],
+	fallback: [
+		"-apple-system",
+		"BlinkMacSystemFont",
+		'"Segoe UI"',
+		"Roboto",
+		'"Helvetica Neue"',
+		"Arial",
+		'"Noto Sans"',
+		"sans-serif",
+		'"Apple Color Emoji"',
+		'"Segoe UI Emoji"',
+		'"Segoe UI Symbol"',
+		'"Noto Color Emoji"',
+	],
+	display: "swap",
+	variable: "--font-inter",
+	preload: false,
+});
 
 export const SERIF_FONT = Newsreader({
 	weight: "variable",
@@ -9,7 +31,7 @@ export const SERIF_FONT = Newsreader({
 	preload: false,
 });
 
-export const MONOSPACE_FONT = Source_Code_Pro({
+export const MONOSPACE_FONT = JetBrains_Mono({
 	weight: "variable",
 	subsets: ["latin"],
 	fallback: [
@@ -22,6 +44,6 @@ export const MONOSPACE_FONT = Source_Code_Pro({
 		'"Courier New"',
 		"monospace",
 	],
-	variable: "--font-source-code",
+	variable: "--font-jetbrains-mono",
 	display: "swap",
 });
