@@ -1,6 +1,6 @@
 "use client";
 import { forwardRef } from "react";
-import { classNames } from "./class-names";
+import { cx } from "class-variance-authority";
 
 type InputProps = React.DetailedHTMLProps<
 	React.InputHTMLAttributes<HTMLInputElement>,
@@ -13,7 +13,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props },
 	return (
 		<input
 			{...props}
-			className={classNames(
+			className={cx(
 				"block w-full rounded-md border-zinc-200 px-2 py-2 text-sm shadow focus:border-sky-500 focus:ring-sky-500 dark:bg-zinc-700",
 				className
 			)}
@@ -34,7 +34,7 @@ const Fieldset = forwardRef<HTMLFieldSetElement, FieldsetProps>(
 		return (
 			<fieldset
 				{...props}
-				className={classNames("mb-8 flex items-center gap-4", className)}
+				className={cx("mb-8 flex items-center gap-4", className)}
 				ref={ref}
 			/>
 		);
@@ -50,9 +50,7 @@ type TextLabelProps = React.DetailedHTMLProps<
 
 const TextLabel = forwardRef<HTMLSpanElement, TextLabelProps>(
 	({ className, ...props }, ref) => {
-		return (
-			<span {...props} className={classNames("block pb-2 text-sm", className)} ref={ref} />
-		);
+		return <span {...props} className={cx("block pb-2 text-sm", className)} ref={ref} />;
 	}
 );
 
@@ -64,7 +62,7 @@ type LabelProps = React.DetailedHTMLProps<
 >;
 
 const Label = forwardRef<HTMLLabelElement, LabelProps>(({ className, ...props }, ref) => {
-	return <label {...props} className={classNames("block", className)} ref={ref} />;
+	return <label {...props} className={cx("block", className)} ref={ref} />;
 });
 
 Label.displayName = "Label";

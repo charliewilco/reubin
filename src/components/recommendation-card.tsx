@@ -39,7 +39,6 @@ export function RecommendationCard(props: RecommendationCardProps) {
 			<div className="flex w-full items-center justify-between">
 				<div className="flex-1 truncate p-4">
 					<h3 className="truncate text-base font-medium">{props.displayName}</h3>
-
 					<p className="mt-1 truncate font-mono text-xs text-zinc-500">{props.link}</p>
 				</div>
 			</div>
