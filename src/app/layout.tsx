@@ -5,8 +5,8 @@ import { MONOSPACE_FONT, SANS_FONT, SERIF_FONT } from "$/utils/fonts";
 
 export const metadata: Metadata = {
 	title: {
-		default: "Reubin | An RSS Client for the Next Generation",
-		template: "%s | Reubin",
+		default: "Zaptread | An RSS Client for the Next Generation",
+		template: "%s | Zaptread",
 	},
 	icons: [
 		{
@@ -29,7 +29,7 @@ export default function RootLayout({ children }: LayoutProps) {
 		SANS_FONT.variable
 	);
 	return (
-		<html className={className}>
+		<html lang="en" className={className}>
 			<head />
 			<body className="">{children}</body>
 		</html>

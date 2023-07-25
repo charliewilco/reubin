@@ -1,26 +1,50 @@
-import { Globe, Activity, Mail } from "lucide-react";
+import { Newspaper, Sparkles, Search, Mail, type LucideIcon } from "lucide-react";
 
 const features = [
 	{
-		name: "Competitive rates",
-		description:
-			"Consequuntur omnis dicta cumque, inventore atque ab dolores aspernatur tempora ab doloremque.",
-		icon: Globe,
-	},
-
-	{
-		name: "Instant transfers",
-		description:
-			"Omnis, illo delectus? Libero, possimus nulla nemo tenetur adipisci repellat dolore eligendi velit doloribus mollitia.",
-		icon: Activity,
+		name: "Unlimited Feeds",
+		description: "Subscribe to as many feeds as you like, no restrictions.",
+		icon: Newspaper,
 	},
 	{
-		name: "Reminder emails",
-		description:
-			"Veniam necessitatibus reiciendis fugit explicabo dolorem nihil et omnis assumenda odit? Quisquam unde accusantium.",
+		name: "AI-powered Summaries",
+		description: "Get concise and insightful article summaries using advanced AI technology.",
+		icon: Sparkles,
+	},
+	{
+		name: "Full-Text Search",
+		description: "Instantly find articles with powerful full-text search capabilities.",
+		icon: Search,
+	},
+	{
+		name: "Newsletter Digests",
+		description: "Get a weekly digest of your favorite newsletters.",
 		icon: Mail,
 	},
 ];
+
+interface FeatureListItemProps {
+	name: string;
+	description: string;
+	icon: LucideIcon;
+}
+
+export function FeatureListItem(props: FeatureListItemProps) {
+	let Icon = props.icon;
+	return (
+		<div>
+			<dt>
+				<div className="flex h-8 w-8 items-center justify-center rounded-md text-sky-600 dark:text-sky-400">
+					<Icon className="h-6 w-6" aria-hidden="true" />
+				</div>
+				<p className="mt-5 text-lg font-medium leading-6 text-zinc-800 dark:text-zinc-200">
+					{props.name}
+				</p>
+			</dt>
+			<dd className="mt-2 font-mono text-base opacity-50">{props.description}</dd>
+		</div>
+	);
+}
 
 export function FeatureList() {
 	return (
@@ -32,18 +56,8 @@ export function FeatureList() {
 					</h2>
 				</div>
 				<dl className="col-span-2 mt-10 grid grid-cols-2  gap-x-8 gap-y-10 sm:mt-0">
-					{features.map((feature) => (
-						<div key={feature.name}>
-							<dt>
-								<div className="flex h-12 w-12 items-center justify-center rounded-md bg-sky-400 text-zinc-900">
-									<feature.icon className="h-6 w-6" aria-hidden="true" />
-								</div>
-								<p className="mt-5 text-lg font-medium leading-6 text-zinc-800 dark:text-zinc-200">
-									{feature.name}
-								</p>
-							</dt>
-							<dd className="mt-2 text-base text-zinc-500">{feature.description}</dd>
-						</div>
+					{features.map((props) => (
+						<FeatureListItem key={props.name} {...props} />
 					))}
 				</dl>
 			</div>

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { cx } from "class-variance-authority";
 
 function HeroLogo() {
 	return (
@@ -23,18 +22,16 @@ function HeroLogo() {
 }
 
 export function Hero() {
-	const headline = cx(
-		"font-serif",
-		"inline-block font-semibold bg-gradient-to-tr from-sky-300 to-sky-600 bg-clip-text text-8xl text-transparent"
-	);
 	return (
 		<section>
 			<div className="text-center">
 				<Link href="/" className="block">
 					<HeroLogo />
 				</Link>
-				<h2 className={headline}>Reubin</h2>
-				<p className="text-2xl opacity-50">RSS for the next generation.</p>
+				<h2 className="mb-8 inline-block bg-gradient-to-tr from-sky-300 to-sky-600 bg-clip-text font-mono text-8xl font-bold tracking-tighter text-transparent">
+					Zaptread
+				</h2>
+				<p className="font-mono text-xl opacity-50">RSS for the next generation.</p>
 			</div>
 		</section>
 	);
