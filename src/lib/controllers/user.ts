@@ -1,7 +1,7 @@
 import base64 from "base-64";
 import { Auth } from "../auth";
 import { Services } from "../services";
-import { ORM } from "../orm";
+import { prisma } from "../orm";
 
 interface CreateUserArgs {
 	username: string;
@@ -27,7 +27,7 @@ export class UserController {
 	}
 
 	async remove(userId: string) {
-		let user = await ORM.authUser.delete({
+		let user = await prisma.authUser.delete({
 			where: {
 				id: userId,
 			},

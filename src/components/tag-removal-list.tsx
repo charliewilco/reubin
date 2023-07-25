@@ -1,23 +1,16 @@
-import * as React from "react";
-import { removeTag } from "$/actions";
 import type { Tag } from "@prisma/client";
 import { Trash2 } from "lucide-react";
-import { getUserSession } from "$/lib/auth";
-import { unstable_cache } from "next/cache";
+import { removeTag } from "$/actions";
 import { Controllers } from "$/lib/controllers";
+import { getUserSession } from "$/lib/auth";
+
+interface TagRemovalListProps {
+	tags: Tag[];
+}
 
 export async function TagRemovalList() {
-	const { user } = await getUserSession();
-	let cachedTags = unstable_cache(
-		(user) => {
-			return Controllers.tags.getAll(user.userId);
-		},
-		["tags", "all"],
-		{
-			tags: ["tag:all"],
-		}
-	);
-	const tags = await cachedTags(user);
+	let { user } = await getUserSession();
+	let tags = await Controllers.tags.getAll(user?.userId);
 
 	let content;
 

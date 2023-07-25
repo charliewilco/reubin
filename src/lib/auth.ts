@@ -1,9 +1,10 @@
 import lucia from "lucia-auth";
 import { nextjs } from "lucia-auth/middleware";
-import prisma from "@lucia-auth/adapter-prisma";
-import { ORM } from "./orm";
+import prismaAdapter from "@lucia-auth/adapter-prisma";
+import { prisma } from "./orm";
 import { cookies } from "next/headers";
 import type { Theme } from "@prisma/client";
+import { $ENV } from "./env";
 
 interface TransformedUser {
 	userId: string;
@@ -14,8 +15,8 @@ interface TransformedUser {
 }
 
 export const Auth = lucia({
-	adapter: prisma(ORM as any),
-	env: process.env.NODE_ENV === "development" ? "DEV" : "PROD",
+	adapter: prismaAdapter(prisma as any),
+	env: $ENV.NODE_ENV === "development" ? "DEV" : "PROD",
 	middleware: nextjs(),
 	transformDatabaseUser: (userData): TransformedUser => {
 		return {

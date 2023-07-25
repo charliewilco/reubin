@@ -1,6 +1,6 @@
 import type { Entry } from "@prisma/client";
 import type { RSSItem } from "$/lib/rss";
-import { ORM } from "$/lib/orm";
+import { prisma } from "$/lib/orm";
 import { EntryFilter } from "$/lib/filters";
 
 export class EntryController {
@@ -16,7 +16,7 @@ export class EntryController {
 		};
 	}
 	async favorite(id: string) {
-		const entry = await ORM.entry.update({
+		const entry = await prisma.entry.update({
 			where: {
 				id,
 			},
@@ -30,18 +30,20 @@ export class EntryController {
 
 		return entry;
 	}
-    async feedBelongsToUser(feedId: string, userId: string): Promise<boolean> {
-       return await ORM.entry.count({
-            where: {
-                id: feedId,
-                feed: {
-                    userId
-                }
-            },
-        }) !== 0;
-    }
+	async feedBelongsToUser(feedId: string, userId: string): Promise<boolean> {
+		return (
+			(await prisma.entry.count({
+				where: {
+					id: feedId,
+					feed: {
+						userId,
+					},
+				},
+			})) !== 0
+		);
+	}
 	async markAsUnread(id: string): Promise<Entry> {
-		const entry = await ORM.entry.update({
+		const entry = await prisma.entry.update({
 			where: {
 				id,
 			},
@@ -56,7 +58,7 @@ export class EntryController {
 		return entry;
 	}
 	async markAsRead(id: string): Promise<Entry> {
-		const entry = await ORM.entry.update({
+		const entry = await prisma.entry.update({
 			where: {
 				id,
 			},
@@ -72,7 +74,7 @@ export class EntryController {
 	}
 
 	async getById(id: string): Promise<Entry> {
-		const entry = await ORM.entry.findUnique({ where: { id } });
+		const entry = await prisma.entry.findUnique({ where: { id } });
 
 		if (!entry) {
 			throw new Error("Entry not found");
@@ -97,7 +99,7 @@ export class EntryController {
 		// console.log("args", args);
 
 		const entries =
-			(await ORM.entry.findMany({
+			(await prisma.entry.findMany({
 				where: args,
 			})) ?? [];
 

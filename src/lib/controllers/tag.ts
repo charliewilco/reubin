@@ -1,5 +1,5 @@
 import type { Tag } from "@prisma/client";
-import { ORM } from "$/lib/orm";
+import { prisma } from "$/lib/orm";
 
 export class TagController {
 	static fromORM(tag: Tag) {
@@ -10,7 +10,7 @@ export class TagController {
 	}
 
 	async getById(id: string, userId: string) {
-		return ORM.tag.findUnique({
+		return prisma.tag.findUnique({
 			where: {
 				tagUserId: {
 					id,
@@ -21,7 +21,7 @@ export class TagController {
 	}
 
 	async getAll(userId?: string) {
-		return ORM.tag.findMany({
+		return prisma.tag.findMany({
 			where: {
 				userId,
 			},
@@ -29,7 +29,7 @@ export class TagController {
 	}
 
 	async updateById(title: string, id: string, userId: string) {
-		return ORM.tag.update({
+		return prisma.tag.update({
 			where: {
 				tagUserId: {
 					id,
@@ -46,7 +46,7 @@ export class TagController {
 		try {
 			if (!userId) throw new Error("No user id");
 
-			const tag = await ORM.tag.create({
+			const tag = await prisma.tag.create({
 				data: {
 					title: name,
 					userId,
@@ -63,14 +63,14 @@ export class TagController {
 	}
 
 	async remove(id: string, userId: string) {
-		const tag = await ORM.tag.findUnique({
+		const tag = await prisma.tag.findUnique({
 			where: {
 				id,
 			},
 		});
 
 		if (tag?.userId === userId) {
-			const tag = await ORM.tag.delete({
+			const tag = await prisma.tag.delete({
 				where: {
 					id,
 				},

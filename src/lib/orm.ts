@@ -1,18 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 
 declare global {
-	var ORM: PrismaClient | undefined;
+	var prisma: PrismaClient | undefined;
 }
 
-let ORM: PrismaClient;
+let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === "production") {
-	ORM = new PrismaClient();
+	prisma = new PrismaClient();
 } else {
-	if (!global.ORM) {
-		global.ORM = new PrismaClient();
+	if (!global.prisma) {
+		global.prisma = new PrismaClient();
 	}
-	ORM = global.ORM;
+	prisma = global.prisma;
 }
 
-export { ORM };
+export { prisma };
