@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { createWeakUID } from "@charliewilco/toolkit";
 
 const mockUser = {
-	email: `charliewilco-${createWeakUID()}@gmail.com`,
+	email: `test-${createWeakUID()}@test.com`,
 	password: "P@ssw0rd",
 };
 
@@ -20,7 +20,7 @@ test("Register for an account", async ({ page }) => {
 	await page.getByTestId("register-password-input").fill(mockUser.password);
 	await page.getByRole("button", { name: "Register" }).click();
 	await page.waitForLoadState("networkidle");
-	await expect(page).toHaveURL("http://localhost:3000/feeds");
+	await expect(page).toHaveURL("http://localhost:3000/dashboard");
 	await page.getByRole("button", { name: "Add Feed" }).click();
 	await expect(page.getByTestId("add-feed-modal")).toHaveText(
 		"Add a website URL to see if it has an RSS feed."

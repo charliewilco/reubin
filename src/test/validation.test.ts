@@ -2,14 +2,15 @@ import {
 	registerValidationSchema,
 	loginValidationSchema,
 	zodToFieldErrors,
+	VALID_PASSWORD_ERROR,
 } from "$/utils/validation";
 
-describe("registerValidationSchema", () => {
+describe("Register Validation", () => {
 	test("should validate username, email, and password", () => {
 		const validInput = {
 			username: "testUser",
 			email: "test@example.com",
-			password: "testPassword123",
+			password: "Passw0rd!",
 		};
 
 		const result = registerValidationSchema.safeParse(validInput);
@@ -30,11 +31,12 @@ describe("registerValidationSchema", () => {
 		// @ts-ignore
 		expect(zodToFieldErrors(result.error)).toEqual({
 			email: "Invalid email",
+			password: VALID_PASSWORD_ERROR,
 		});
 	});
 });
 
-describe("zodToFieldErrors", () => {
+describe("Login Validation", () => {
 	test("should convert ZodError to field errors", () => {
 		const invalidInput = {
 			username: "",
@@ -46,11 +48,13 @@ describe("zodToFieldErrors", () => {
 		expect(result.success).toBe(false);
 
 		// @ts-ignore
+		console.log(result.error.flatten());
+
+		// @ts-ignore
 		const fieldErrors = zodToFieldErrors(result.error as Zod.ZodError);
 
 		expect(fieldErrors).toEqual({
-			username: "Required",
-			password: "Should be at least 8 characters",
+			password: VALID_PASSWORD_ERROR,
 		});
 	});
 });
