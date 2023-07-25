@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { Auth } from "$/lib/auth";
 import { RegisterForm } from "$/components/register-form";
 import { Card } from "$/components/ui/card";
 
@@ -10,11 +7,7 @@ export const metadata: Metadata = {
 	title: "Sign up",
 };
 
-export default async function RegistrationPage() {
-	const authRequest = Auth.handleRequest({ cookies });
-	const { session } = await authRequest.validateUser();
-	if (session) redirect("/dashboard");
-
+export default function RegistrationPage() {
 	return (
 		<div>
 			<header className="mb-8 text-center">

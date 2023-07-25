@@ -10,7 +10,7 @@ export function LoadingIndicator({}: ActivityIndicatorProps) {
 					fill="none"
 					r="14"
 					strokeWidth="4"
-					stroke="var(--highlight)"
+					stroke="currentColor"
 					opacity="0.2"
 				/>
 				<circle
@@ -19,7 +19,7 @@ export function LoadingIndicator({}: ActivityIndicatorProps) {
 					fill="none"
 					r="14"
 					strokeWidth="4"
-					stroke="var(--highlight)"
+					stroke="currentColor"
 					strokeDashoffset={60}
 					strokeDasharray={80}
 				/>

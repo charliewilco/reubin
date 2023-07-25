@@ -1,9 +1,8 @@
-import { RecommendationMap } from "$/lib/recommendations";
-import { cookies } from "next/headers";
-import { RecommendationList } from "$/components/recommendation-list";
-import { Auth } from "$/lib/auth";
-import { ORM } from "$/lib/orm";
 import { Metadata } from "next";
+import { RecommendationMap } from "$/lib/recommendations";
+import { RecommendationList } from "$/components/recommendation-list";
+import { getUserSession } from "$/lib/auth";
+import { prisma } from "$/lib/orm";
 
 export const metadata: Metadata = {
 	title: "Recommended Feeds",
@@ -12,16 +11,14 @@ export const metadata: Metadata = {
 async function RecommendationsPage() {
 	let lists = Array.from(RecommendationMap);
 
-	const authRequest = Auth.handleRequest({ cookies });
-	const { user } = await authRequest.validateUser();
+	const { user } = await getUserSession();
 
-	let subscribed = await ORM?.feed.findMany({
-		where: {
-			userId: user.userId,
-		},
-	});
-
-	subscribed = subscribed ?? [];
+	let subscribed =
+		(await prisma?.feed.findMany({
+			where: {
+				userId: user?.userId,
+			},
+		})) ?? [];
 
 	return (
 		<div className="mx-auto max-w-7xl space-y-16">

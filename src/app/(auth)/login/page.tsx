@@ -1,20 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { LoginForm } from "$/components/login-form";
 import { Card } from "$/components/ui/card";
-import { Auth } from "$/lib/auth";
 
 export const metadata: Metadata = {
 	title: "Login",
 };
 
-export default async function LoginPage() {
-	const authRequest = Auth.handleRequest({ cookies });
-	const { session } = await authRequest.validateUser();
-	if (session) redirect("/feeds");
-
+export default function LoginPage() {
 	return (
 		<div>
 			<header className="mb-8 text-center">

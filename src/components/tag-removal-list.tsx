@@ -2,23 +2,32 @@ import * as React from "react";
 import { removeTag } from "$/actions";
 import type { Tag } from "@prisma/client";
 import { Trash2 } from "lucide-react";
+import { getUserSession } from "$/lib/auth";
+import { unstable_cache } from "next/cache";
+import { Controllers } from "$/lib/controllers";
 
-interface TagListProps {
-	tags: Tag[];
-}
+export async function TagRemovalList() {
+	const { user } = await getUserSession();
+	let cachedTags = unstable_cache(
+		(user) => {
+			return Controllers.tags.getAll(user.userId);
+		},
+		["tags", "all"],
+		{
+			tags: ["tag:all"],
+		}
+	);
+	const tags = await cachedTags(user);
 
-console.log(Object.keys(React));
-
-export function TagRemovalList(props: TagListProps) {
 	let content;
 
-	if (props.tags) {
-		if (props.tags.length === 0) {
+	if (tags) {
+		if (tags.length === 0) {
 			content = <p className="text-center">No Tags</p>;
 		} else {
 			content = (
 				<ul>
-					{props.tags.map((tag) => {
+					{tags.map((tag) => {
 						return (
 							<li key={tag.id} className="pb-2">
 								<form className="flex items-center justify-between ">

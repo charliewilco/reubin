@@ -19,7 +19,8 @@ export function FavoriteEntry(props: FavoriteEntryProps) {
 	);
 	return (
 		<form
-			action={async (formData) => {
+			className="block"
+			action={async (formData: FormData) => {
 				let id = formData.get("id")?.toString();
 
 				if (id) {
@@ -29,7 +30,7 @@ export function FavoriteEntry(props: FavoriteEntryProps) {
 			}}>
 			<input type="hidden" name="id" value={props.id} />
 
-			<button title="Favorite Entry" type="submit">
+			<button title="Favorite Entry" type="submit" className="block">
 				{pending ? "Hang on..." : optimisticValue ? <BookmarkMinus /> : <BookmarkPlus />}
 			</button>
 		</form>

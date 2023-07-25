@@ -27,7 +27,7 @@ export const POST = async (request: Request) => {
 		const session = await Auth.createSession(key.userId);
 		authRequest.setSession(session);
 
-        return NextResponse.redirect(new URL('/dashboard', request.url));
+		return NextResponse.redirect(new URL("/all", request.url));
 	} catch (error) {
 		if (
 			(error instanceof LuciaError && error.message === "AUTH_INVALID_KEY_ID") ||

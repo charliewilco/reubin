@@ -1,29 +1,12 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { Auth } from "$/lib/auth";
-import { Controllers } from "$/lib/controllers";
 import { CreateTagForm } from "$/components/tag-create-form";
 import { TagRemovalList } from "$/components/tag-removal-list";
-import { unstable_cache } from "next/cache";
 
 export const metadata: Metadata = {
 	title: "Settings",
 };
 
 export default async function SettingsPage() {
-	const authRequest = Auth.handleRequest({ cookies: cookies });
-	const { user } = await authRequest.validateUser();
-	let cachedTags = unstable_cache(
-		(user) => {
-			return Controllers.tags.getAll(user.userId);
-		},
-		["tags", "all"],
-		{
-			tags: ["tag:all"],
-		}
-	);
-	const tags = await cachedTags(user);
-
 	return (
 		<div className="w-full flex-1 p-4">
 			<div className="mx-auto max-w-7xl space-y-16">
@@ -44,7 +27,7 @@ export default async function SettingsPage() {
 					</div>
 					<div className="col-span-12 lg:col-span-4">
 						<h3 className="mb-8 text-2xl">Available Tags</h3>
-						<TagRemovalList tags={tags} />
+						<TagRemovalList />
 					</div>
 				</section>
 				<section className="grid grid-cols-12 gap-8">

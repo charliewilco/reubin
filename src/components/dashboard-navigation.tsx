@@ -15,7 +15,7 @@ export function LinkItem(props: LinkItemProps) {
 	let isActive = pathName === props.href;
 
 	let container = cx(
-		"flex items-center rounded-lg p-2 text-zinc-700  dark:text-zinc-200",
+		"flex-1 justify-center flex items-center rounded-lg p-2 text-zinc-700  dark:text-zinc-200",
 		isActive ? "bg-sky-700 hover:bg-sky-900" : "hover:bg-sky-700"
 	);
 
@@ -31,7 +31,7 @@ export function LinkItem(props: LinkItemProps) {
 
 export function DashboardNavigationRail() {
 	return (
-		<nav aria-label="Sidebar" className="flex flex-col items-center space-y-4 px-2 py-2">
+		<nav aria-label="Sidebar" className="flex justify-center w-full md:w-auto md:flex-col items-center md:space-y-4 px-2 py-2">
 			<LinkItem href="/all" name="Home">
 				<Home className="h-6 w-6" aria-hidden="true" />
 			</LinkItem>
