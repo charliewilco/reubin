@@ -1,15 +1,12 @@
-import { cookies } from "next/headers";
-import { prisma } from "$/lib/orm";
-import { Auth } from "$/lib/auth";
+import { Services } from "$/lib/services";
 import { NextResponse } from "next/server";
 
-export async function GET() {
-	const authRequest = Auth.handleRequest({ cookies });
-	const { user } = await authRequest.validateUser();
+export async function GET(request: Request) {
+	const { user } = await Services.getUserSession(request);
 
-	let feeds = await prisma.feed.findMany({
+	let feeds = await Services.db.feed.findMany({
 		where: {
-			userId: user.userId,
+			userId: user?.userId,
 		},
 	});
 

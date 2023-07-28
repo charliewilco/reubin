@@ -1,9 +1,9 @@
-import { Auth } from "$/lib/auth";
 import { LuciaError } from "lucia-auth";
 import { cookies } from "next/headers";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import base64 from "base-64";
+import { Services } from "$/lib/services";
 
 export const runtime = "nodejs";
 
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 		);
 	}
 	try {
-		const user = await Auth.createUser({
+		const user = await Services.auth.createUser({
 			primaryKey: {
 				providerId: "username",
 				providerUserId: username,
@@ -35,8 +35,8 @@ export async function POST(request: Request) {
 				email,
 			},
 		});
-		const session = await Auth.createSession(user.userId);
-		const authRequest = Auth.handleRequest({ request, cookies });
+		const session = await Services.auth.createSession(user.userId);
+		const authRequest = Services.auth.handleRequest({ request, cookies });
 		authRequest.setSession(session);
 
 		return NextResponse.redirect(new URL("/all", request.url));

@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Auth } from "$/lib/auth";
 import base64 from "base-64";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { LuciaError } from "lucia-auth";
+import { Services } from "$/lib/services";
 
 export const POST = async (request: Request) => {
 	const { username, password } = (await request.json()) as Partial<{
@@ -22,9 +22,9 @@ export const POST = async (request: Request) => {
 	}
 
 	try {
-		const authRequest = Auth.handleRequest({ request, cookies });
-		const key = await Auth.useKey("username", username, base64.decode(password));
-		const session = await Auth.createSession(key.userId);
+		const authRequest = Services.auth.handleRequest({ request, cookies });
+		const key = await Services.auth.useKey("username", username, base64.decode(password));
+		const session = await Services.auth.createSession(key.userId);
 		authRequest.setSession(session);
 
 		return NextResponse.redirect(new URL("/all", request.url));

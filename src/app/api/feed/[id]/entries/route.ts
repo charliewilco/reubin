@@ -1,17 +1,14 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { Auth } from "$/lib/auth";
 import { Controllers } from "$/lib/controllers";
+import { Services } from "$/lib/services";
 
 interface Params {
 	id: string;
 }
 
-export async function GET(request: Request, context: { params: Params }) {
-	const authRequest = Auth.handleRequest({ request, cookies });
-	const { user } = await authRequest.validateUser();
+export async function GET(_request: Request, context: { params: Params }) {
+	const { user } = await Services.getUserSession(_request);
 	let id = context.params.id;
-
 	let entries = await Controllers.entry.getByFeed(id);
 
 	return NextResponse.json({
