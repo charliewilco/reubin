@@ -1,5 +1,6 @@
 import { Stripe } from "stripe";
-import { $ENV } from "./env";
+import { Env } from "./env";
+import type { AuthUser } from "@prisma/client";
 
 export interface PricingTierData {
 	name: string;
@@ -23,9 +24,15 @@ let FREE_TIER: PricingTierData = {
 export class Payments {
 	stripe: Stripe;
 	constructor() {
-		this.stripe = new Stripe($ENV.STRIPE_SECRET_KEY, {
+		this.stripe = new Stripe(Env.$vars.STRIPE_SECRET_KEY, {
 			apiVersion: "2022-11-15",
 			typescript: true,
+		});
+	}
+
+	async createCustomer(user: AuthUser) {
+		this.stripe.customers.create({
+			email: user.email,
 		});
 	}
 
@@ -63,7 +70,6 @@ export class Payments {
 
 	async getAllProducts() {
 		let products = await this.stripe.products.list();
-		console.log(products);
 		let prices = await Promise.all(this.getPriceIds(products.data));
 
 		return { products, prices };

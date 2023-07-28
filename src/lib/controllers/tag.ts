@@ -1,5 +1,5 @@
 import type { Tag } from "@prisma/client";
-import { prisma } from "$/lib/orm";
+import { Services } from "../services";
 
 export class TagController {
 	static fromORM(tag: Tag) {
@@ -9,8 +9,9 @@ export class TagController {
 		};
 	}
 
-	async getById(id: string, userId: string) {
-		return prisma.tag.findUnique({
+	async getById(id: string, userId?: string) {
+		if (!userId) throw new Error("No user id");
+		return Services.db.tag.findUnique({
 			where: {
 				tagUserId: {
 					id,
@@ -21,15 +22,17 @@ export class TagController {
 	}
 
 	async getAll(userId?: string) {
-		return prisma.tag.findMany({
+		return Services.db.tag.findMany({
 			where: {
 				userId,
 			},
 		});
 	}
 
-	async updateById(title: string, id: string, userId: string) {
-		return prisma.tag.update({
+	async updateById(title: string, id: string, userId?: string) {
+		if (!userId) throw new Error("No user id");
+
+		return Services.db.tag.update({
 			where: {
 				tagUserId: {
 					id,
@@ -46,7 +49,7 @@ export class TagController {
 		try {
 			if (!userId) throw new Error("No user id");
 
-			const tag = await prisma.tag.create({
+			const tag = await Services.db.tag.create({
 				data: {
 					title: name,
 					userId,
@@ -63,14 +66,14 @@ export class TagController {
 	}
 
 	async remove(id: string, userId: string) {
-		const tag = await prisma.tag.findUnique({
+		const tag = await Services.db.tag.findUnique({
 			where: {
 				id,
 			},
 		});
 
 		if (tag?.userId === userId) {
-			const tag = await prisma.tag.delete({
+			const tag = await Services.db.tag.delete({
 				where: {
 					id,
 				},

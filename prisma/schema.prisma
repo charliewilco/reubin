@@ -1,11 +1,19 @@
 generator client {
-  provider    = "prisma-client-js"
-  previewFeed = ["extendedWhereUnique"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum SubscriptionType {
+  AI
+  FREEMIUM
+  UNLIMITED
+  BETA
+  SERVICE
 }
 
 model AuthSession {
@@ -26,19 +34,20 @@ enum Theme {
 }
 
 model AuthUser {
-  id              String   @id @unique @default(cuid())
-  username        String   @unique
-  email           String   @unique
-  isVerified      Boolean  @default(false) @map("is_verified")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-  preferredTheme  Theme    @default(DEFAULT)
+  id              String           @id @unique @default(cuid())
+  username        String           @unique
+  email           String           @unique
+  isVerified      Boolean          @default(false) @map("is_verified")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  preferredTheme  Theme            @default(DEFAULT)
   feeds           Feed[]
   tags            Tag[]
-  refreshInterval Int      @default(60) @map("refresh_interval")
-
-  authSessions AuthSession[]
-  authKeys     AuthKey[]
+  refreshInterval Int              @default(60) @map("refresh_interval")
+  stripeId        String?          @unique @map("stripe_id")
+  subscription    SubscriptionType @default(FREEMIUM)
+  authSessions    AuthSession[]
+  authKeys        AuthKey[]
   // here you can add custom fields for your user
   // e.g. name, email, username, roles, etc.
 

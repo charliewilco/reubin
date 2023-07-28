@@ -1,8 +1,8 @@
 import { Resend } from "resend";
-import { $ENV } from "./env";
+import { Env } from "./env";
 
 export class Email {
-	public service = new Resend($ENV.RESEND_API_KEY);
+	public service = new Resend(Env.$vars.RESEND_API_KEY);
 	async createVerificationEmail(_email: string, _token: string) {}
 	async sendEmail() {
 		await this.service.emails.send({

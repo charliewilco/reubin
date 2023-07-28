@@ -1,7 +1,5 @@
 import base64 from "base-64";
-import { Auth } from "../auth";
 import { Services } from "../services";
-import { prisma } from "../orm";
 
 interface CreateUserArgs {
 	username: string;
@@ -11,7 +9,7 @@ interface CreateUserArgs {
 
 export class UserController {
 	async create({ username, password, email }: CreateUserArgs) {
-		let user = await Auth.createUser({
+		let user = await Services.auth.createUser({
 			primaryKey: {
 				providerId: "username",
 				providerUserId: username,
@@ -23,11 +21,25 @@ export class UserController {
 			},
 		});
 
+		await Services.payments.createCustomer(user);
 		await Services.mail.createVerificationEmail(user.userId, "...");
 	}
 
+	async updateEmail() {
+		// needs to sync with Stripe
+	}
+
+	async updateSubscription(stripeId: string, _planId: string) {
+		await Services.db.authUser.update({
+			where: {
+				stripeId,
+			},
+			data: {},
+		});
+	}
+
 	async remove(userId: string) {
-		let user = await prisma.authUser.delete({
+		let user = await Services.db.authUser.delete({
 			where: {
 				id: userId,
 			},

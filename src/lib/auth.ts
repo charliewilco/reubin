@@ -4,7 +4,7 @@ import prismaAdapter from "@lucia-auth/adapter-prisma";
 import { prisma } from "./orm";
 import { cookies } from "next/headers";
 import type { Theme } from "@prisma/client";
-import { $ENV } from "./env";
+import { Env } from "./env";
 
 interface TransformedUser {
 	userId: string;
@@ -16,7 +16,7 @@ interface TransformedUser {
 
 export const Auth = lucia({
 	adapter: prismaAdapter(prisma as any),
-	env: $ENV.NODE_ENV === "development" ? "DEV" : "PROD",
+	env: Env.$vars.NODE_ENV === "development" ? "DEV" : "PROD",
 	middleware: nextjs(),
 	transformDatabaseUser: (userData): TransformedUser => {
 		return {
@@ -56,11 +56,6 @@ export type AuthUserSession = ValidatedSession | NullSession;
 
 export function isValidatedSession(session: AuthUserSession): session is ValidatedSession {
 	return session.user !== null;
-}
-
-export async function getUserSession(): Promise<AuthUserSession> {
-	const authRequest = Auth.handleRequest({ cookies });
-	return authRequest.validateUser();
 }
 
 export type AuthAdapter = typeof Auth;

@@ -1,8 +1,8 @@
 import type { Feed } from "@prisma/client";
 import axios from "axios";
-import { prisma } from "$/lib/orm";
 import { RSSKit } from "$/lib/rss";
 import { EntryController } from "./entry";
+import { Services } from "../services";
 
 export class FeedController {
 	static async getFeedFromDirectURL(url: string) {
@@ -24,7 +24,7 @@ export class FeedController {
 		try {
 			const { data } = await FeedController.getFeedFromDirectURL(url);
 			const parsed = await this.rss.parse(data);
-			const feed = await prisma.feed.create({
+			const feed = await Services.db.feed.create({
 				data: {
 					title: parsed.title ?? "Untitled Feed",
 					link: parsed.link ?? url,
@@ -37,7 +37,7 @@ export class FeedController {
 			let created =
 				parsed.items?.map((value) => EntryController.fromRSS(value, feed.id)) ?? [];
 			if (created.length > 0)
-				await prisma.entry.createMany({
+				await Services.db.entry.createMany({
 					data: created,
 				});
 
@@ -47,8 +47,8 @@ export class FeedController {
 		}
 	}
 
-	async getById(id: string, userId: string) {
-		const feed = await prisma.feed.findUnique({
+	async getById(id: string, userId?: string) {
+		const feed = await Services.db.feed.findUnique({
 			where: {
 				id,
 			},
@@ -62,7 +62,7 @@ export class FeedController {
 	}
 
 	async getByTagID(id: string, userId: string) {
-		const feeds = await prisma.feed.findMany({
+		const feeds = await Services.db.feed.findMany({
 			where: {
 				userId,
 				tagId: id,
@@ -78,7 +78,7 @@ export class FeedController {
 	}
 
 	async getAll(userId?: string) {
-		const feeds = await prisma.feed.findMany({
+		const feeds = await Services.db.feed.findMany({
 			where: {
 				userId,
 			},
@@ -92,7 +92,7 @@ export class FeedController {
 	}
 
 	async updateTitle(id: string, title: string, userId: string) {
-		let feed = await prisma.feed.update({
+		let feed = await Services.db.feed.update({
 			where: {
 				feedUserId: {
 					id,
@@ -108,7 +108,7 @@ export class FeedController {
 	}
 
 	async remove(id: string, userId: string) {
-		const feed = await prisma.feed.findUnique({
+		const feed = await Services.db.feed.findUnique({
 			where: {
 				id,
 			},
@@ -118,13 +118,13 @@ export class FeedController {
 			throw new Error("Feed not found");
 		}
 
-		// await prisma.entry.deleteMany({
+		// await Services.db.entry.deleteMany({
 		// 	where: {
 		// 		feedId: id,
 		// 	},
 		// });
 
-		const removed = await prisma.feed.delete({
+		const removed = await Services.db.feed.delete({
 			where: {
 				id,
 			},
@@ -134,7 +134,7 @@ export class FeedController {
 	}
 
 	async refresh(id: string) {
-		const feed = await prisma.feed.findUnique({
+		const feed = await Services.db.feed.findUnique({
 			where: {
 				id,
 			},
@@ -159,11 +159,11 @@ export class FeedController {
 			}
 		}
 
-		await prisma.entry.createMany({
+		await Services.db.entry.createMany({
 			data: entries,
 		});
 
-		const _ = await prisma.entry.findMany({
+		const _ = await Services.db.entry.findMany({
 			where: {
 				feedId: id,
 				pubDate: {
@@ -172,7 +172,7 @@ export class FeedController {
 			},
 		});
 
-		await prisma.feed.update({
+		await Services.db.feed.update({
 			where: {
 				id,
 			},
@@ -185,7 +185,7 @@ export class FeedController {
 	}
 
 	async attachTag(feedId: string, tagId: string, userId: string) {
-		const feed = await prisma.feed.updateMany({
+		const feed = await Services.db.feed.updateMany({
 			where: {
 				id: feedId,
 				userId,
@@ -199,7 +199,7 @@ export class FeedController {
 	}
 
 	async markAllAsRead(feedId: string, _userId: string) {
-		await prisma.entry.updateMany({
+		await Services.db.entry.updateMany({
 			where: {
 				feedId,
 			},
