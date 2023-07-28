@@ -1,11 +1,11 @@
 import { AddFeed } from "$/components/feed-create";
 import { AppHeader } from "$/components/app-header";
 import { DashboardNavigationRail } from "$/components/dashboard-navigation";
-import { getUserSession } from "$/lib/auth";
 import { addFeed } from "$/actions";
+import { Services } from "$/lib/services";
 
 export default async function Layout({ children }: React.PropsWithChildren<{}>) {
-	const { user } = await getUserSession();
+	const { user } = await Services.getUserSession();
 
 	return (
 		<div className="h-screen">

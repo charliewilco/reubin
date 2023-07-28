@@ -3,18 +3,16 @@ import { Settings } from "lucide-react";
 import { Dialog, DialogTitle, DialogContent, DialogTrigger } from "./ui/dialog";
 import { UpdateFeedForm } from "./feed-update-form";
 import { Controllers } from "$/lib/controllers";
-import { Auth } from "$/lib/auth";
-import { cookies } from "next/headers";
+import { Services } from "$/lib/services";
 
 interface FeedSettingsProps {
 	id: string;
 }
 
 export async function FeedSettings(props: FeedSettingsProps) {
-	let authRequest = Auth.handleRequest({ cookies: cookies });
-	const { user } = await authRequest.validateUser();
+	const { user } = await Services.getUserSession();
 
-	let feed = await Controllers.feed.getById(props.id, user.userId);
+	let feed = await Controllers.feed.getById(props.id, user?.userId);
 	return (
 		<Dialog>
 			<DialogTrigger aria-label="Update feed">

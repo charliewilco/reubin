@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { LogoDisplay } from "../../components/logo";
-import { getUserSession } from "$/lib/auth";
+import { Services } from "$/lib/services";
 
 export default async function Layout({ children }: React.PropsWithChildren<{}>) {
-	const { session } = await getUserSession();
+	const { session } = await Services.getUserSession();
 	if (session) redirect("/all");
 
 	return (

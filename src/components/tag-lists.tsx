@@ -1,15 +1,15 @@
 import { unstable_cache } from "next/cache";
 import { Controllers } from "$/lib/controllers";
-import { getUserSession } from "$/lib/auth";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/input";
+import { Services } from "$/lib/services";
 
 interface TagListProps {
 	selected?: string | null;
 }
 
 export async function TagSelectionList(props: TagListProps) {
-	const { user } = await getUserSession();
+	const { user } = await Services.getUserSession();
 	const tags = await unstable_cache(() => Controllers.tags.getAll(user?.userId), [], {
 		tags: ["tag:all"],
 	})();

@@ -1,15 +1,10 @@
-import type { Tag } from "@prisma/client";
 import { Trash2 } from "lucide-react";
 import { removeTag } from "$/actions";
 import { Controllers } from "$/lib/controllers";
-import { getUserSession } from "$/lib/auth";
-
-interface TagRemovalListProps {
-	tags: Tag[];
-}
+import { Services } from "$/lib/services";
 
 export async function TagRemovalList() {
-	let { user } = await getUserSession();
+	let { user } = await Services.getUserSession();
 	let tags = await Controllers.tags.getAll(user?.userId);
 
 	let content;

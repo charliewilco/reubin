@@ -1,15 +1,15 @@
-import { getUserSession } from "$/lib/auth";
-import { Controllers } from "$/lib/controllers";
 import { FeedListItem } from "./feed-list-item";
 import { FeedNavigation } from "./feed-navigation";
 import { EmptyFeedList } from "./feed-list-empty";
+import { Controllers } from "$/lib/controllers";
+import { Services } from "$/lib/services";
 
 interface FeedListProps {
 	currentFilter: string;
 }
 
 export async function FeedList(props: FeedListProps) {
-	const { user } = await getUserSession();
+	const { user } = await Services.getUserSession();
 
 	let feeds = await Controllers.feed.getAll(user?.userId);
 
