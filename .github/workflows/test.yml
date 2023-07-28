@@ -11,12 +11,14 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: ci_db_test
-          RESEND_API_KEY: "..."
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     env:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ci_db_test
+      RESEND_API_KEY: "..."
+      STRIPE_PUBLIC_KEY: "something"
+      STRIPE_SECRET_KEY: "something secret"
     strategy:
       matrix:
         node-version: [18.x]
