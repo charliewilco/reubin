@@ -76,7 +76,7 @@ export const Social: BigIcons = {
 	},
 };
 
-export function Services() {
+export function _SocialServices() {
 	return (
 		<section>
 			<div className="text-center">

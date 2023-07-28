@@ -1,6 +1,6 @@
 import { Social } from "./social-icons";
 
-export function Services() {
+export function SocialServices() {
 	return (
 		<section>
 			<div className="text-center">
