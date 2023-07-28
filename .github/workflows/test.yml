@@ -17,8 +17,8 @@ jobs:
     env:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ci_db_test
       RESEND_API_KEY: "..."
-      STRIPE_PUBLIC_KEY: "something"
-      STRIPE_SECRET_KEY: "something secret"
+      STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
     strategy:
       matrix:
         node-version: [18.x]
