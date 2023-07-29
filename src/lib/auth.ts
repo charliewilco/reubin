@@ -2,7 +2,6 @@ import lucia from "lucia-auth";
 import { nextjs } from "lucia-auth/middleware";
 import prismaAdapter from "@lucia-auth/adapter-prisma";
 import { prisma } from "./orm";
-import { cookies } from "next/headers";
 import type { Theme } from "@prisma/client";
 import { Env } from "./env";
 
