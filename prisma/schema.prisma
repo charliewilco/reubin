@@ -68,6 +68,7 @@ model AuthKey {
 
 model Entry {
   id       String    @id @default(uuid())
+  link     String
   title    String
   content  String
   pubDate  DateTime  @default(now())

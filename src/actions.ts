@@ -1,8 +1,9 @@
 "use server";
+import type { Entry } from "@prisma/client";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { Controllers } from "$/lib/controllers";
-import { Services } from "./lib/services";
+import { ArticleExpander } from "$/lib/article-expansion";
 
 export async function addFeed(formData: FormData) {
 	let url = formData.get("url") as string;
@@ -10,7 +11,7 @@ export async function addFeed(formData: FormData) {
 		return;
 	}
 
-	const { user } = await Services.getUserSession();
+	const { user } = await Controllers.session.getUserSession();
 	if (user === null) {
 		return;
 	}
@@ -20,7 +21,7 @@ export async function addFeed(formData: FormData) {
 export async function addFeedFromRecommendation(formData: FormData) {
 	let link = formData.get("link") as string;
 
-	const { user } = await Services.getUserSession();
+	const { user } = await Controllers.session.getUserSession();
 	if (user === null) {
 		return;
 	}
@@ -29,15 +30,17 @@ export async function addFeedFromRecommendation(formData: FormData) {
 	revalidatePath("/dashboard");
 }
 
-export async function addFavorite(id: string) {
-	await Controllers.entry.favorite(id);
+export async function addFavorite(id: string): Promise<Entry> {
+	let entry = await Controllers.entry.favorite(id);
 	revalidateTag(`entry:${id}`);
+
+	return entry;
 }
 
 export async function removeFeed(formData: FormData) {
 	let id = formData.get("id") as string;
 	if (id) {
-		const { user } = await Services.getUserSession();
+		const { user } = await Controllers.session.getUserSession();
 		if (user === null) {
 			return;
 		}
@@ -58,7 +61,7 @@ export async function refreshFeed(formData: FormData) {
 export async function createTag(formData: FormData) {
 	let name = formData.get("name") as string;
 	if (name) {
-		const { user } = await Services.getUserSession();
+		const { user } = await Controllers.session.getUserSession();
 		if (user === null) {
 			return;
 		}
@@ -70,7 +73,7 @@ export async function createTag(formData: FormData) {
 export async function removeTag(formData: FormData) {
 	let id = formData.get("id") as string;
 	if (id) {
-		const { user } = await Services.getUserSession();
+		const { user } = await Controllers.session.getUserSession();
 		if (user === null) {
 			return;
 		}
@@ -85,7 +88,7 @@ export async function attachFeedToTag(formData: FormData) {
 	let tagId = formData.get("tagId") as string;
 
 	if (feedId && tagId) {
-		const { user } = await Services.getUserSession();
+		const { user } = await Controllers.session.getUserSession();
 		if (user === null) {
 			return;
 		}
@@ -96,10 +99,14 @@ export async function attachFeedToTag(formData: FormData) {
 export async function markAllEntriesAsRead(formData: FormData) {
 	let id = formData.get("id") as string;
 	if (id) {
-		const { user } = await Services.getUserSession();
+		const { user } = await Controllers.session.getUserSession();
 		if (user === null) {
 			return;
 		}
 		await Controllers.feed.markAllAsRead(id, user.userId);
 	}
+}
+
+export async function extractArticle(id: string, link: string) {
+	return ArticleExpander.getArticle(id, link);
 }

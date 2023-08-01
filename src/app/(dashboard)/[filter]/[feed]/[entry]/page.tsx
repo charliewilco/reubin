@@ -11,6 +11,7 @@ export default async function EntryPage({ params }: { params: PageParams }) {
 		let entry = await Controllers.entry.getById(params.entry);
 		return (
 			<EntryBody
+				link={entry.link}
 				date={entry.pubDate}
 				isFavorite={entry.favorite}
 				title={entry.title}

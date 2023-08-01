@@ -3,14 +3,14 @@ import type { RSSItem } from "$/lib/rss";
 import { EntryFilter } from "$/lib/filters";
 import { Services } from "../services";
 
+type LeanEntry = Pick<Entry, "content" | "title" | "feedId" | "pubDate" | "link">;
+
 export class EntryController {
-	static fromRSS(
-		rssItem: RSSItem,
-		feedId: string
-	): Pick<Entry, "content" | "title" | "feedId" | "pubDate"> {
+	static fromRSS(rssItem: RSSItem, feedId: string): LeanEntry {
 		return {
 			title: rssItem.title ?? "Untitled Entry",
 			content: rssItem.content ?? "",
+			link: rssItem.link!,
 			feedId,
 			pubDate: new Date(rssItem.pubDate ?? Date.now()),
 		};

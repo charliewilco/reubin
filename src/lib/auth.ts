@@ -41,12 +41,12 @@ interface LuciaSessionType {
 	fresh: boolean;
 }
 
-interface ValidatedSession {
+export interface ValidatedSession {
 	user: TransformedUser;
 	session: Readonly<LuciaSessionType>;
 }
 
-interface NullSession {
+export interface NullSession {
 	user: null;
 	session: null;
 }
