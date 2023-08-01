@@ -14,15 +14,15 @@ export function getSnippet(str: string) {
 	return decodeHTML(stripHtml(str)).trim();
 }
 
-export const getLink = function (links: any[], rel: string, fallbackIdx: number) {
+export function getLink(links: any[], rel: string, fallbackIdx: number) {
 	if (!links) return;
 	for (let i = 0; i < links.length; ++i) {
 		if (links[i].$.rel === rel) return links[i].$.href;
 	}
 	if (links[fallbackIdx]) return links[fallbackIdx].$.href;
-};
+}
 
-export const getContent = function (content: any) {
+export function getContent(content: any) {
 	if (typeof content._ === "string") {
 		return content._;
 	} else if (typeof content === "object") {
@@ -36,9 +36,9 @@ export const getContent = function (content: any) {
 	} else {
 		return content;
 	}
-};
+}
 
-export const copyFromXML = function (xml: string, dest: any, fields: any[] = []) {
+export function copyFromXML(xml: string, dest: any, fields: any[] = []) {
 	fields.forEach(function (f) {
 		let from = f;
 		let to = f;
@@ -64,18 +64,7 @@ export const copyFromXML = function (xml: string, dest: any, fields: any[] = [])
 			dest[to + "Snippet"] = getSnippet(dest[to]);
 		}
 	});
-};
-
-export const maybePromisify = function (
-	callback: (...args: any) => any,
-	promise: Promise<any>
-) {
-	if (!callback) return promise;
-	return promise.then(
-		(data) => setTimeout(() => callback(null, data)),
-		(err) => setTimeout(() => callback(err))
-	);
-};
+}
 
 const DEFAULT_ENCODING = "utf8";
 const ENCODING_REGEX = /(encoding|charset)\s*=\s*(\S+)/;
@@ -94,7 +83,7 @@ const ENCODING_ALIASES = {
 	"iso-8859-1": "latin1",
 };
 
-export const getEncodingFromContentType = function (contentType: string) {
+export function getEncodingFromContentType(contentType: string) {
 	contentType = contentType || "";
 	let match = contentType.match(ENCODING_REGEX);
 	let encoding: keyof typeof ENCODING_ALIASES | string = (match || [])[2] || "";
@@ -104,13 +93,13 @@ export const getEncodingFromContentType = function (contentType: string) {
 		encoding = DEFAULT_ENCODING;
 	}
 	return encoding;
-};
+}
 
-export const isJSON = <T extends any>(str: any): str is T => {
+export function isJSON<T extends any>(str: any): str is T {
 	try {
 		JSON.parse(str);
 	} catch (e) {
 		return false;
 	}
 	return true;
-};
+}

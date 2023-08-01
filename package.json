@@ -20,7 +20,7 @@
 		"@charliewilco/toolkit": "^0.5.0",
 		"@defer/client": "^1.8.1",
 		"@lucia-auth/adapter-prisma": "2.0.0",
-		"@orama/orama": "^1.1.0",
+		"@mozilla/readability": "^0.4.4",
 		"@prisma/client": "^5.0.0",
 		"@radix-ui/react-accordion": "^1.1.2",
 		"@radix-ui/react-dialog": "^1.0.4",
@@ -29,6 +29,9 @@
 		"@tailwindcss/forms": "^0.5.4",
 		"@tailwindcss/typography": "^0.5.9",
 		"@types/base-64": "^1.0.0",
+		"@upstash/ratelimit": "^0.4.3",
+		"@upstash/redis": "^1.22.0",
+		"@xmlxyz/html-purify": "^0.0.5",
 		"ai": "^2.1.26",
 		"autoprefixer": "^10.4.13",
 		"axios": "1.4.0",
@@ -36,13 +39,8 @@
 		"cheerio": "1.0.0-rc.12",
 		"class-variance-authority": "^0.7.0",
 		"date-fns": "^2.30.0",
-		"encoding": "0.1.13",
 		"entities": "^4.5.0",
-		"escape-string-regexp": "5.0.0",
 		"fathom-client": "^3.5.0",
-		"he": "^1.2.0",
-		"html-entities": "2.3.3",
-		"htmlparser2": "^8.0.1",
 		"lodash": "4.17.21",
 		"lucia-auth": "^1.8.0",
 		"lucide-react": "^0.263.0",
@@ -65,7 +63,6 @@
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^14.0.0",
 		"@testing-library/user-event": "^14.4.3",
-		"@types/he": "^1.2.0",
 		"@types/jest": "^29.5.2",
 		"@types/lodash": "^4.14.195",
 		"@types/node": "^20.3.2",
@@ -96,5 +93,9 @@
 			"prettier-plugin-prisma",
 			"prettier-plugin-tailwindcss"
 		]
-	}
+	},
+	"browserslist": [
+		"defaults and supports es6-module",
+		"not IE 11"
+	]
 }

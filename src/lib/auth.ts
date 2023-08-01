@@ -2,7 +2,6 @@ import lucia from "lucia-auth";
 import { nextjs } from "lucia-auth/middleware";
 import prismaAdapter from "@lucia-auth/adapter-prisma";
 import { prisma } from "./orm";
-import { cookies } from "next/headers";
 import type { Theme } from "@prisma/client";
 import { Env } from "./env";
 
@@ -42,12 +41,12 @@ interface LuciaSessionType {
 	fresh: boolean;
 }
 
-interface ValidatedSession {
+export interface ValidatedSession {
 	user: TransformedUser;
 	session: Readonly<LuciaSessionType>;
 }
 
-interface NullSession {
+export interface NullSession {
 	user: null;
 	session: null;
 }
