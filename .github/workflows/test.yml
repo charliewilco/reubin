@@ -16,6 +16,11 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     env:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ci_db_test
+      RESEND_API_KEY: "..."
+      UPSTASH_REDIS_REST_URL: ""
+      UPSTASH_REDIS_REST_TOKEN: ""
+      STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
     strategy:
       matrix:
         node-version: [18.x]
@@ -29,7 +34,7 @@ jobs:
       - name: Install
         run: yarn install
       - name: Setup DB
-        run: npx prisma db push --schema apps/graphql/prisma/schema.prisma
+        run: yarn prisma db push
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost

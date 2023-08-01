@@ -1,0 +1,25 @@
+Each route should resolve a `Result<T>` response shape
+
+- `/feed/:id`
+  - **GET** feed
+  - **PUT** { title: string } update feed title
+  - **POST** { tagId: number } attach a tag to feed
+  - **DELETE** remove feed
+- `/feed/:id/latest`
+  - **GET** refresh feed
+- `/feed/:id/:filter`
+  - **GET** entry based on filter
+- `/feed/:id/entries`
+  - **GET** all entries
+- `/tags`
+  - **GET** tags
+  - **POST** { title: string } create tag
+- `/tag/:id`
+  - **GET** tag
+  - **DELETE** remove tag
+  - **PUT** rename tag
+- `/feeds`
+  - **POST** { feedURL: string } create a feed
+  - **GET** list of a feeds
+- `/filters`
+  - **GET** list of available filters

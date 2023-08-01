@@ -4,6 +4,6 @@
 	"service": "app",
 	"workspaceFolder": "/workspace",
 	"forwardPorts": [5432],
-	"postCreateCommand": "yarn install && yarn db && yarn seed",
-	"postAttachCommand": "yarn turbo dev --parallel --filter=!@reubin/extension"
+	"postCreateCommand": "yarn install && yarn prisma db push",
+	"postAttachCommand": "yarn dev"
 }

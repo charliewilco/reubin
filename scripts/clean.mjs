@@ -4,16 +4,15 @@ import { deleteAsync } from "del";
 import arg from "arg";
 import path from "node:path";
 
-const turboCachePaths = ["./apps/**/.turbo", "./packages/**/.turbo"];
+const turboCachePaths = [];
 const buildOuputPaths = [
 	".husky",
-	".parcel-cache",
-	"apps/browser-extension/dist",
-	"apps/graphql/dist",
-	"apps/ui/.next",
-	"apps/ui/coverage",
-	"apps/ui/tsconfig.tsbuildinfo",
+	".next",
+	"coverage",
+	"tsconfig.tsbuildinfo",
 	"e2e/playwright-report",
+	"*/**/.DS_Store",
+	".DS_Store",
 ];
 
 const args = arg({

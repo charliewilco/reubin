@@ -6,6 +6,23 @@ jobs:
     name: Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_db_test
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ci_db_test
+      RESEND_API_KEY: "..."
+      UPSTASH_REDIS_REST_URL: ""
+      UPSTASH_REDIS_REST_TOKEN: ""
+      STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
 
     steps:
       - name: Check out code
@@ -35,7 +52,7 @@ jobs:
         run: yarn install
 
       - name: Generate Types
-        run: yarn generate && yarn prisma generate --schema apps/graphql/prisma/schema.prisma
+        run: yarn prisma generate
 
       - name: Build
         run: yarn build

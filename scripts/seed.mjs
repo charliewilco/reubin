@@ -164,12 +164,11 @@ async function seedProject(email, password) {
 	);
 }
 
-seedProject(EMAIL, PASSWORD)
-	.then(async () => {
-		await orm.$disconnect();
-	})
-	.catch(async (e) => {
-		console.error(e);
-		await orm.$disconnect();
-		process.exit(1);
-	});
+try {
+	await seedProject(EMAIL, PASSWORD);
+} catch (error) {
+	console.error(error);
+	process.exit(1);
+} finally {
+	await orm.$disconnect();
+}

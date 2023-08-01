@@ -1,0 +1,109 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SubscriptionType {
+  AI
+  FREEMIUM
+  UNLIMITED
+  BETA
+  SERVICE
+}
+
+model AuthSession {
+  id             String   @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  auth_user      AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("auth_session")
+}
+
+enum Theme {
+  DEFAULT
+  SERIF
+  MONO
+}
+
+model AuthUser {
+  id              String           @id @unique @default(cuid())
+  username        String           @unique
+  email           String           @unique
+  isVerified      Boolean          @default(false) @map("is_verified")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  preferredTheme  Theme            @default(DEFAULT)
+  feeds           Feed[]
+  tags            Tag[]
+  refreshInterval Int              @default(60) @map("refresh_interval")
+  stripeId        String?          @unique @map("stripe_id")
+  subscription    SubscriptionType @default(FREEMIUM)
+  authSessions    AuthSession[]
+  authKeys        AuthKey[]
+  // here you can add custom fields for your user
+  // e.g. name, email, username, roles, etc.
+
+  @@map("auth_user")
+}
+
+model AuthKey {
+  id              String   @id @unique
+  hashed_password String?
+  user_id         String
+  primary_key     Boolean
+  expires         BigInt?
+  auth_user       AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("auth_key")
+}
+
+model Entry {
+  id       String    @id @default(uuid())
+  link     String
+  title    String
+  content  String
+  pubDate  DateTime  @default(now())
+  favorite Boolean   @default(false)
+  unread   Boolean   @default(true)
+  feedId   String?
+  readAt   DateTime? @map("read_at")
+  feed     Feed?     @relation(fields: [feedId], references: [id], onDelete: Cascade)
+
+  @@map("entry")
+}
+
+model Tag {
+  id     String    @id @default(uuid())
+  title  String
+  userId String?
+  user   AuthUser? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  feeds  Feed[]
+
+  @@unique(fields: [userId, id], name: "tagUserId")
+  @@map("tag")
+}
+
+model Feed {
+  id          String    @id @default(uuid())
+  title       String
+  userId      String
+  link        String
+  feedURL     String
+  lastFetched DateTime  @default(now())
+  tagId       String?
+  tag         Tag?      @relation(fields: [tagId], references: [id], onDelete: SetNull)
+  user        AuthUser? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries     Entry[]
+
+  @@unique(fields: [userId, id], name: "feedUserId")
+  @@map("feed")
+}
