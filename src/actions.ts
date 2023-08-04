@@ -107,6 +107,16 @@ export async function markAllEntriesAsRead(formData: FormData) {
 	}
 }
 
+export async function markEntryAsRead(entryId: string) {
+	const { user } = await Controllers.session.getUserSession();
+	if (user === null) {
+		return;
+	}
+
+	await Controllers.entry.markAsRead(entryId);
+	revalidateTag(`entry:${entryId}`);
+}
+
 export async function extractArticle(id: string, link: string) {
 	return ArticleExpander.getArticle(id, link);
 }
