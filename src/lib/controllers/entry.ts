@@ -1,5 +1,5 @@
 import type { Entry } from "@prisma/client";
-import type { RSSItem } from "$/lib/rss";
+import type { RSSItem } from "@xmlxyz/rsskit";
 import { EntryFilter } from "$/lib/filters";
 import { Services } from "../services";
 

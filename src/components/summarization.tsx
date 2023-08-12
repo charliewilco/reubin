@@ -9,9 +9,7 @@ interface SummaryContainerProps {
 }
 
 export function SummaryContainer(props: SummaryContainerProps) {
-	let formatted = useMemo(() => {
-		return quickMarkdownParse(props.completion);
-	}, [props.completion]);
+	let formatted = useMemo(() => quickMarkdownParse(props.completion), [props.completion]);
 	return (
 		<aside className="block rounded border-8 border-sky-500/50 text-zinc-800 shadow-md  animate-in fade-in">
 			<div className="rounded bg-gradient-to-tr from-sky-500 to-sky-300 px-8 py-6">

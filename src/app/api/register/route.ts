@@ -2,7 +2,7 @@ import { LuciaError } from "lucia-auth";
 import { cookies } from "next/headers";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-import base64 from "base-64";
+import * as base64 from "$/utils/base-64";
 import { Services } from "$/lib/services";
 
 export const runtime = "nodejs";

@@ -1,16 +1,15 @@
 import type { Feed } from "@prisma/client";
-import axios from "axios";
-import { RSSKit } from "$/lib/rss";
+import { RSSKit } from "@xmlxyz/rsskit";
 import { EntryController } from "./entry";
 import { Services } from "../services";
 
 export class FeedController {
 	static async getFeedFromDirectURL(url: string) {
-		return axios.get<string>(url, {
+		return fetch(url, {
 			headers: {
 				"Content-Type": "text/plain",
 			},
-		});
+		}).then((res) => res.text());
 	}
 	static fromORM(feed: Feed) {
 		return {
@@ -22,7 +21,7 @@ export class FeedController {
 
 	async add(url: string, userId: string) {
 		try {
-			const { data } = await FeedController.getFeedFromDirectURL(url);
+			const data = await FeedController.getFeedFromDirectURL(url);
 			const parsed = await this.rss.parse(data);
 			const feed = await Services.db.feed.create({
 				data: {
@@ -144,7 +143,7 @@ export class FeedController {
 			throw new Error("Couldn't find feed");
 		}
 
-		const { data: rssText } = await FeedController.getFeedFromDirectURL(feed.feedURL);
+		const rssText = await FeedController.getFeedFromDirectURL(feed.feedURL);
 		const { items } = await this.rss.parse(rssText);
 
 		const lastFetchedISO = feed.lastFetched.toISOString();
