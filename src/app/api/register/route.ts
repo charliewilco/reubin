@@ -1,7 +1,7 @@
 import { LuciaError } from "lucia-auth";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { Prisma } from "@prisma/client";
-import { NextResponse } from "next/server";
 import * as base64 from "$/utils/base-64";
 import { Services } from "$/lib/services";
 
