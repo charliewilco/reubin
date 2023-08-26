@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { LuciaError } from "lucia-auth";
 import { Services } from "$/lib/services";
-import * as base64 from "$/utils/base-64";
+import * as base64 from "$/utils/node-base-64";
 
 export async function POST(request: Request) {
 	const { username, password } = (await request.json()) as Partial<{

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { RecommendationMap } from "$/lib/recommendations";
 import { RecommendationList } from "$/components/recommendation-list";
-import { Services } from "$/lib/services";
+import { prisma } from "$/lib/orm";
+import { Controllers } from "$/lib/controllers";
 
 export const metadata: Metadata = {
 	title: "Recommended Feeds",
@@ -10,10 +12,10 @@ export const metadata: Metadata = {
 async function RecommendationsPage() {
 	let lists = Array.from(RecommendationMap);
 
-	let { user } = await Services.getUserSession();
+	let { user } = await Controllers.session.getUserSession(cookies);
 
 	let subscribed =
-		(await Services.db.feed.findMany({
+		(await prisma.feed.findMany({
 			where: {
 				userId: user?.userId,
 			},

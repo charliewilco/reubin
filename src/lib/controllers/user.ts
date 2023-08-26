@@ -1,4 +1,4 @@
-import * as base64 from "$/utils/base-64";
+import * as base64 from "$/utils/node-base-64";
 import { Services } from "../services";
 
 interface CreateUserArgs {

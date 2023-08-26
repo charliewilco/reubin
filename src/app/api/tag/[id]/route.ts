@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { Controllers } from "$/lib/controllers";
-import { Services } from "$/lib/services";
+import { cookies } from "next/headers";
 
 interface Params {
 	id: string;
 }
 
-export async function GET(_request: Request, context: { params: Params }) {
-	const { user } = await Services.getUserSession(_request);
+export async function GET(request: Request, context: { params: Params }) {
+	const { user } = await Controllers.session.getUserSession(cookies, request);
 	let id = context.params.id;
 	let tag = await Controllers.tags.getById(id, user?.userId);
 
@@ -21,7 +21,7 @@ interface TagUpdateArgs {
 }
 
 export async function PUT(request: Request, context: { params: Params }) {
-	const { user } = await Services.getUserSession();
+	const { user } = await Controllers.session.getUserSession(cookies, request);
 	let id = context.params.id;
 	const body: TagUpdateArgs = await request.json();
 

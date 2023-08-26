@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-
+import { cookies } from "next/headers";
 import { Controllers } from "$/lib/controllers";
-import { Services } from "$/lib/services";
 
 interface Params {
 	id: string;
@@ -9,7 +8,7 @@ interface Params {
 
 export async function PUT(_request: Request, context: { params: Params }) {
 	let { id } = context.params;
-	const { user } = await Services.getUserSession(_request);
+	const { user } = await Controllers.session.getUserSession(cookies, _request);
 
 	if (!id) {
 		return NextResponse.json({ error: "Entry id not provided" }, { status: 500 });

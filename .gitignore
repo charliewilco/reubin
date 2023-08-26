@@ -24,6 +24,7 @@ node_modules
 .DS_Store
 *.pem
 tsconfig.tsbuildinfo
+coverage
 
 # debug
 npm-debug.log*

@@ -1,6 +1,4 @@
-import { cookies } from "next/headers";
-
-import { Auth, type AuthUserSession } from "./auth";
+import { Auth } from "./auth";
 import { Email } from "./email";
 import { prisma } from "./orm";
 import { Payments } from "./payments";
@@ -12,18 +10,4 @@ export class Services {
 	static db = prisma;
 	static kv = redis;
 	static payments = new Payments();
-
-	/**
-	 * @deprecated Moved to `Controllers.session.getUserSession`
-	 * @param request
-	 * @returns
-	 */
-	static async getUserSession(request?: Request): Promise<AuthUserSession> {
-		let authRequest = this.auth.handleRequest({
-			request,
-			cookies,
-		});
-
-		return authRequest.validateUser();
-	}
 }
