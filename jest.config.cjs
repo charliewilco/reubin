@@ -8,7 +8,6 @@ const createJestConfig = nextJest.default({
 /** @type {import('jest').Config} */
 const config = {
 	testPathIgnorePatterns: ["<rootDir>/e2e"],
-	setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 
 	// Add more setup options before each test is run
 	// setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
