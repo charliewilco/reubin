@@ -2,10 +2,10 @@
 import { Button, SuperButton } from "./ui/button";
 import { Label, Input, TextLabel } from "./ui/input";
 import { createTag } from "$/actions";
-import { experimental_useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 
 export function CreateTagForm() {
-	let { pending } = experimental_useFormStatus();
+	let { pending } = useFormStatus();
 
 	return (
 		<form action={createTag} className="rounded p-4 shadow-sm dark:bg-zinc-800">

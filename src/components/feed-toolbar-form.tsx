@@ -1,5 +1,5 @@
 "use client";
-import { experimental_useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 import { CheckCheck, RefreshCcw, Loader } from "lucide-react";
 import { markAllEntriesAsRead, refreshFeed } from "$/actions";
 import { Button } from "./ui/button";
@@ -10,7 +10,7 @@ interface FeedToolbarProps {
 }
 
 export function FeedToolbarForm(props: FeedToolbarProps) {
-	let { pending } = experimental_useFormStatus();
+	let { pending } = useFormStatus();
 	return (
 		<form className="flex gap-4">
 			<input type="hidden" name="id" value={props.id} />

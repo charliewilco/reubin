@@ -2,26 +2,18 @@
 
 import { Suspense, useCallback } from "react";
 import { useTimeout } from "$/hooks/useTimeout";
+import { markEntryAsRead } from "$/actions";
+import { usePathname } from "next/navigation";
 
 interface MarkAsReadProps {
 	id: string;
 }
 
-async function markAsRead(id: string) {
-	let response = await fetch(`/api/entry/${id}`, {
-		method: "PUT",
-	});
-
-	if (response.ok) {
-		return response.json();
-	} else {
-		throw new Error("Failed to mark entry as read");
-	}
-}
 export function NotMarkAsRead(props: MarkAsReadProps) {
-	let callback = useCallback(() => markAsRead(props.id), [props.id]);
+	let path = usePathname();
+	let cb = useCallback(() => markEntryAsRead(props.id, path), [props.id, path]);
 
-	useTimeout(callback, 1500);
+	useTimeout(cb, 1500);
 
 	return null;
 }

@@ -2,14 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
-import { experimental_useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 import { Label, Input, TextLabel } from "./ui/input";
 import { submitLoginForm, type LoginFormValues } from "$/client";
 import type { FieldErrors } from "$/utils/validation";
 
 export function LoginForm() {
 	const router = useRouter();
-	let { pending } = experimental_useFormStatus();
+	let { pending } = useFormStatus();
 	let [errors, setErrors] = useState<FieldErrors<LoginFormValues>>({});
 
 	let formId = useId();
@@ -18,12 +18,8 @@ export function LoginForm() {
 		<form
 			action={(formData) =>
 				submitLoginForm(formData, {
-					onSuccess(url) {
-						router.push(url);
-					},
-					onError(errors) {
-						setErrors(errors);
-					},
+					onSuccess: router.push,
+					onError: setErrors,
 				})
 			}
 			className="space-y-8">

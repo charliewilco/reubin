@@ -1,7 +1,7 @@
 import { GalleryVerticalEnd, BookmarkMinus, BookmarkPlus, Sparkle } from "lucide-react";
 import { extractArticle, addFavorite } from "$/actions";
-import { experimental_useFormStatus } from "react-dom";
-import { experimental_useOptimistic } from "react";
+import { useFormStatus } from "react-dom";
+import { useOptimistic } from "react";
 import { useCompletion } from "ai/react";
 import { SummaryContainer } from "../summarization";
 
@@ -14,12 +14,12 @@ interface EntryToolbarProps {
 }
 
 export function EntryToolbar(props: EntryToolbarProps) {
-	let { pending } = experimental_useFormStatus();
-	let [optimisticValue, addOptimisticValue] = experimental_useOptimistic(
+	let { pending } = useFormStatus();
+	let [optimisticValue, addOptimisticValue] = useOptimistic(
 		!!props.isFavorite,
 		(state: boolean, _value?: string) => {
 			return !!state;
-		}
+		},
 	);
 
 	const { completion, input, complete } = useCompletion({

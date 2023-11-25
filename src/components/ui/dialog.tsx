@@ -9,12 +9,8 @@ const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
-const DialogPortal = ({
-	className,
-	children,
-	...props
-}: DialogPrimitive.DialogPortalProps) => (
-	<DialogPrimitive.Portal className={cx(className)} {...props}>
+const DialogPortal = ({ children, ...props }: DialogPrimitive.DialogPortalProps) => (
+	<DialogPrimitive.Portal {...props}>
 		<div className="fixed inset-0 z-50 flex items-start justify-center sm:items-center">
 			{children}
 		</div>
@@ -29,8 +25,8 @@ const DialogOverlay = forwardRef<
 	<DialogPrimitive.Overlay
 		ref={ref}
 		className={cx(
-			"bg-background/80 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in fixed inset-0 z-50 backdrop-blur-sm transition-all duration-100",
-			className
+			"bg-background/80 fixed inset-0 z-50 backdrop-blur-sm transition-all duration-100 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+			className,
 		)}
 		{...props}
 	/>
@@ -46,8 +42,8 @@ const DialogContent = forwardRef<
 		<DialogPrimitive.Content
 			ref={ref}
 			className={cx(
-				"animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 fixed z-50 grid w-full gap-4 rounded-b-lg bg-white p-6 shadow-lg dark:bg-zinc-900 sm:max-w-lg sm:rounded-lg",
-				className
+				"fixed z-50 grid w-full gap-4 rounded-b-lg bg-white p-6 shadow-lg animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 dark:bg-zinc-900 sm:max-w-lg sm:rounded-lg sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0",
+				className,
 			)}
 			{...props}>
 			{children}

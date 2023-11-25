@@ -1,14 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
-import { experimental_useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 import { Label, Input, TextLabel } from "./ui/input";
 import { submitRegisterForm, type RegisterFormValues } from "$/client";
 import type { FieldErrors } from "$/utils/validation";
 
 export function RegisterForm() {
 	let router = useRouter();
-	let { pending } = experimental_useFormStatus();
+	let { pending } = useFormStatus();
 	let [errors, setErrors] = useState<FieldErrors<RegisterFormValues>>({});
 
 	let formId = useId();
