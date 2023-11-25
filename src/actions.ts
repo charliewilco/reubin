@@ -105,17 +105,18 @@ export async function markAllEntriesAsRead(formData: FormData) {
 			return;
 		}
 		await Controllers.feed.markAllAsRead(id, user.userId);
+		revalidatePath("/all");
 	}
 }
 
-export async function markEntryAsRead(entryId: string) {
+export async function markEntryAsRead(entryId: string, path: string) {
 	const { user } = await Controllers.session.getUserSession(cookies);
 	if (user === null) {
 		return;
 	}
 
 	await Controllers.entry.markAsRead(entryId);
-	revalidateTag(`entry:${entryId}`);
+	revalidatePath(path);
 }
 
 export async function extractArticle(id: string, link: string) {
