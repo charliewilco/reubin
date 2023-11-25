@@ -1,21 +1,22 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { Services } from "$/lib/services";
+import { Auth } from "$/lib/auth";
 
-export const POST = async (request: Request) => {
-	const authRequest = Services.auth.handleRequest({ request, cookies });
+export async function POST(request: Request) {
+	const authRequest = Auth.handleRequest({ request, cookies });
 	const { session } = await authRequest.validateUser();
 	if (!session) {
+		authRequest.setSession(null); // delete session cookie
 		return NextResponse.json(null, {
 			status: 401,
 		});
 	}
-	await Services.auth.invalidateSession(session.sessionId);
+	await Auth.invalidateSession(session.sessionId);
 	authRequest.setSession(null); // delete session cookie
-	return new Response(null, {
+	return new NextResponse(null, {
 		status: 302,
 		headers: {
 			location: "/login",
 		},
 	});
-};
+}
