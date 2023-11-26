@@ -1,6 +1,6 @@
 "use client";
-import { Button, SuperButton } from "./ui/button";
-import { Label, Input, TextLabel } from "./ui/input";
+import { Button, SuperButton } from "../ui/button";
+import { Label, Input, TextLabel } from "../ui/input";
 import { createTag } from "$/actions";
 import { useFormStatus } from "react-dom";
 

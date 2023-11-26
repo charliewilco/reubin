@@ -1,4 +1,4 @@
-import { RecommendationCard } from "./recommendation-card";
+import { RecommendationCard } from "./card";
 import type { Feed } from "@prisma/client";
 import type { RecommendedField } from "$/lib/recommendations";
 

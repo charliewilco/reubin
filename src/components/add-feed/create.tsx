@@ -6,8 +6,8 @@ import {
 	DialogDescription,
 	DialogTitle,
 	DialogTrigger,
-} from "./ui/dialog";
-import { AddFeedForm } from "./feed-create-form";
+} from "../ui/dialog";
+import { AddFeedForm } from "./form";
 
 interface AddFeedProps {
 	onAdd(formData: FormData): Promise<void>;

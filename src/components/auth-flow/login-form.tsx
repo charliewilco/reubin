@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { Label, Input, TextLabel } from "./ui/input";
+import { Label, Input, TextLabel } from "../ui/input";
 import { submitLoginForm, type LoginFormValues } from "$/client";
 import type { FieldErrors } from "$/utils/validation";
 

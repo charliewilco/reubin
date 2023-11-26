@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { Controllers } from "$/lib/controllers";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import { Label } from "./ui/input";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Label } from "../ui/input";
 
 interface TagListProps {
 	selected?: string | null;

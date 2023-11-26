@@ -1,5 +1,5 @@
-import { SuperButton } from "./ui/button";
-import { Label, Input, TextLabel } from "./ui/input";
+import { SuperButton } from "../ui/button";
+import { Label, Input, TextLabel } from "../ui/input";
 
 interface AddFeedFormProps {
 	onSubmit(formData: FormData): Promise<void>;

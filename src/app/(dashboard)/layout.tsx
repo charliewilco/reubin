@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { AddFeed } from "$/components/feed-create";
+import { AddFeed } from "$/components/add-feed/create";
 import { AppHeader } from "$/components/app-header";
 import { DashboardNavigationRail } from "$/components/dashboard-navigation";
 import { addFeed } from "$/actions";

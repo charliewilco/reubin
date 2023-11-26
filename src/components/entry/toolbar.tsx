@@ -1,9 +1,9 @@
+"use client";
+
+import { useState, useOptimistic } from "react";
+import { useFormStatus } from "react-dom";
 import { GalleryVerticalEnd, BookmarkMinus, BookmarkPlus, Sparkle } from "lucide-react";
 import { extractArticle, addFavorite } from "$/actions";
-import { useFormStatus } from "react-dom";
-import { useOptimistic } from "react";
-import { useCompletion } from "ai/react";
-import { SummaryContainer } from "../summarization";
 
 interface EntryToolbarProps {
 	id: string;
@@ -11,6 +11,7 @@ interface EntryToolbarProps {
 	content: string;
 	isFavorite: boolean;
 	onExtract(value: string): void;
+	children?: React.ReactNode;
 }
 
 export function EntryToolbar(props: EntryToolbarProps) {
@@ -22,10 +23,7 @@ export function EntryToolbar(props: EntryToolbarProps) {
 		},
 	);
 
-	const { completion, input, complete } = useCompletion({
-		api: "/api/completion",
-		initialInput: `Summarize the following article in three bullet points:\n${props.content}`,
-	});
+	let [_completion, setCompletion] = useState(false);
 
 	return (
 		<div>
@@ -40,7 +38,7 @@ export function EntryToolbar(props: EntryToolbarProps) {
 					}>
 					<GalleryVerticalEnd />
 				</button>
-				<button formAction={async () => await complete(input)} disabled={!input}>
+				<button onClick={() => setCompletion(true)} disabled={_completion}>
 					<Sparkle />
 				</button>
 				<button
@@ -53,7 +51,7 @@ export function EntryToolbar(props: EntryToolbarProps) {
 					{pending ? "Hang on..." : optimisticValue ? <BookmarkMinus /> : <BookmarkPlus />}
 				</button>
 			</form>
-			{completion && <SummaryContainer completion={completion} />}
+			{_completion && props.children}
 		</div>
 	);
 }
