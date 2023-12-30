@@ -2,7 +2,7 @@ import { Trash2 } from "lucide-react";
 import { Button, SuperButton } from "./ui/button";
 import { Input, Label, TextLabel } from "./ui/input";
 import { removeFeed } from "$/actions";
-import { TagSelectionList } from "./tag-lists";
+import { TagSelectionList } from "./tags/lists";
 
 interface UpdateFeedFormProps {
 	initialTitle?: string;

@@ -1,18 +1,17 @@
+import { cookies } from "next/headers";
 import { Settings } from "lucide-react";
-
 import { Dialog, DialogTitle, DialogContent, DialogTrigger } from "./ui/dialog";
 import { UpdateFeedForm } from "./feed-update-form";
 import { Controllers } from "$/lib/controllers";
-import { Services } from "$/lib/services";
 
 interface FeedSettingsProps {
 	id: string;
 }
 
 export async function FeedSettings(props: FeedSettingsProps) {
-	const { user } = await Services.getUserSession();
-
+	const { user } = await Controllers.session.getUserSession(cookies);
 	let feed = await Controllers.feed.getById(props.id, user?.userId);
+
 	return (
 		<Dialog>
 			<DialogTrigger aria-label="Update feed">

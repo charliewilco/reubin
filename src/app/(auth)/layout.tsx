@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
 import { LogoDisplay } from "$/components/logo";
 import { Controllers } from "$/lib/controllers";
+import { cookies } from "next/headers";
 
 export default async function Layout({ children }: React.PropsWithChildren<{}>) {
-	const { session } = await Controllers.session.getUserSession();
+	const { session } = await Controllers.session.getUserSession(cookies);
 	if (session) redirect("/all");
 
 	return (

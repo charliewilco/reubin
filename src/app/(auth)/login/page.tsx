@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LoginForm } from "$/components/login-form";
+import { LoginForm } from "$/components/auth-flow/login-form";
 import { Card } from "$/components/ui/card";
 
 export const metadata: Metadata = {

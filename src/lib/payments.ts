@@ -25,7 +25,7 @@ export class Payments {
 	stripe: Stripe;
 	constructor() {
 		this.stripe = new Stripe(Env.$vars.STRIPE_SECRET_KEY, {
-			apiVersion: "2022-11-15",
+			apiVersion: "2023-10-16",
 			typescript: true,
 		});
 	}
@@ -47,7 +47,7 @@ export class Payments {
 
 	convertToPricingTiers(
 		products: Stripe.Product[],
-		prices: Stripe.Price[]
+		prices: Stripe.Price[],
 	): PricingTierData[] {
 		let tiers: PricingTierData[] = [FREE_TIER];
 		for (let product of products) {

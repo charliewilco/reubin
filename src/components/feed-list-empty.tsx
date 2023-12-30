@@ -1,6 +1,6 @@
 import { RecommendationMap, type RecommendedField } from "$/lib/recommendations";
 import Link from "next/link";
-import { RecommendationCard } from "./recommendation-card";
+import { RecommendationCard } from "./recommendations/card";
 
 export function EmptyFeedList() {
 	let recommendations = RecommendationMap.get("Relevant") ?? [];

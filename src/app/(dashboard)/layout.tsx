@@ -1,11 +1,12 @@
-import { AddFeed } from "$/components/feed-create";
+import { cookies } from "next/headers";
+import { AddFeed } from "$/components/add-feed/create";
 import { AppHeader } from "$/components/app-header";
 import { DashboardNavigationRail } from "$/components/dashboard-navigation";
 import { addFeed } from "$/actions";
-import { Services } from "$/lib/services";
+import { Controllers } from "$/lib/controllers";
 
 export default async function Layout({ children }: React.PropsWithChildren<{}>) {
-	const { user } = await Services.getUserSession();
+	const { user } = await Controllers.session.getUserSession(cookies);
 
 	return (
 		<div className="h-screen">

@@ -1,8 +1,8 @@
-import { cookies } from "next/headers";
+import type { CookiesFn } from "$/utils/cookies";
 import { Auth, type AuthUserSession, type ValidatedSession } from "../auth";
 
 export class SessionController {
-	async getUserSession(request?: Request): Promise<AuthUserSession> {
+	async getUserSession(cookies: CookiesFn, request?: Request): Promise<AuthUserSession> {
 		let authRequest = Auth.handleRequest({
 			request,
 			cookies,

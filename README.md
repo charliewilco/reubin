@@ -14,7 +14,7 @@ brew install postgres@14 node
 
 ### Node
 
-Make sure you're using `18.x` because [Vercel](https://vercel.com/docs/runtimes#official-runtimes/node-js/node-js-version) currently lists their default runtime as that version. This project uses [yarn workspaces](https://classic.yarnpkg.com/lang/en/docs/workspaces/) & [Turborepo](https://turborepo.org/) and setup is simple:
+Make sure you're using `20.x` because [Vercel](https://vercel.com/docs/runtimes#official-runtimes/node-js/node-js-version) currently lists their default runtime as that version. This project uses [yarn workspaces](https://classic.yarnpkg.com/lang/en/docs/workspaces/) & [Turborepo](https://turborepo.org/) and setup is simple:
 
 ```
 yarn

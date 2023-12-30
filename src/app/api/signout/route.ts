@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { Services } from "$/lib/services";
 
-export const POST = async (request: Request) => {
+export async function POST(request: Request) {
 	const authRequest = Services.auth.handleRequest({ request, cookies });
 	const { session } = await authRequest.validateUser();
 	if (!session) {
@@ -18,4 +18,4 @@ export const POST = async (request: Request) => {
 			location: "/login",
 		},
 	});
-};
+}

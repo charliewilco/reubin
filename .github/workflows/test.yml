@@ -17,13 +17,14 @@ jobs:
     env:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ci_db_test
       RESEND_API_KEY: "..."
+      COHERE_API_KEY: "..."
       UPSTASH_REDIS_REST_URL: ""
       UPSTASH_REDIS_REST_TOKEN: ""
       STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
       STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [20.x]
 
     steps:
       - uses: actions/checkout@v3

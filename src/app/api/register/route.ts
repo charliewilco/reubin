@@ -1,8 +1,8 @@
 import { LuciaError } from "lucia-auth";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { Prisma } from "@prisma/client";
-import { NextResponse } from "next/server";
-import base64 from "base-64";
+import * as base64 from "$/utils/node-base-64";
 import { Services } from "$/lib/services";
 
 export const runtime = "nodejs";

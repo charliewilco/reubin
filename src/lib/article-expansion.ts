@@ -1,4 +1,7 @@
 import { Readability } from "@mozilla/readability";
+/**
+ * This dependency is not listed in package.json because it comes from with the Jest suite.
+ */
 import { JSDOM } from "jsdom";
 import { redis } from "./kv";
 

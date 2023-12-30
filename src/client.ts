@@ -14,6 +14,12 @@ export interface LoginFormValues {
 	password: string;
 }
 
+/**
+ * @deprecated Consider refactoring to use a server action instead
+ * @param formData
+ * @param cb {AuthCallback<LoginFormValues>}
+ * @returns
+ */
 export async function submitLoginForm(formData: FormData, cb: AuthCallback<LoginFormValues>) {
 	let username = formData.get("username")?.toString();
 	let password = formData.get("password")?.toString();
@@ -43,9 +49,15 @@ export interface RegisterFormValues {
 	password: string;
 }
 
+/**
+ * @deprecated Consider refactoring to use a server action instead
+ * @param formData
+ * @param cb {AuthCallback<RegisterFormValues>}
+ * @returns
+ */
 export async function submitRegisterForm(
 	formData: FormData,
-	cb: AuthCallback<RegisterFormValues>
+	cb: AuthCallback<RegisterFormValues>,
 ) {
 	let username = formData.get("username")?.toString();
 	let email = formData.get("email")?.toString();

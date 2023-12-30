@@ -8,6 +8,7 @@ const ENV_VARS_SCHEMA = z.object({
 	STRIPE_PUBLIC_KEY: z.string(),
 	STRIPE_SECRET_KEY: z.string(),
 	RESEND_API_KEY: z.string(),
+	COHERE_API_KEY: z.string(),
 });
 
 export type EnvType = z.infer<typeof ENV_VARS_SCHEMA>;

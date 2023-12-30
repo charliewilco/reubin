@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import base64 from "base-64";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { LuciaError } from "lucia-auth";
 import { Services } from "$/lib/services";
+import * as base64 from "$/utils/node-base-64";
 
-export const POST = async (request: Request) => {
+export async function POST(request: Request) {
 	const { username, password } = (await request.json()) as Partial<{
 		username: string;
 		password: string;
@@ -53,4 +53,4 @@ export const POST = async (request: Request) => {
 			}
 		);
 	}
-};
+}

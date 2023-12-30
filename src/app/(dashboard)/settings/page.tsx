@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { CreateTagForm } from "$/components/tag-create-form";
-import { TagRemovalList } from "$/components/tag-removal-list";
+import { CreateTagForm } from "$/components/tags/form";
+import { TagRemovalList } from "$/components/tags/remove-list";
 
 export const metadata: Metadata = {
 	title: "Settings",
