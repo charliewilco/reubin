@@ -1,8 +1,14 @@
 // @ts-check
 
 /** @type {import('next').NextConfig} */
-// eslint-disable-next-line import/no-anonymous-default-export
 module.exports = {
 	reactStrictMode: true,
 	swcMinify: true,
-};
+	experimental: {
+		useLightningcss: true,
+	},
+	webpack: (config) => {
+		config.externals.push('@node-rs/argon2', '@node-rs/bcrypt')
+		return config
+	},
+}

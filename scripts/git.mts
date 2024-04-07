@@ -5,5 +5,5 @@ import { install, add } from "husky";
 if (!process.env.CI) {
 	install();
 
-	add(".husky/pre-commit", "yarn format");
+	add(".husky/pre-commit", "bun run format");
 }

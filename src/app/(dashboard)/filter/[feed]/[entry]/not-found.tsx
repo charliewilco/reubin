@@ -4,5 +4,5 @@ export default function NotFound() {
 			<h2 className="mb-4 text-2xl font-bold">Entry Not Found</h2>
 			<p className="font-mono opacity-50">Could not find requested resource</p>
 		</div>
-	);
+	)
 }

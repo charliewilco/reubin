@@ -1,0 +1,28 @@
+.findMe {
+	display: flex;
+}
+
+.findMe > :not([hidden]) ~ :not([hidden]) {
+	--space-x-reverse: 0;
+	margin-right: calc(1.5rem * var(--space-x-reverse));
+	margin-left: calc(1.5rem * calc(1 - var(--space-x-reverse)));
+}
+
+.findMe a {
+	color: var(--color-zinc-500);
+}
+
+.findMe a:hover {
+	color: var(--color-zinc-900);
+}
+
+.findMe svg {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+@media (min-width: 768px) {
+	.findMe {
+		order: 2;
+	}
+}

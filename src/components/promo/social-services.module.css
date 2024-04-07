@@ -1,0 +1,50 @@
+.services {
+	text-align: center;
+}
+
+.services figcaption {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 28rem;
+	padding-top: 4rem;
+}
+
+.services p {
+	background-image: linear-gradient(
+		to top right,
+		var(--color-sky-300),
+		var(--color-sky-800)
+	);
+	background-clip: text;
+	font-size: 3.75rem;
+	line-height: 1;
+	font-weight: 700;
+	letter-spacing: -0.05em;
+	color: transparent;
+}
+
+.iconContainer {
+	display: flex;
+	justify-content: center;
+	gap: 2rem;
+	color: var(--color-sky-700);
+}
+
+.iconContainer svg {
+	height: 4rem;
+	width: 4rem;
+}
+
+@media (prefers-color-scheme: dark) {
+	.iconContainer {
+		color: var(--color-sky-200);
+	}
+
+	.services p {
+		background-image: linear-gradient(
+			to top right,
+			var(--color-sky-200),
+			var(--color-sky-600)
+		);
+	}
+}

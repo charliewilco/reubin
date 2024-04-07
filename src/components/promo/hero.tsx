@@ -1,8 +1,10 @@
-import Link from "next/link";
+import Link from 'next/link'
+import styles from './hero.module.css'
 
 function HeroLogo() {
 	return (
-		<svg className="mx-auto mb-12 max-w-[4rem]" viewBox="0 0 45 56" fill="none">
+		<svg className={styles.logo} viewBox="0 0 45 56" fill="none">
+			<title>Logo</title>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
@@ -18,21 +20,19 @@ function HeroLogo() {
 				fill="currentColor"
 			/>
 		</svg>
-	);
+	)
 }
 
 export function Hero() {
 	return (
 		<section>
-			<div className="text-center">
-				<Link href="/" className="block">
+			<div className={styles.content}>
+				<Link href="/" className={styles.logoContainer}>
 					<HeroLogo />
 				</Link>
-				<h2 className="mb-8 inline-block bg-gradient-to-tr from-sky-300 to-sky-600 bg-clip-text font-mono text-8xl font-bold tracking-tighter text-transparent">
-					Zaptread
-				</h2>
-				<p className="font-mono text-xl opacity-50">RSS for the next generation.</p>
+				<h2>Zaptread</h2>
+				<p>RSS for the next generation.</p>
 			</div>
 		</section>
-	);
+	)
 }
