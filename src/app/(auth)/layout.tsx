@@ -1,11 +1,15 @@
-import { redirect } from "next/navigation";
-import { LogoDisplay } from "$/components/logo";
-import { Controllers } from "$/lib/controllers";
-import { cookies } from "next/headers";
+import { redirect } from 'next/navigation'
+import { LogoDisplay } from '$/components/logo'
+import { Controllers } from '$/lib/controllers'
+import { cookies } from 'next/headers'
 
-export default async function Layout({ children }: React.PropsWithChildren<{}>) {
-	const { session } = await Controllers.session.getUserSession(cookies);
-	if (session) redirect("/all");
+interface LayoutProps {
+	children: React.ReactNode
+}
+
+export default async function Layout({ children }: LayoutProps) {
+	const result = await Controllers.session.getUserSession()
+	if (result?.session) redirect('/all')
 
 	return (
 		<div className="px-2 py-16">
@@ -14,5 +18,5 @@ export default async function Layout({ children }: React.PropsWithChildren<{}>) 
 			</div>
 			<div className="mx-auto max-w-md">{children}</div>
 		</div>
-	);
+	)
 }

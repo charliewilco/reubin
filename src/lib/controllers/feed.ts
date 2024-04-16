@@ -1,210 +1,204 @@
-import type { Feed } from "@prisma/client";
-import { RSSKit } from "@xmlxyz/rsskit";
-import { EntryController } from "./entry";
-import { Services } from "../services";
+import type { Feed } from '@prisma/client'
+import { RSSKit } from '@xmlxyz/rsskit'
+import { fromRSS } from './entry'
+import { prisma } from '../orm'
 
-export class FeedController {
-	static async getFeedFromDirectURL(url: string) {
-		return fetch(url, {
-			headers: {
-				"Content-Type": "text/plain",
-			},
-		}).then((res) => res.text());
+const rss = new RSSKit()
+
+export async function getFeedFromDirectURL(url: string) {
+	return fetch(url, {
+		headers: {
+			'Content-Type': 'text/plain',
+		},
+	}).then((res) => res.text())
+}
+
+export function fromORM(feed: Feed) {
+	return {
+		...feed,
+		tag: feed.tagId,
 	}
-	static fromORM(feed: Feed) {
-		return {
-			...feed,
-			tag: feed.tagId,
-		};
-	}
-	private rss: RSSKit<{}, {}> = new RSSKit();
+}
 
-	async add(url: string, userId: string) {
-		try {
-			const data = await FeedController.getFeedFromDirectURL(url);
-			const parsed = await this.rss.parse(data);
-			const feed = await Services.db.feed.create({
-				data: {
-					title: parsed.title ?? "Untitled Feed",
-					link: parsed.link ?? url,
-					feedURL: parsed.feedUrl ?? url,
-					lastFetched: new Date(Date.now()),
-					userId,
-				},
-			});
-
-			let created =
-				parsed.items?.map((value) => EntryController.fromRSS(value, feed.id)) ?? [];
-			if (created.length > 0)
-				await Services.db.entry.createMany({
-					data: created,
-				});
-
-			return feed;
-		} catch (err: any) {
-			throw new Error(err);
-		}
-	}
-
-	async getById(id: string, userId?: string) {
-		const feed = await Services.db.feed.findUnique({
-			where: {
-				id,
-			},
-		});
-
-		if (feed === null || feed.userId !== userId) {
-			throw new Error("Feed not found");
-		}
-
-		return feed;
-	}
-
-	async getByTagID(id: string, userId: string) {
-		const feeds = await Services.db.feed.findMany({
-			where: {
-				userId,
-				tagId: id,
-			},
-		});
-
-		const converted = [];
-		for (let index = 0; index < feeds.length; index++) {
-			converted.push(FeedController.fromORM(feeds[index]));
-		}
-
-		return converted;
-	}
-
-	async getAll(userId?: string) {
-		const feeds = await Services.db.feed.findMany({
-			where: {
-				userId,
-			},
-		});
-		const converted = [];
-		for (let index = 0; index < feeds.length; index++) {
-			converted.push(FeedController.fromORM(feeds[index]));
-		}
-
-		return converted;
-	}
-
-	async updateTitle(id: string, title: string, userId: string) {
-		let feed = await Services.db.feed.update({
-			where: {
-				feedUserId: {
-					id,
-					userId: userId,
-				},
-			},
+export async function add(url: string, userId: string) {
+	try {
+		const data = await getFeedFromDirectURL(url)
+		const parsed = await rss.parse(data)
+		const feed = await prisma.feed.create({
 			data: {
-				title: title,
+				title: parsed.title ?? 'Untitled Feed',
+				link: parsed.link ?? url,
+				feedURL: parsed.feedUrl ?? url,
+				lastFetched: new Date(Date.now()),
+				userId,
 			},
-		});
+		})
 
-		return feed;
+		let created = parsed.items?.map((value) => fromRSS(value, feed.id)) ?? []
+		if (created.length > 0)
+			await prisma.entry.createMany({
+				data: created,
+			})
+
+		return feed
+	} catch (error: unknown) {
+		throw new Error(String(error))
+	}
+}
+
+export async function getById(id: string, userId?: string) {
+	const feed = await prisma.feed.findUnique({
+		where: {
+			id,
+		},
+	})
+
+	if (feed === null || feed.userId !== userId) {
+		throw new Error('Feed not found')
 	}
 
-	async remove(id: string, userId: string) {
-		const feed = await Services.db.feed.findUnique({
-			where: {
-				id,
-			},
-		});
+	return feed
+}
 
-		if (feed === null || feed.userId !== userId) {
-			throw new Error("Feed not found");
-		}
+export async function getByTagID(id: string, userId: string) {
+	const feeds = await prisma.feed.findMany({
+		where: {
+			userId,
+			tagId: id,
+		},
+	})
 
-		// await Services.db.entry.deleteMany({
-		// 	where: {
-		// 		feedId: id,
-		// 	},
-		// });
-
-		const removed = await Services.db.feed.delete({
-			where: {
-				id,
-			},
-		});
-
-		return removed;
+	const converted = []
+	for (let index = 0; index < feeds.length; index++) {
+		converted.push(fromORM(feeds[index]))
 	}
 
-	async refresh(id: string) {
-		const feed = await Services.db.feed.findUnique({
-			where: {
+	return converted
+}
+
+export async function getAll(userId?: string) {
+	const feeds = await prisma.feed.findMany({
+		where: {
+			userId,
+		},
+	})
+	const converted = []
+	for (let index = 0; index < feeds.length; index++) {
+		converted.push(fromORM(feeds[index]))
+	}
+
+	return converted
+}
+
+export async function updateTitle(id: string, title: string, userId: string) {
+	let feed = await prisma.feed.update({
+		where: {
+			feedUserId: {
 				id,
+				userId: userId,
 			},
-		});
+		},
+		data: {
+			title: title,
+		},
+	})
 
-		if (feed === null) {
-			throw new Error("Couldn't find feed");
-		}
+	return feed
+}
 
-		const rssText = await FeedController.getFeedFromDirectURL(feed.feedURL);
-		const { items } = await this.rss.parse(rssText);
+export async function remove(id: string, userId: string) {
+	const feed = await prisma.feed.findUnique({
+		where: {
+			id,
+		},
+	})
 
-		const lastFetchedISO = feed.lastFetched.toISOString();
+	if (feed === null || feed.userId !== userId) {
+		throw new Error('Feed not found')
+	}
 
-		const entries: ReturnType<typeof EntryController.fromRSS>[] = [];
+	const removed = await prisma.feed.delete({
+		where: {
+			id,
+		},
+	})
 
-		for (const item of items) {
-			if (item) {
-				if (lastFetchedISO < item.isoDate!) {
-					entries.push(EntryController.fromRSS(item, feed.id));
-				}
+	return removed
+}
+
+export async function refresh(id: string) {
+	const feed = await prisma.feed.findUnique({
+		where: {
+			id,
+		},
+	})
+
+	if (feed === null) {
+		throw new Error("Couldn't find feed")
+	}
+
+	const rssText = await getFeedFromDirectURL(feed.feedURL)
+	const { items } = await rss.parse(rssText)
+
+	const lastFetchedISO = feed.lastFetched.toISOString()
+
+	const entries: ReturnType<typeof fromRSS>[] = []
+
+	for (const item of items) {
+		if (item) {
+			// biome-ignore lint/style/noNonNullAssertion: we need to check if there's an isoDate
+			if (lastFetchedISO < item.isoDate!) {
+				entries.push(fromRSS(item, feed.id))
 			}
 		}
-
-		await Services.db.entry.createMany({
-			data: entries,
-		});
-
-		const _ = await Services.db.entry.findMany({
-			where: {
-				feedId: id,
-				pubDate: {
-					gte: feed.lastFetched,
-				},
-			},
-		});
-
-		await Services.db.feed.update({
-			where: {
-				id,
-			},
-			data: {
-				lastFetched: new Date(Date.now()),
-			},
-		});
-
-		return _;
 	}
 
-	async attachTag(feedId: string, tagId: string, userId: string) {
-		const feed = await Services.db.feed.updateMany({
-			where: {
-				id: feedId,
-				userId,
-			},
-			data: {
-				tagId,
-			},
-		});
+	await prisma.entry.createMany({
+		data: entries,
+	})
 
-		return feed;
-	}
+	const _ = await prisma.entry.findMany({
+		where: {
+			feedId: id,
+			pubDate: {
+				gte: feed.lastFetched,
+			},
+		},
+	})
 
-	async markAllAsRead(feedId: string, _userId: string) {
-		await Services.db.entry.updateMany({
-			where: {
-				feedId,
-			},
-			data: {
-				unread: false,
-			},
-		});
-	}
+	await prisma.feed.update({
+		where: {
+			id,
+		},
+		data: {
+			lastFetched: new Date(Date.now()),
+		},
+	})
+
+	return _
+}
+
+export async function attachTag(feedId: string, tagId: string, userId: string) {
+	const feed = await prisma.feed.updateMany({
+		where: {
+			id: feedId,
+			userId,
+		},
+		data: {
+			tagId,
+		},
+	})
+
+	return feed
+}
+
+export async function markAllAsRead(feedId: string, _userId: string) {
+	await prisma.entry.updateMany({
+		where: {
+			feedId,
+		},
+		data: {
+			unread: false,
+		},
+	})
 }

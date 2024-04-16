@@ -1,5 +1,5 @@
 import { Lucia } from 'lucia'
-import sql from '@vercel/postgres'
+import { sql } from './db'
 import { NeonHTTPAdapter } from '@lucia-auth/adapter-postgresql'
 
 const adapter = new NeonHTTPAdapter(sql, {
@@ -7,7 +7,7 @@ const adapter = new NeonHTTPAdapter(sql, {
 	session: 'user_session',
 })
 
-const db = new Lucia(adapter, {
+const Auth = new Lucia(adapter, {
 	sessionCookie: {
 		// this sets cookies with super long expiration
 		// since Next.js doesn't allow Lucia to extend cookie expiration when rendering pages
@@ -21,14 +21,14 @@ const db = new Lucia(adapter, {
 
 declare module 'lucia' {
 	interface Register {
-		Lucia: typeof db
+		Lucia: typeof Auth
 	}
 }
 
 interface TransformedUser {
 	userId: string
 	username: string
-	preferredTheme: Theme
+	preferredTheme: any
 	isVerified: boolean
 	refreshInterval: number
 }
@@ -78,3 +78,5 @@ export function isValidatedSession(session: AuthUserSession): session is Validat
 }
 
 // export type AuthAdapter = typeof Auth;
+
+export { Auth }

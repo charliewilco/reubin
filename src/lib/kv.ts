@@ -1,7 +1,7 @@
-import { Redis } from "@upstash/redis";
-import { Env } from "./env";
+import { Redis } from '@upstash/redis'
+import { env } from './env'
 
 export const redis = new Redis({
-	url: Env.$vars.UPSTASH_REDIS_REST_URL,
-	token: Env.$vars.UPSTASH_REDIS_REST_TOKEN,
-});
+	url: env.UPSTASH_REDIS_REST_URL,
+	token: env.UPSTASH_REDIS_REST_TOKEN,
+})
