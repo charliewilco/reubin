@@ -1,18 +1,14 @@
 {
 	"name": "reubin",
 	"scripts": {
-		"format": "lint-staged",
-		"clean": "node scripts/clean.mjs"
+		"clean": "node scripts/clean.mjs",
+		"outdated": "bunx npm-check-updates --root --workspaces --format group -i"
 	},
 	"workspaces": ["apps/*", "e2e", "packages/*", "services/*"],
 	"devDependencies": {
 		"@biomejs/biome": "1.6.4",
-		"arg": "^5.0.2",
 		"del": "^7.1.0",
-		"husky": "^8.0.3",
-		"lint-staged": "^15.2.2"
-	},
-	"lint-staged": {
-		"**/*.{js,jsx,ts,tsx,json,css,scss,md}": ["bunx biome format --write"]
+		"lefthook": "^1.6.10",
+		"turbo": "^1.13.2"
 	}
 }

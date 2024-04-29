@@ -1,42 +1,48 @@
-// @ts-check
+import { deleteAsync } from 'del'
+import path from 'node:path'
+import { parseArgs } from 'node:util'
 
-import { deleteAsync } from "del";
-import arg from "arg";
-import path from "node:path";
-
-const turboCachePaths = [];
+const turboCachePaths = []
 const buildOuputPaths = [
-	".husky",
-	".next",
-	"coverage",
-	"tsconfig.tsbuildinfo",
-	"e2e/playwright-report",
-	"*/**/.DS_Store",
-	".DS_Store",
-];
+	'.husky',
+	'.next',
+	'coverage',
+	'tsconfig.tsbuildinfo',
+	'e2e/playwright-report',
+	'*/**/.DS_Store',
+	'.DS_Store',
+]
 
-const args = arg({
-	"--all": Boolean,
-	"--dryrun": Boolean,
-	"-a": "--all",
-	"-d": "--dryrun",
-});
+const { values } = parseArgs({
+	args: Bun.argv,
+	allowPositionals: true,
+	options: {
+		all: {
+			type: 'boolean',
+			short: 'a',
+		},
+		dryrun: {
+			type: 'boolean',
+			short: 'd',
+		},
+	},
+})
 
 if (!process.env.CI) {
 	const removedPaths = await deleteAsync(
-		args["--all"] ? [...turboCachePaths, ...buildOuputPaths] : buildOuputPaths,
+		values.all ? [...turboCachePaths, ...buildOuputPaths] : buildOuputPaths,
 		{
-			dryRun: args["--dryrun"],
-		}
-	);
+			dryRun: values.dryrun,
+		},
+	)
 
-	if (args["--dryrun"]) {
-		console.log("Would-be deleted directories:\n");
+	if (values.dryrun) {
+		console.log('Would-be deleted directories:\n')
 	} else {
-		console.log("Deleted directories:\n");
+		console.log('Deleted directories:\n')
 	}
 
 	for (const removed of removedPaths) {
-		console.log("♻️ ", path.relative(process.cwd(), removed));
+		console.log('♻️ ', path.relative(process.cwd(), removed))
 	}
 }
