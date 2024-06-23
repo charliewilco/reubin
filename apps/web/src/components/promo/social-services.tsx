@@ -1,5 +1,5 @@
-import { Social } from './social-icons'
-import styles from './social-services.module.css'
+import { Social } from "./social-icons";
+import styles from "./social-services.module.css";
 
 export function SocialServices() {
 	return (
@@ -20,5 +20,5 @@ export function SocialServices() {
 				</figure>
 			</div>
 		</section>
-	)
+	);
 }

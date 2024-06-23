@@ -1,61 +1,111 @@
-import { Stripe } from 'stripe'
-import { env } from './env'
-import type { AuthUser } from '@prisma/client'
+import { env } from "$/lib/env";
+import type { AuthUser } from "@prisma/client";
+import { Stripe } from "stripe";
 
 export interface PricingTierData {
-	name: string
-	href: string
-	id: string
-	includedFeatures: string[]
-	priceMonthly: number
-	description: string | null
+	name: string;
+	href: string;
+	id: string;
+	includedFeatures: string[];
+	priceMonthly: number;
+	description: string | null;
 }
 
 let FREE_TIER: PricingTierData = {
-	name: 'Essentials Plan',
-	id: 'FREE_PLAN',
+	name: "Essentials Plan",
+	id: "FREE_PLAN",
 	description:
-		'Dive into the world of RSS with our Essential Stream plan. Stay updated with up to 10 feeds without any limitations.',
-	href: '/pricing/essentials',
+		"Dive into the world of RSS with our Essential Stream plan. Stay updated with up to 10 feeds without any limitations.",
+	href: "/pricing/essentials",
 	includedFeatures: [],
 	priceMonthly: 0,
+};
+
+let stripe = new Stripe(env.STRIPE_SECRET_KEY, {
+	apiVersion: "2023-10-16",
+	typescript: true,
+});
+
+export async function createCustomer(user: AuthUser) {
+	stripe.customers.create({
+		email: user.email,
+	});
+}
+
+function getPriceIds(products: Stripe.Product[]): Stripe.ApiListPromise<Stripe.Price>[] {
+	let requests = [];
+	for (let product of products) {
+		requests.push(stripe.prices.list({ product: product.id }));
+	}
+
+	return requests;
+}
+
+export async function getAllProducts() {
+	let products = await stripe.products.list();
+	let prices = await Promise.all(getPriceIds(products.data));
+
+	return { products, prices };
+}
+
+export function convertToPricingTiers(
+	products: Stripe.Product[],
+	prices: Stripe.Price[],
+): PricingTierData[] {
+	let tiers: PricingTierData[] = [FREE_TIER];
+	for (let product of products) {
+		let price = prices.find((price) => price.product === product.id);
+		if (!price) {
+			throw new Error(`No price found for product ${product.id}`);
+		}
+		let amount = price.unit_amount ?? 0;
+		tiers.push({
+			name: product.name,
+			id: product.id,
+			href: product.metadata.href,
+			includedFeatures: [],
+			priceMonthly: amount / 100,
+			description: product.description,
+		});
+	}
+	return tiers.sort((a, b) => a.priceMonthly - b.priceMonthly);
 }
 
 export class Payments {
-	stripe: Stripe
+	stripe: Stripe;
 	constructor() {
 		this.stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-			apiVersion: '2023-10-16',
+			apiVersion: "2023-10-16",
 			typescript: true,
-		})
+		});
 	}
 
 	async createCustomer(user: AuthUser) {
 		this.stripe.customers.create({
 			email: user.email,
-		})
+		});
 	}
 
 	private getPriceIds(products: Stripe.Product[]): Stripe.ApiListPromise<Stripe.Price>[] {
-		let requests = []
+		let requests = [];
 		for (let product of products) {
-			requests.push(this.stripe.prices.list({ product: product.id }))
+			requests.push(this.stripe.prices.list({ product: product.id }));
 		}
 
-		return requests
+		return requests;
 	}
 
 	convertToPricingTiers(
 		products: Stripe.Product[],
 		prices: Stripe.Price[],
 	): PricingTierData[] {
-		let tiers: PricingTierData[] = [FREE_TIER]
+		let tiers: PricingTierData[] = [FREE_TIER];
 		for (let product of products) {
-			let price = prices.find((price) => price.product === product.id)
+			let price = prices.find((price) => price.product === product.id);
 			if (!price) {
-				throw new Error(`No price found for product ${product.id}`)
+				throw new Error(`No price found for product ${product.id}`);
 			}
-			let amount = price.unit_amount ?? 0
+			let amount = price.unit_amount ?? 0;
 			tiers.push({
 				name: product.name,
 				id: product.id,
@@ -63,15 +113,15 @@ export class Payments {
 				includedFeatures: [],
 				priceMonthly: amount / 100,
 				description: product.description,
-			})
+			});
 		}
-		return tiers.sort((a, b) => a.priceMonthly - b.priceMonthly)
+		return tiers.sort((a, b) => a.priceMonthly - b.priceMonthly);
 	}
 
 	async getAllProducts() {
-		let products = await this.stripe.products.list()
-		let prices = await Promise.all(this.getPriceIds(products.data))
+		let products = await this.stripe.products.list();
+		let prices = await Promise.all(this.getPriceIds(products.data));
 
-		return { products, prices }
+		return { products, prices };
 	}
 }

@@ -1,16 +1,16 @@
-import { cookies } from 'next/headers'
-import { Settings } from 'lucide-react'
-import { Dialog, DialogTitle, DialogContent, DialogTrigger } from '../ui/dialog'
-import { UpdateFeedForm } from './feed-update-form'
-import { Controllers } from '$/lib/controllers'
+import { getById } from "$/lib/controllers/feed";
+import { getUserSession } from "$/lib/controllers/session";
+import { Settings } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { UpdateFeedForm } from "./feed-update-form";
 
 interface FeedSettingsProps {
-	id: string
+	id: string;
 }
 
-export async function FeedSettings(props: FeedSettingsProps) {
-	const { user } = await Controllers.session.getUserSession(cookies)
-	let feed = await Controllers.feed.getById(props.id, user?.userId)
+export async function FeedSettings({ id }: FeedSettingsProps) {
+	const result = await getUserSession();
+	let feed = await getById(id, result?.user?.id);
 
 	return (
 		<Dialog>
@@ -24,5 +24,5 @@ export async function FeedSettings(props: FeedSettingsProps) {
 				</Dialog>
 			</DialogContent>
 		</Dialog>
-	)
+	);
 }

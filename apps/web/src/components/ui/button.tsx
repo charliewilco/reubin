@@ -1,48 +1,28 @@
-'use client'
+"use client";
 
-import { forwardRef } from 'react'
-import { cx } from 'class-variance-authority'
+import { cx } from "class-variance-authority";
+import { forwardRef } from "react";
+import styles from "./button.module.css";
 
 type BaseButtonProps = React.DetailedHTMLProps<
 	React.ButtonHTMLAttributes<HTMLButtonElement>,
 	HTMLButtonElement
->
+>;
 
 const Button = forwardRef<HTMLButtonElement, BaseButtonProps>((props, ref) => {
-	return <button {...props} ref={ref} />
-})
+	return <button {...props} ref={ref} />;
+});
 
-Button.displayName = 'UIButton'
+Button.displayName = "UIButton";
 
 const IconButton = forwardRef<HTMLButtonElement, BaseButtonProps>((props, ref) => {
-	return (
-		<button
-			{...props}
-			className={cx(
-				props.className,
-				'rounded-full',
-				'inline-flex h-6 w-6 items-center justify-center',
-			)}
-			ref={ref}
-		/>
-	)
-})
+	return <button {...props} className={cx(props.className, styles.iconButton)} ref={ref} />;
+});
 
-IconButton.displayName = 'UIIconButton'
+IconButton.displayName = "UIIconButton";
 
 function SuperButton({ className, ..._props }: BaseButtonProps) {
-	return (
-		<Button
-			{..._props}
-			className={cx(
-				'inline-flex rounded-sm px-4 py-1',
-				'font-semibold',
-				'bg-sky-500 text-base text-white shadow-sm',
-				className,
-			)}
-			ref={() => {}}
-		/>
-	)
+	return <Button {..._props} className={cx(styles.superButton, className)} ref={() => {}} />;
 }
 
-export { SuperButton, Button, IconButton }
+export { SuperButton, Button, IconButton };

@@ -1,47 +1,47 @@
-'use client'
-import { useParams } from 'next/navigation'
-import Link from 'next/link'
-import type { Entry } from '@prisma/client'
-import { cva } from 'class-variance-authority'
-import { getDateString } from '$/utils/dates'
+"use client";
+import { getDateString } from "$/utils/dates";
+import type { Entry } from "@prisma/client";
+import { cva } from "class-variance-authority";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 interface EntryListItemProps {
-	entry: Entry
-	filter: string
+	entry: Entry;
+	filter: string;
 }
 
 let entryContainer = cva(
-	['cursor-pointer', 'border-b', 'border-zinc-200', 'dark:border-zinc-700'],
+	["cursor-pointer", "border-b", "border-zinc-200", "dark:border-zinc-700"],
 	{
 		variants: {
 			state: {
-				selected: ['bg-sky-500', 'text-white', 'opacity-100'],
+				selected: ["bg-sky-500", "text-white", "opacity-100"],
 				unread: [],
-				read: ['opacity-50'],
+				read: ["opacity-50"],
 			},
 		},
 		defaultVariants: {},
 	},
-)
+);
 
 export function EntryListItem(props: EntryListItemProps) {
-	let params = useParams()
-	let isSelected = props.entry.id === params?.entry
+	let params = useParams();
+	let isSelected = props.entry.id === params?.entry;
 
 	let href = isSelected
 		? `/${props.filter}/${props.entry.feedId}`
-		: `/${props.filter}/${props.entry.feedId}/${props.entry.id}`
+		: `/${props.filter}/${props.entry.feedId}/${props.entry.id}`;
 
 	// let isRead = !props.entry.unread;
 	// let isBoth = isRead && isSelected;
 
-	let dateString = getDateString(props.entry.pubDate)
+	let dateString = getDateString(props.entry.pubDate);
 
 	return (
 		<li
 			key={props.entry.id}
 			className={entryContainer({
-				state: isSelected ? 'selected' : props.entry.unread ? 'unread' : 'read',
+				state: isSelected ? "selected" : props.entry.unread ? "unread" : "read",
 			})}
 		>
 			<Link href={href} className="flex p-4">
@@ -51,5 +51,5 @@ export function EntryListItem(props: EntryListItemProps) {
 				</div>
 			</Link>
 		</li>
-	)
+	);
 }

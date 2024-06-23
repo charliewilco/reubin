@@ -1,19 +1,17 @@
-import { cookies } from 'next/headers'
-import { Trash2 } from 'lucide-react'
-import { removeTag } from '$/actions'
-import { Controllers } from '$/lib/controllers'
+import { removeTag } from "$/app/actions";
+import { getUserSession } from "$/lib/controllers/session";
+import { getAll } from "$/lib/controllers/tag";
+import { Trash2 } from "lucide-react";
 
 export async function TagRemovalList() {
-	let { user } = await Controllers.session.getUserSession(cookies)
-	let tags = await Controllers.tags.getAll(user?.userId)
+	let result = await getUserSession();
+	let tags = await getAll(result?.user?.id);
 
-	let content
-
-	if (tags) {
-		if (tags.length === 0) {
-			content = <p className="text-center">No Tags</p>
-		} else {
-			content = (
+	return (
+		<div>
+			{tags?.length === 0 ? (
+				<p className="text-center">No Tags</p>
+			) : (
 				<ul>
 					{tags.map((tag) => {
 						return (
@@ -21,17 +19,15 @@ export async function TagRemovalList() {
 								<form className="flex items-center justify-between ">
 									<span>{tag.title}</span>
 									<input type="hidden" name="id" value={tag.id} />
-									<button formAction={removeTag} aria-label="Remove Tag">
+									<button formAction={removeTag} type="button" aria-label="Remove Tag">
 										<Trash2 className="h-4 w-4" />
 									</button>
 								</form>
 							</li>
-						)
+						);
 					})}
 				</ul>
-			)
-		}
-	}
-
-	return <div>{content}</div>
+			)}
+		</div>
+	);
 }

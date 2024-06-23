@@ -1,16 +1,16 @@
-'use client'
-import { useFormStatus } from 'react-dom'
-import { CheckCheck, RefreshCcw, Loader } from 'lucide-react'
-import { markAllEntriesAsRead, refreshFeed } from '$/actions'
-import { Button } from '../ui/button'
+"use client";
+import { markAllEntriesAsRead, refreshFeed } from "$/app/actions";
+import { CheckCheck, Loader, RefreshCcw } from "lucide-react";
+import { useFormStatus } from "react-dom";
+import { Button } from "../ui/button";
 
 interface FeedToolbarProps {
-	id: string
-	filter: string
+	id: string;
+	filter: string;
 }
 
 export function FeedToolbarActions(props: FeedToolbarProps) {
-	let { pending } = useFormStatus()
+	let { pending } = useFormStatus();
 	return (
 		<form className="flex gap-4">
 			<input type="hidden" name="id" value={props.id} />
@@ -22,5 +22,5 @@ export function FeedToolbarActions(props: FeedToolbarProps) {
 				{!pending ? <RefreshCcw className="h-4 w-4" /> : <Loader className="h-4 w-4" />}
 			</Button>
 		</form>
-	)
+	);
 }

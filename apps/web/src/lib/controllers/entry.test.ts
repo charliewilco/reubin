@@ -1,78 +1,78 @@
-import { describe, test, expect } from 'bun:test'
+import { describe, expect, mock, test } from "bun:test";
+import type { RSSItem } from "@xmlxyz/rsskit";
 import {
-	fromRSS,
-	feedBelongsToUser,
 	favorite,
-	getById,
+	feedBelongsToUser,
+	fromRSS,
 	getByFeed,
+	getById,
 	markAsUnread,
-} from './entry'
-import type { RSSItem } from '@xmlxyz/rsskit'
+} from "./entry";
 
 // Mocking the Prisma Service
-jest.mock('../services', () => {
+mock.module("../services", () => {
 	return {
 		Services: {
 			db: {
 				entry: {
-					update: jest.fn(),
-					count: jest.fn(),
-					findUnique: jest.fn(),
-					findMany: jest.fn(),
+					update: mock(),
+					count: mock(),
+					findUnique: mock(),
+					findMany: mock(),
 				},
 			},
 		},
-	}
-})
+	};
+});
 
-const servicesPath = '../services'
+const servicesPath = "../services";
 
-describe('EntryController', () => {
-	test('should transform RSSItem to LeanEntry', () => {
+describe("EntryController", () => {
+	test("should transform RSSItem to LeanEntry", () => {
 		const rssItem: RSSItem = {
-			title: 'Test Title',
-			content: 'Test Content',
-			link: 'https://test.link',
-			pubDate: '2023-08-25',
-		}
-		const feedId = 'test-feed-id'
+			title: "Test Title",
+			content: "Test Content",
+			link: "https://test.link",
+			pubDate: "2023-08-25",
+		};
+		const feedId = "test-feed-id";
 
-		const leanEntry = fromRSS(rssItem, feedId)
+		const leanEntry = fromRSS(rssItem, feedId);
 
-		expect(leanEntry.title).toBe(rssItem.title)
-		expect(leanEntry.content).toBe(rssItem.content)
-		expect(leanEntry.link).toBe(rssItem.link)
-		expect(leanEntry.feedId).toBe(feedId)
-		expect(leanEntry.pubDate).toEqual(new Date(rssItem.pubDate!))
-	})
+		expect(leanEntry.title).toBe(rssItem.title);
+		expect(leanEntry.content).toBe(rssItem.content);
+		expect(leanEntry.link).toBe(rssItem.link);
+		expect(leanEntry.feedId).toBe(feedId);
+		expect(leanEntry.pubDate).toEqual(new Date(rssItem.pubDate!));
+	});
 
-	test('should mark entry as favorite', async () => {
-		const id = 'test-id'
-		const mockEntry = { id, favorite: true }
+	test("should mark entry as favorite", async () => {
+		const id = "test-id";
+		const mockEntry = { id, favorite: true };
 
 		// Mock the call to Prisma's update method
-		const { Services } = require(servicesPath)
-		Services.db.entry.update.mockResolvedValue(mockEntry)
+		const { Services } = require(servicesPath);
+		Services.db.entry.update.mockResolvedValue(mockEntry);
 
-		const updatedEntry = await favorite(id)
+		const updatedEntry = await favorite(id);
 
-		expect(updatedEntry).toEqual(mockEntry)
+		expect(updatedEntry).toEqual(mockEntry);
 		expect(Services.db.entry.update).toHaveBeenCalledWith({
 			where: { id },
 			data: { favorite: true },
-		})
-	})
+		});
+	});
 
-	test('should verify if a feed belongs to a user', async () => {
-		const feedId = 'test-feed-id'
-		const userId = 'test-user-id'
+	test("should verify if a feed belongs to a user", async () => {
+		const feedId = "test-feed-id";
+		const userId = "test-user-id";
 
-		const { Services } = require(servicesPath)
-		Services.db.entry.count.mockResolvedValue(1) // indicate that feed belongs to user
+		const { Services } = require(servicesPath);
+		Services.db.entry.count.mockResolvedValue(1); // indicate that feed belongs to user
 
-		const result = await feedBelongsToUser(feedId, userId)
+		const result = await feedBelongsToUser(feedId, userId);
 
-		expect(result).toBe(true)
+		expect(result).toBe(true);
 		expect(Services.db.entry.count).toHaveBeenCalledWith({
 			where: {
 				id: feedId,
@@ -80,76 +80,76 @@ describe('EntryController', () => {
 					userId,
 				},
 			},
-		})
-	})
+		});
+	});
 
-	test('should mark entry as unread', async () => {
-		const id = 'test-id'
-		const mockEntry = { id, unread: true }
+	test("should mark entry as unread", async () => {
+		const id = "test-id";
+		const mockEntry = { id, unread: true };
 
-		const { Services } = require(servicesPath)
-		Services.db.entry.update.mockResolvedValue(mockEntry)
+		const { Services } = require(servicesPath);
+		Services.db.entry.update.mockResolvedValue(mockEntry);
 
-		const updatedEntry = await markAsUnread(id)
+		const updatedEntry = await markAsUnread(id);
 
-		expect(updatedEntry).toEqual(mockEntry)
+		expect(updatedEntry).toEqual(mockEntry);
 		expect(Services.db.entry.update).toHaveBeenCalledWith({
 			where: { id },
 			data: { unread: true },
-		})
-	})
+		});
+	});
 
-	test('should retrieve an entry by ID', async () => {
-		const id = 'test-id'
-		const mockEntry = { id, title: 'Test Entry' }
+	test("should retrieve an entry by ID", async () => {
+		const id = "test-id";
+		const mockEntry = { id, title: "Test Entry" };
 
-		const { Services } = require(servicesPath)
-		Services.db.entry.findUnique.mockResolvedValue(mockEntry)
+		const { Services } = require(servicesPath);
+		Services.db.entry.findUnique.mockResolvedValue(mockEntry);
 
-		const entry = await getById(id)
+		const entry = await getById(id);
 
-		expect(entry).toEqual(mockEntry)
-		expect(Services.db.entry.findUnique).toHaveBeenCalledWith({ where: { id } })
-	})
+		expect(entry).toEqual(mockEntry);
+		expect(Services.db.entry.findUnique).toHaveBeenCalledWith({ where: { id } });
+	});
 
-	test('should throw an error if entry is not found', async () => {
-		const id = 'test-id'
+	test("should throw an error if entry is not found", async () => {
+		const id = "test-id";
 
-		const { Services } = require(servicesPath)
-		Services.db.entry.findUnique.mockResolvedValue(null)
+		const { Services } = require(servicesPath);
+		Services.db.entry.findUnique.mockResolvedValue(null);
 
-		await expect(getById(id)).rejects.toThrow('Entry not found')
-	})
+		await expect(getById(id)).rejects.toThrow("Entry not found");
+	});
 
-	test('should retrieve all entries for a feed without filters', async () => {
-		const feedId = 'test-feed-id'
+	test("should retrieve all entries for a feed without filters", async () => {
+		const feedId = "test-feed-id";
 		const mockEntries = [
-			{ id: '1', title: 'Test Entry 1' },
-			{ id: '2', title: 'Test Entry 2' },
-		]
+			{ id: "1", title: "Test Entry 1" },
+			{ id: "2", title: "Test Entry 2" },
+		];
 
-		const { Services } = require(servicesPath)
-		Services.db.entry.findMany.mockResolvedValue(mockEntries)
+		const { Services } = require(servicesPath);
+		Services.db.entry.findMany.mockResolvedValue(mockEntries);
 
-		const entries = await getByFeed(feedId)
+		const entries = await getByFeed(feedId);
 
-		expect(entries).toEqual(mockEntries)
-		expect(Services.db.entry.findMany).toHaveBeenCalledWith({ where: { feedId } })
-	})
+		expect(entries).toEqual(mockEntries);
+		expect(Services.db.entry.findMany).toHaveBeenCalledWith({ where: { feedId } });
+	});
 
-	test('should retrieve favorite entries for a feed', async () => {
-		const feedId = 'test-feed-id'
-		const mockEntries = [{ id: '1', title: 'Test Entry 1', favorite: true }]
+	test("should retrieve favorite entries for a feed", async () => {
+		const feedId = "test-feed-id";
+		const mockEntries = [{ id: "1", title: "Test Entry 1", favorite: true }];
 
-		const { Services } = require(servicesPath)
-		Services.db.entry.findMany.mockResolvedValue(mockEntries)
+		const { Services } = require(servicesPath);
+		Services.db.entry.findMany.mockResolvedValue(mockEntries);
 
-		const entries = await getByFeed(feedId, 'favorite')
+		const entries = await getByFeed(feedId, "favorite");
 
-		expect(entries).toEqual(mockEntries)
+		expect(entries).toEqual(mockEntries);
 		expect(Services.db.entry.findMany).toHaveBeenCalledWith({
 			where: { feedId, favorite: true },
-		})
-	})
+		});
+	});
 	// ... Add other filter scenarios similarly
-})
+});

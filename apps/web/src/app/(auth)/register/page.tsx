@@ -1,27 +1,25 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import { RegisterForm } from '$/components/auth-flow/register-form'
-import { Card } from '$/components/ui/card'
+import { Card } from "$/components/ui/card";
+import type { Metadata } from "next";
+import Link from "next/link";
+import styles from "../page.module.css";
+import { RegisterForm } from "./form";
 
 export const metadata: Metadata = {
-	title: 'Sign up',
-}
+	title: "Sign up",
+};
 
 export default function RegistrationPage() {
 	return (
 		<div>
-			<header className="mb-8 text-center">
-				<h2 className="mb-4 text-2xl font-bold dark:text-gray-100">Sign up for an account</h2>
+			<header className={styles.header}>
+				<h2 className={styles.title}>Sign up for an account</h2>
 				<p>
-					<span className="opacity-75">Or sign in to your account</span>{' '}
-					<Link href="/login" className="text-sky-600">
-						here
-					</Link>
+					Or sign in to your account <Link href="/login">here</Link>.
 				</p>
 			</header>
-			<Card className="px-8 py-6">
+			<Card className={styles.content}>
 				<RegisterForm />
 			</Card>
 		</div>
-	)
+	);
 }

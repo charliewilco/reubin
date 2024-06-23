@@ -1,11 +1,12 @@
-'use client'
-import { Button, SuperButton } from '../ui/button'
-import { Label, Input, TextLabel } from '../ui/input'
-import { createTag } from '$/actions'
-import { useFormStatus } from 'react-dom'
+"use client";
+
+import { createTag } from "$/app/actions";
+import { useFormStatus } from "react-dom";
+import { Button, SuperButton } from "../ui/button";
+import { Input, Label, TextLabel } from "../ui/input";
 
 export function CreateTagForm() {
-	let { pending } = useFormStatus()
+	let { pending } = useFormStatus();
 
 	return (
 		<form action={createTag} className="rounded p-4 shadow-sm dark:bg-zinc-800">
@@ -23,5 +24,5 @@ export function CreateTagForm() {
 				</SuperButton>
 			</div>
 		</form>
-	)
+	);
 }

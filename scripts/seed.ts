@@ -1,71 +1,77 @@
 // @ts-check
 
-import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
-import RSSParser from 'rss-parser'
-import arg from 'arg'
+import { parseArgs } from "node:util";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import RSSParser from "rss-parser";
 
-const args = arg({
-	'--email': String,
-})
+const { values } = parseArgs({
+	args: Bun.argv,
+	allowPositionals: true,
+	options: {
+		email: {
+			type: "string",
+		},
+	},
+});
 
-const EMAIL = args['--email'] ?? 'charlespeters42@gmail.com'
-const PASSWORD = 'P@ssw0rd'
+const EMAIL = values.email ?? "charlespeters42@gmail.com";
+const PASSWORD = "P@ssw0rd";
 
-const prisma = new PrismaClient()
-const parser = new RSSParser()
+const prisma = new PrismaClient();
+const parser = new RSSParser();
 
 interface FeedListItem {
-	url: string
-	title: string
+	url: string;
+	title: string;
 }
 
 const TECH_FEEDS: FeedListItem[] = [
 	{
-		title: 'Reddit JavaScript',
-		url: 'https://www.reddit.com/r/javascript/.rss',
+		title: "Reddit JavaScript",
+		url: "https://www.reddit.com/r/javascript/.rss",
 	},
 	{
-		title: 'Sanity',
-		url: 'https://www.sanity.io/feed/rss',
+		title: "Sanity",
+		url: "https://www.sanity.io/feed/rss",
 	},
 	{
-		title: 'Discord',
-		url: 'https://discord.com/blog/rss.xml',
+		title: "Discord",
+		url: "https://discord.com/blog/rss.xml",
 	},
 	{
-		title: 'Filecoin',
-		url: 'https://filecoin.io/blog/feed/index.xml',
+		title: "Filecoin",
+		url: "https://filecoin.io/blog/feed/index.xml",
 	},
 	{
-		title: 'Chainlink',
-		url: 'https://blog.chain.link/feed/',
+		title: "Chainlink",
+		url: "https://blog.chain.link/feed/",
 	},
 	{
-		title: 'Vercel News',
-		url: 'https://vercel.com/atom',
+		title: "Vercel News",
+		url: "https://vercel.com/atom",
 	},
-]
+];
 
 /** @type {FeedListItem[]} */
-const NEW_FEEDS = [
+const NEW_FEEDS: FeedListItem[] = [
 	{
-		url: 'https://www.vox.com/rss/index.xml',
-		title: 'Vox',
+		url: "https://www.vox.com/rss/index.xml",
+		title: "Vox",
 	},
 	{
-		url: 'https://www.out.com/rss.xml',
-		title: 'Out.com',
+		url: "https://www.out.com/rss.xml",
+		title: "Out.com",
 	},
 	{
-		url: 'https://www.buzzfeed.com/world.xml',
-		title: 'BuzzFeed World News',
+		url: "https://www.buzzfeed.com/world.xml",
+		title: "BuzzFeed World News",
 	},
 	{
-		url: 'https://thedailywhat.cheezburger.com/rss',
-		title: 'Daily What',
+		url: "https://thedailywhat.cheezburger.com/rss",
+		title: "Daily What",
 	},
-]
+];
 
 /**
  *
@@ -80,7 +86,7 @@ async function createFeedWithTag(title: string, feeds: FeedListItem[], userId: s
 			title,
 			userId: userId,
 		},
-	})
+	});
 
 	for await (const _feed of feeds) {
 		const feed = await prisma.feed.create({
@@ -91,39 +97,39 @@ async function createFeedWithTag(title: string, feeds: FeedListItem[], userId: s
 				userId,
 				tagId: tag.id,
 			},
-		})
+		});
 
-		const parsedFeed = await parser.parseURL(_feed.url)
+		const parsedFeed = await parser.parseURL(_feed.url);
 
 		const entries = await prisma.entry.createMany({
 			data: parsedFeed.items.map((rssItem) => {
 				return {
-					title: rssItem.title ?? 'Untitled Entry',
-					content: rssItem.content ?? '',
+					title: rssItem.title ?? "Untitled Entry",
+					content: rssItem.content ?? "",
 					feedId: feed.id,
 					pubDate: new Date(rssItem.pubDate ?? Date.now()),
-				}
+				};
 			}),
-		})
+		});
 
-		console.log({ feed, entries })
+		console.log({ feed, entries });
 	}
 
-	console.log({ tag })
+	console.log({ tag });
 }
 
 async function clearAll() {
 	const models = Reflect.ownKeys(prisma).filter(
-		(key) => key[0] !== '_' && key[0] !== '$' && typeof key !== 'symbol',
-	)
+		(key) => key[0] !== "_" && key[0] !== "$" && typeof key !== "symbol",
+	);
 
-	console.log({ models })
+	console.log({ models });
 
 	return Promise.all(
 		models.map((modelKey) => {
-			return prisma[modelKey].deleteMany()
+			return prisma[modelKey].deleteMany();
 		}),
-	)
+	);
 }
 
 /**
@@ -132,40 +138,40 @@ async function clearAll() {
  * @param {String} password
  */
 async function seedProject(email: string, password: string) {
-	await clearAll().then(() => console.log('Cleared all data'))
+	await clearAll().then(() => console.log("Cleared all data"));
 
-	const hashed = await bcrypt.hash(password, 10)
+	const hashed = await bcrypt.hash(password, 10);
 
 	const user = await prisma.user.create({
 		data: {
 			email,
 			password: hashed,
-			name: '...',
+			name: "...",
 		},
-	})
+	});
 
-	console.log({ user })
+	console.log({ user });
 
-	await createFeedWithTag('Tech', TECH_FEEDS, user.id)
-	await createFeedWithTag('News', NEW_FEEDS, user.id)
+	await createFeedWithTag("Tech", TECH_FEEDS, user.id);
+	await createFeedWithTag("News", NEW_FEEDS, user.id);
 
 	await createFeedWithTag(
-		'Personal',
+		"Personal",
 		[
 			{
-				title: 'Charlie Wilco',
-				url: 'https://charliewil.co/rss',
+				title: "Charlie Wilco",
+				url: "https://charliewil.co/rss",
 			},
 		],
 		user.id,
-	)
+	);
 }
 
 try {
-	await seedProject(EMAIL, PASSWORD)
+	await seedProject(EMAIL, PASSWORD);
 } catch (error) {
-	console.error(error)
-	process.exit(1)
+	console.error(error);
+	process.exit(1);
 } finally {
-	await prisma.$disconnect()
+	await prisma.$disconnect();
 }

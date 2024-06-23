@@ -1,28 +1,27 @@
-import { cookies } from 'next/headers'
-import { Controllers } from '$/lib/controllers'
-
-import { FeedListItem } from '$/components/feed/feed-list-item'
-import { EmptyFeedList } from '$/components/feed/list-empty'
-import type { EntryFilter } from '$/lib/filters'
+import { FeedListItem } from "$/components/feed/feed-list-item";
+import { EmptyFeedList } from "$/components/feed/list-empty";
+import { getAll } from "$/lib/controllers/feed";
+import { getUserSession } from "$/lib/controllers/session";
+import type { EntryFilter } from "$/lib/filters";
 
 interface Params {
-	filter: EntryFilter
+	filter: EntryFilter;
 }
 
 export default async function FeedPage({ params }: { params: Params }) {
-	console.log(params, 'page component')
-	const { user } = await Controllers.session.getUserSession(cookies)
+	console.log(params, "page component");
+	const result = await getUserSession();
 
-	let feeds = await Controllers.feed.getAll(user?.userId)
+	let feeds = await getAll(result?.user?.id);
 
 	if (feeds) {
 		if (feeds.length === 0) {
-			return <EmptyFeedList />
+			return <EmptyFeedList />;
 		}
 
 		return (
 			<div>
-				<ul role="list">
+				<ul>
 					{feeds.map((feed) => (
 						<FeedListItem
 							key={feed?.id}
@@ -33,8 +32,8 @@ export default async function FeedPage({ params }: { params: Params }) {
 					))}
 				</ul>
 			</div>
-		)
+		);
 	}
 
-	return null
+	return null;
 }

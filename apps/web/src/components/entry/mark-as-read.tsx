@@ -1,21 +1,21 @@
-'use client'
+"use client";
 
-import { Suspense, useCallback } from 'react'
-import { useTimeout } from '$/hooks/useTimeout'
-import { markEntryAsRead } from '$/actions'
-import { usePathname } from 'next/navigation'
+import { markEntryAsRead } from "$/app/actions";
+import { useTimeout } from "$/hooks/useTimeout";
+import { usePathname } from "next/navigation";
+import { Suspense, useCallback } from "react";
 
 interface MarkAsReadProps {
-	id: string
+	id: string;
 }
 
 export function NotMarkAsRead(props: MarkAsReadProps) {
-	let path = usePathname()
-	let cb = useCallback(() => markEntryAsRead(props.id, path), [props.id, path])
+	let path = usePathname();
+	let cb = useCallback(() => markEntryAsRead(props.id, path), [props.id, path]);
 
-	useTimeout(cb, 1500)
+	useTimeout(cb, 1500);
 
-	return null
+	return null;
 }
 
 export function MarkAsRead(props: MarkAsReadProps) {
@@ -23,5 +23,5 @@ export function MarkAsRead(props: MarkAsReadProps) {
 		<Suspense fallback={null}>
 			<NotMarkAsRead {...props} />
 		</Suspense>
-	)
+	);
 }

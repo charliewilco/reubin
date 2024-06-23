@@ -1,8 +1,8 @@
-import type { Metadata } from 'next'
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: 'Changelog',
-}
+	title: "Changelog",
+};
 
 export default function ChangelogPage() {
 	return (
@@ -11,5 +11,5 @@ export default function ChangelogPage() {
 				<h1 className="text-5xl font-bold tracking-tight">Changelog</h1>
 			</header>
 		</div>
-	)
+	);
 }

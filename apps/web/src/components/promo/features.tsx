@@ -1,37 +1,37 @@
-import { Newspaper, Sparkles, Search, Mail, type LucideIcon } from 'lucide-react'
-import styles from './features.module.css'
+import { type LucideIcon, Mail, Newspaper, Search, Sparkles } from "lucide-react";
+import styles from "./features.module.css";
 
 const features = [
 	{
-		name: 'Unlimited Feeds',
-		description: 'Subscribe to as many feeds as you like, no restrictions.',
+		name: "Unlimited Feeds",
+		description: "Subscribe to as many feeds as you like, no restrictions.",
 		icon: Newspaper,
 	},
 	{
-		name: 'AI-powered Summaries',
-		description: 'Get concise and insightful article summaries using advanced AI technology.',
+		name: "AI-powered Summaries",
+		description: "Get concise and insightful article summaries using advanced AI technology.",
 		icon: Sparkles,
 	},
 	{
-		name: 'Full-Text Search',
-		description: 'Instantly find articles with powerful full-text search capabilities.',
+		name: "Full-Text Search",
+		description: "Instantly find articles with powerful full-text search capabilities.",
 		icon: Search,
 	},
 	{
-		name: 'Newsletter Digests',
-		description: 'Get a weekly digest of your favorite newsletters.',
+		name: "Newsletter Digests",
+		description: "Get a weekly digest of your favorite newsletters.",
 		icon: Mail,
 	},
-]
+];
 
 interface FeatureListItemProps {
-	name: string
-	description: string
-	icon: LucideIcon
+	name: string;
+	description: string;
+	icon: LucideIcon;
 }
 
 export function FeatureListItem(props: FeatureListItemProps) {
-	let Icon = props.icon
+	let Icon = props.icon;
 	return (
 		<div>
 			<dt>
@@ -42,7 +42,7 @@ export function FeatureListItem(props: FeatureListItemProps) {
 			</dt>
 			<dd className={styles.description}>{props.description}</dd>
 		</div>
-	)
+	);
 }
 
 export function FeatureList() {
@@ -59,5 +59,5 @@ export function FeatureList() {
 				</dl>
 			</div>
 		</section>
-	)
+	);
 }

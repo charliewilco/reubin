@@ -1,4 +1,12 @@
-import { neon } from '@neondatabase/serverless'
-import { env } from './env'
+import { PrismaClient } from "@prisma/client";
 
-export const sql = neon(env.DATABASE_URL)
+declare global {
+	var prisma: PrismaClient | undefined;
+}
+
+// biome-ignore lint/suspicious/noRedeclare: ensures instance of prisma
+export const prisma = global.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") global.prisma = prisma;
+
+export * from "@prisma/client";

@@ -1,30 +1,28 @@
-import { cookies } from 'next/headers'
-import type { CookiesFn } from '$/utils/cookies'
-import { Auth, type AuthUserSession, type ValidatedSession } from '../auth'
+import { cookies } from "next/headers";
+import { lucia } from "../auth";
 
-export class SessionController {
-	async getUserSession() {
-		const sessionId = cookies().get(Auth.sessionCookieName)?.value ?? null
-		if (!sessionId) return null
+export async function getUserSession() {
+	const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+	if (!sessionId) return null;
 
-		const { user, session } = await Auth.validateSession(sessionId)
+	const { user, session } = await lucia.validateSession(sessionId);
 
-		try {
-			if (session?.fresh) {
-				const sessionCookie = Auth.createSessionCookie(session.id)
-				cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
-			}
-			if (!session) {
-				const sessionCookie = Auth.createBlankSessionCookie()
-				cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
-			}
-		} catch {
-			// Next.js throws error when attempting to set cookies when rendering page
+	try {
+		if (session?.fresh) {
+			const sessionCookie = lucia.createSessionCookie(session.id);
+			cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 		}
-		return { user, session }
+		if (!session) {
+			const sessionCookie = lucia.createBlankSessionCookie();
+			cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+		}
+	} catch {
+		// Next.js throws error when attempting to set cookies when rendering page
 	}
+	return { user, session };
+}
 
-	isValidatedSession(session: AuthUserSession): session is ValidatedSession {
-		return session.user !== null
-	}
+// biome-ignore lint/suspicious/noExplicitAny: Placeholder for future implementation
+export function isValidatedSession(session: any): session is any {
+	return session.user !== null;
 }

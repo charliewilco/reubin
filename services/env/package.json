@@ -1,6 +1,0 @@
-{
-	"name": "@reubin/env",
-	"dependencies": {
-		"zod": "^3.22.4"
-	}
-}

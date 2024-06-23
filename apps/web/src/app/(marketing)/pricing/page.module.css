@@ -1,0 +1,29 @@
+.container {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 4rem;
+	max-width: 80rem;
+	padding: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 4rem;
+}
+
+.header {
+	padding-top: 2rem;
+}
+
+.title {
+	margin-top: 0;
+	margin-bottom: 0;
+	font-size: 3rem;
+	font-weight: bold;
+	letter-spacing: -0.015625rem;
+}
+
+.tagline {
+	margin-top: 1.25rem;
+	font-size: 1.25rem;
+	color: var(--color-zinc-500);
+	margin: 0;
+}

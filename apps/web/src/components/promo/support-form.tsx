@@ -49,5 +49,5 @@ export function SupportForm() {
 				Send message
 			</button>
 		</form>
-	)
+	);
 }

@@ -1,27 +1,27 @@
 /* eslint-disable react/no-unescaped-entities */
-import type { Metadata } from 'next'
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: 'Privacy Policy',
-}
+	title: "Privacy Policy",
+};
 
 export default function Privacy() {
 	return (
 		<div className="mx-auto max-w-7xl px-2 py-2">
 			<article className="mb-8 space-y-8">
 				<header className="pt-8">
-					<h1 className="text-5xl font-bold tracking-tight">Privacy Policy of Zaptread</h1>
+					<h1 className="text-5xl font-bold tracking-tight">Privacy Policy of Reubin</h1>
 				</header>
 				<section className="prose ml-auto dark:prose-invert">
 					<p>
-						Zaptread operates the <code>https://reubin.app/</code> website, which provides the
+						Reubin operates the <code>https://reubin.app/</code> website, which provides the
 						SERVICE.
 					</p>
 
 					<p>
 						This page is used to inform website visitors regarding our policies with the
 						collection, use, and disclosure of Personal Information if anyone decided to use
-						our Service, the Zaptread website.
+						our Service, the Reubin website.
 					</p>
 
 					<p>
@@ -29,8 +29,8 @@ export default function Privacy() {
 						information in relation with this policy. The Personal Information that we collect
 						are used for providing and improving the Service. We will not use or share your
 						information with anyone except as described in this Privacy Policy. Our Privacy
-						Policy was created with the help of the{' '}
-						<a href="https://www.privacypolicytemplate.net">Privacy Policy Template</a> and the{' '}
+						Policy was created with the help of the{" "}
+						<a href="https://www.privacypolicytemplate.net">Privacy Policy Template</a> and the{" "}
 						<a href="https://www.generateprivacypolicy.com">Privacy Policy Generator</a>.
 					</p>
 
@@ -75,7 +75,7 @@ export default function Privacy() {
 					</p>
 
 					<p>
-						For more general information on cookies, please read{' '}
+						For more general information on cookies, please read{" "}
 						<a href="https://www.cookieconsent.com/what-are-cookies/">"What Are Cookies"</a>.
 					</p>
 
@@ -147,5 +147,5 @@ export default function Privacy() {
 				</section>
 			</article>
 		</div>
-	)
+	);
 }

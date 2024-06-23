@@ -1,13 +1,13 @@
-import { Trash2 } from 'lucide-react'
-import { Button, SuperButton } from '../ui/button'
-import { Input, Label, TextLabel } from '../ui/input'
-import { removeFeed } from '$/actions'
-import { TagSelectionList } from '../tags/lists'
+import { removeFeed } from "$/app/actions";
+import { Trash2 } from "lucide-react";
+import { TagSelectionList } from "../tags/lists";
+import { Button, SuperButton } from "../ui/button";
+import { Input, Label, TextLabel } from "../ui/input";
 
 interface UpdateFeedFormProps {
-	initialTitle?: string
-	id: string
-	tagId: string | null
+	initialTitle?: string;
+	id: string;
+	tagId: string | null;
 }
 
 export function UpdateFeedForm(props: UpdateFeedFormProps) {
@@ -40,5 +40,5 @@ export function UpdateFeedForm(props: UpdateFeedFormProps) {
 				</SuperButton>
 			</div>
 		</form>
-	)
+	);
 }

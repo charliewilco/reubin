@@ -1,8 +1,10 @@
-import { deleteAsync } from 'del'
+import { $, Glob } from 'bun'
 import path from 'node:path'
 import { parseArgs } from 'node:util'
 
-const turboCachePaths = []
+const rmrf = (path: string) => $`rm -rf ${path}`
+
+const turboCachePaths = ['.turbo']
 const buildOuputPaths = [
 	'.husky',
 	'.next',
@@ -28,13 +30,22 @@ const { values } = parseArgs({
 	},
 })
 
+const removedPaths: string[] = []
+
+const globs = [...buildOuputPaths, ...turboCachePaths].map((paths) => new Glob(paths))
+
+const files = globs.flatMap((g) => [...g.scanSync()])
+
+console.log(files)
+
 if (!process.env.CI) {
-	const removedPaths = await deleteAsync(
-		values.all ? [...turboCachePaths, ...buildOuputPaths] : buildOuputPaths,
-		{
-			dryRun: values.dryrun,
-		},
-	)
+	if (values.dryrun) {
+		removedPaths.push(...files)
+	}
+
+	if (!values.dryrun) {
+		await Promise.all(files.map((file) => rmrf(file).then(() => removedPaths.push(file))))
+	}
 
 	if (values.dryrun) {
 		console.log('Would-be deleted directories:\n')
@@ -43,6 +54,6 @@ if (!process.env.CI) {
 	}
 
 	for (const removed of removedPaths) {
-		console.log('♻️ ', path.relative(process.cwd(), removed))
+		console.log('♻️ ', '\x1b[1m\x1b[32m%s\x1b[0m', path.relative(process.cwd(), removed))
 	}
 }

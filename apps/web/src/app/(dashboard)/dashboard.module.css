@@ -1,0 +1,52 @@
+.dashboard {
+	height: 100vh;
+}
+
+.inner {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.header {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+}
+
+.navigation {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	border-right: 1px solid #e5e7eb;
+}
+
+@media (min-width: 768px) {
+	.navigation {
+		position: relative;
+		height: 100%;
+		width: auto;
+		flex-direction: column;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.navigation {
+		border-right-color: #374151;
+	}
+}
+
+.main {
+	position: relative;
+	display: flex;
+	flex: 1;
+}
+
+.container {
+	flex: 1;
+}

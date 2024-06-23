@@ -1,9 +1,9 @@
-import { SupportForm } from '$/components/promo/support-form'
-import type { Metadata } from 'next'
+import { SupportForm } from "$/components/promo/support-form";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: 'Support',
-}
+	title: "Support",
+};
 
 export default async function SupportPage() {
 	return (
@@ -17,7 +17,7 @@ export default async function SupportPage() {
 					<aside className="col-span-4">
 						<p>Hey there! </p>
 						<p className="opacity-50">
-							Got feedback or ideas? We&apos;re all ears! Zaptread thrives on your input, so we
+							Got feedback or ideas? We&apos;re all ears! Reubin thrives on your input, so we
 							can keep making it better - together!
 						</p>
 					</aside>
@@ -27,5 +27,5 @@ export default async function SupportPage() {
 				</section>
 			</article>
 		</div>
-	)
+	);
 }

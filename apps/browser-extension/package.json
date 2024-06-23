@@ -1,0 +1,26 @@
+{
+	"name": "@r/browser-extension",
+	"version": "1.2.3",
+	"private": true,
+	"scripts": {
+		"build": "parcel build src/manifest.json --no-source-maps",
+		"test": "bun test",
+		"types": "tsc --noEmit --pretty"
+	},
+	"dependencies": {
+		"react": "rc",
+		"react-dom": "rc",
+		"swr": "beta"
+	},
+	"devDependencies": {
+		"@parcel/config-webextension": "^2.12.0",
+		"@parcel/packager-webextension": "2.12.0",
+		"@parcel/runtime-webextension": "2.12.0",
+		"@parcel/transformer-webextension": "^2.12.0",
+		"@types/chrome": "^0.0.268",
+		"@types/react": "^18.3.2",
+		"@types/react-dom": "^18.3.0",
+		"parcel": "^2.12.0",
+		"typescript": "^5.4.5"
+	}
+}

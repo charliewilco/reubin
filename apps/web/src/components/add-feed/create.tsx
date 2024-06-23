@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react'
+import { Plus } from "lucide-react";
 
 import {
 	Dialog,
@@ -6,11 +6,12 @@ import {
 	DialogDescription,
 	DialogTitle,
 	DialogTrigger,
-} from '../ui/dialog'
-import { AddFeedForm } from './form'
+} from "../ui/dialog";
+import styles from "./add-feed.module.css";
+import { AddFeedForm } from "./form";
 
 interface AddFeedProps {
-	onAdd(formData: FormData): Promise<void>
+	onAdd(formData: FormData): Promise<void>;
 }
 
 export function AddFeed(props: AddFeedProps) {
@@ -21,14 +22,11 @@ export function AddFeed(props: AddFeedProps) {
 			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Add Feed</DialogTitle>
-				<DialogDescription
-					className="mb-8 mt-2 text-sm opacity-50"
-					data-testid="add-feed-modal"
-				>
+				<DialogDescription className={styles.dialogContent} data-testid="add-feed-modal">
 					Add a website URL to see if it has an RSS feed.
 				</DialogDescription>
 				<AddFeedForm onSubmit={props.onAdd} />
 			</DialogContent>
 		</Dialog>
-	)
+	);
 }

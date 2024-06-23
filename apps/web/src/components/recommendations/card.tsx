@@ -1,17 +1,17 @@
-import type { Feed } from '@prisma/client'
-import { Rss, CheckCircle } from 'lucide-react'
-import { addFeedFromRecommendation } from '$/actions'
+import { addFeedFromRecommendation } from "$/app/actions";
+import type { Feed } from "@prisma/client";
+import { CheckCircle, Rss } from "lucide-react";
 
 interface RecommendationCardProps {
-	displayName: string
-	link: string
-	feeds?: Feed[]
+	displayName: string;
+	link: string;
+	feeds?: Feed[];
 }
 
 export function RecommendationCard(props: RecommendationCardProps) {
-	let feeds = props.feeds ?? []
+	let feeds = props.feeds ?? [];
 
-	const hasFeed = feeds.findIndex((f) => f?.feedURL === props.link) > -1
+	const hasFeed = feeds.findIndex((f) => f?.feedURL === props.link) > -1;
 
 	let content = (
 		<form action={addFeedFromRecommendation} className="block w-full text-center">
@@ -24,7 +24,7 @@ export function RecommendationCard(props: RecommendationCardProps) {
 				<span className="ml-3">Subscribe</span>
 			</button>
 		</form>
-	)
+	);
 
 	if (hasFeed) {
 		content = (
@@ -32,7 +32,7 @@ export function RecommendationCard(props: RecommendationCardProps) {
 				<CheckCircle className="h-5 w-5 text-green-400" aria-hidden="true" />
 				<span className="ml-3">Subscribed</span>
 			</div>
-		)
+		);
 	}
 
 	return (
@@ -47,5 +47,5 @@ export function RecommendationCard(props: RecommendationCardProps) {
 				<div className="flex">{content}</div>
 			</div>
 		</div>
-	)
+	);
 }

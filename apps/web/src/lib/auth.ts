@@ -1,82 +1,66 @@
-import { Lucia } from 'lucia'
-import { sql } from './db'
-import { NeonHTTPAdapter } from '@lucia-auth/adapter-postgresql'
+import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
+import type { Theme } from "@prisma/client";
+import { Lucia } from "lucia";
+import type { Session, User } from "lucia";
+import { cookies } from "next/headers";
+import { cache } from "react";
+import { prisma } from "./db";
 
-const adapter = new NeonHTTPAdapter(sql, {
-	user: 'auth_user',
-	session: 'user_session',
-})
+const adapter = new PrismaAdapter(prisma.authSession, prisma.authUser);
 
-const Auth = new Lucia(adapter, {
+export const lucia = new Lucia(adapter, {
 	sessionCookie: {
-		// this sets cookies with super long expiration
-		// since Next.js doesn't allow Lucia to extend cookie expiration when rendering pages
 		expires: false,
 		attributes: {
-			// set to `true` when using HTTPS
-			secure: process.env.NODE_ENV === 'production',
+			secure: process.env.NODE_ENV === "production",
 		},
 	},
-})
+	getUserAttributes: (attributes) => {
+		console.log(attributes);
+		return {
+			// attributes has the type of DatabaseUserAttributes
+			username: attributes.username,
+		};
+	},
+});
 
-declare module 'lucia' {
+declare module "lucia" {
 	interface Register {
-		Lucia: typeof Auth
+		Lucia: typeof lucia;
+		DatabaseUserAttributes: DatabaseUserAttributes;
 	}
 }
 
-interface TransformedUser {
-	userId: string
-	username: string
-	preferredTheme: any
-	isVerified: boolean
-	refreshInterval: number
+interface DatabaseUserAttributes {
+	userId: string;
+	username: string;
+	preferredTheme: Theme;
+	isVerified: boolean;
+	refreshInterval: number;
 }
 
-// export const Auth = lucia({
-// 	adapter: prismaAdapter(prisma as any),
-// 	env: Env.$vars.NODE_ENV === "development" ? "DEV" : "PROD",
-// 	middleware: nextjs(),
-// 	transformDatabaseUser: (userData): TransformedUser => {
-// 		return {
-// 			userId: userData.id,
-// 			username: userData.username,
-// 			preferredTheme: userData.preferredTheme,
-// 			isVerified: userData.isVerified,
-// 			refreshInterval: userData.refreshInterval,
-// 		};
-// 	},
-// 	sessionExpiresIn: {
-// 		activePeriod: 1000 * 60 * 60 * 24 * 30, // 1 month
-// 		idlePeriod: 0, // disable session renewal
-// 	},
-// });
+export const validateRequest = cache(
+	async (): Promise<{ user: User; session: Session } | { user: null; session: null }> => {
+		const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+		if (!sessionId) {
+			return {
+				user: null,
+				session: null,
+			};
+		}
 
-interface LuciaSessionType {
-	sessionId: string
-	userId: string
-	activePeriodExpiresAt: Date
-	idlePeriodExpiresAt: Date
-	state: 'idle' | 'active'
-	fresh: boolean
-}
-
-export interface ValidatedSession {
-	user: TransformedUser
-	session: Readonly<LuciaSessionType>
-}
-
-export interface NullSession {
-	user: null
-	session: null
-}
-
-export type AuthUserSession = ValidatedSession | NullSession
-
-export function isValidatedSession(session: AuthUserSession): session is ValidatedSession {
-	return session.user !== null
-}
-
-// export type AuthAdapter = typeof Auth;
-
-export { Auth }
+		const result = await lucia.validateSession(sessionId);
+		// next.js throws when you attempt to set cookie when rendering page
+		try {
+			if (result.session?.fresh) {
+				const sessionCookie = lucia.createSessionCookie(result.session.id);
+				cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+			}
+			if (!result.session) {
+				const sessionCookie = lucia.createBlankSessionCookie();
+				cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+			}
+		} catch {}
+		return result;
+	},
+);

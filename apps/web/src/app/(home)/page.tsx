@@ -1,9 +1,9 @@
-import { FeatureList } from '$/components/promo/features'
-import { SocialServices } from '$/components/promo/social-services'
-import { Hero } from '$/components/promo/hero'
-import { CallToAction } from '$/components/promo/call-to-action'
-import { SiteFooter } from '$/components/site-footer'
-import styles from './home.module.css'
+import { FeatureList } from "$/components/promo/features";
+import { SocialServices } from "$/components/promo/social-services";
+import { SiteFooter } from "$/components/site-footer";
+import { CallToAction } from "./call-to-action";
+import { Hero } from "./hero";
+import styles from "./home.module.css";
 
 function IndexPage() {
 	return (
@@ -16,7 +16,7 @@ function IndexPage() {
 			</div>
 			<SiteFooter />
 		</div>
-	)
+	);
 }
 
-export default IndexPage
+export default IndexPage;

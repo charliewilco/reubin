@@ -1,26 +1,28 @@
-import { isNumber } from '$/utils/number'
-import { useEffect, useRef } from 'react'
+import { isNumber } from "$/utils/number";
+import { useEffect, useRef } from "react";
 
-export function useTimeout(cb: () => void, delay: number = 1000) {
-	const timerRef = useRef<NodeJS.Timer | number | null>(null)
+type Timeout = ReturnType<typeof setTimeout> | null;
+
+export function useTimeout(cb: () => void, delay = 1000) {
+	const timerRef = useRef<Timeout>(null);
 
 	useEffect(() => {
 		timerRef.current = setTimeout(() => {
-			cb()
-		}, delay)
+			cb();
+		}, delay);
 
 		return () => {
 			if (isNumber(timerRef.current)) {
-				clearTimeout(timerRef.current)
+				clearTimeout(timerRef.current);
 			}
-		}
-	}, [cb, delay])
+		};
+	}, [cb, delay]);
 
 	const clear = () => {
 		if (isNumber(timerRef.current)) {
-			clearTimeout(timerRef.current)
+			clearTimeout(timerRef.current);
 		}
-	}
+	};
 
-	return clear
+	return clear;
 }

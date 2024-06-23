@@ -1,13 +1,13 @@
 export function LogoSmall() {
 	return (
 		<svg
-			className="max-w-[1.5rem]"
 			width="45"
 			height="56"
 			viewBox="0 0 45 56"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
+			<title>Reubin Logo</title>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
@@ -23,7 +23,7 @@ export function LogoSmall() {
 				fill="currentColor"
 			/>
 		</svg>
-	)
+	);
 }
 
 export function LogoDisplay() {
@@ -35,6 +35,8 @@ export function LogoDisplay() {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
+			<title>Reubin Logo</title>
+
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
@@ -50,5 +52,5 @@ export function LogoDisplay() {
 				fill="currentColor"
 			/>
 		</svg>
-	)
+	);
 }

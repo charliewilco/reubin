@@ -1,11 +1,11 @@
-import { RecommendationCard } from './card'
-import type { Feed } from '@prisma/client'
-import type { RecommendedField } from '$/lib/recommendations'
+import type { RecommendedField } from "$/lib/recommendations";
+import type { Feed } from "@prisma/client";
+import { RecommendationCard } from "./card";
 
 interface RecommendationListItemProps {
-	subscribed: Feed[]
-	feeds: RecommendedField[]
-	title: string
+	subscribed: Feed[];
+	feeds: RecommendedField[];
+	title: string;
 }
 
 export function RecommendationList(props: RecommendationListItemProps) {
@@ -13,7 +13,7 @@ export function RecommendationList(props: RecommendationListItemProps) {
 		<section>
 			<h2 className="text-lg opacity-50">{props.title}</h2>
 
-			<ul role="list" className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			<ul className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 				{props.feeds.map((r) => {
 					return (
 						<li key={r.displayName} className="col-span-1">
@@ -23,9 +23,9 @@ export function RecommendationList(props: RecommendationListItemProps) {
 								feeds={props.subscribed}
 							/>
 						</li>
-					)
+					);
 				})}
 			</ul>
 		</section>
-	)
+	);
 }

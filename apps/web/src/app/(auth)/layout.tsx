@@ -1,22 +1,23 @@
-import { redirect } from 'next/navigation'
-import { LogoDisplay } from '$/components/logo'
-import { Controllers } from '$/lib/controllers'
-import { cookies } from 'next/headers'
+import { LogoDisplay } from "$/components/logo";
+import { getUserSession } from "$/lib/controllers/session";
+import { redirect } from "next/navigation";
+import styles from "./auth.module.css";
 
 interface LayoutProps {
-	children: React.ReactNode
+	children: React.ReactNode;
 }
 
 export default async function Layout({ children }: LayoutProps) {
-	const result = await Controllers.session.getUserSession()
-	if (result?.session) redirect('/all')
+	const result = await getUserSession();
+	console.log(result);
+	if (result?.session) redirect("/all");
 
 	return (
-		<div className="px-2 py-16">
-			<div className="mb-4 flex justify-center">
+		<div className={styles.container}>
+			<div className={styles.header}>
 				<LogoDisplay />
 			</div>
-			<div className="mx-auto max-w-md">{children}</div>
+			<div className={styles.content}>{children}</div>
 		</div>
-	)
+	);
 }
