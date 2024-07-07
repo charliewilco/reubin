@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		"lib": ["ES2022"],
+		"outDir": "./dist",
+		"composite": false,
+		"declaration": true,
+		"declarationMap": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"allowImportingTsExtensions": true,
+		"inlineSources": false,
+		"isolatedModules": true,
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"preserveWatchOutput": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"noEmit": true,
+		"strictNullChecks": true,
+		"target": "ES2023"
+	},
+	"include": ["."],
+	"exclude": ["node_modules", "dist"]
+}

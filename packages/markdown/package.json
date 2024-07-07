@@ -1,0 +1,19 @@
+{
+	"name": "@r/quick-markdown",
+	"type": "module",
+	"types": "dist/index.d.ts",
+	"module": "dist/index.js",
+	"files": ["dist/*"],
+	"scripts": {
+		"test": "vitest",
+		"build": "tsup src/index.ts --dts --sourcemap --minify --format esm",
+		"dev": "tsup src/index.ts --watch --dts --sourcemap --minify --format esm",
+		"typecheck": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"@types/node": "^20.14.2",
+		"tsup": "^8.1.0",
+		"typescript": "^5.4.5",
+		"vitest": "^1.6.0"
+	}
+}
