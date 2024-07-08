@@ -1,18 +1,18 @@
-import z from 'zod'
-import { isNonEmptyArray, joinPath } from './array'
+import z from "zod";
+import Utils from "@r/utils";
 
 export class ValidationError extends Error {
-	details: Array<z.ZodIssue>
-	name: 'ZodValidationError'
+	details: Array<z.ZodIssue>;
+	name: "ZodValidationError";
 
 	constructor(message: string, details: Array<z.ZodIssue> | undefined = []) {
-		super(message)
-		this.details = details
-		this.name = 'ZodValidationError'
+		super(message);
+		this.details = details;
+		this.name = "ZodValidationError";
 	}
 
 	toString(): string {
-		return this.message
+		return this.message;
 	}
 }
 
@@ -21,46 +21,46 @@ function fromZodIssue(
 	issueSeparator: string,
 	unionSeparator: string,
 ): string {
-	if (issue.code === 'invalid_union') {
+	if (issue.code === "invalid_union") {
 		return issue.unionErrors
 			.reduce<string[]>((acc, zodError) => {
 				const newIssues = zodError.issues
 					.map((issue) => fromZodIssue(issue, issueSeparator, unionSeparator))
-					.join(issueSeparator)
+					.join(issueSeparator);
 
 				if (!acc.includes(newIssues)) {
-					acc.push(newIssues)
+					acc.push(newIssues);
 				}
 
-				return acc
+				return acc;
 			}, [])
-			.join(unionSeparator)
+			.join(unionSeparator);
 	}
 
-	if (isNonEmptyArray(issue.path)) {
+	if (Utils.Array.isNonEmptyArray(issue.path)) {
 		// handle array indices
 		if (issue.path.length === 1) {
-			const identifier = issue.path[0]
+			const identifier = issue.path[0];
 
-			if (typeof identifier === 'number') {
-				return `${issue.message} at index ${identifier}`
+			if (typeof identifier === "number") {
+				return `${issue.message} at index ${identifier}`;
 			}
 		}
 
-		return `${issue.message} at "${joinPath(issue.path)}"`
+		return `${issue.message} at "${Utils.Array.joinPath(issue.path)}"`;
 	}
 
-	return issue.message
+	return issue.message;
 }
 
-export type ZodError = z.ZodError
+export type ZodError = z.ZodError;
 export type FromZodErrorOptions = {
-	maxIssuesInMessage?: number
-	issueSeparator?: string
-	unionSeparator?: string
-	prefixSeparator?: string
-	prefix?: string
-}
+	maxIssuesInMessage?: number;
+	issueSeparator?: string;
+	unionSeparator?: string;
+	prefixSeparator?: string;
+	prefix?: string;
+};
 
 export function fromZodError(
 	zodError: ZodError,
@@ -68,11 +68,11 @@ export function fromZodError(
 ): ValidationError {
 	const {
 		maxIssuesInMessage = 99,
-		issueSeparator = '; ',
-		unionSeparator = ', or ',
-		prefixSeparator = ': ',
-		prefix = 'Validation error',
-	} = options
+		issueSeparator = "; ",
+		unionSeparator = ", or ",
+		prefixSeparator = ": ",
+		prefix = "Validation error",
+	} = options;
 
 	const reason = zodError.errors
 		// limit max number of issues printed in the reason section
@@ -80,31 +80,31 @@ export function fromZodError(
 		// format error message
 		.map((issue) => fromZodIssue(issue, issueSeparator, unionSeparator))
 		// concat as string
-		.join(issueSeparator)
+		.join(issueSeparator);
 
-	const message = reason ? [prefix, reason].join(prefixSeparator) : prefix
+	const message = reason ? [prefix, reason].join(prefixSeparator) : prefix;
 
-	return new ValidationError(message, zodError.errors)
+	return new ValidationError(message, zodError.errors);
 }
 
 export const toValidationError =
 	(options: Parameters<typeof fromZodError>[1] = {}) =>
 	(err: unknown): ValidationError | Error => {
 		if (err instanceof z.ZodError) {
-			return fromZodError(err, options)
+			return fromZodError(err, options);
 		}
 
 		if (err instanceof Error) {
-			return err
+			return err;
 		}
 
-		return new Error('Unknown error')
-	}
+		return new Error("Unknown error");
+	};
 
 export function isValidationError(err: unknown): err is ValidationError {
-	return err instanceof ValidationError
+	return err instanceof ValidationError;
 }
 
 export function isValidationErrorLike(err: unknown): err is ValidationError {
-	return err instanceof Error && err.name === 'ZodValidationError'
+	return err instanceof Error && err.name === "ZodValidationError";
 }

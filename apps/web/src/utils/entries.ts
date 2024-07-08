@@ -1,5 +1,5 @@
 import type { Entry } from "@prisma/client";
-import { sortGenericByNearest } from "./dates";
+import Utils from "@r/utils";
 
 export function getDateString(date: Date | string) {
 	return new Date(date).toDateString();
@@ -8,5 +8,5 @@ export function getDateString(date: Date | string) {
 let extractor = (a: Entry) => a.pubDate;
 
 export function sortEntriesByNearest(a: Entry, b: Entry) {
-	return sortGenericByNearest<Entry>({ a, b }, extractor);
+	return Utils.Dates.sortGenericByNearest<Entry>({ a, b }, extractor);
 }

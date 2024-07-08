@@ -15,3 +15,7 @@ export function getFilterFromString(value: string): EntryFilter {
 			return "all";
 	}
 }
+
+export function isValidFilter(value: string): boolean {
+	return ["all", "favorite", "unread"].includes(getFilterFromString(value));
+}
