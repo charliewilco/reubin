@@ -4,6 +4,6 @@
 	"service": "app",
 	"workspaceFolder": "/workspace",
 	"forwardPorts": [5432],
-	"postCreateCommand": "yarn install && yarn prisma db push",
-	"postAttachCommand": "yarn dev"
+	"postCreateCommand": "pnpm install && pnpm dlx prisma db push",
+	"postAttachCommand": "pnpm dev"
 }

@@ -1,0 +1,6 @@
+{
+	"name": "@r/email",
+	"dependencies": {
+		"resend": "^3.4.0"
+	}
+}

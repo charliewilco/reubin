@@ -3,8 +3,9 @@
 	"version": "1.2.3",
 	"private": true,
 	"scripts": {
+		"_dev": "parcel watch src/manifest.json --host localhost",
 		"build": "parcel build src/manifest.json --no-source-maps",
-		"test": "bun test",
+		"test": "node --test",
 		"types": "tsc --noEmit --pretty"
 	},
 	"dependencies": {
@@ -18,9 +19,9 @@
 		"@parcel/runtime-webextension": "2.12.0",
 		"@parcel/transformer-webextension": "^2.12.0",
 		"@types/chrome": "^0.0.268",
-		"@types/react": "^18.3.2",
+		"@types/react": "^18.3.3",
 		"@types/react-dom": "^18.3.0",
 		"parcel": "^2.12.0",
-		"typescript": "^5.4.5"
+		"typescript": "^5.5.4"
 	}
 }

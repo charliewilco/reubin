@@ -1,11 +1,16 @@
 #!/usr/bin/env just --justfile
 
-# hello is recipe's name
-hello:
-  echo "Hello World!"
-
 bootstrap:
-  bun install; bunx turbo dev
+  pnpm install; pnpm dlx turbo dev
 
 clean:
-  bun ./scripts/clean.mts
+  pnpm dlx tsx ./scripts/clean.mjs
+
+build:
+  pnpm run build
+
+test:
+  pnpm dlx turbo test
+
+db:
+  pnpm dlx prisma studio --schema apps/web/prisma/schema.prisma
