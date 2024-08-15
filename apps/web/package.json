@@ -16,6 +16,7 @@
 		"@r/extractor": "workspace:*",
 		"@r/quick-markdown": "workspace:*",
 		"@r/utils": "workspace:*",
+		"@r/validations": "workspace:*",
 		"@auth/prisma-adapter": "2.4.1",
 		"@charliewilco/toolkit": "^0.5.0",
 		"@neondatabase/serverless": "^0.9.4",
