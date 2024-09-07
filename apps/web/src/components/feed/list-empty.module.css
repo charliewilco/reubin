@@ -1,0 +1,28 @@
+.container {
+	display: flex;
+	height: 100%;
+	flex-direction: column-reverse;
+	justify-content: center;
+	gap: 2rem;
+	padding: 1rem;
+}
+
+.helperText {
+	opacity: 75%;
+}
+
+.link {
+	color: var(--color-sky-500);
+	text-decoration: none;
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	text-align: left;
+	list-style: none inside;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+}

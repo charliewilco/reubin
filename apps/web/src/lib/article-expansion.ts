@@ -1,8 +1,5 @@
-import { Readability } from "@mozilla/readability";
-/**
- * This dependency is not listed in package.json because it comes from with the Jest suite.
- */
-// import { JSDOM } from "jsdom";
+import { ContentExtractor } from "@r/extractor";
+import type { ExtractorResult } from "@r/extractor";
 import { redis } from "./kv";
 
 interface ExpandedArticle<T> {
@@ -36,18 +33,16 @@ interface ExpandedArticle<T> {
 
 type ExpandedResponse = ExpandedArticle<string> | null;
 
-async function fetchArticle(link: string): Promise<ExpandedResponse> {
+async function fetchArticle(link: string): Promise<ExtractorResult | null> {
 	let response = await fetch(link);
 	let text = await response.text();
 
-	// let document = new JSDOM(text);
-	// biome-ignore lint/suspicious/noExplicitAny: Types are wrong in the @mozilla/readability package
-	let reader = new Readability(text as any);
+	let reader = new ContentExtractor();
 
 	/*
 	 * there's no need to purify the HTML because Readability is already handling this
 	 */
-	return reader.parse();
+	return reader.parse(link);
 }
 
 async function getArticle(id: string, link: string): Promise<ExpandedArticle<string>> {

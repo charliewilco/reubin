@@ -1,19 +1,19 @@
-import { Suspense } from 'react'
-import { quickMarkdownParse } from '$/utils/quick-markdown'
+import { Suspense } from "react";
+import { parse } from "@r/quick-markdown";
 
 export async function AIStreamReader({
 	reader,
 }: {
-	reader: ReadableStreamDefaultReader<any>
+	reader: ReadableStreamDefaultReader<any>;
 }) {
-	const { done, value } = await reader.read()
+	const { done, value } = await reader.read();
 
 	if (done) {
-		return null
+		return null;
 	}
 
-	const text = new TextDecoder().decode(value)
-	let __html = quickMarkdownParse(text.trimStart())
+	const text = new TextDecoder().decode(value);
+	let __html: TrustedHTML = parse(text.trimStart());
 
 	return (
 		<>
@@ -23,5 +23,5 @@ export async function AIStreamReader({
 				<AIStreamReader reader={reader} />
 			</Suspense>
 		</>
-	)
+	);
 }

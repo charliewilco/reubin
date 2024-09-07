@@ -1,0 +1,16 @@
+.avatar {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	height: 2rem;
+	width: 2rem;
+	border-radius: 9999px;
+	background: linear-gradient(to top right, #f59e0b, #ef4444);
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}

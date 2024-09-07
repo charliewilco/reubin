@@ -1,0 +1,55 @@
+.icon {
+	width: 24px;
+	height: 24px;
+}
+
+.navigation {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+	.navigation {
+		width: auto;
+		flex-direction: column;
+		gap: 1rem;
+	}
+}
+
+.link {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	color: #3f3f46;
+}
+
+.link[aria-current="page"] {
+	background-color: #38bdf8;
+	color: #f1f5f9;
+}
+
+@media (prefers-color-scheme: dark) {
+	.link {
+		color: #e5e7eb;
+	}
+	.link[aria-current="page"] {
+		background-color: #0369a1;
+	}
+}
+
+.link:hover {
+	background-color: #0369a1;
+}
+
+.link[aria-current="page"]:hover {
+	background-color: #0c4a6e;
+}

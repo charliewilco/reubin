@@ -1,20 +1,7 @@
 import { prisma } from "$/lib/db";
 import type { EntryFilter } from "$/lib/filters";
-import type { Prisma } from "@prisma/client";
+import type { Entry, Prisma } from "@prisma/client";
 import type { RSSItem } from "@xmlxyz/rsskit";
-
-export type Entry = {
-	id: string;
-	link: string;
-	title: string;
-	content: string;
-	pubDate: Date;
-	favorite: boolean;
-	unread: boolean;
-	feedId: string | null;
-	readAt: Date | null;
-	summary: string | null;
-};
 
 type LeanEntry = Pick<Entry, "content" | "title" | "feedId" | "pubDate" | "link">;
 

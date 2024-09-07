@@ -1,35 +1,42 @@
-import { describe, test } from "vitest";
+import { describe, expect, test } from "vitest";
+import { ContentExtractor } from "../src";
 
 describe("Extractor", () => {
-	test.todo("should initialize with default values", () => {
-		// Initialize ContentExtractor with default values and verify properties
-	});
+  test.todo("should initialize with default values", () => {
+    // Initialize ContentExtractor with default values and verify properties
+    const extractor = new ContentExtractor();
 
-	test.todo("should handle empty input gracefully", () => {
-		// Pass empty HTML to ContentExtractor and verify it handles gracefully;
-	});
+    expect(extractor.options.keepClasses).toBeFalsy();
+    expect(extractor.options.classesToPreserve).toEqual([]);
+    expect(extractor.options.disableJSONLD).toBeFalsy();
+    expect(extractor.options.maxElemsToParse).toEqual(0);
+  });
 
-	test.todo("should extract content correctly from a simple HTML", () => {
-		// Pass simple HTML to ContentExtractor and verify extracted content;
-	});
+  test.todo("should handle empty input gracefully", () => {
+    // Pass empty HTML to ContentExtractor and verify it handles gracefully;
+  });
 
-	test.todo("should strip unlikely candidates when option is enabled", () => {
-		// Verify that unlikely candidates are stripped when the option is enabled;
-	});
+  test.todo("should extract content correctly from a simple HTML", () => {
+    // Pass simple HTML to ContentExtractor and verify extracted content;
+  });
 
-	test.todo("should weight classes correctly when option is enabled", () => {
-		// Verify that classes are weighted correctly when the option is enabled;
-	});
+  test.todo("should strip unlikely candidates when option is enabled", () => {
+    // Verify that unlikely candidates are stripped when the option is enabled;
+  });
 
-	test.todo("should clean conditionally when option is enabled", () => {
-		// Verify that content is cleaned conditionally when the option is enabled;
-	});
+  test.todo("should weight classes correctly when option is enabled", () => {
+    // Verify that classes are weighted correctly when the option is enabled;
+  });
 
-	test.todo("should preserve specified classes", () => {
-		// Verify that specified classes are preserved;
-	});
+  test.todo("should clean conditionally when option is enabled", () => {
+    // Verify that content is cleaned conditionally when the option is enabled;
+  });
 
-	test.todo("should convert DIV to P elements correctly", () => {
-		// Verify that DIV elements are converted to P elements correctly;
-	});
+  test.todo("should preserve specified classes", () => {
+    // Verify that specified classes are preserved;
+  });
+
+  test.todo("should convert DIV to P elements correctly", () => {
+    // Verify that DIV elements are converted to P elements correctly;
+  });
 });

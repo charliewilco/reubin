@@ -1,0 +1,89 @@
+.card {
+	border-radius: 0.5rem;
+	background-color: #f3f4f6;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+	.card {
+		background-color: #18181b;
+		box-shadow: 0 1px 2px rgba(63, 63, 70, 0.5);
+	}
+}
+
+.header {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.content {
+	flex: 1;
+	overflow: hidden;
+	padding: 1rem;
+}
+
+.title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.link {
+	margin-top: 0.25rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-family: monospace;
+	font-size: 0.75rem;
+	color: #71717a;
+}
+
+@media (prefers-color-scheme: dark) {
+	.link {
+		color: #a1a1aa;
+	}
+}
+
+.subscribeButton,
+.subscribedButton {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	border-bottom-left-radius: 0.5rem;
+	border: 1px solid transparent;
+	padding: 1rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+}
+
+.subscribeButton:hover {
+	color: #6b7280;
+}
+
+.icon {
+	height: 1.25rem;
+	width: 1.25rem;
+	color: #71717a;
+}
+
+.subscribedButton {
+	position: relative;
+	margin-right: -1px;
+	opacity: 0.5;
+}
+
+.subscribedButton:hover {
+	color: #6b7280;
+}
+
+.subscribedIcon {
+	height: 1.25rem;
+	width: 1.25rem;
+	color: #10b981;
+}
+
+.iconSpacing {
+	margin-left: 0.75rem;
+}

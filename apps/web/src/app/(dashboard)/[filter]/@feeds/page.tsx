@@ -12,7 +12,6 @@ export default async function FeedPage({ params }: { params: Params }) {
 	const result = await getUserSession();
 
 	let feeds = await getAll(result?.user?.id);
-	console.log(feeds);
 
 	if (feeds) {
 		if (feeds.length === 0) {

@@ -1,39 +1,31 @@
-import { LogoSmall } from './logo'
+import { getUserSession } from "$/lib/controllers/session";
+import { LogoSmall } from "./logo";
+import styles from "./app-header.module.css";
+import { Avatar } from "./ui/avatar";
 
 interface AppHeaderProps {
-	title?: string
-	children?: React.ReactNode
-	username?: string
+	title?: string;
+	children?: React.ReactNode;
 }
 
-export function AppHeader(props: AppHeaderProps) {
+export async function AppHeader(props: AppHeaderProps) {
+	const result = await getUserSession();
+	const username = result?.user?.username;
 	return (
-		<header className="w-full border-b border-zinc-200 px-4 backdrop-blur-sm backdrop-saturate-150 dark:border-zinc-700">
-			<div className="flex items-center justify-between">
-				<div className="flex items-center">
+		<header className={styles.header}>
+			<div className={styles.container}>
+				<div className={styles.logoContainer}>
 					<LogoSmall />
-					{props.title && <h1 className="ml-4">{props.title}</h1>}
+					{props.title && <h1>{props.title}</h1>}
 				</div>
 
 				<div>
-					<div className="flex justify-end gap-4">
+					<div className={styles.utilityContainer}>
 						{props.children}
-						<div>
-							{props.username ? (
-								<>
-									<object
-										className="mx-auto block h-8 w-8 rounded-full bg-gradient-to-tr from-amber-500 to-red-500 shadow-md"
-										title={props.username}
-									/>
-									<div className="sr-only">
-										<p>{props.username}</p>
-									</div>
-								</>
-							) : null}
-						</div>
+						{username ? <Avatar username={username} /> : null}
 					</div>
 				</div>
 			</div>
 		</header>
-	)
+	);
 }

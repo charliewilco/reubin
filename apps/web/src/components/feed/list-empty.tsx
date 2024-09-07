@@ -1,25 +1,26 @@
-import { RecommendationMap, type RecommendedField } from '$/lib/recommendations'
-import Link from 'next/link'
-import { RecommendationCard } from '../recommendations/card'
+import { RecommendationMap, type RecommendedField } from "$/lib/recommendations";
+import Link from "next/link";
+import { RecommendationCard } from "../recommendations/card";
+import styles from "./list-empty.module.css";
 
 export function EmptyFeedList() {
-	let recommendations = RecommendationMap.get('Relevant') ?? []
+	let recommendations = RecommendationMap.get("Relevant") ?? [];
 	return (
-		<div className="flex h-full flex-col-reverse justify-center gap-8 p-4">
+		<div className={styles.container}>
 			<p>
-				<span className="opacity-75">
+				<span className={styles.helperText}>
 					Looks like you have no feeds. Maybe you should add some?
-				</span>{' '}
-				<Link href="/recommendations" className="text-sky-500">
+				</span>{" "}
+				<Link href="/recommendations" className={styles.link}>
 					Find more here.
 				</Link>
 			</p>
 
-			<ul className="space-y-4 text-left">
+			<ul className={styles.list}>
 				{recommendations.map((r: RecommendedField) => {
-					return <RecommendationCard {...r} key={r.link} feeds={[]} />
+					return <RecommendationCard {...r} key={r.link} feeds={[]} />;
 				})}
 			</ul>
 		</div>
-	)
+	);
 }

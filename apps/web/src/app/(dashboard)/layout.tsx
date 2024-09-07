@@ -1,8 +1,6 @@
-import { addFeed } from "$/app/actions";
-import { AddFeed } from "$/components/add-feed/create";
+import { AddFeedDialog } from "$/components/add-feed/create";
 import { AppHeader } from "$/components/app-header";
 import { DashboardNavigationRail } from "$/components/dashboard-navigation";
-import { getUserSession } from "$/lib/controllers/session";
 import styles from "./dashboard.module.css";
 
 interface LayoutProps {
@@ -11,13 +9,12 @@ interface LayoutProps {
 }
 
 export default async function Layout({ children }: LayoutProps) {
-	const result = await getUserSession();
 	return (
 		<div className={styles.dashboard}>
 			<div className={styles.inner}>
-				<AppHeader username={result?.user?.username}>
+				<AppHeader>
 					<div className={styles.header}>
-						<AddFeed onAdd={addFeed} />
+						<AddFeedDialog />
 					</div>
 				</AppHeader>
 				<div className={styles.main}>

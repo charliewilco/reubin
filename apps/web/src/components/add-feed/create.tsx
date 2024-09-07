@@ -10,11 +10,7 @@ import {
 import styles from "./add-feed.module.css";
 import { AddFeedForm } from "./form";
 
-interface AddFeedProps {
-	onAdd(formData: FormData): Promise<void>;
-}
-
-export function AddFeed(props: AddFeedProps) {
+export function AddFeedDialog() {
 	return (
 		<Dialog>
 			<DialogTrigger aria-label="Add Feed">
@@ -25,7 +21,7 @@ export function AddFeed(props: AddFeedProps) {
 				<DialogDescription className={styles.dialogContent} data-testid="add-feed-modal">
 					Add a website URL to see if it has an RSS feed.
 				</DialogDescription>
-				<AddFeedForm onSubmit={props.onAdd} />
+				<AddFeedForm />
 			</DialogContent>
 		</Dialog>
 	);

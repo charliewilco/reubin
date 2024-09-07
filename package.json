@@ -5,6 +5,7 @@
 	"author": "Charlie ⚡ <charliewilc0@pm.me>",
 	"scripts": {
 		"build": "turbo build",
+		"test": "turbo test",
 		"dev": "turbo dev",
 		"check": "sherif",
 		"_out": "pnpm dlx npm-check-updates -i -f group -p pnpm -ws"
@@ -12,9 +13,9 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
 		"del": "^7.1.0",
-		"lefthook": "^1.7.11",
-		"sherif": "^0.10.0",
-		"tsx": "^4.16.3",
+		"lefthook": "^1.7.14",
+		"sherif": "^0.11.0",
+		"tsx": "^4.17.0",
 		"turbo": "^2.0.10"
 	},
 	"packageManager": "pnpm@9.1.0"

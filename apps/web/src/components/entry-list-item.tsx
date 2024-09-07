@@ -1,5 +1,5 @@
 "use client";
-import { getDateString } from "$/utils/dates";
+import { getDateString } from "@r/utils";
 import type { Entry } from "@prisma/client";
 import { cva } from "class-variance-authority";
 import Link from "next/link";

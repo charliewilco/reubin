@@ -1,0 +1,21 @@
+.errorContainer {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	flex-direction: column;
+	justify-content: center;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+}
+
+.errorTitle {
+	text-align: center;
+	font-size: 1.125rem;
+}
+
+.errorMessage {
+	font-size: 0.875rem;
+	opacity: 75%;
+}

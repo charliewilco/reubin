@@ -1,66 +1,79 @@
-import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import type { Theme } from "@prisma/client";
-import { Lucia } from "lucia";
-import type { Session, User } from "lucia";
-import { cookies } from "next/headers";
-import { cache } from "react";
-import { prisma } from "./db";
+import Auth from "next-auth";
+import Resend from "next-auth/providers/resend";
+import Credentials from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import {} from "@node-rs/argon2";
+import { hash } from "@node-rs/bcrypt";
+import { prisma, type User } from "$/lib/db";
+import { env } from "./env";
 
-const adapter = new PrismaAdapter(prisma.authSession, prisma.authUser);
+async function authorize(credentials: Partial<Record<"email" | "password", string>>) {
+	let user = null;
 
-export const lucia = new Lucia(adapter, {
-	sessionCookie: {
-		expires: false,
-		attributes: {
-			secure: process.env.NODE_ENV === "production",
-		},
-	},
-	getUserAttributes: (attributes) => {
-		console.log(attributes);
-		return {
-			// attributes has the type of DatabaseUserAttributes
-			username: attributes.username,
-		};
-	},
-});
-
-declare module "lucia" {
-	interface Register {
-		Lucia: typeof lucia;
-		DatabaseUserAttributes: DatabaseUserAttributes;
+	if (!credentials.email || !credentials.password) {
+		throw new Error("Missing credentials.");
 	}
+	// logic to salt and hash password
+	const pwHash = await hash(credentials.password);
+
+	// logic to verify if the user exists
+	user = await prisma.user.findUnique({
+		where: {
+			email: credentials.email,
+		},
+	});
+
+	if (!user) {
+		// No user found, so this is their first attempt to login
+		// meaning this is also the place you could do registration
+		throw new Error("User not found.");
+	}
+
+	// return user object with their profile data
+	return user;
 }
 
-interface DatabaseUserAttributes {
-	userId: string;
-	username: string;
-	preferredTheme: Theme;
-	isVerified: boolean;
-	refreshInterval: number;
-}
+export const {
+	handlers,
+	signIn,
+	signOut,
+	auth,
+	unstable_update: update,
+} = Auth({
+	adapter: PrismaAdapter(prisma),
+	providers: [
+		Resend,
+		Credentials({
+			credentials: {
+				email: {},
+				password: {},
+			},
+			async authorize(credentials: Partial<Record<"email" | "password", unknown>>) {
+				let user: null | User = null;
 
-export const validateRequest = cache(
-	async (): Promise<{ user: User; session: Session } | { user: null; session: null }> => {
-		const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
-		if (!sessionId) {
-			return {
-				user: null,
-				session: null,
-			};
-		}
+				if (!credentials.email || !credentials.password) {
+					throw new Error("Missing credentials.");
+				}
+				// logic to salt and hash password
+				const pwHash = await hash(String(credentials.password));
 
-		const result = await lucia.validateSession(sessionId);
-		// next.js throws when you attempt to set cookie when rendering page
-		try {
-			if (result.session?.fresh) {
-				const sessionCookie = lucia.createSessionCookie(result.session.id);
-				cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-			}
-			if (!result.session) {
-				const sessionCookie = lucia.createBlankSessionCookie();
-				cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-			}
-		} catch {}
-		return result;
-	},
-);
+				// logic to verify if the user exists
+				user = await prisma.user.findUnique({
+					where: {
+						email: String(credentials.email),
+					},
+				});
+
+				if (!user) {
+					// No user found, so this is their first attempt to login
+					// meaning this is also the place you could do registration
+					throw new Error("User not found.");
+				}
+
+				// return user object with their profile data
+				return user;
+			},
+		}),
+	],
+	debug: env.NODE_ENV === "development",
+});

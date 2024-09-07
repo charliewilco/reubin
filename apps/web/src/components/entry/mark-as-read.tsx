@@ -9,19 +9,19 @@ interface MarkAsReadProps {
 	id: string;
 }
 
-export function NotMarkAsRead(props: MarkAsReadProps) {
+export function NotMarkAsRead({ id }: MarkAsReadProps) {
 	let path = usePathname();
-	let cb = useCallback(() => markEntryAsRead(props.id, path), [props.id, path]);
+	let cb = useCallback(() => markEntryAsRead(id, path), [id, path]);
 
 	useTimeout(cb, 1500);
 
 	return null;
 }
 
-export function MarkAsRead(props: MarkAsReadProps) {
+export function MarkAsRead({ id }: MarkAsReadProps) {
 	return (
 		<Suspense fallback={null}>
-			<NotMarkAsRead {...props} />
+			<NotMarkAsRead id={id} />
 		</Suspense>
 	);
 }

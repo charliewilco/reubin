@@ -1,0 +1,37 @@
+.layout {
+	height: 100%;
+	width: 100%;
+	flex: 1;
+}
+
+@media (min-width: 1024px) {
+	.layout {
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+	}
+}
+
+.column {
+	grid-column: span 2;
+	overflow-y: scroll;
+	border-right: 1px solid #e5e7eb;
+}
+
+.columnInner {
+	position: relative;
+	height: 100%;
+}
+
+.columnInner > * {
+	width: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+	.column {
+		border-right-color: #374151;
+	}
+
+	.columnInner {
+		background-color: #18181b;
+	}
+}

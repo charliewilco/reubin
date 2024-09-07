@@ -9,11 +9,15 @@ import { redirect } from "next/navigation";
 import { Argon2id } from "oslo/password";
 import type { LoginFormState, RegisterFormState } from "./types";
 
+export async function loginTemp(): Promise<LoginFormState> {
+	redirect("/filter");
+}
+
 export async function register(
 	_: RegisterFormState,
 	formData: FormData,
 ): Promise<RegisterFormState> {
-	const username = formData.get("username");
+	const username = formData.get("username")?.toString();
 	// username must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
 	// keep in mind some database (e.g. mysql) are case insensitive
 	if (
@@ -52,7 +56,7 @@ export async function register(
 		data: {
 			id: userId,
 			username: username,
-			email: formData.get("email") as string,
+			email: formData.get("email")?.toString(),
 		},
 	});
 

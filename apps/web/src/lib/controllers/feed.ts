@@ -82,6 +82,7 @@ export async function getAll(userId?: string) {
 			userId,
 		},
 	});
+
 	const converted = [];
 	for (let index = 0; index < feeds.length; index++) {
 		converted.push(fromORM(feeds[index]));

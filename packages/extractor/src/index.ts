@@ -37,10 +37,10 @@ export class ContentExtractor {
 		"UL",
 	]);
 
-	private readonly _options: ReadabilityOptions;
+	readonly options: ReadabilityOptions;
 
 	constructor(options: Partial<ReadabilityOptions> = {}) {
-		this._options = {
+		this.options = {
 			...mergeOptions(options),
 			serializer: options.serializer || this._defaultSerializer,
 		};
@@ -157,7 +157,7 @@ export class ContentExtractor {
 			const $element = $(element);
 			const innerText = $element.text().trim();
 
-			if (innerText.length >= this._options.charThreshold) {
+			if (innerText.length >= this.options.charThreshold) {
 				const score = this._getElementScore($element);
 				candidates.push({ score, element: $element });
 			}

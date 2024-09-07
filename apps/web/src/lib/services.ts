@@ -1,4 +1,4 @@
-import { lucia } from "@r/auth";
+import { lucia } from "./auth";
 import { redis } from "./kv";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: it makes me happy

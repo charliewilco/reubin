@@ -1,13 +1,10 @@
-import { SuperButton } from '../ui/button'
-import { Label, Input, TextLabel } from '../ui/input'
+import { addFeed } from "$/app/actions";
+import { SuperButton } from "../ui/button";
+import { Label, Input, TextLabel } from "../ui/input";
 
-interface AddFeedFormProps {
-	onSubmit(formData: FormData): Promise<void>
-}
-
-export function AddFeedForm(props: AddFeedFormProps) {
+export function AddFeedForm() {
 	return (
-		<form action={props.onSubmit}>
+		<form action={addFeed}>
 			<Label htmlFor="url">
 				<TextLabel>URL</TextLabel>
 
@@ -18,5 +15,5 @@ export function AddFeedForm(props: AddFeedFormProps) {
 				<SuperButton type="submit">Submit</SuperButton>
 			</div>
 		</form>
-	)
+	);
 }
