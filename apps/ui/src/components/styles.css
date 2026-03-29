@@ -1,7 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-article {
-	font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1, "ss06" 1;
-}

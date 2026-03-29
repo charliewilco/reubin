@@ -1,2 +1,7 @@
-node_modules
-npm-debug.log
+.git
+.gitignore
+
+reubin2/bin
+reubin2/*.db
+reubin2/*.sqlite
+reubin2/*.sqlite3
