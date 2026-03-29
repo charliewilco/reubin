@@ -1,20 +1,16 @@
-FROM node:18-alpine
+FROM golang:1.25 AS build
 
-# Create app directory
-WORKDIR /usr/src/app
-RUN npm install -g turbo
+WORKDIR /src/reubin2
+COPY reubin2/go.mod reubin2/go.sum ./
+RUN go mod download
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-COPY turbo.json ./
+COPY reubin2/ ./
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /out/reubin2 ./cmd/reubin2
 
-RUN yarn install
-RUN yarn build
+FROM gcr.io/distroless/base-debian12
 
-# Bundle app source
-COPY . .
+WORKDIR /app
+COPY --from=build /out/reubin2 /app/reubin2
 
-EXPOSE 4000
-CMD ["yarn", "start"]
+EXPOSE 8080
+ENTRYPOINT ["/app/reubin2"]
